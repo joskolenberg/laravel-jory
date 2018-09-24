@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
-         backupGlobals="false"
+<phpunit backupGlobals="false"
          backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
          colors="true"
-         verbose="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         processIsolation="true"
-         stopOnFailure="false">
+         processIsolation="false"
+         stopOnFailure="false"
+>
     <testsuites>
-        <testsuite name="Package Test Suite">
+        <testsuite name="Laravel Jory Package Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+
     <filter>
-        <whitelist>
-            <directory suffix=".php">src/</directory>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>src</directory>
         </whitelist>
     </filter>
     <php>

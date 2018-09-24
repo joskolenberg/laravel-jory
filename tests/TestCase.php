@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use Illuminate\Foundation\Application;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,8 @@ class TestCase extends Orchestra
 
     protected function setUpDatabase(Application $app)
     {
+        DB::connection()->setQueryGrammar(new MySqlGrammar());
+
         $app['db']->connection()->getSchemaBuilder()->create('people', function (Blueprint $table) {
             $table->increments('id');
             $table->string('first_name');
@@ -35,6 +38,8 @@ class TestCase extends Orchestra
         $app['db']->connection()->getSchemaBuilder()->create('bands', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->integer('year_start');
+            $table->integer('year_end')->nullable();
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('band_members', function (Blueprint $table) {
@@ -112,14 +117,12 @@ class TestCase extends Orchestra
 
         // Seed Bands
         foreach ([
-                     1 => 'Rolling Stones',
-                     2 => 'Led Zeppelin',
-                     3 => 'Beatles',
-                     4 => 'Jimi Hendrix Experience',
-                 ] as $name) {
-            Band::create([
-                'name' => $name,
-            ]);
+                     1 => ['name' => 'Rolling Stones', 'year_start' => 1962, 'year_end' => null],
+                     2 => ['name' => 'Led Zeppelin', 'year_start' => 1968, 'year_end' => 1980],
+                     3 => ['name' => 'Beatles', 'year_start' => 1960, 'year_end' => 1970],
+                     4 => ['name' => 'Jimi Hendrix Experience', 'year_start' => 1966, 'year_end' => 1970],
+                 ] as $band) {
+            Band::create($band);
         }
 
         // Associate persons with bands
