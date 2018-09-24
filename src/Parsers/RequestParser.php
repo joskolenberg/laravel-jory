@@ -12,11 +12,9 @@ use JosKolenberg\Jory\Parsers\JsonParser;
  * Uses the "jory" parameter which must hold the jory data in json format.
  *
  * Class RequestParser
- * @package JosKolenberg\LaravelJory\Parsers
  */
 class RequestParser implements JoryParserInterface
 {
-
     /**
      * @var Request
      */
@@ -24,6 +22,7 @@ class RequestParser implements JoryParserInterface
 
     /**
      * RequestParser constructor.
+     *
      * @param Request $request
      */
     public function __construct(Request $request)
@@ -32,7 +31,7 @@ class RequestParser implements JoryParserInterface
     }
 
     /**
-     * Get the jory object based on the given Request
+     * Get the jory object based on the given Request.
      *
      * @return Jory
      */

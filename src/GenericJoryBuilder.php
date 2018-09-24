@@ -2,10 +2,9 @@
 
 namespace JosKolenberg\LaravelJory;
 
-
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\Jory\Jory;
@@ -21,11 +20,9 @@ use JosKolenberg\LaravelJory\Parsers\RequestParser;
  * Class to query models based on Jory data.
  *
  * Class GenericJoryBuilder
- * @package JosKolenberg\LaravelJory
  */
 class GenericJoryBuilder implements JoryBuilderInterface
 {
-
     /**
      * @var Builder
      */
@@ -39,7 +36,8 @@ class GenericJoryBuilder implements JoryBuilderInterface
     /**
      * GenericJoryBuilder constructor.
      */
-    public function __construct() {
+    public function __construct()
+    {
         // Set to empty jory by default in case none is applied.
         $this->jory = new Jory();
     }
@@ -48,9 +46,10 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Set a builder instance to build the query upon.
      *
      * @param Builder $builder
+     *
      * @return GenericJoryBuilder
      */
-    public function onQuery(Builder $builder): GenericJoryBuilder
+    public function onQuery(Builder $builder): self
     {
         $this->builder = $builder;
 
@@ -61,12 +60,16 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Set a Model to build the query upon.
      *
      * @param Model|string $class
+     *
      * @return GenericJoryBuilder
      */
-    public function onModel($class): GenericJoryBuilder
+    public function onModel($class): self
     {
-        if($class instanceof Model) $this->onQuery($class->newQuery());
-        else $this->onQuery((new $class)->newQuery());
+        if ($class instanceof Model) {
+            $this->onQuery($class->newQuery());
+        } else {
+            $this->onQuery((new $class())->newQuery());
+        }
 
         return $this;
     }
@@ -75,9 +78,10 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Apply an array with Jory data.
      *
      * @param array $array
+     *
      * @return GenericJoryBuilder
      */
-    public function applyArray(array $array): GenericJoryBuilder
+    public function applyArray(array $array): self
     {
         return $this->applyJory((new ArrayParser($array))->getJory());
     }
@@ -86,9 +90,10 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Apply a Json string with Jory data.
      *
      * @param string $json
+     *
      * @return GenericJoryBuilder
      */
-    public function applyJson(string $json): GenericJoryBuilder
+    public function applyJson(string $json): self
     {
         return $this->applyJory((new JsonParser($json))->getJory());
     }
@@ -97,9 +102,10 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Apply a request with Jory data.
      *
      * @param Request $request
+     *
      * @return GenericJoryBuilder
      */
-    public function applyRequest(Request $request): GenericJoryBuilder
+    public function applyRequest(Request $request): self
     {
         return $this->applyJory((new RequestParser($request))->getJory());
     }
@@ -108,11 +114,13 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Apply a Jory object.
      *
      * @param Jory $jory
+     *
      * @return GenericJoryBuilder
      */
-    public function applyJory(Jory $jory): GenericJoryBuilder
+    public function applyJory(Jory $jory): self
     {
         $this->jory = $jory;
+
         return $this;
     }
 
@@ -146,7 +154,9 @@ class GenericJoryBuilder implements JoryBuilderInterface
         $query = clone $this->builder;
 
         // Apply filters if there are any
-        if($this->jory->getFilter()) $this->applyFilter($query, $this->jory->getFilter());
+        if ($this->jory->getFilter()) {
+            $this->applyFilter($query, $this->jory->getFilter());
+        }
 
         return $query;
     }
@@ -154,7 +164,7 @@ class GenericJoryBuilder implements JoryBuilderInterface
     /**
      * Apply a filter (field, groupAnd or groupOr) on a query.
      *
-     * @param Builder $query
+     * @param Builder         $query
      * @param FilterInterface $filter
      */
     protected function applyFilter(Builder $query, FilterInterface $filter): void
@@ -162,17 +172,17 @@ class GenericJoryBuilder implements JoryBuilderInterface
         if ($filter instanceof Filter) {
             $this->applyFieldFilter($query, $filter);
         }
-        if($filter instanceof GroupAndFilter){
-            $query->where(function ($query) use ($filter){
-                foreach ($filter as $subFilter){
+        if ($filter instanceof GroupAndFilter) {
+            $query->where(function ($query) use ($filter) {
+                foreach ($filter as $subFilter) {
                     $this->applyFilter($query, $subFilter);
                 }
             });
         }
-        if($filter instanceof GroupOrFilter){
-            $query->where(function ($query) use ($filter){
-                foreach ($filter as $subFilter){
-                    $query->orWhere(function ($query) use($subFilter){
+        if ($filter instanceof GroupOrFilter) {
+            $query->where(function ($query) use ($filter) {
+                foreach ($filter as $subFilter) {
+                    $query->orWhere(function ($query) use ($subFilter) {
                         $this->applyFilter($query, $subFilter);
                     });
                 }
@@ -184,21 +194,29 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Apply a filter to a field.
      *
      * @param Builder $query
-     * @param Filter $filter
+     * @param Filter  $filter
      */
     protected function applyFieldFilter(Builder $query, Filter $filter): void
     {
-        switch ($filter->getOperator()){
+        switch ($filter->getOperator()) {
             case 'null':
-                $query->whereNull($filter->getField()); return;
+                $query->whereNull($filter->getField());
+
+return;
             case 'not_null':
-                $query->whereNotNull($filter->getField()); return;
+                $query->whereNotNull($filter->getField());
+
+return;
             case 'in':
-                $query->whereIn($filter->getField(), $filter->getValue()); return;
+                $query->whereIn($filter->getField(), $filter->getValue());
+
+return;
             case 'not_in':
-                $query->whereNotIn($filter->getField(), $filter->getValue()); return;
+                $query->whereNotIn($filter->getField(), $filter->getValue());
+
+return;
             default:
-                $query->where($filter->getField(), $filter->getOperator() ?: '=' , $filter->getValue());
+                $query->where($filter->getField(), $filter->getOperator() ?: '=', $filter->getValue());
         }
     }
 }
