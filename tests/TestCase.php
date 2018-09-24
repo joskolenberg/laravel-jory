@@ -3,8 +3,8 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
-use Illuminate\Foundation\Application;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
@@ -21,7 +21,6 @@ class TestCase extends Orchestra
 
         $this->setUpDatabase($this->app);
         $this->seedDatabase();
-
     }
 
     protected function setUpDatabase(Application $app)
@@ -89,7 +88,6 @@ class TestCase extends Orchestra
                 ->references('id')->on('album')
                 ->onDelete('restrict');
         });
-
     }
 
     private function seedDatabase()
@@ -134,7 +132,7 @@ class TestCase extends Orchestra
                  ] as $bandId => $personIds) {
             foreach ($personIds as $personId) {
                 DB::table('band_members')->insert([
-                    'band_id' => $bandId,
+                    'band_id'   => $bandId,
                     'person_id' => $personId,
                 ]);
             }
@@ -174,7 +172,7 @@ class TestCase extends Orchestra
             foreach ($instrumentIds as $instrumentId) {
                 DB::table('band_member_instrument')->insert([
                     'band_member_id' => $bandMemberId,
-                    'instrument_id' => $instrumentId,
+                    'instrument_id'  => $instrumentId,
                 ]);
             }
         }
@@ -349,6 +347,5 @@ class TestCase extends Orchestra
                  ] as $data) {
             Song::create($data);
         }
-
     }
 }
