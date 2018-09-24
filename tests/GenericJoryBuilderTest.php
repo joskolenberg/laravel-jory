@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
@@ -12,12 +11,11 @@ use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class GenericJoryBuilderTest extends TestCase
 {
-
     protected function setUp()
     {
         parent::setUp();
 
-        Route::get('/band', BandController::class . '@index');
+        Route::get('/band', BandController::class.'@index');
     }
 
     /**
@@ -68,7 +66,7 @@ class GenericJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    function it_can_apply_a_jory_json_string()
+    public function it_can_apply_a_jory_json_string()
     {
         $actual = (new GenericJoryBuilder())
             ->onModel(Song::class)
@@ -86,16 +84,16 @@ class GenericJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    function it_can_apply_a_jory_array()
+    public function it_can_apply_a_jory_array()
     {
         $actual = (new GenericJoryBuilder())
             ->onModel(Song::class)
             ->applyArray([
-                "filter" => [
-                    "f" => "name",
-                    "o" => "like",
-                    "v" => "love%",
-                ]
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'v' => 'love%',
+                ],
             ])
             ->get()
             ->pluck('name')
@@ -109,7 +107,7 @@ class GenericJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    function it_can_apply_a_jory_json_string_from_a_request()
+    public function it_can_apply_a_jory_json_string_from_a_request()
     {
         $response = $this->json('GET', '/band', [
             'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
@@ -119,21 +117,21 @@ class GenericJoryBuilderTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 [
-                    'id' => 2,
+                    'id'   => 2,
                     'name' => 'Led Zeppelin',
                 ],
             ]);
     }
 
     /** @test */
-    function it_can_apply_a_jory_object()
+    public function it_can_apply_a_jory_object()
     {
         $jory = (new ArrayParser([
-            "filter" => [
-                "f" => "name",
-                "o" => "like",
-                "v" => "love%",
-            ]
+            'filter' => [
+                'f' => 'name',
+                'o' => 'like',
+                'v' => 'love%',
+            ],
         ]))->getJory();
 
         $actual = (new GenericJoryBuilder())
@@ -151,7 +149,7 @@ class GenericJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    function it_defaults_to_empty_when_no_jory_is_applied()
+    public function it_defaults_to_empty_when_no_jory_is_applied()
     {
         $actual = (new GenericJoryBuilder())
             ->onModel(Band::class)

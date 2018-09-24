@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
-
 use JosKolenberg\LaravelJory\Contracts\JoryBuilderInterface;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 
@@ -12,11 +11,9 @@ use JosKolenberg\LaravelJory\GenericJoryBuilder;
  * This trait must be applied to a model as a marker even if the jory method is manually added to the model.
  *
  * Trait JoryTrait
- * @package JosKolenberg\LaravelJory\Traits
  */
 trait JoryTrait
 {
-
     /**
      * Return the JoryBuilder to query on this model.
      * A generic one by default, override this method to apply custom JoryBuilder class.
@@ -27,5 +24,4 @@ trait JoryTrait
     {
         return (new GenericJoryBuilder())->onModel(static::class);
     }
-
 }
