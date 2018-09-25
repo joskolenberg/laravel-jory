@@ -10,6 +10,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Tests\Models\WithTraits\BandWithTrait;
 use JosKolenberg\LaravelJory\Tests\Models\WithTraits\PersonWithTrait;
+use JosKolenberg\LaravelJory\Tests\Models\WithTraits\SongWithTrait;
 
 class GenericJoryBuilderFilterTest extends TestCase
 {
@@ -20,9 +21,9 @@ class GenericJoryBuilderFilterTest extends TestCase
     {
         $actual = PersonWithTrait::jory()->applyArray([
             'filter' => [
-                'field'    => 'first_name',
+                'field' => 'first_name',
                 'operator' => 'like',
-                'value'    => '%john%',
+                'value' => '%john%',
             ],
         ])->get()->pluck('last_name')->toArray();
 
@@ -38,14 +39,14 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_or' => [
                     [
-                        'field'    => 'first_name',
+                        'field' => 'first_name',
                         'operator' => 'like',
-                        'value'    => '%paul%',
+                        'value' => '%paul%',
                     ],
                     [
-                        'field'    => 'last_name',
+                        'field' => 'last_name',
                         'operator' => 'like',
-                        'value'    => '%le%',
+                        'value' => '%le%',
                     ],
                 ],
             ],
@@ -63,20 +64,212 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'first_name',
+                        'field' => 'first_name',
                         'operator' => 'like',
-                        'value'    => '%john%',
+                        'value' => '%john%',
                     ],
                     [
-                        'field'    => 'last_name',
+                        'field' => 'last_name',
                         'operator' => 'like',
-                        'value'    => '%le%',
+                        'value' => '%le%',
                     ],
                 ],
             ],
         ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Lennon'], $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_apply_nested_filters_1()
+    {
+        $actual = SongWithTrait::jory()->applyArray([
+            'filter' => [
+                'group_and' => [
+                    [
+                        'field' => 'name',
+                        'operator' => 'like',
+                        'value' => '%love%',
+                    ],
+                ],
+            ],
+        ])->get()->pluck('name')->toArray();
+
+        $this->assertEquals([
+                'Love In Vain (Robert Johnson)',
+                'Whole Lotta Love',
+                'Lovely Rita',
+                'Love or Confusion',
+                'May This Be Love',
+                'Little Miss Lover',
+                'Bold as Love',
+                'And the Gods Made Love',
+            ]
+            , $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_apply_nested_filters_2()
+    {
+        $actual = SongWithTrait::jory()->applyArray([
+            'filter' => [
+                'group_and' => [
+                    [
+                        'field' => 'name',
+                        'operator' => 'like',
+                        'value' => '%love%',
+                    ],
+                    [
+                        'group_or' => [
+                            [
+                                'field' => 'name',
+                                'operator' => 'like',
+                                'value' => '%bold%',
+                            ],
+                            [
+                                'field' => 'name',
+                                'operator' => 'like',
+                                'value' => '%er%',
+                            ],
+                        ]
+                    ],
+                ],
+            ],
+        ])->get()->pluck('name')->toArray();
+
+        $this->assertEquals([
+                'Love In Vain (Robert Johnson)',
+                'Little Miss Lover',
+                'Bold as Love',
+            ]
+            , $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_apply_nested_filters_3()
+    {
+        $actual = SongWithTrait::jory()->applyArray([
+            'filter' => [
+                'group_and' => [
+                    [
+                        'field' => 'name',
+                        'operator' => 'like',
+                        'value' => '%love%',
+                    ],
+                    [
+                        'group_or' => [
+                            [
+                                'field' => 'name',
+                                'operator' => 'like',
+                                'value' => '%bold%',
+                            ],
+                            [
+                                'field' => 'name',
+                                'operator' => 'like',
+                                'value' => '%er%',
+                            ],
+                            [
+                                'group_and' => [
+                                    [
+                                        'field' => 'name',
+                                        'operator' => 'like',
+                                        'value' => 'may%',
+                                    ],
+                                    [
+                                        'field' => 'name',
+                                        'operator' => 'like',
+                                        'value' => '%love',
+                                    ],
+                                ]
+                            ],
+                        ]
+                    ],
+                ],
+            ],
+        ])->get()->pluck('name')->toArray();
+
+        $this->assertEquals([
+                'Love In Vain (Robert Johnson)',
+                'May This Be Love',
+                'Little Miss Lover',
+                'Bold as Love',
+            ]
+            , $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_apply_nested_filters_4()
+    {
+        $actual = SongWithTrait::jory()->applyArray([
+            'filter' => [
+                'group_and' => [
+                    [
+                        'field' => 'name',
+                        'operator' => 'like',
+                        'value' => '%love%',
+                    ],
+                    [
+                        'group_or' => [
+                            [
+                                'field' => 'name',
+                                'operator' => 'like',
+                                'value' => '%bold%',
+                            ],
+                            [
+                                'field' => 'name',
+                                'operator' => 'like',
+                                'value' => '%er%',
+                            ],
+                            [
+                                'group_and' => [
+                                    [
+                                        'field' => 'name',
+                                        'operator' => 'like',
+                                        'value' => '%e%',
+                                    ],
+                                    [
+                                        'field' => 'name',
+                                        'operator' => 'like',
+                                        'value' => '%a%',
+                                    ],
+                                    [
+                                        'group_or' => [
+                                            [
+                                                'field' => 'name',
+                                                'operator' => 'like',
+                                                'value' => '%whole%',
+                                            ],
+                                            [
+                                                'field' => 'name',
+                                                'operator' => 'like',
+                                                'value' => '%gods%',
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ],
+                ],
+            ],
+        ])->get()->pluck('name')->toArray();
+
+        $this->assertEquals([
+                'Love In Vain (Robert Johnson)',
+                'Whole Lotta Love',
+                'Little Miss Lover',
+                'Bold as Love',
+                'And the Gods Made Love',
+            ]
+            , $actual);
     }
 
     /**
