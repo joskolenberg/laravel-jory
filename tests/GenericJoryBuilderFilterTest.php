@@ -21,9 +21,9 @@ class GenericJoryBuilderFilterTest extends TestCase
     {
         $actual = PersonWithTrait::jory()->applyArray([
             'filter' => [
-                'field' => 'first_name',
+                'field'    => 'first_name',
                 'operator' => 'like',
-                'value' => '%john%',
+                'value'    => '%john%',
             ],
         ])->get()->pluck('last_name')->toArray();
 
@@ -39,14 +39,14 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_or' => [
                     [
-                        'field' => 'first_name',
+                        'field'    => 'first_name',
                         'operator' => 'like',
-                        'value' => '%paul%',
+                        'value'    => '%paul%',
                     ],
                     [
-                        'field' => 'last_name',
+                        'field'    => 'last_name',
                         'operator' => 'like',
-                        'value' => '%le%',
+                        'value'    => '%le%',
                     ],
                 ],
             ],
@@ -64,14 +64,14 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field' => 'first_name',
+                        'field'    => 'first_name',
                         'operator' => 'like',
-                        'value' => '%john%',
+                        'value'    => '%john%',
                     ],
                     [
-                        'field' => 'last_name',
+                        'field'    => 'last_name',
                         'operator' => 'like',
-                        'value' => '%le%',
+                        'value'    => '%le%',
                     ],
                 ],
             ],
@@ -89,9 +89,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field' => 'name',
+                        'field'    => 'name',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'value'    => '%love%',
                     ],
                 ],
             ],
@@ -106,8 +106,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                 'Little Miss Lover',
                 'Bold as Love',
                 'And the Gods Made Love',
-            ]
-            , $actual);
+            ], $actual);
     }
 
     /**
@@ -119,23 +118,23 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field' => 'name',
+                        'field'    => 'name',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'value'    => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field' => 'name',
+                                'field'    => 'name',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'value'    => '%bold%',
                             ],
                             [
-                                'field' => 'name',
+                                'field'    => 'name',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'value'    => '%er%',
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -145,8 +144,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                 'Love In Vain (Robert Johnson)',
                 'Little Miss Lover',
                 'Bold as Love',
-            ]
-            , $actual);
+            ], $actual);
     }
 
     /**
@@ -158,37 +156,37 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field' => 'name',
+                        'field'    => 'name',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'value'    => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field' => 'name',
+                                'field'    => 'name',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'value'    => '%bold%',
                             ],
                             [
-                                'field' => 'name',
+                                'field'    => 'name',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'value'    => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
-                                        'field' => 'name',
+                                        'field'    => 'name',
                                         'operator' => 'like',
-                                        'value' => 'may%',
+                                        'value'    => 'may%',
                                     ],
                                     [
-                                        'field' => 'name',
+                                        'field'    => 'name',
                                         'operator' => 'like',
-                                        'value' => '%love',
+                                        'value'    => '%love',
                                     ],
-                                ]
+                                ],
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -199,8 +197,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                 'May This Be Love',
                 'Little Miss Lover',
                 'Bold as Love',
-            ]
-            , $actual);
+            ], $actual);
     }
 
     /**
@@ -212,51 +209,51 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field' => 'name',
+                        'field'    => 'name',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'value'    => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field' => 'name',
+                                'field'    => 'name',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'value'    => '%bold%',
                             ],
                             [
-                                'field' => 'name',
+                                'field'    => 'name',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'value'    => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
-                                        'field' => 'name',
+                                        'field'    => 'name',
                                         'operator' => 'like',
-                                        'value' => '%e%',
+                                        'value'    => '%e%',
                                     ],
                                     [
-                                        'field' => 'name',
+                                        'field'    => 'name',
                                         'operator' => 'like',
-                                        'value' => '%a%',
+                                        'value'    => '%a%',
                                     ],
                                     [
                                         'group_or' => [
                                             [
-                                                'field' => 'name',
+                                                'field'    => 'name',
                                                 'operator' => 'like',
-                                                'value' => '%whole%',
+                                                'value'    => '%whole%',
                                             ],
                                             [
-                                                'field' => 'name',
+                                                'field'    => 'name',
                                                 'operator' => 'like',
-                                                'value' => '%gods%',
-                                            ]
-                                        ]
-                                    ]
-                                ]
+                                                'value'    => '%gods%',
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -268,8 +265,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                 'Little Miss Lover',
                 'Bold as Love',
                 'And the Gods Made Love',
-            ]
-            , $actual);
+            ], $actual);
     }
 
     /**
