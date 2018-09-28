@@ -3,8 +3,8 @@
 namespace JosKolenberg\LaravelJory\Tests\Traits;
 
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Models\WithTraits\AlbumWithTrait;
-use JosKolenberg\LaravelJory\Tests\Models\WithTraits\BandWithTrait;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class JoryTraitTest extends TestCase
@@ -15,13 +15,13 @@ class JoryTraitTest extends TestCase
     {
         parent::setUp();
 
-        BandWithTrait::joryRoutes('band');
+        Band::joryRoutes('band');
     }
 
     /** @test */
     public function it_can_give_a_genericJoryBuilder_when_applied()
     {
-        $this->assertInstanceOf(GenericJoryBuilder::class, AlbumWithTrait::jory());
+        $this->assertInstanceOf(GenericJoryBuilder::class, Album::jory());
     }
 
     /** @test */

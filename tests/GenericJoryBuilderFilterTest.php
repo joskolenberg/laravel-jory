@@ -8,9 +8,9 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Tests\Models\WithTraits\BandWithTrait;
-use JosKolenberg\LaravelJory\Tests\Models\WithTraits\PersonWithTrait;
-use JosKolenberg\LaravelJory\Tests\Models\WithTraits\SongWithTrait;
+use JosKolenberg\LaravelJory\Tests\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Models\Person;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class GenericJoryBuilderFilterTest extends TestCase
 {
@@ -19,7 +19,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_a_single_filter()
     {
-        $actual = PersonWithTrait::jory()->applyArray([
+        $actual = Person::jory()->applyArray([
             'filter' => [
                 'field'    => 'first_name',
                 'operator' => 'like',
@@ -35,7 +35,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_an_OR_filter_group()
     {
-        $actual = PersonWithTrait::jory()->applyArray([
+        $actual = Person::jory()->applyArray([
             'filter' => [
                 'group_or' => [
                     [
@@ -60,7 +60,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_an_AND_filter_group()
     {
-        $actual = PersonWithTrait::jory()->applyArray([
+        $actual = Person::jory()->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -85,7 +85,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_1()
     {
-        $actual = SongWithTrait::jory()->applyArray([
+        $actual = Song::jory()->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -114,7 +114,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_2()
     {
-        $actual = SongWithTrait::jory()->applyArray([
+        $actual = Song::jory()->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -152,7 +152,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_3()
     {
-        $actual = SongWithTrait::jory()->applyArray([
+        $actual = Song::jory()->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -205,7 +205,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_4()
     {
-        $actual = SongWithTrait::jory()->applyArray([
+        $actual = Song::jory()->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -273,7 +273,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_doesnt_apply_any_filter_when_parameter_is_omitted()
     {
-        $actual = BandWithTrait::jory()->applyArray([])->get()->pluck('name')->toArray();
+        $actual = Band::jory()->applyArray([])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -287,7 +287,7 @@ class GenericJoryBuilderFilterTest extends TestCase
     public function it_can_filter_by_the_default_laravel_operators()
     {
         // =, >, <, <>, !=, like, not like, <=, >=
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '=',
@@ -298,7 +298,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Beatles',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '>',
@@ -310,7 +310,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Led Zeppelin',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '<',
@@ -321,7 +321,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Beatles',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '<>',
@@ -334,7 +334,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Jimi Hendrix Experience',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '!=',
@@ -347,7 +347,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Jimi Hendrix Experience',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
@@ -358,7 +358,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Beatles',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
@@ -369,7 +369,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Rolling Stones',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
@@ -381,7 +381,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Beatles',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => 'not like',
@@ -393,7 +393,7 @@ class GenericJoryBuilderFilterTest extends TestCase
             'Jimi Hendrix Experience',
         ], $actual);
 
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'id',
                 'o' => '>=',
@@ -409,7 +409,7 @@ class GenericJoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_filter_on_null_values()
     {
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'year_end',
                 'o' => 'null',
@@ -423,7 +423,7 @@ class GenericJoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_filter_on_non_null_values()
     {
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'year_end',
                 'o' => 'not_null',
@@ -439,7 +439,7 @@ class GenericJoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_apply_an_IN_filter()
     {
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'id',
                 'o' => 'in',
@@ -455,7 +455,7 @@ class GenericJoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_apply_a_NOT_IN_filter()
     {
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'id',
                 'o' => 'not_in',
@@ -471,7 +471,7 @@ class GenericJoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_defaults_to_an_EQUALS_check_if_no_operator_is_given()
     {
-        $actual = BandWithTrait::jory()->applyArray([
+        $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
                 'v' => 'Beatles',

@@ -2,10 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
+use JosKolenberg\LaravelJory\Traits\JoryTrait;
+
 class Person extends Model
 {
-    public function bands()
-    {
-        return $this->belongsToMany(Band::class, 'band_members');
-    }
+    use JoryTrait;
+
+    protected $table = 'people';
 }
