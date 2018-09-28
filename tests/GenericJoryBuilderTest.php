@@ -11,11 +11,13 @@ use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class GenericJoryBuilderTest extends TestCase
 {
+
     protected function setUp()
     {
         parent::setUp();
 
         Route::get('/band', BandController::class.'@index');
+        Route::get('/band-as-response', BandController::class.'@indexAsResponse');
     }
 
     /**
@@ -163,5 +165,22 @@ class GenericJoryBuilderTest extends TestCase
             'Beatles',
             'Jimi Hendrix Experience',
         ], $actual);
+    }
+
+    /** @test */
+    public function it_can_be_returned_as_a_response_from_a_controller()
+    {
+        $response = $this->json('GET', '/band-as-response', [
+            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                [
+                    'id'   => 2,
+                    'name' => 'Led Zeppelin',
+                ],
+            ]);
     }
 }

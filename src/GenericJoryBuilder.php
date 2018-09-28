@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory;
 
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ use JosKolenberg\LaravelJory\Parsers\RequestParser;
  *
  * Class GenericJoryBuilder
  */
-class GenericJoryBuilder implements JoryBuilderInterface
+class GenericJoryBuilder implements JoryBuilderInterface, Responsable
 {
     /**
      * @var Builder
@@ -164,7 +165,7 @@ class GenericJoryBuilder implements JoryBuilderInterface
     /**
      * Apply a filter (field, groupAnd or groupOr) on a query.
      *
-     * @param Builder         $query
+     * @param Builder $query
      * @param FilterInterface $filter
      */
     protected function applyFilter(Builder $query, FilterInterface $filter): void
@@ -194,7 +195,7 @@ class GenericJoryBuilder implements JoryBuilderInterface
      * Apply a filter to a field.
      *
      * @param Builder $query
-     * @param Filter  $filter
+     * @param Filter $filter
      */
     protected function applyFieldFilter(Builder $query, Filter $filter): void
     {
@@ -202,21 +203,32 @@ class GenericJoryBuilder implements JoryBuilderInterface
             case 'null':
                 $query->whereNull($filter->getField());
 
-return;
+                return;
             case 'not_null':
                 $query->whereNotNull($filter->getField());
 
-return;
+                return;
             case 'in':
                 $query->whereIn($filter->getField(), $filter->getValue());
 
-return;
+                return;
             case 'not_in':
                 $query->whereNotIn($filter->getField(), $filter->getValue());
 
-return;
+                return;
             default:
                 $query->where($filter->getField(), $filter->getOperator() ?: '=', $filter->getValue());
         }
+    }
+
+    /**
+     * Create an HTTP response that represents the object.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function toResponse($request)
+    {
+        return response($this->get());
     }
 }
