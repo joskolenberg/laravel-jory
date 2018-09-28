@@ -70,8 +70,7 @@ class GenericJoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_json_string()
     {
-        $actual = (new GenericJoryBuilder())
-            ->onModel(Song::class)
+        $actual = Song::jory()
             ->applyJson('{"filter":{"f":"name","o":"like","v":"%love"}}')
             ->get()
             ->pluck('name')
@@ -88,8 +87,7 @@ class GenericJoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_array()
     {
-        $actual = (new GenericJoryBuilder())
-            ->onModel(Song::class)
+        $actual = Song::jory()
             ->applyArray([
                 'filter' => [
                     'f' => 'name',
@@ -136,8 +134,7 @@ class GenericJoryBuilderTest extends TestCase
             ],
         ]))->getJory();
 
-        $actual = (new GenericJoryBuilder())
-            ->onModel(Song::class)
+        $actual = Song::jory()
             ->applyJory($jory)
             ->get()
             ->pluck('name')
@@ -153,8 +150,7 @@ class GenericJoryBuilderTest extends TestCase
     /** @test */
     public function it_defaults_to_empty_when_no_jory_is_applied()
     {
-        $actual = (new GenericJoryBuilder())
-            ->onModel(Band::class)
+        $actual = Band::jory()
             ->get()
             ->pluck('name')
             ->toArray();
