@@ -58,10 +58,10 @@ class TestCase extends Orchestra
             $table->string('name');
         });
 
-        $app['db']->connection()->getSchemaBuilder()->create('band_member_instrument', function (Blueprint $table) {
+        $app['db']->connection()->getSchemaBuilder()->create('instrument_person', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('band_member_id');
-            $table->foreign('band_member_id')
+            $table->unsignedInteger('person_id');
+            $table->foreign('person_id')
                 ->references('id')->on('band_members')
                 ->onDelete('restrict');
             $table->unsignedInteger('instrument_id');
@@ -145,6 +145,7 @@ class TestCase extends Orchestra
                      3 => 'Bassguitar',
                      4 => 'Drums',
                      5 => 'Piano',
+                     6 => 'Flute',
                  ] as $name) {
             Instrument::create([
                 'name' => $name,
@@ -170,8 +171,8 @@ class TestCase extends Orchestra
                      15 => [4],
                  ] as $bandMemberId => $instrumentIds) {
             foreach ($instrumentIds as $instrumentId) {
-                DB::table('band_member_instrument')->insert([
-                    'band_member_id' => $bandMemberId,
+                DB::table('instrument_person')->insert([
+                    'person_id' => $bandMemberId,
                     'instrument_id'  => $instrumentId,
                 ]);
             }

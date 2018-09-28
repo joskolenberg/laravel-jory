@@ -4,7 +4,7 @@ namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use JosKolenberg\LaravelJory\Contracts\JoryBuilderInterface;
+use JosKolenberg\LaravelJory\AbstractJoryBuilder;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 
 /**
@@ -20,9 +20,9 @@ trait JoryTrait
      * Return the JoryBuilder to query on this model.
      * A generic one by default, override this method to apply custom JoryBuilder class.
      *
-     * @return JoryBuilderInterface
+     * @return AbstractJoryBuilder
      */
-    public static function jory(): JoryBuilderInterface
+    public static function jory(): AbstractJoryBuilder
     {
         return (new GenericJoryBuilder())->onModel(static::class);
     }
