@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Contracts\JoryBuilderInterface;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 
@@ -23,5 +25,17 @@ trait JoryTrait
     public static function jory(): JoryBuilderInterface
     {
         return (new GenericJoryBuilder())->onModel(static::class);
+    }
+
+    /**
+     * Register the routes for querying this model using the data in the request's jory parameter.
+     *
+     * @return void
+     */
+    public static function joryRoutes($uri): void
+    {
+        Route::get($uri, function (Request $request){
+            return static::jory()->applyRequest($request);
+        });
     }
 }
