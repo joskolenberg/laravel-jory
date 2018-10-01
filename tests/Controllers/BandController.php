@@ -8,7 +8,6 @@ use JosKolenberg\LaravelJory\Tests\Models\Band;
 
 class BandController extends Controller
 {
-
     public function index(Request $request)
     {
         $data = Band::jory()->applyRequest($request)->get();
@@ -20,5 +19,4 @@ class BandController extends Controller
     {
         return Band::jory()->applyRequest($request);
     }
-
 }

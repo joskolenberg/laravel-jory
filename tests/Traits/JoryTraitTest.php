@@ -10,8 +10,6 @@ use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class JoryTraitTest extends TestCase
 {
-
-
     protected function setUp()
     {
         parent::setUp();
@@ -43,11 +41,11 @@ class JoryTraitTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 [
-                    'id' => 1,
+                    'id'   => 1,
                     'name' => 'Rolling Stones',
                 ],
                 [
-                    'id' => 2,
+                    'id'   => 2,
                     'name' => 'Led Zeppelin',
                 ],
             ]);
@@ -64,34 +62,33 @@ class JoryTraitTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 [
-                    'id' => 3,
+                    'id'   => 3,
                     'name' => 'Exile on main st.',
                 ],
                 [
-                    'id' => 7,
+                    'id'   => 7,
                     'name' => 'Sgt. Peppers lonely hearts club band',
                 ],
                 [
-                    'id' => 8,
+                    'id'   => 8,
                     'name' => 'Abbey road',
                 ],
                 [
-                    'id' => 9,
+                    'id'   => 9,
                     'name' => 'Let it be',
                 ],
                 [
-                    'id' => 10,
+                    'id'   => 10,
                     'name' => 'Are you experienced',
                 ],
                 [
-                    'id' => 11,
+                    'id'   => 11,
                     'name' => 'Axis: Bold as love',
                 ],
                 [
-                    'id' => 12,
+                    'id'   => 12,
                     'name' => 'Electric ladyland',
                 ],
             ]);
     }
-
 }

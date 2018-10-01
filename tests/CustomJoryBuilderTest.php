@@ -2,15 +2,13 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 
 class CustomJoryBuilderTest extends TestCase
 {
-
     /** @test */
-    function it_can_apply_a_custom_filter()
+    public function it_can_apply_a_custom_filter()
     {
         $actual = Album::jory()
             ->applyArray([
@@ -18,7 +16,7 @@ class CustomJoryBuilderTest extends TestCase
                     'f' => 'number_of_songs',
                     'o' => '>',
                     'v' => 10,
-                ]
+                ],
             ])
             ->get()
             ->pluck('name')
@@ -36,7 +34,7 @@ class CustomJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    function it_can_apply_mulitple_custom_filters()
+    public function it_can_apply_mulitple_custom_filters()
     {
         $actual = Album::jory()
             ->applyArray([
@@ -53,7 +51,7 @@ class CustomJoryBuilderTest extends TestCase
                             'v' => 9,
                         ],
                     ],
-                ]
+                ],
             ])
             ->get()
             ->pluck('name')
@@ -74,7 +72,7 @@ class CustomJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    function it_can_combine_standard_and_custom_filters()
+    public function it_can_combine_standard_and_custom_filters()
     {
         $actual = Album::jory()
             ->applyArray([
@@ -91,7 +89,7 @@ class CustomJoryBuilderTest extends TestCase
                             'v' => '%el%',
                         ],
                     ],
-                ]
+                ],
             ])
             ->get()
             ->pluck('name')
@@ -104,7 +102,7 @@ class CustomJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    function it_can_override_the_basic_filter_function()
+    public function it_can_override_the_basic_filter_function()
     {
         $actual = Instrument::jory()
             ->applyArray([
@@ -124,5 +122,4 @@ class CustomJoryBuilderTest extends TestCase
             // An extra custom filter is made to exclude instruments without connected people, so flute should be missing
         ], $actual);
     }
-
 }

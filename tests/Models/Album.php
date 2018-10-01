@@ -20,5 +20,4 @@ class Album extends Model
     {
         return new AlbumJoryBuilder();
     }
-
 }

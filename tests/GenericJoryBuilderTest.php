@@ -11,7 +11,6 @@ use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class GenericJoryBuilderTest extends TestCase
 {
-
     protected function setUp()
     {
         parent::setUp();

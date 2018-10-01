@@ -16,12 +16,12 @@ use JosKolenberg\LaravelJory\GenericJoryBuilder;
  */
 trait JoryTrait
 {
-
     /**
      * Return the JoryBuilder to query on this model.
      *
-     * @return AbstractJoryBuilder
      * @throws LaravelJoryException
+     *
+     * @return AbstractJoryBuilder
      */
     public static function jory(): AbstractJoryBuilder
     {
@@ -35,7 +35,7 @@ trait JoryTrait
      */
     public static function joryRoutes($uri): void
     {
-        Route::get($uri, function (Request $request){
+        Route::get($uri, function (Request $request) {
             return static::jory()->applyRequest($request);
         });
     }
@@ -44,8 +44,9 @@ trait JoryTrait
      * Get a new JoryBuilder instance for the model.
      * A generic one by default, override in to apply a custom JoryBuilder class.
      *
-     * @return GenericJoryBuilder
      * @throws LaravelJoryException
+     *
+     * @return GenericJoryBuilder
      */
     public static function getJoryBuilder(): AbstractJoryBuilder
     {
