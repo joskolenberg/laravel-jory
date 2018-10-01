@@ -172,7 +172,7 @@ class TestCase extends Orchestra
                  ] as $bandMemberId => $instrumentIds) {
             foreach ($instrumentIds as $instrumentId) {
                 DB::table('instrument_person')->insert([
-                    'person_id' => $bandMemberId,
+                    'person_id'      => $bandMemberId,
                     'instrument_id'  => $instrumentId,
                 ]);
             }

@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory;
 
-
 use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\Jory\Support\Filter;
 
@@ -14,19 +13,19 @@ use JosKolenberg\Jory\Support\Filter;
  */
 abstract class CustomJoryBuilder extends AbstractJoryBuilder
 {
-
     /**
      * Run the custom filter method if it is available.
      * If not, run the standard filter method in the parent.
      *
      * @param Builder $query
-     * @param Filter $filter
+     * @param Filter  $filter
      */
     protected function applyFieldFilter(Builder $query, Filter $filter): void
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
-        if(method_exists($this, $customMethodName)){
+        if (method_exists($this, $customMethodName)) {
             $this->$customMethodName($query, $filter);
+
             return;
         }
 
@@ -34,15 +33,14 @@ abstract class CustomJoryBuilder extends AbstractJoryBuilder
     }
 
     /**
-     * Get the custom method name to look for to apply a filter
+     * Get the custom method name to look for to apply a filter.
      *
      * @param Filter $filter
+     *
      * @return string
      */
     protected function getCustomFilterMethodName(Filter $filter)
     {
-        return 'apply' . studly_case($filter->getField()) . 'Filter';
+        return 'apply'.studly_case($filter->getField()).'Filter';
     }
-
-
 }

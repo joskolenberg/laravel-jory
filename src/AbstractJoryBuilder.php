@@ -5,7 +5,6 @@ namespace JosKolenberg\LaravelJory;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\Jory\Jory;
@@ -146,7 +145,7 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Apply a filter (field, groupAnd or groupOr) on a query.
      *
-     * @param Builder $query
+     * @param Builder         $query
      * @param FilterInterface $filter
      */
     protected function applyFilter(Builder $query, FilterInterface $filter): void
@@ -176,7 +175,7 @@ abstract class AbstractJoryBuilder implements Responsable
      * Apply a filter to a field.
      *
      * @param Builder $query
-     * @param Filter $filter
+     * @param Filter  $filter
      */
     protected function applyFieldFilter(Builder $query, Filter $filter): void
     {
@@ -188,7 +187,8 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Create an HTTP response that represents the object.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function toResponse($request)
@@ -197,12 +197,12 @@ abstract class AbstractJoryBuilder implements Responsable
     }
 
     /**
-     * Do apply a filter to a field with default options
+     * Do apply a filter to a field with default options.
      *
      * Prefixed with 'do' to prevent classing if a custom filter named 'default_field' should exist.
      *
      * @param Builder $query
-     * @param Filter $filter
+     * @param Filter  $filter
      */
     protected function doApplyDefaultFieldFilter(Builder $query, Filter $filter): void
     {
