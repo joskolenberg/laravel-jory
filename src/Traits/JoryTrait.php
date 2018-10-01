@@ -2,29 +2,30 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\AbstractJoryBuilder;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 
 /**
  * Trait to mark a Model as Jory-queryable.
  *
- * This trait must be applied to a model as a marker even if the jory method is manually added to the model.
- *
  * Trait JoryTrait
  */
 trait JoryTrait
 {
+
     /**
      * Return the JoryBuilder to query on this model.
-     * A generic one by default, override this method to apply custom JoryBuilder class.
      *
      * @return AbstractJoryBuilder
+     * @throws LaravelJoryException
      */
     public static function jory(): AbstractJoryBuilder
     {
-        return (new GenericJoryBuilder())->onModel(static::class);
+        return static::getJoryBuilder()->onQuery(static::getJoryBaseQuery());
     }
 
     /**
@@ -37,5 +38,27 @@ trait JoryTrait
         Route::get($uri, function (Request $request){
             return static::jory()->applyRequest($request);
         });
+    }
+
+    /**
+     * Get a new JoryBuilder instance for the model.
+     * A generic one by default, override in to apply a custom JoryBuilder class.
+     *
+     * @return GenericJoryBuilder
+     * @throws LaravelJoryException
+     */
+    public static function getJoryBuilder(): AbstractJoryBuilder
+    {
+        return new GenericJoryBuilder();
+    }
+
+    /**
+     * Get the base query to build upon with a jorybuilder.
+     *
+     * @return Builder
+     */
+    protected static function getJoryBaseQuery(): Builder
+    {
+        return (new static())->query();
     }
 }
