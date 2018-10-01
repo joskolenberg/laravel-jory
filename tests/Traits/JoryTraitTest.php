@@ -17,6 +17,7 @@ class JoryTraitTest extends TestCase
         parent::setUp();
 
         Band::joryRoutes('band');
+        Album::joryRoutes('album');
     }
 
     /** @test */
@@ -42,12 +43,53 @@ class JoryTraitTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 [
-                    'id'   => 1,
+                    'id' => 1,
                     'name' => 'Rolling Stones',
                 ],
                 [
-                    'id'   => 2,
+                    'id' => 2,
                     'name' => 'Led Zeppelin',
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function it_can_define_a_route_for_a_custom_builder()
+    {
+        $response = $this->json('GET', '/album', [
+            'jory' => '{"filter":{"f":"number_of_songs","o":">","v":10}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                [
+                    'id' => 3,
+                    'name' => 'Exile on main st.',
+                ],
+                [
+                    'id' => 7,
+                    'name' => 'Sgt. Peppers lonely hearts club band',
+                ],
+                [
+                    'id' => 8,
+                    'name' => 'Abbey road',
+                ],
+                [
+                    'id' => 9,
+                    'name' => 'Let it be',
+                ],
+                [
+                    'id' => 10,
+                    'name' => 'Are you experienced',
+                ],
+                [
+                    'id' => 11,
+                    'name' => 'Axis: Bold as love',
+                ],
+                [
+                    'id' => 12,
+                    'name' => 'Electric ladyland',
                 ],
             ]);
     }

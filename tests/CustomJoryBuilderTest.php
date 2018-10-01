@@ -74,6 +74,36 @@ class CustomJoryBuilderTest extends TestCase
     }
 
     /** @test */
+    function it_can_combine_standard_and_custom_filters()
+    {
+        $actual = Album::jory()
+            ->applyArray([
+                'filter' => [
+                    'group_and' => [
+                        [
+                            'f' => 'number_of_songs',
+                            'o' => '>=',
+                            'v' => 11,
+                        ],
+                        [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'v' => '%el%',
+                        ],
+                    ],
+                ]
+            ])
+            ->get()
+            ->pluck('name')
+            ->toArray();
+
+        $this->assertEquals([
+            'Sgt. Peppers lonely hearts club band',
+            'Electric ladyland',
+        ], $actual);
+    }
+
+    /** @test */
     function it_can_override_the_basic_filter_function()
     {
         $actual = Instrument::jory()
