@@ -23,37 +23,6 @@ class GenericJoryBuilderTest extends TestCase
     /**
      * @test
      */
-    public function it_can_apply_on_a_models_class_name()
-    {
-        $actual = (new GenericJoryBuilder())->onModel(Band::class)->get()->pluck('name')->toArray();
-
-        $this->assertEquals([
-            'Rolling Stones',
-            'Led Zeppelin',
-            'Beatles',
-            'Jimi Hendrix Experience',
-        ], $actual);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_apply_on_a_model_instance()
-    {
-        $band = new Band();
-        $actual = (new GenericJoryBuilder())->onModel($band)->get()->pluck('name')->toArray();
-
-        $this->assertEquals([
-            'Rolling Stones',
-            'Led Zeppelin',
-            'Beatles',
-            'Jimi Hendrix Experience',
-        ], $actual);
-    }
-
-    /**
-     * @test
-     */
     public function it_can_apply_on_a_querybuilder_instance()
     {
         $query = Band::query();

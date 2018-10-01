@@ -57,24 +57,6 @@ abstract class AbstractJoryBuilder implements Responsable
     }
 
     /**
-     * Set a Model to build the query upon.
-     *
-     * @param Model|string $class
-     *
-     * @return GenericJoryBuilder
-     */
-    public function onModel($class): self
-    {
-        if ($class instanceof Model) {
-            $this->onQuery($class->newQuery());
-        } else {
-            $this->onQuery((new $class())->newQuery());
-        }
-
-        return $this;
-    }
-
-    /**
      * Apply an array with Jory data.
      *
      * @param array $array
