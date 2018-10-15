@@ -2,8 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 use JosKolenberg\LaravelJory\Traits\JoryTrait;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 
 class Band extends Model
 {

@@ -2,12 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Traits;
 
+use JosKolenberg\LaravelJory\Tests\TestCase;
 use JosKolenberg\LaravelJory\CustomJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
-use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
-use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class JoryTraitTest extends TestCase
 {

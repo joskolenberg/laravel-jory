@@ -2,11 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use JosKolenberg\LaravelJory\AbstractJoryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
+use JosKolenberg\LaravelJory\AbstractJoryBuilder;
 
 /**
  * Trait to mark a Model as Jory-queryable.

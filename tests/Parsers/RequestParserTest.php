@@ -3,9 +3,9 @@
 namespace JosKolenberg\LaravelJory\Tests\Parsers;
 
 use Illuminate\Support\Facades\Route;
+use JosKolenberg\LaravelJory\Tests\TestCase;
 use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
 use JosKolenberg\LaravelJory\Tests\Controllers\PersonController;
-use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class RequestParserTest extends TestCase
 {
