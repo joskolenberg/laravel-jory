@@ -252,18 +252,11 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Load the given relations on the given model(s).
      *
-     * @param Model|Collection $models
-     * @param array            $relations
+     * @param Collection $models
+     * @param array      $relations
      */
-    protected function loadRelations($models, array $relations): void
+    protected function loadRelations(Collection $models, array $relations): void
     {
-        // If a single model is given, convert to collection for coding convenience
-        if ($models instanceof Model) {
-            $model = clone $models;
-            $models = new Collection();
-            $models->push($model);
-        }
-
         foreach ($relations as $relation) {
             $this->loadRelation($models, $relation);
         }

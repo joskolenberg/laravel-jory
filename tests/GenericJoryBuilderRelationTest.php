@@ -294,6 +294,7 @@ class GenericJoryBuilderRelationTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 [
+                    'id'           => 8,
                     'band_id'      => 3,
                     'name'         => 'Abbey road',
                     'release_date' => '1969-09-26',
@@ -375,7 +376,7 @@ class GenericJoryBuilderRelationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_load_and_filter_nested_relations()
+    public function it_can_load_and_filter_nested_relations_1()
     {
         $response = $this->json('GET', '/band', [
             'jory' => '{"filter":{"f":"name","o":"like","v":"%in%"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%love%"},"rlt":{"album":{}}}}}',
@@ -763,6 +764,130 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                     ],
                 ],
+            ]);
+    }
+
+    /** @test */
+    public function it_can_have_a_relation_on_empty_collection()
+    {
+        $response = $this->json('GET', '/band', [
+            'jory' => '{"filter":{"f":"name","o":"=","v":"foo"},"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%III%"}}}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([]);
+    }
+
+    /** @test */
+    public function it_can_load_and_filter_nested_relations_3()
+    {
+        $response = $this->json('GET', '/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","v":"The End"},"rlt":{"album":{"rlt":{"songs":{}}}}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                [
+                    'id' => 94,
+                    'album_id' => 8,
+                    'title' => 'The End',
+                    'album' => [
+                        'id' => 8,
+                        'band_id' => 3,
+                        'name' => 'Abbey road',
+                        'release_date' => '1969-09-26',
+                        'songs' => [
+                            [
+                                'id' => 79,
+                                'album_id' => 8,
+                                'title' => 'Come Together'
+                            ],
+                            [
+                                'id' => 80,
+                                'album_id' => 8,
+                                'title' => 'Something'
+                            ],
+                            [
+                                'id' => 81,
+                                'album_id' => 8,
+                                'title' => 'Maxwell\'s Silver Hammer'
+                            ],
+                            [
+                                'id' => 82,
+                                'album_id' => 8,
+                                'title' => 'Oh! Darling'
+                            ],
+                            [
+                                'id' => 83,
+                                'album_id' => 8,
+                                'title' => 'Octopus\'s Garden'
+                            ],
+                            [
+                                'id' => 84,
+                                'album_id' => 8,
+                                'title' => 'I Want You (She\'s So Heavy)'
+                            ],
+                            [
+                                'id' => 85,
+                                'album_id' => 8,
+                                'title' => 'Here Comes the Sun'
+                            ],
+                            [
+                                'id' => 86,
+                                'album_id' => 8,
+                                'title' => 'Because'
+                            ],
+                            [
+                                'id' => 87,
+                                'album_id' => 8,
+                                'title' => 'You Never Give Me Your Money'
+                            ],
+                            [
+                                'id' => 88,
+                                'album_id' => 8,
+                                'title' => 'Sun King'
+                            ],
+                            [
+                                'id' => 89,
+                                'album_id' => 8,
+                                'title' => 'Mean Mr. Mustard'
+                            ],
+                            [
+                                'id' => 90,
+                                'album_id' => 8,
+                                'title' => 'Polythene Pam'
+                            ],
+                            [
+                                'id' => 91,
+                                'album_id' => 8,
+                                'title' => 'She Came in Through the Bathroom Window'
+                            ],
+                            [
+                                'id' => 92,
+                                'album_id' => 8,
+                                'title' => 'Golden Slumbers'
+                            ],
+                            [
+                                'id' => 93,
+                                'album_id' => 8,
+                                'title' => 'Carry That Weight'
+                            ],
+                            [
+                                'id' => 94,
+                                'album_id' => 8,
+                                'title' => 'The End'
+                            ],
+                            [
+                                'id' => 95,
+                                'album_id' => 8,
+                                'title' => 'Her Majesty'
+                            ],
+
+                        ]
+                    ]
+                ]
             ]);
     }
 }
