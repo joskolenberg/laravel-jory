@@ -31,7 +31,8 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/joskolenberg/jory"
+      "url": "https://github.com/joskolenberg/jory",
+      "no-api": true
     }
   ]
 }
