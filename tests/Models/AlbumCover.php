@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
-
 use JosKolenberg\LaravelJory\Traits\JoryTrait;
 
 class AlbumCover extends Model
@@ -15,5 +14,4 @@ class AlbumCover extends Model
     {
         return $this->belongsTo(Album::class);
     }
-
 }
