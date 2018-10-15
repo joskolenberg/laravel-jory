@@ -74,8 +74,9 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @param string $json
      *
-     * @return GenericJoryBuilder
      * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     *
+     * @return GenericJoryBuilder
      */
     public function applyJson(string $json): self
     {
@@ -257,13 +258,13 @@ abstract class AbstractJoryBuilder implements Responsable
     protected function loadRelations($models, array $relations): void
     {
         // If a single model is given, convert to collection for coding convenience
-        if($models instanceof Model) {
+        if ($models instanceof Model) {
             $model = clone $models;
             $models = new Collection();
             $models->push($model);
         }
 
-        foreach ($relations as $relation){
+        foreach ($relations as $relation) {
             $this->loadRelation($models, $relation);
         }
     }
@@ -272,15 +273,17 @@ abstract class AbstractJoryBuilder implements Responsable
      * Load the given relation on a collection of models.
      *
      * @param Collection $collection
-     * @param Relation $relation
+     * @param Relation   $relation
      */
     protected function loadRelation(Collection $collection, Relation $relation): void
     {
-        if($collection->isEmpty()) return;
+        if ($collection->isEmpty()) {
+            return;
+        }
 
         $relationName = $relation->getRelation();
 
-        $collection->load([$relationName => function($query) use ($relation){
+        $collection->load([$relationName => function ($query) use ($relation) {
             // Retrieve the model which will be queried to get the appropriate JoryBuilder
             $relatedModel = $query->getRelated();
             $joryBuilder = $relatedModel::getJoryBuilder();
@@ -292,10 +295,13 @@ abstract class AbstractJoryBuilder implements Responsable
 
         // Put all retrieved related models in single collection to load subrelations in a single call
         $allRelated = new Collection();
-        foreach ($collection as $model){
+        foreach ($collection as $model) {
             $related = $model->$relationName;
-            if($related instanceof Model) $allRelated->push($related);
-            else $allRelated = $allRelated->merge($related);
+            if ($related instanceof Model) {
+                $allRelated->push($related);
+            } else {
+                $allRelated = $allRelated->merge($related);
+            }
         }
 
         // Load the subrelations
