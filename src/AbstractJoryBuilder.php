@@ -274,7 +274,7 @@ abstract class AbstractJoryBuilder implements Responsable
             return;
         }
 
-        $relationName = $relation->getRelation();
+        $relationName = $relation->getName();
 
         $collection->load([$relationName => function ($query) use ($relation) {
             // Retrieve the model which will be queried to get the appropriate JoryBuilder
