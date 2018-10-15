@@ -2,12 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use JosKolenberg\LaravelJory\AbstractJoryBuilder;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
+use JosKolenberg\LaravelJory\AbstractJoryBuilder;
 
 /**
  * Trait to mark a Model as Jory-queryable.
@@ -18,8 +17,6 @@ trait JoryTrait
 {
     /**
      * Return the JoryBuilder to query on this model.
-     *
-     * @throws LaravelJoryException
      *
      * @return AbstractJoryBuilder
      */
@@ -43,8 +40,6 @@ trait JoryTrait
     /**
      * Get a new JoryBuilder instance for the model.
      * A generic one by default, override in to apply a custom JoryBuilder class.
-     *
-     * @throws LaravelJoryException
      *
      * @return GenericJoryBuilder
      */

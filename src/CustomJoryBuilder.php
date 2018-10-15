@@ -2,8 +2,8 @@
 
 namespace JosKolenberg\LaravelJory;
 
-use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\Jory\Support\Filter;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Generic class to query models based on Jory data.
@@ -20,7 +20,7 @@ abstract class CustomJoryBuilder extends AbstractJoryBuilder
      * @param Builder $query
      * @param Filter  $filter
      */
-    protected function applyFieldFilter(Builder $query, Filter $filter): void
+    protected function applyFieldFilter($query, Filter $filter): void
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
         if (method_exists($this, $customMethodName)) {

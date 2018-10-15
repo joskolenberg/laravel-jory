@@ -9,4 +9,9 @@ class Person extends Model
     use JoryTrait;
 
     protected $table = 'people';
+
+    public function instruments()
+    {
+        return $this->belongsToMany(Instrument::class, 'instrument_person');
+    }
 }

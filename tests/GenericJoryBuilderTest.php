@@ -4,10 +4,10 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\Jory\Parsers\ArrayParser;
-use JosKolenberg\LaravelJory\GenericJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\GenericJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
 
 class GenericJoryBuilderTest extends TestCase
 {
@@ -39,9 +39,9 @@ class GenericJoryBuilderTest extends TestCase
     public function it_can_apply_a_jory_json_string()
     {
         $actual = Song::jory()
-            ->applyJson('{"filter":{"f":"name","o":"like","v":"%love"}}')
+            ->applyJson('{"filter":{"f":"title","o":"like","v":"%love"}}')
             ->get()
-            ->pluck('name')
+            ->pluck('title')
             ->toArray();
 
         $this->assertEquals([
@@ -58,13 +58,13 @@ class GenericJoryBuilderTest extends TestCase
         $actual = Song::jory()
             ->applyArray([
                 'filter' => [
-                    'f' => 'name',
+                    'f' => 'title',
                     'o' => 'like',
                     'v' => 'love%',
                 ],
             ])
             ->get()
-            ->pluck('name')
+            ->pluck('title')
             ->toArray();
 
         $this->assertEquals([
@@ -96,7 +96,7 @@ class GenericJoryBuilderTest extends TestCase
     {
         $jory = (new ArrayParser([
             'filter' => [
-                'f' => 'name',
+                'f' => 'title',
                 'o' => 'like',
                 'v' => 'love%',
             ],
@@ -105,7 +105,7 @@ class GenericJoryBuilderTest extends TestCase
         $actual = Song::jory()
             ->applyJory($jory)
             ->get()
-            ->pluck('name')
+            ->pluck('title')
             ->toArray();
 
         $this->assertEquals([
