@@ -2,9 +2,9 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
 
 class GenericJoryBuilderRelationTest extends TestCase
 {
