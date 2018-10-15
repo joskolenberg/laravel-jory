@@ -2,19 +2,19 @@
 
 namespace JosKolenberg\LaravelJory;
 
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\Jory\Jory;
-use JosKolenberg\Jory\Parsers\ArrayParser;
-use JosKolenberg\Jory\Parsers\JsonParser;
+use Illuminate\Http\Request;
 use JosKolenberg\Jory\Support\Filter;
-use JosKolenberg\Jory\Support\GroupAndFilter;
-use JosKolenberg\Jory\Support\GroupOrFilter;
+use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\Jory\Support\Relation;
+use Illuminate\Database\Eloquent\Builder;
+use JosKolenberg\Jory\Parsers\JsonParser;
+use JosKolenberg\Jory\Parsers\ArrayParser;
+use Illuminate\Database\Eloquent\Collection;
+use JosKolenberg\Jory\Support\GroupOrFilter;
+use Illuminate\Contracts\Support\Responsable;
+use JosKolenberg\Jory\Support\GroupAndFilter;
+use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 
 /**

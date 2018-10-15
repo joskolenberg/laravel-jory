@@ -2,8 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
 use JosKolenberg\LaravelJory\Traits\JoryTrait;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
 
 class Album extends Model
 {

@@ -3,8 +3,8 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class GenericJoryBuilderFilterTest extends TestCase
 {

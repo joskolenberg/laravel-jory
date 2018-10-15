@@ -4,10 +4,10 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\Jory\Parsers\ArrayParser;
-use JosKolenberg\LaravelJory\GenericJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\GenericJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
 
 class GenericJoryBuilderTest extends TestCase
 {

@@ -2,9 +2,9 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
 
 class GenericJoryBuilderRelationTest extends TestCase
 {
@@ -790,104 +790,104 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
             ->assertStatus(200)
             ->assertJson([
                 [
-                    'id' => 94,
+                    'id'       => 94,
                     'album_id' => 8,
-                    'title' => 'The End',
-                    'album' => [
-                        'id' => 8,
-                        'band_id' => 3,
-                        'name' => 'Abbey road',
+                    'title'    => 'The End',
+                    'album'    => [
+                        'id'           => 8,
+                        'band_id'      => 3,
+                        'name'         => 'Abbey road',
                         'release_date' => '1969-09-26',
-                        'songs' => [
+                        'songs'        => [
                             [
-                                'id' => 79,
+                                'id'       => 79,
                                 'album_id' => 8,
-                                'title' => 'Come Together'
+                                'title'    => 'Come Together',
                             ],
                             [
-                                'id' => 80,
+                                'id'       => 80,
                                 'album_id' => 8,
-                                'title' => 'Something'
+                                'title'    => 'Something',
                             ],
                             [
-                                'id' => 81,
+                                'id'       => 81,
                                 'album_id' => 8,
-                                'title' => 'Maxwell\'s Silver Hammer'
+                                'title'    => 'Maxwell\'s Silver Hammer',
                             ],
                             [
-                                'id' => 82,
+                                'id'       => 82,
                                 'album_id' => 8,
-                                'title' => 'Oh! Darling'
+                                'title'    => 'Oh! Darling',
                             ],
                             [
-                                'id' => 83,
+                                'id'       => 83,
                                 'album_id' => 8,
-                                'title' => 'Octopus\'s Garden'
+                                'title'    => 'Octopus\'s Garden',
                             ],
                             [
-                                'id' => 84,
+                                'id'       => 84,
                                 'album_id' => 8,
-                                'title' => 'I Want You (She\'s So Heavy)'
+                                'title'    => 'I Want You (She\'s So Heavy)',
                             ],
                             [
-                                'id' => 85,
+                                'id'       => 85,
                                 'album_id' => 8,
-                                'title' => 'Here Comes the Sun'
+                                'title'    => 'Here Comes the Sun',
                             ],
                             [
-                                'id' => 86,
+                                'id'       => 86,
                                 'album_id' => 8,
-                                'title' => 'Because'
+                                'title'    => 'Because',
                             ],
                             [
-                                'id' => 87,
+                                'id'       => 87,
                                 'album_id' => 8,
-                                'title' => 'You Never Give Me Your Money'
+                                'title'    => 'You Never Give Me Your Money',
                             ],
                             [
-                                'id' => 88,
+                                'id'       => 88,
                                 'album_id' => 8,
-                                'title' => 'Sun King'
+                                'title'    => 'Sun King',
                             ],
                             [
-                                'id' => 89,
+                                'id'       => 89,
                                 'album_id' => 8,
-                                'title' => 'Mean Mr. Mustard'
+                                'title'    => 'Mean Mr. Mustard',
                             ],
                             [
-                                'id' => 90,
+                                'id'       => 90,
                                 'album_id' => 8,
-                                'title' => 'Polythene Pam'
+                                'title'    => 'Polythene Pam',
                             ],
                             [
-                                'id' => 91,
+                                'id'       => 91,
                                 'album_id' => 8,
-                                'title' => 'She Came in Through the Bathroom Window'
+                                'title'    => 'She Came in Through the Bathroom Window',
                             ],
                             [
-                                'id' => 92,
+                                'id'       => 92,
                                 'album_id' => 8,
-                                'title' => 'Golden Slumbers'
+                                'title'    => 'Golden Slumbers',
                             ],
                             [
-                                'id' => 93,
+                                'id'       => 93,
                                 'album_id' => 8,
-                                'title' => 'Carry That Weight'
+                                'title'    => 'Carry That Weight',
                             ],
                             [
-                                'id' => 94,
+                                'id'       => 94,
                                 'album_id' => 8,
-                                'title' => 'The End'
+                                'title'    => 'The End',
                             ],
                             [
-                                'id' => 95,
+                                'id'       => 95,
                                 'album_id' => 8,
-                                'title' => 'Her Majesty'
+                                'title'    => 'Her Majesty',
                             ],
 
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ]);
     }
 }

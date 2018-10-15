@@ -2,10 +2,10 @@
 
 namespace JosKolenberg\LaravelJory\Parsers;
 
-use Illuminate\Http\Request;
-use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\Jory\Jory;
+use Illuminate\Http\Request;
 use JosKolenberg\Jory\Parsers\JsonParser;
+use JosKolenberg\Jory\Contracts\JoryParserInterface;
 
 /**
  * Class to parse an Laravel request to a Jory Object.

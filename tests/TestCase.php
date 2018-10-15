@@ -2,17 +2,17 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use Illuminate\Database\Query\Grammars\MySqlGrammar;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
-use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Instrument;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
+use Illuminate\Foundation\Application;
+use Illuminate\Database\Schema\Blueprint;
 use Orchestra\Testbench\TestCase as Orchestra;
+use JosKolenberg\LaravelJory\Tests\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Models\Person;
+use Illuminate\Database\Query\Grammars\MySqlGrammar;
+use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
+use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 
 class TestCase extends Orchestra
 {
