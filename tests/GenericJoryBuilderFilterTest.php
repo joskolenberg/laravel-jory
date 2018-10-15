@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: joskolenberg
- * Date: 24-09-18
- * Time: 11:43.
- */
 
 namespace JosKolenberg\LaravelJory\Tests;
 

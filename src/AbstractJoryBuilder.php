@@ -73,6 +73,7 @@ abstract class AbstractJoryBuilder implements Responsable
      * @param string $json
      *
      * @return GenericJoryBuilder
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function applyJson(string $json): self
     {
@@ -180,7 +181,7 @@ abstract class AbstractJoryBuilder implements Responsable
     protected function applyFieldFilter(Builder $query, Filter $filter): void
     {
         // Run this through an extra function to allow child classes to override
-        // this method and be able to run the default fiter function
+        // this method and still be able to run the default filter function
         $this->doApplyDefaultFieldFilter($query, $filter);
     }
 
