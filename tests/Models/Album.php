@@ -16,8 +16,18 @@ class Album extends Model
         return $this->hasMany(Song::class);
     }
 
+    public function band()
+    {
+        return $this->belongsTo(Band::class);
+    }
+
     public static function getJoryBuilder()
     {
         return new AlbumJoryBuilder();
+    }
+
+    public function cover()
+    {
+        return $this->hasOne(AlbumCover::class);
     }
 }

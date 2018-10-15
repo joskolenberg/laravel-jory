@@ -83,13 +83,13 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'name',
+                        'field'    => 'title',
                         'operator' => 'like',
                         'value'    => '%love%',
                     ],
                 ],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
                 'Love In Vain (Robert Johnson)',
@@ -112,19 +112,19 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'name',
+                        'field'    => 'title',
                         'operator' => 'like',
                         'value'    => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field'    => 'name',
+                                'field'    => 'title',
                                 'operator' => 'like',
                                 'value'    => '%bold%',
                             ],
                             [
-                                'field'    => 'name',
+                                'field'    => 'title',
                                 'operator' => 'like',
                                 'value'    => '%er%',
                             ],
@@ -132,7 +132,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
                 'Love In Vain (Robert Johnson)',
@@ -150,31 +150,31 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'name',
+                        'field'    => 'title',
                         'operator' => 'like',
                         'value'    => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field'    => 'name',
+                                'field'    => 'title',
                                 'operator' => 'like',
                                 'value'    => '%bold%',
                             ],
                             [
-                                'field'    => 'name',
+                                'field'    => 'title',
                                 'operator' => 'like',
                                 'value'    => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
-                                        'field'    => 'name',
+                                        'field'    => 'title',
                                         'operator' => 'like',
                                         'value'    => 'may%',
                                     ],
                                     [
-                                        'field'    => 'name',
+                                        'field'    => 'title',
                                         'operator' => 'like',
                                         'value'    => '%love',
                                     ],
@@ -184,7 +184,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
                 'Love In Vain (Robert Johnson)',
@@ -203,43 +203,43 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'name',
+                        'field'    => 'title',
                         'operator' => 'like',
                         'value'    => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field'    => 'name',
+                                'field'    => 'title',
                                 'operator' => 'like',
                                 'value'    => '%bold%',
                             ],
                             [
-                                'field'    => 'name',
+                                'field'    => 'title',
                                 'operator' => 'like',
                                 'value'    => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
-                                        'field'    => 'name',
+                                        'field'    => 'title',
                                         'operator' => 'like',
                                         'value'    => '%e%',
                                     ],
                                     [
-                                        'field'    => 'name',
+                                        'field'    => 'title',
                                         'operator' => 'like',
                                         'value'    => '%a%',
                                     ],
                                     [
                                         'group_or' => [
                                             [
-                                                'field'    => 'name',
+                                                'field'    => 'title',
                                                 'operator' => 'like',
                                                 'value'    => '%whole%',
                                             ],
                                             [
-                                                'field'    => 'name',
+                                                'field'    => 'title',
                                                 'operator' => 'like',
                                                 'value'    => '%gods%',
                                             ],
@@ -251,7 +251,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
                 'Love In Vain (Robert Johnson)',

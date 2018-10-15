@@ -6,6 +6,7 @@ use JosKolenberg\LaravelJory\CustomJoryBuilder;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class JoryTraitTest extends TestCase
@@ -21,7 +22,7 @@ class JoryTraitTest extends TestCase
     /** @test */
     public function it_can_give_a_genericJoryBuilder_when_applied()
     {
-        $this->assertInstanceOf(GenericJoryBuilder::class, Band::jory());
+        $this->assertInstanceOf(GenericJoryBuilder::class, Person::jory());
     }
 
     /** @test */

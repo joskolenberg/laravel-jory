@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\Jory\Jory;
@@ -13,6 +14,7 @@ use JosKolenberg\Jory\Parsers\JsonParser;
 use JosKolenberg\Jory\Support\Filter;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Support\GroupOrFilter;
+use JosKolenberg\Jory\Support\Relation;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 
 /**
@@ -113,7 +115,11 @@ abstract class AbstractJoryBuilder implements Responsable
      */
     public function get(): Collection
     {
-        return $this->getQuery()->get();
+        $collection = $this->getQuery()->get();
+
+        $this->loadRelations($collection, $this->jory->getRelations());
+
+        return $collection;
     }
 
     /**
@@ -146,10 +152,10 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Apply a filter (field, groupAnd or groupOr) on a query.
      *
-     * @param Builder         $query
+     * @param mixed           $query
      * @param FilterInterface $filter
      */
-    protected function applyFilter(Builder $query, FilterInterface $filter): void
+    protected function applyFilter($query, FilterInterface $filter): void
     {
         if ($filter instanceof Filter) {
             $this->applyFieldFilter($query, $filter);
@@ -175,10 +181,10 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Apply a filter to a field.
      *
-     * @param Builder $query
-     * @param Filter  $filter
+     * @param mixed  $query
+     * @param Filter $filter
      */
-    protected function applyFieldFilter(Builder $query, Filter $filter): void
+    protected function applyFieldFilter($query, Filter $filter): void
     {
         // Run this through an extra function to allow child classes to override
         // this method and still be able to run the default filter function
@@ -202,10 +208,10 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * Prefixed with 'do' to prevent classing if a custom filter named 'default_field' should exist.
      *
-     * @param Builder $query
-     * @param Filter  $filter
+     * @param mixed  $query
+     * @param Filter $filter
      */
-    protected function doApplyDefaultFieldFilter(Builder $query, Filter $filter): void
+    protected function doApplyDefaultFieldFilter($query, Filter $filter): void
     {
         switch ($filter->getOperator()) {
             case 'null':
@@ -227,5 +233,72 @@ abstract class AbstractJoryBuilder implements Responsable
             default:
                 $query->where($filter->getField(), $filter->getOperator() ?: '=', $filter->getValue());
         }
+    }
+
+    /**
+     * Apply the jory data on an existing query.
+     *
+     * @param $query
+     */
+    protected function applyOnQuery($query): void
+    {
+        // Apply filters if there are any
+        if ($this->jory->getFilter()) {
+            $this->applyFilter($query, $this->jory->getFilter());
+        }
+    }
+
+    /**
+     * Load the given relations on the given model(s).
+     *
+     * @param Model|Collection $models
+     * @param array            $relations
+     */
+    protected function loadRelations($models, array $relations): void
+    {
+        // If a single model is given, convert to collection for coding convenience
+        if($models instanceof Model) {
+            $model = clone $models;
+            $models = new Collection();
+            $models->push($model);
+        }
+
+        foreach ($relations as $relation){
+            $this->loadRelation($models, $relation);
+        }
+    }
+
+    /**
+     * Load the given relation on a collection of models.
+     *
+     * @param Collection $collection
+     * @param Relation $relation
+     */
+    protected function loadRelation(Collection $collection, Relation $relation): void
+    {
+        if($collection->isEmpty()) return;
+
+        $relationName = $relation->getRelation();
+
+        $collection->load([$relationName => function($query) use ($relation){
+            // Retrieve the model which will be queried to get the appropriate JoryBuilder
+            $relatedModel = $query->getRelated();
+            $joryBuilder = $relatedModel::getJoryBuilder();
+
+            // Apply the data in the subjory (for filtering) on the query
+            $joryBuilder->applyJory($relation->getJory());
+            $joryBuilder->applyOnQuery($query);
+        }]);
+
+        // Put all retrieved related models in single collection to load subrelations in a single call
+        $allRelated = new Collection();
+        foreach ($collection as $model){
+            $related = $model->$relationName;
+            if($related instanceof Model) $allRelated->push($related);
+            else $allRelated = $allRelated->merge($related);
+        }
+
+        // Load the subrelations
+        $this->loadRelations($allRelated, $relation->getJory()->getRelations());
     }
 }

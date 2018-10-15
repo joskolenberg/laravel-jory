@@ -2,16 +2,18 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
+
 use JosKolenberg\LaravelJory\Traits\JoryTrait;
 
-class Song extends Model
+class AlbumCover extends Model
 {
     use JoryTrait;
 
-    protected $table = 'songs';
+    protected $table = 'album_covers';
 
     public function album()
     {
         return $this->belongsTo(Album::class);
     }
+
 }
