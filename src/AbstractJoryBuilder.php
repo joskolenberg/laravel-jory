@@ -15,6 +15,7 @@ use JosKolenberg\Jory\Support\GroupOrFilter;
 use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Contracts\FilterInterface;
+use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 
 /**
@@ -147,6 +148,8 @@ abstract class AbstractJoryBuilder implements Responsable
             $this->applyFilter($query, $this->jory->getFilter());
         }
 
+        $this->applySorts($query, $this->jory->getSorts());
+
         return $query;
     }
 
@@ -207,7 +210,7 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Do apply a filter to a field with default options.
      *
-     * Prefixed with 'do' to prevent classing if a custom filter named 'default_field' should exist.
+     * Prefixed with 'do' to prevent clashing if a custom filter named 'default_field' should exist.
      *
      * @param mixed  $query
      * @param Filter $filter
@@ -247,6 +250,7 @@ abstract class AbstractJoryBuilder implements Responsable
         if ($this->jory->getFilter()) {
             $this->applyFilter($query, $this->jory->getFilter());
         }
+        $this->applySorts($query, $this->jory->getSorts());
     }
 
     /**
@@ -299,5 +303,60 @@ abstract class AbstractJoryBuilder implements Responsable
 
         // Load the subrelations
         $this->loadRelations($allRelated, $relation->getJory()->getRelations());
+    }
+
+    /**
+     * Apply an array of sorts on the query.
+     *
+     * @param $query
+     * @param array $sorts
+     */
+    protected function applySorts($query, array $sorts): void
+    {
+        foreach ($sorts as $sort) {
+            $this->applySort($query, $sort);
+        }
+    }
+
+    /**
+     * Apply a single sort on a query
+     *
+     * @param $query
+     * @param Sort $sort
+     */
+    protected function applySort($query, Sort $sort): void
+    {
+        $customMethodName = $this->getCustomSortMethodName($sort);
+        if (method_exists($this, $customMethodName)) {
+            $this->$customMethodName($query, $sort);
+
+            return;
+        }
+
+        $this->doApplyDefaultSort($query, $sort);
+    }
+
+    /**
+     * Do apply a sort to a field with default options.
+     *
+     * Prefixed with 'do' to prevent clashing if a custom filter named 'default_field' should exist.
+     *
+     * @param $query
+     * @param Sort $sort
+     */
+    protected function doApplyDefaultSort($query, Sort $sort): void
+    {
+        $query->orderBy($sort->getField(), $sort->getOrder());
+    }
+
+    /**
+     * Get the custom method name to look for to apply a sort.
+     *
+     * @param Sort $filter
+     * @return string
+     */
+    protected function getCustomSortMethodName(Sort $filter): string
+    {
+        return 'apply'.studly_case($filter->getField()).'Sort';
     }
 }
