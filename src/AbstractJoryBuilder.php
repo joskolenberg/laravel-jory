@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory;
 
 use JosKolenberg\Jory\Jory;
 use Illuminate\Http\Request;
+use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\Jory\Support\Filter;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\Jory\Support\Relation;
@@ -15,7 +16,6 @@ use JosKolenberg\Jory\Support\GroupOrFilter;
 use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Contracts\FilterInterface;
-use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 
 /**
@@ -319,7 +319,7 @@ abstract class AbstractJoryBuilder implements Responsable
     }
 
     /**
-     * Apply a single sort on a query
+     * Apply a single sort on a query.
      *
      * @param $query
      * @param Sort $sort
