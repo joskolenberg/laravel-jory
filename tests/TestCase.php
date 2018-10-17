@@ -190,18 +190,18 @@ class TestCase extends Orchestra
 
         // Seed Albums
         foreach ([
-                     1 => ['band_id' => 1, 'name' => 'Let it bleed', 'release_date' => '1969-12-05'],
-                     2 => ['band_id' => 1, 'name' => 'Sticky Fingers', 'release_date' => '1971-04-23'],
-                     3 => ['band_id' => 1, 'name' => 'Exile on main st.', 'release_date' => '1972-05-12'],
-                     4 => ['band_id' => 2, 'name' => 'Led Zeppelin', 'release_date' => '1969-01-12'],
-                     5 => ['band_id' => 2, 'name' => 'Led Zeppelin II', 'release_date' => '1969-10-22'],
-                     6 => ['band_id' => 2, 'name' => 'Led Zeppelin III', 'release_date' => '1970-10-05'],
-                     7 => ['band_id' => 3, 'name' => 'Sgt. Peppers lonely hearts club band', 'release_date' => '1967-06-01'],
-                     8 => ['band_id' => 3, 'name' => 'Abbey road', 'release_date' => '1969-09-26'],
-                     9 => ['band_id' => 3, 'name' => 'Let it be', 'release_date' => '1970-05-08'],
-                     10 => ['band_id' => 4, 'name' => 'Are you experienced', 'release_date' => '1967-05-12'],
-                     11 => ['band_id' => 4, 'name' => 'Axis: Bold as love', 'release_date' => '1967-12-01'],
-                     12 => ['band_id' => 4, 'name' => 'Electric ladyland', 'release_date' => '1968-10-16'],
+                     1 => ['band_id' => 1, 'name' => 'Let it bleed', 'release_date' => '1969-12-05'], // count: 9
+                     2 => ['band_id' => 1, 'name' => 'Sticky Fingers', 'release_date' => '1971-04-23'], // 10
+                     3 => ['band_id' => 1, 'name' => 'Exile on main st.', 'release_date' => '1972-05-12'], // 18
+                     4 => ['band_id' => 2, 'name' => 'Led Zeppelin', 'release_date' => '1969-01-12'], // 9
+                     5 => ['band_id' => 2, 'name' => 'Led Zeppelin II', 'release_date' => '1969-10-22'], // 9
+                     6 => ['band_id' => 2, 'name' => 'Led Zeppelin III', 'release_date' => '1970-10-05'], // 10
+                     7 => ['band_id' => 3, 'name' => 'Sgt. Peppers lonely hearts club band', 'release_date' => '1967-06-01'], // 13
+                     8 => ['band_id' => 3, 'name' => 'Abbey road', 'release_date' => '1969-09-26'], // 17
+                     9 => ['band_id' => 3, 'name' => 'Let it be', 'release_date' => '1970-05-08'], // 12
+                     10 => ['band_id' => 4, 'name' => 'Are you experienced', 'release_date' => '1967-05-12'], // 11
+                     11 => ['band_id' => 4, 'name' => 'Axis: Bold as love', 'release_date' => '1967-12-01'], // 13
+                     12 => ['band_id' => 4, 'name' => 'Electric ladyland', 'release_date' => '1968-10-16'], // 15
                  ] as $data) {
             Album::create($data);
         }
