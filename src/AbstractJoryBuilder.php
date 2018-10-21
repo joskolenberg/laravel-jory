@@ -17,6 +17,7 @@ use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 
 /**
  * Class to query models based on Jory data.
@@ -149,6 +150,7 @@ abstract class AbstractJoryBuilder implements Responsable
         }
 
         $this->applySorts($query, $this->jory->getSorts());
+        $this->applyOffsetAndLimit($query, $this->jory->getOffset(), $this->jory->getLimit());
 
         return $query;
     }
@@ -251,6 +253,7 @@ abstract class AbstractJoryBuilder implements Responsable
             $this->applyFilter($query, $this->jory->getFilter());
         }
         $this->applySorts($query, $this->jory->getSorts());
+        $this->applyOffsetAndLimit($query, $this->jory->getOffset(), $this->jory->getLimit());
     }
 
     /**
@@ -285,7 +288,7 @@ abstract class AbstractJoryBuilder implements Responsable
             $relatedModel = $query->getRelated();
             $joryBuilder = $relatedModel::getJoryBuilder();
 
-            // Apply the data in the subjory (for filtering) on the query
+            // Apply the data in the subjory (filtering/sorting/...) on the query
             $joryBuilder->applyJory($relation->getJory());
             $joryBuilder->applyOnQuery($query);
         }]);
@@ -358,5 +361,27 @@ abstract class AbstractJoryBuilder implements Responsable
     protected function getCustomSortMethodName(Sort $filter): string
     {
         return 'apply'.studly_case($filter->getField()).'Sort';
+    }
+
+    /**
+     * Apply an offset and limit on the query.
+     *
+     * @param $query
+     * @param int|null $offset
+     * @param int|null $limit
+     * @throws LaravelJoryException
+     */
+    protected function applyOffsetAndLimit($query, int $offset = null, int $limit = null): void
+    {
+        // When setting an offset a limit is required in SQL
+        if ($offset && ! $limit) {
+            throw new LaravelJoryException('An offset cannot be set without a limit.');
+        }
+        if ($offset) {
+            $query->offset($offset);
+        }
+        if ($limit) {
+            $query->limit($limit);
+        }
     }
 }
