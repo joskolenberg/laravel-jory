@@ -16,8 +16,8 @@ use JosKolenberg\Jory\Support\GroupOrFilter;
 use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Contracts\FilterInterface;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 
 /**
  * Class to query models based on Jory data.
@@ -374,9 +374,14 @@ abstract class AbstractJoryBuilder implements Responsable
     protected function applyOffsetAndLimit($query, int $offset = null, int $limit = null): void
     {
         // When setting an offset a limit is required in SQL
-        if($offset && !$limit) throw new LaravelJoryException('An offset cannot be set without a limit.');
-
-        if($offset) $query->offset($offset);
-        if($limit) $query->limit($limit);
+        if ($offset && ! $limit) {
+            throw new LaravelJoryException('An offset cannot be set without a limit.');
+        }
+        if ($offset) {
+            $query->offset($offset);
+        }
+        if ($limit) {
+            $query->limit($limit);
+        }
     }
 }
