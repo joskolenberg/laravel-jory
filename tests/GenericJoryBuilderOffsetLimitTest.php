@@ -2,13 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 
 class GenericJoryBuilderOffsetLimitTest extends TestCase
 {
-
     protected function setUp()
     {
         parent::setUp();
@@ -134,7 +133,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
     public function it_can_apply_an_offset_and_limit_combined_with_with_sorts_and_filters_on_relations()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":{"title":"asc"},"offset":10,"limit":5}}}'
+            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":{"title":"asc"},"offset":10,"limit":5}}}',
         ]);
 
         $response
