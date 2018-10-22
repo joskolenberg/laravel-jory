@@ -13,8 +13,8 @@ class RequestParserTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('/person', PersonController::class.'@index');
-        Route::get('/band', BandController::class.'@index');
+        Route::get('/person', PersonController::class . '@index');
+        Route::get('/band', BandController::class . '@index');
     }
 
     /** @test */
@@ -27,17 +27,17 @@ class RequestParserTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
-                    'id'            => 8,
-                    'first_name'    => 'John',
-                    'last_name'     => 'Bonham',
+                    'id' => 8,
+                    'first_name' => 'John',
+                    'last_name' => 'Bonham',
                     'date_of_birth' => '1948-05-31',
                 ],
                 [
-                    'id'            => 9,
-                    'first_name'    => 'John',
-                    'last_name'     => 'Lennon',
+                    'id' => 9,
+                    'first_name' => 'John',
+                    'last_name' => 'Lennon',
                     'date_of_birth' => '1940-10-09',
                 ],
             ]);
@@ -50,22 +50,30 @@ class RequestParserTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
-                    'id'   => 1,
+                    'id' => 1,
                     'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
                 ],
                 [
-                    'id'   => 2,
+                    'id' => 2,
                     'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
                 [
-                    'id'   => 3,
+                    'id' => 3,
                     'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
                 ],
                 [
-                    'id'   => 4,
+                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
                 ],
             ]);
     }

@@ -116,13 +116,25 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function get(): Collection
+    public function getModels(): Collection
     {
         $collection = $this->getQuery()->get();
 
         $this->loadRelations($collection, $this->jory->getRelations());
 
         return $collection;
+    }
+
+    public function get()
+    {
+        $models = $this->getModels();
+
+        $result = [];
+        foreach ($models as $model) {
+            $result[] = $model->toArrayByJory($this->jory);
+        }
+
+        return $result;
     }
 
     /**
@@ -297,6 +309,9 @@ abstract class AbstractJoryBuilder implements Responsable
         $allRelated = new Collection();
         foreach ($collection as $model) {
             $related = $model->$relationName;
+
+            if($related == null) continue;
+
             if ($related instanceof Model) {
                 $allRelated->push($related);
             } else {

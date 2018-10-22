@@ -25,7 +25,7 @@ class GenericJoryBuilderTest extends TestCase
     public function it_can_apply_on_a_querybuilder_instance()
     {
         $query = Band::query();
-        $actual = (new GenericJoryBuilder())->onQuery($query)->get()->pluck('name')->toArray();
+        $actual = (new GenericJoryBuilder())->onQuery($query)->getModels()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -40,7 +40,7 @@ class GenericJoryBuilderTest extends TestCase
     {
         $actual = Song::jory()
             ->applyJson('{"filter":{"f":"title","o":"like","v":"%love"}}')
-            ->get()
+            ->getModels()
             ->pluck('title')
             ->toArray();
 
@@ -63,7 +63,7 @@ class GenericJoryBuilderTest extends TestCase
                     'v' => 'love%',
                 ],
             ])
-            ->get()
+            ->getModels()
             ->pluck('title')
             ->toArray();
 
@@ -83,10 +83,12 @@ class GenericJoryBuilderTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
-                    'id'   => 2,
+                    'id' => 2,
                     'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ]);
     }
@@ -104,7 +106,7 @@ class GenericJoryBuilderTest extends TestCase
 
         $actual = Song::jory()
             ->applyJory($jory)
-            ->get()
+            ->getModels()
             ->pluck('title')
             ->toArray();
 
@@ -119,7 +121,7 @@ class GenericJoryBuilderTest extends TestCase
     public function it_defaults_to_empty_when_no_jory_is_applied()
     {
         $actual = Band::jory()
-            ->get()
+            ->getModels()
             ->pluck('name')
             ->toArray();
 
@@ -140,10 +142,12 @@ class GenericJoryBuilderTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
-                    'id'   => 2,
+                    'id' => 2,
                     'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ]);
     }

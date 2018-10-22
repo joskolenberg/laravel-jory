@@ -26,10 +26,12 @@ class GenericJoryBuilderRelationTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'     => 2,
                     'name'   => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                     'people' => [
                         [
                             'id'            => 5,
@@ -70,10 +72,12 @@ class GenericJoryBuilderRelationTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'     => 2,
                     'name'   => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                     'albums' => [
                         [
                             'id'           => 4,
@@ -99,6 +103,46 @@ class GenericJoryBuilderRelationTest extends TestCase
     }
 
     /** @test */
+    public function it_can_load_a_has_many_relation_with_no_result()
+    {
+        $response = $this->json('GET', '/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","v":"Led Zeppelin IV"}}}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertExactJson([
+                [
+                    'id'     => 2,
+                    'name'   => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                    'albums' => [],
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function it_can_load_subrelations_on_a_has_many_relation_with_no_result()
+    {
+        $response = $this->json('GET', '/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","v":"Led Zeppelin IV"},"rlt":{"songs":{}}}}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertExactJson([
+                [
+                    'id'     => 2,
+                    'name'   => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                    'albums' => [],
+                ],
+            ]);
+    }
+
+    /** @test */
     public function it_can_load_a_belongs_to_relation()
     {
         $response = $this->json('GET', '/song', [
@@ -107,7 +151,7 @@ class GenericJoryBuilderRelationTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'       => 12,
                     'album_id' => 2,
@@ -123,15 +167,53 @@ class GenericJoryBuilderRelationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_load_a_has_many_through_relation()
+    public function it_can_load_a_belongs_to_relation_with_no_result()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"=","v":"Led Zeppelin"},"rlt":{"songs":{}}}',
+        $response = $this->json('GET', '/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","v":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","v":"another"}}}}',
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
+                [
+                    'id'       => 12,
+                    'album_id' => 2,
+                    'title'    => 'Wild Horses',
+                    'album'    => null,
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function it_can_load_subrelations_on_a_belongs_to_relation_with_no_result()
+    {
+        $response = $this->json('GET', '/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","v":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","v":"another"},"rlt":{"band":{}}}}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertExactJson([
+                [
+                    'id'       => 12,
+                    'album_id' => 2,
+                    'title'    => 'Wild Horses',
+                    'album'    => null,
+                ],
+            ]);
+    }
+
+    /** @test */
+    public function it_can_load_a_has_many_through_relation()
+    {
+        $response = $this->json('GET', '/band', [
+            'jory' => '{"filter":{"f":"name","o":"=","v":"Led Zeppelin"},"rlt":{"songs":{"fld":["id","title"]}}}',
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertExactJson([
                 [
                     'id'         => 2,
                     'name'       => 'Led Zeppelin',
@@ -140,142 +222,114 @@ class GenericJoryBuilderRelationTest extends TestCase
                     'songs'      => [
                         [
                             'id'       => 38,
-                            'album_id' => 4,
                             'title'    => 'Good Times Bad Times',
                         ],
                         [
                             'id'       => 39,
-                            'album_id' => 4,
                             'title'    => 'Babe I\'m Gonna Leave You',
                         ],
                         [
                             'id'       => 40,
-                            'album_id' => 4,
                             'title'    => 'You Shook Me',
                         ],
                         [
                             'id'       => 41,
-                            'album_id' => 4,
                             'title'    => 'Dazed and Confused',
                         ],
                         [
                             'id'       => 42,
-                            'album_id' => 4,
                             'title'    => 'Your Time Is Gonna Come',
                         ],
                         [
                             'id'       => 43,
-                            'album_id' => 4,
                             'title'    => 'Black Mountain Side',
                         ],
                         [
                             'id'       => 44,
-                            'album_id' => 4,
                             'title'    => 'Communication Breakdown',
                         ],
                         [
                             'id'       => 45,
-                            'album_id' => 4,
                             'title'    => 'I Can\'t Quit You Baby',
                         ],
                         [
                             'id'       => 46,
-                            'album_id' => 4,
                             'title'    => 'How Many More Times',
                         ],
                         [
                             'id'       => 47,
-                            'album_id' => 5,
                             'title'    => 'Whole Lotta Love',
                         ],
                         [
                             'id'       => 48,
-                            'album_id' => 5,
                             'title'    => 'What Is and What Should Never Be',
                         ],
                         [
                             'id'       => 49,
-                            'album_id' => 5,
                             'title'    => 'The Lemon Song',
                         ],
                         [
                             'id'       => 50,
-                            'album_id' => 5,
                             'title'    => 'Thank You',
                         ],
                         [
                             'id'       => 51,
-                            'album_id' => 5,
                             'title'    => 'Heartbreaker',
                         ],
                         [
                             'id'       => 52,
-                            'album_id' => 5,
                             'title'    => 'Living Loving Maid (She\'s Just A Woman)',
                         ],
                         [
                             'id'       => 53,
-                            'album_id' => 5,
                             'title'    => 'Ramble On',
                         ],
                         [
                             'id'       => 54,
-                            'album_id' => 5,
                             'title'    => 'Moby Dick',
                         ],
                         [
                             'id'       => 55,
-                            'album_id' => 5,
                             'title'    => 'Bring It On Home',
                         ],
                         [
                             'id'       => 56,
-                            'album_id' => 6,
                             'title'    => 'Immigrant Song',
                         ],
                         [
                             'id'       => 57,
-                            'album_id' => 6,
                             'title'    => 'Friends',
                         ],
                         [
                             'id'       => 58,
-                            'album_id' => 6,
                             'title'    => 'Celebration Day',
                         ],
                         [
                             'id'       => 59,
-                            'album_id' => 6,
                             'title'    => 'Since I\'ve Been Loving You',
                         ],
                         [
                             'id'       => 60,
-                            'album_id' => 6,
                             'title'    => 'Out on the Tiles',
                         ],
                         [
                             'id'       => 61,
-                            'album_id' => 6,
                             'title'    => 'Gallows Pole',
                         ],
                         [
                             'id'       => 62,
-                            'album_id' => 6,
                             'title'    => 'Tangerine',
                         ],
                         [
                             'id'       => 63,
-                            'album_id' => 6,
                             'title'    => 'That\'s the Way',
                         ],
                         [
                             'id'       => 64,
-                            'album_id' => 6,
                             'title'    => 'Bron-Y-Aur Stomp',
                         ],
                         [
                             'id'       => 65,
-                            'album_id' => 6,
                             'title'    => 'Hats Off to (Roy) Harper',
                         ],
                     ],
@@ -292,13 +346,14 @@ class GenericJoryBuilderRelationTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'           => 8,
                     'band_id'      => 3,
                     'name'         => 'Abbey road',
                     'release_date' => '1969-09-26',
                     'cover'        => [
+                        'id' => 8,
                         'album_id' => 8,
                         'image'    => '@@@@@@@@@#@@@@@@@@@@@@@@@#@@@@=#=:----------------------------------------+=###
 @@@@@@@@@@@@#@@@##@@@@@@@@@@@#=**+:---------------------------------------+###@
@@ -354,7 +409,7 @@ class GenericJoryBuilderRelationTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'       => 12,
                     'album_id' => 2,
@@ -379,12 +434,12 @@ class GenericJoryBuilderRelationTest extends TestCase
     public function it_can_load_and_filter_nested_relations_1()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%in%"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%love%"},"rlt":{"album":{}}}}}',
+            'jory' => '{"filter":{"f":"name","o":"like","v":"%in%"},"rlt":{"songs":{"fld":["id","title"],"flt":{"f":"title","o":"like","v":"%love%"},"rlt":{"album":{}}}}}',
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'         => 1,
                     'name'       => 'Rolling Stones',
@@ -393,7 +448,6 @@ class GenericJoryBuilderRelationTest extends TestCase
                     'songs'      => [
                         [
                             'id'       => 2,
-                            'album_id' => 1,
                             'title'    => 'Love In Vain (Robert Johnson)',
                             'album'    => [
                                 'id'           => 1,
@@ -412,7 +466,6 @@ class GenericJoryBuilderRelationTest extends TestCase
                     'songs'      => [
                         [
                             'id'       => 47,
-                            'album_id' => 5,
                             'title'    => 'Whole Lotta Love',
                             'album'    => [
                                 'id'           => 5,
@@ -430,12 +483,12 @@ class GenericJoryBuilderRelationTest extends TestCase
     public function it_can_load_and_filter_nested_relations_2()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"number_of_albums_in_year","o":"=","v":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","v":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","v":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}}},"people":{"rlt":{"instruments":{}}}}}',
+            'jory' => '{"filter":{"f":"number_of_albums_in_year","o":"=","v":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","v":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","v":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}},"fld":["id","title"]},"people":{"rlt":{"instruments":{}}}}}',
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'         => 2,
                     'name'       => 'Led Zeppelin',
@@ -496,7 +549,6 @@ class GenericJoryBuilderRelationTest extends TestCase
                     'songs' => [
                         [
                             'id'       => 43,
-                            'album_id' => 4,
                             'title'    => 'Black Mountain Side',
                             'album'    => [
                                 'id'           => 4,
@@ -627,7 +679,6 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                     'songs' => [
                         [
                             'id'       => 98,
-                            'album_id' => 9,
                             'title'    => 'Across the Universe',
                             'album'    => [
                                 'id'           => 9,
@@ -644,7 +695,6 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                         [
                             'id'       => 107,
-                            'album_id' => 9,
                             'title'    => 'Get Back',
                             'album'    => [
                                 'id'           => 9,
@@ -746,12 +796,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_apply_a_filter_on_a_relation()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%III%"}}}}',
+            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%III%"}}},"fld":["id","name"]}',
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'     => 2,
                     'name'   => 'Led Zeppelin',
@@ -776,7 +826,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
 
         $response
             ->assertStatus(200)
-            ->assertJson([]);
+            ->assertExactJson([]);
     }
 
     /** @test */
@@ -788,7 +838,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id'       => 94,
                     'album_id' => 8,

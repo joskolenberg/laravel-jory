@@ -2,9 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Builder;
+use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 use JosKolenberg\LaravelJory\AbstractJoryBuilder;
 
@@ -39,7 +41,7 @@ trait JoryTrait
 
     /**
      * Get a new JoryBuilder instance for the model.
-     * A generic one by default, override in to apply a custom JoryBuilder class.
+     * Override to apply a custom JoryBuilder class for the model.
      *
      * @return GenericJoryBuilder
      */
@@ -56,5 +58,49 @@ trait JoryTrait
     protected static function getJoryBaseQuery(): Builder
     {
         return (new static())->query();
+    }
+
+    /**
+     * Export the model to an array based on a Jory object (fields and relations).
+     *
+     * @param Jory $jory
+     * @return array
+     */
+    public function toArrayByJory(Jory $jory)
+    {
+        // We will load the relations manually so remove them from Laravel's toArray() export.
+        $relationNames = [];
+        foreach ($jory->getRelations() as $relation) {
+            $relationNames = $relation->getName();
+        }
+        $this->makeHidden($relationNames);
+
+        // When no fields are specified, we'll use all the model's fields
+        // if fields are specified, we use only these.
+        $result = $this->toArray();
+        if ($jory->getFields() !== null) {
+            $result = array_intersect_key($result, array_flip($jory->getFields()));
+        }
+
+        // Add the relations to the result
+        foreach ($jory->getRelations() as $relation){
+            $relationName = $relation->getName();
+
+            $related = $this->$relationName;
+
+            if($related == null){
+                $result[$relationName] = null;
+            } elseif ($related instanceof Model){
+                $result[$relationName] = $related->toArrayByJory($relation->getJory());
+            } else {
+                $relationResult = [];
+                foreach ($related as $relatedModel) {
+                    $relationResult[] = $relatedModel->toArrayByJory($relation->getJory());
+                }
+                $result[$relationName] = $relationResult;
+            }
+        }
+
+        return $result;
     }
 }

@@ -10,6 +10,11 @@ class Song extends Model
 
     protected $table = 'songs';
 
+    protected $casts = [
+        'id' => 'integer',
+        'album_id' => 'integer',
+    ];
+
     public function album()
     {
         return $this->belongsTo(Album::class);

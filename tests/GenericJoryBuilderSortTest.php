@@ -24,7 +24,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 3,
                     'name' => 'Beatles',
@@ -61,7 +61,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -98,7 +98,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -135,7 +135,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -172,7 +172,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -209,7 +209,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -246,7 +246,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 3,
                     'name' => 'Beatles',
@@ -381,7 +381,7 @@ class GenericJoryBuilderSortTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -441,83 +441,59 @@ class GenericJoryBuilderSortTest extends TestCase
     public function it_can_apply_a_custom_sort()
     {
         $response = $this->json('GET', '/album', [
-            'jory' => '{"srt":{"number_of_songs":"asc","name":"asc"}}',
+            'jory' => '{"srt":{"number_of_songs":"asc","name":"asc"},"fld":["id","name"]}',
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 4,
-                    'band_id' => 2,
                     'name' => 'Led Zeppelin',
-                    'release_date' => '1969-01-12',
                 ],
                 [
                     'id' => 5,
-                    'band_id' => 2,
                     'name' => 'Led Zeppelin II',
-                    'release_date' => '1969-10-22',
                 ],
                 [
                     'id' => 1,
-                    'band_id' => 1,
                     'name' => 'Let it bleed',
-                    'release_date' => '1969-12-05',
                 ],
                 [
                     'id' => 6,
-                    'band_id' => 2,
                     'name' => 'Led Zeppelin III',
-                    'release_date' => '1970-10-05',
                 ],
                 [
                     'id' => 2,
-                    'band_id' => 1,
                     'name' => 'Sticky Fingers',
-                    'release_date' => '1971-04-23',
                 ],
                 [
                     'id' => 10,
-                    'band_id' => 4,
                     'name' => 'Are you experienced',
-                    'release_date' => '1967-05-12',
                 ],
                 [
                     'id' => 9,
-                    'band_id' => 3,
                     'name' => 'Let it be',
-                    'release_date' => '1970-05-08',
                 ],
                 [
                     'id' => 11,
-                    'band_id' => 4,
                     'name' => 'Axis: Bold as love',
-                    'release_date' => '1967-12-01',
                 ],
                 [
                     'id' => 7,
-                    'band_id' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
-                    'release_date' => '1967-06-01',
                 ],
                 [
                     'id' => 12,
-                    'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'release_date' => '1968-10-16',
                 ],
                 [
                     'id' => 8,
-                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26',
                 ],
                 [
                     'id' => 3,
-                    'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'release_date' => '1972-05-12',
                 ],
             ]);
     }
@@ -526,83 +502,59 @@ class GenericJoryBuilderSortTest extends TestCase
     public function it_can_apply_a_custom_sort_2()
     {
         $response = $this->json('GET', '/album', [
-            'jory' => '{"srt":{"band_name":"asc","number_of_songs":"asc"}}',
+            'jory' => '{"srt":{"band_name":"asc","number_of_songs":"asc"},"fld":["id","name"]}',
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 9,
-                    'band_id' => 3,
                     'name' => 'Let it be',
-                    'release_date' => '1970-05-08',
                 ],
                 [
                     'id' => 7,
-                    'band_id' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
-                    'release_date' => '1967-06-01',
                 ],
                 [
                     'id' => 8,
-                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26',
                 ],
                 [
                     'id' => 10,
-                    'band_id' => 4,
                     'name' => 'Are you experienced',
-                    'release_date' => '1967-05-12',
                 ],
                 [
                     'id' => 11,
-                    'band_id' => 4,
                     'name' => 'Axis: Bold as love',
-                    'release_date' => '1967-12-01',
                 ],
                 [
                     'id' => 12,
-                    'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'release_date' => '1968-10-16',
                 ],
                 [
                     'id' => 4,
-                    'band_id' => 2,
                     'name' => 'Led Zeppelin',
-                    'release_date' => '1969-01-12',
                 ],
                 [
                     'id' => 5,
-                    'band_id' => 2,
                     'name' => 'Led Zeppelin II',
-                    'release_date' => '1969-10-22',
                 ],
                 [
                     'id' => 6,
-                    'band_id' => 2,
                     'name' => 'Led Zeppelin III',
-                    'release_date' => '1970-10-05',
                 ],
                 [
                     'id' => 1,
-                    'band_id' => 1,
                     'name' => 'Let it bleed',
-                    'release_date' => '1969-12-05',
                 ],
                 [
                     'id' => 2,
-                    'band_id' => 1,
                     'name' => 'Sticky Fingers',
-                    'release_date' => '1971-04-23',
                 ],
                 [
                     'id' => 3,
-                    'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'release_date' => '1972-05-12',
                 ],
             ]);
     }

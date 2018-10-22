@@ -23,7 +23,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
         $this->expectException(LaravelJoryException::class);
         $this->expectExceptionMessage('An offset cannot be set without a limit.');
 
-        Song::jory()->applyJson('{"offset":140}')->get();
+        Song::jory()->applyJson('{"offset":140}')->getModels();
     }
 
     /** @test */
@@ -35,7 +35,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 141,
                     'album_id' => 12,
@@ -83,7 +83,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 1,
                     'album_id' => 1,
@@ -111,7 +111,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 130,
                     'album_id' => 11,
@@ -134,12 +134,12 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
     public function it_can_apply_an_offset_and_limit_combined_with_with_sorts_and_filters_on_relations()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":{"title":"asc"},"offset":10,"limit":5}}}'
+            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":{"title":"asc"},"offset":10,"limit":5,"fld":["id","title"]}}}'
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
                     'id' => 3,
                     'name' => 'Beatles',
@@ -148,27 +148,22 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
                     'songs' => [
                         [
                             'id' => 103,
-                            'album_id' => 9,
                             'title' => 'I\'ve Got a Feeling',
                         ],
                         [
                             'id' => 75,
-                            'album_id' => 7,
                             'title' => 'Lovely Rita',
                         ],
                         [
                             'id' => 68,
-                            'album_id' => 7,
                             'title' => 'Lucy in the Sky with Diamonds',
                         ],
                         [
                             'id' => 102,
-                            'album_id' => 9,
                             'title' => 'Maggie Mae',
                         ],
                         [
                             'id' => 81,
-                            'album_id' => 8,
                             'title' => 'Maxwell\'s Silver Hammer',
                         ],
                     ],

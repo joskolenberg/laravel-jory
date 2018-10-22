@@ -10,6 +10,14 @@ class Person extends Model
 
     protected $table = 'people';
 
+    protected $hidden = [
+        'pivot',
+    ];
+
+    protected $casts = [
+        'id' => 'integer',
+    ];
+
     public function instruments()
     {
         return $this->belongsToMany(Instrument::class, 'instrument_person');

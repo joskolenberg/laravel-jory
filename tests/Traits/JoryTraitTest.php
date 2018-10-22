@@ -40,14 +40,18 @@ class JoryTraitTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
-                    'id'   => 1,
+                    'id' => 1,
                     'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
                 ],
                 [
-                    'id'   => 2,
+                    'id' => 2,
                     'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ]);
     }
@@ -61,34 +65,48 @@ class JoryTraitTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([
+            ->assertExactJson([
                 [
-                    'id'   => 3,
+                    'id' => 3,
+                    'band_id' => 1,
                     'name' => 'Exile on main st.',
+                    'release_date' => '1972-05-12',
                 ],
                 [
-                    'id'   => 7,
+                    'id' => 7,
+                    'band_id' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
+                    'release_date' => '1967-06-01',
                 ],
                 [
-                    'id'   => 8,
+                    'id' => 8,
+                    'band_id' => 3,
                     'name' => 'Abbey road',
+                    'release_date' => '1969-09-26',
                 ],
                 [
-                    'id'   => 9,
+                    'id' => 9,
+                    'band_id' => 3,
                     'name' => 'Let it be',
+                    'release_date' => '1970-05-08',
                 ],
                 [
-                    'id'   => 10,
+                    'id' => 10,
+                    'band_id' => 4,
                     'name' => 'Are you experienced',
+                    'release_date' => '1967-05-12',
                 ],
                 [
-                    'id'   => 11,
+                    'id' => 11,
+                    'band_id' => 4,
                     'name' => 'Axis: Bold as love',
+                    'release_date' => '1967-12-01',
                 ],
                 [
-                    'id'   => 12,
+                    'id' => 12,
+                    'band_id' => 4,
                     'name' => 'Electric ladyland',
+                    'release_date' => '1968-10-16',
                 ],
             ]);
     }
