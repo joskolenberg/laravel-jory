@@ -2,10 +2,10 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Traits;
 
+use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\TestCase;
-use JosKolenberg\LaravelJory\CustomJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\GenericJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
@@ -20,15 +20,15 @@ class JoryTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_can_give_a_genericJoryBuilder_when_applied()
+    public function it_can_give_a_JoryBuilder_when_applied()
     {
-        $this->assertInstanceOf(GenericJoryBuilder::class, Person::jory());
+        $this->assertInstanceOf(JoryBuilder::class, Person::jory());
     }
 
     /** @test */
-    public function it_can_give_a_customJoryBuilder_when_applied_and_overridden()
+    public function it_can_give_a_custom_JoryBuilder_when_applied_and_overridden()
     {
-        $this->assertInstanceOf(CustomJoryBuilder::class, Album::jory());
+        $this->assertInstanceOf(AlbumJoryBuilder::class, Album::jory());
     }
 
     /** @test */

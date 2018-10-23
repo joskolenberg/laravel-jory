@@ -3,9 +3,9 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\Jory\Support\Filter;
-use JosKolenberg\LaravelJory\CustomJoryBuilder;
+use JosKolenberg\LaravelJory\JoryBuilder;
 
-class InstrumentJoryBuilder extends CustomJoryBuilder
+class InstrumentJoryBuilder extends JoryBuilder
 {
     protected function applyNameFilter($query, Filter $filter)
     {

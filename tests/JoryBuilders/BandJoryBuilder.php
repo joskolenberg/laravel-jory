@@ -3,9 +3,9 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\Jory\Support\Filter;
-use JosKolenberg\LaravelJory\CustomJoryBuilder;
+use JosKolenberg\LaravelJory\JoryBuilder;
 
-class BandJoryBuilder extends CustomJoryBuilder
+class BandJoryBuilder extends JoryBuilder
 {
     protected function applyNumberOfAlbumsInYearFilter($query, Filter $filter)
     {

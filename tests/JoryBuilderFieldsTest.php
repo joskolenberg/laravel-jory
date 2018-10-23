@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
-class GenericJoryBuilderFieldsTest extends TestCase
+class JoryBuilderFieldsTest extends TestCase
 {
     protected function setUp()
     {

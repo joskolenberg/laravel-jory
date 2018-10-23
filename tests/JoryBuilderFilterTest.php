@@ -6,7 +6,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
-class GenericJoryBuilderFilterTest extends TestCase
+class JoryBuilderFilterTest extends TestCase
 {
     /**
      * @test

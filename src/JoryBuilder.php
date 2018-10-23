@@ -22,9 +22,9 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 /**
  * Class to query models based on Jory data.
  *
- * Class GenericJoryBuilder
+ * Class JoryBuilder
  */
-abstract class AbstractJoryBuilder implements Responsable
+class JoryBuilder implements Responsable
 {
     /**
      * @var Builder
@@ -37,7 +37,7 @@ abstract class AbstractJoryBuilder implements Responsable
     protected $jory;
 
     /**
-     * GenericJoryBuilder constructor.
+     * JoryBuilder constructor.
      */
     public function __construct()
     {
@@ -50,7 +50,7 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @param Builder $builder
      *
-     * @return GenericJoryBuilder
+     * @return JoryBuilder
      */
     public function onQuery(Builder $builder): self
     {
@@ -64,7 +64,7 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @param array $array
      *
-     * @return GenericJoryBuilder
+     * @return JoryBuilder
      */
     public function applyArray(array $array): self
     {
@@ -78,7 +78,7 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @throws \JosKolenberg\Jory\Exceptions\JoryException
      *
-     * @return GenericJoryBuilder
+     * @return JoryBuilder
      */
     public function applyJson(string $json): self
     {
@@ -90,7 +90,7 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @param Request $request
      *
-     * @return GenericJoryBuilder
+     * @return JoryBuilder
      */
     public function applyRequest(Request $request): self
     {
@@ -102,7 +102,7 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @param Jory $jory
      *
-     * @return GenericJoryBuilder
+     * @return JoryBuilder
      */
     public function applyJory(Jory $jory): self
     {
@@ -198,15 +198,34 @@ abstract class AbstractJoryBuilder implements Responsable
 
     /**
      * Apply a filter to a field.
+     * Use custom filter method if available.
+     * If not, run the default filter method..
      *
-     * @param mixed $query
+     * @param Builder $query
      * @param Filter $filter
      */
     protected function applyFieldFilter($query, Filter $filter): void
     {
-        // Run this through an extra function to allow child classes to override
-        // this method and still be able to run the default filter function
+        $customMethodName = $this->getCustomFilterMethodName($filter);
+        if (method_exists($this, $customMethodName)) {
+            $this->$customMethodName($query, $filter);
+
+            return;
+        }
+
         $this->doApplyDefaultFieldFilter($query, $filter);
+    }
+
+    /**
+     * Get the custom method name to look for to apply a filter.
+     *
+     * @param Filter $filter
+     *
+     * @return string
+     */
+    protected function getCustomFilterMethodName(Filter $filter)
+    {
+        return 'apply'.studly_case($filter->getField()).'Filter';
     }
 
     /**

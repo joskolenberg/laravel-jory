@@ -6,7 +6,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 
-class GenericJoryBuilderOffsetLimitTest extends TestCase
+class JoryBuilderOffsetLimitTest extends TestCase
 {
     protected function setUp()
     {

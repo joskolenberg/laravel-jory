@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 
-class GenericJoryBuilderSortTest extends TestCase
+class JoryBuilderSortTest extends TestCase
 {
     protected function setUp()
     {

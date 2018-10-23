@@ -4,9 +4,9 @@ namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\Jory\Support\Filter;
-use JosKolenberg\LaravelJory\CustomJoryBuilder;
+use JosKolenberg\LaravelJory\JoryBuilder;
 
-class AlbumJoryBuilder extends CustomJoryBuilder
+class AlbumJoryBuilder extends JoryBuilder
 {
     protected function applyNumberOfSongsFilter($query, Filter $filter)
     {

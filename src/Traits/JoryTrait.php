@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use JosKolenberg\LaravelJory\GenericJoryBuilder;
-use JosKolenberg\LaravelJory\AbstractJoryBuilder;
+use JosKolenberg\LaravelJory\JoryBuilder;
 
 /**
  * Trait to mark a Model as Jory-queryable.
@@ -20,9 +19,9 @@ trait JoryTrait
     /**
      * Return the JoryBuilder to query on this model.
      *
-     * @return AbstractJoryBuilder
+     * @return JoryBuilder
      */
-    public static function jory(): AbstractJoryBuilder
+    public static function jory(): JoryBuilder
     {
         return static::getJoryBuilder()->onQuery(static::getJoryBaseQuery());
     }
@@ -43,11 +42,11 @@ trait JoryTrait
      * Get a new JoryBuilder instance for the model.
      * Override to apply a custom JoryBuilder class for the model.
      *
-     * @return GenericJoryBuilder
+     * @return JoryBuilder
      */
-    public static function getJoryBuilder(): AbstractJoryBuilder
+    public static function getJoryBuilder(): JoryBuilder
     {
-        return new GenericJoryBuilder();
+        return new JoryBuilder();
     }
 
     /**
