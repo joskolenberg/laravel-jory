@@ -3,10 +3,7 @@
 namespace JosKolenberg\LaravelJory\Traits;
 
 use JosKolenberg\Jory\Jory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\LaravelJory\JoryBuilder;
 
 /**

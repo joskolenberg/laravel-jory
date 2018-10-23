@@ -2,18 +2,15 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use Illuminate\Support\Facades\Route;
-use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
-use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 
 class JoryBuilderTest extends TestCase
 {
-
     /**
      * @test
      */
@@ -229,7 +226,7 @@ class JoryBuilderTest extends TestCase
             'flt' => [
                 'f' => 'name',
                 'v' => 'Hobo',
-            ]
+            ],
         ])->first()->toArray();
 
         $this->assertNull($actual);

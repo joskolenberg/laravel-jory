@@ -2,10 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Parsers;
 
-use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Tests\TestCase;
-use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
-use JosKolenberg\LaravelJory\Tests\Controllers\PersonController;
 
 class RequestParserTest extends TestCase
 {

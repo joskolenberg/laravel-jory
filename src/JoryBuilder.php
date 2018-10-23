@@ -477,7 +477,7 @@ class JoryBuilder implements Responsable
      *
      * @return \JosKolenberg\LaravelJory\JoryBuilder
      */
-    public function first(): JoryBuilder
+    public function first(): self
     {
         $this->first = true;
 
@@ -492,7 +492,7 @@ class JoryBuilder implements Responsable
      * @param \Illuminate\Database\Eloquent\Model $model
      * @return \JosKolenberg\LaravelJory\JoryBuilder
      */
-    public function onModel(Model $model): JoryBuilder
+    public function onModel(Model $model): self
     {
         $this->model = $model;
         $this->first();
