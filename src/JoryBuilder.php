@@ -40,6 +40,16 @@ class JoryBuilder implements Responsable
     protected $jory;
 
     /**
+     * @var bool
+     */
+    protected $first = false;
+
+    /**
+     * @var Model|null
+     */
+    protected $model = null;
+
+    /**
      * JoryBuilder constructor.
      */
     public function __construct()
@@ -119,7 +129,7 @@ class JoryBuilder implements Responsable
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getModels(): Collection
+    public function get(): Collection
     {
         $collection = $this->getQuery()->get();
 
@@ -128,9 +138,45 @@ class JoryBuilder implements Responsable
         return $collection;
     }
 
-    public function get()
+    /**
+     * Get the first Model based on the baseQuery and Jory data.
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function getFirst(): ? Model
     {
-        $models = $this->getModels();
+        $model = $this->model;
+
+        if (! $model) {
+            $model = $this->getQuery()->first();
+        }
+
+        if (! $model) {
+            return null;
+        }
+
+        $this->loadRelations(new Collection([$model]), $this->jory->getRelations());
+
+        return $model;
+    }
+
+    /**
+     * Get the result array.
+     *
+     * @return array|null
+     */
+    public function toArray(): ? array
+    {
+        if ($this->first) {
+            $model = $this->getFirst();
+            if (! $model) {
+                return null;
+            }
+
+            return $model->toArrayByJory($this->jory);
+        }
+
+        $models = $this->get();
 
         $result = [];
         foreach ($models as $model) {
@@ -240,7 +286,7 @@ class JoryBuilder implements Responsable
      */
     public function toResponse($request)
     {
-        return response($this->get());
+        return response($this->toArray());
     }
 
     /**
@@ -424,5 +470,33 @@ class JoryBuilder implements Responsable
         if ($limit) {
             $query->limit($limit);
         }
+    }
+
+    /**
+     * Set this JoryBuilder to return only a single record.
+     *
+     * @return \JosKolenberg\LaravelJory\JoryBuilder
+     */
+    public function first(): JoryBuilder
+    {
+        $this->first = true;
+
+        return $this;
+    }
+
+    /**
+     * Set the model to query on.
+     * This model will we the base result for this builder
+     * with fields an relations as applied in the Jory.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return \JosKolenberg\LaravelJory\JoryBuilder
+     */
+    public function onModel(Model $model): JoryBuilder
+    {
+        $this->model = $model;
+        $this->first();
+
+        return $this;
     }
 }

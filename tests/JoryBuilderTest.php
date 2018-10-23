@@ -13,12 +13,6 @@ use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
 
 class JoryBuilderTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        Route::get('/band-as-response', BandController::class.'@indexAsResponse');
-    }
 
     /**
      * @test
@@ -26,7 +20,7 @@ class JoryBuilderTest extends TestCase
     public function it_can_apply_on_a_querybuilder_instance()
     {
         $query = Band::query();
-        $actual = (new JoryBuilder())->onQuery($query)->getModels()->pluck('name')->toArray();
+        $actual = (new JoryBuilder())->onQuery($query)->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -39,7 +33,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_json_string()
     {
-        $actual = Song::jory()->applyJson('{"filter":{"f":"title","o":"like","v":"%love"}}')->getModels()->pluck('title')->toArray();
+        $actual = Song::jory()->applyJson('{"filter":{"f":"title","o":"like","v":"%love"}}')->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Whole Lotta Love',
@@ -58,7 +52,7 @@ class JoryBuilderTest extends TestCase
                 'o' => 'like',
                 'v' => 'love%',
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -95,7 +89,7 @@ class JoryBuilderTest extends TestCase
             ],
         ]))->getJory();
 
-        $actual = Song::jory()->applyJory($jory)->getModels()->pluck('title')->toArray();
+        $actual = Song::jory()->applyJory($jory)->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -107,7 +101,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_defaults_to_empty_when_no_jory_is_applied()
     {
-        $actual = Band::jory()->getModels()->pluck('name')->toArray();
+        $actual = Band::jory()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -115,23 +109,6 @@ class JoryBuilderTest extends TestCase
             'Beatles',
             'Jimi Hendrix Experience',
         ], $actual);
-    }
-
-    /** @test */
-    public function it_can_be_returned_as_a_response_from_a_controller()
-    {
-        $response = $this->json('GET', 'band-as-response', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
-        ]);
-
-        $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-            ],
-        ]);
     }
 
     /** @test */
@@ -143,7 +120,7 @@ class JoryBuilderTest extends TestCase
                 'o' => '>',
                 'v' => 10,
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Exile on main st.',
@@ -174,7 +151,7 @@ class JoryBuilderTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Let it bleed',
@@ -208,7 +185,7 @@ class JoryBuilderTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Sgt. Peppers lonely hearts club band',
@@ -225,12 +202,36 @@ class JoryBuilderTest extends TestCase
                 'o' => 'like',
                 'v' => '%t%',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Guitar',
             'Bassguitar',
             // An extra custom filter is made to exclude instruments without connected people, so flute should be missing
         ], $actual);
+    }
+
+    /** @test */
+    public function it_can_return_a_single_model()
+    {
+        $actual = Instrument::jory()->first()->toArray();
+
+        $this->assertEquals([
+            'id' => 1,
+            'name' => 'Vocals',
+        ], $actual);
+    }
+
+    /** @test */
+    public function it_returns_null_when_a_single_model_is_not_found()
+    {
+        $actual = Instrument::jory()->applyArray([
+            'flt' => [
+                'f' => 'name',
+                'v' => 'Hobo',
+            ]
+        ])->first()->toArray();
+
+        $this->assertNull($actual);
     }
 }

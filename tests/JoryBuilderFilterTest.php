@@ -19,7 +19,7 @@ class JoryBuilderFilterTest extends TestCase
                 'operator' => 'like',
                 'value' => '%john%',
             ],
-        ])->getModels()->pluck('last_name')->toArray();
+        ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Bonham', 'Lennon'], $actual);
     }
@@ -44,7 +44,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('last_name')->toArray();
+        ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Lennon', 'McCartney'], $actual);
     }
@@ -69,7 +69,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('last_name')->toArray();
+        ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Lennon'], $actual);
     }
@@ -89,7 +89,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -132,7 +132,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -184,7 +184,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -251,7 +251,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -267,7 +267,7 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_doesnt_apply_any_filter_when_parameter_is_omitted()
     {
-        $actual = Band::jory()->applyArray([])->getModels()->pluck('name')->toArray();
+        $actual = Band::jory()->applyArray([])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -287,7 +287,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => '=',
                 'v' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
@@ -298,7 +298,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => '>',
                 'v' => 'KISS',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
@@ -310,7 +310,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => '<',
                 'v' => 'Cult',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
@@ -321,7 +321,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => '<>',
                 'v' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
@@ -334,7 +334,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => '!=',
                 'v' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
@@ -347,7 +347,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'like',
                 'v' => 'Beat%',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
@@ -358,7 +358,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'like',
                 'v' => '%Stones',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
         ], $actual);
@@ -369,7 +369,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'like',
                 'v' => '%s%',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Beatles',
@@ -381,7 +381,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'not like',
                 'v' => '%s%',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Jimi Hendrix Experience',
@@ -393,7 +393,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => '>=',
                 'v' => '3',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
             'Jimi Hendrix Experience',
@@ -408,7 +408,7 @@ class JoryBuilderFilterTest extends TestCase
                 'f' => 'year_end',
                 'o' => 'null',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
         ], $actual);
@@ -422,7 +422,7 @@ class JoryBuilderFilterTest extends TestCase
                 'f' => 'year_end',
                 'o' => 'not_null',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Beatles',
@@ -439,7 +439,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'in',
                 'v' => [1, 3],
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Beatles',
@@ -455,7 +455,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'not_in',
                 'v' => [1, 3],
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Jimi Hendrix Experience',
@@ -470,7 +470,7 @@ class JoryBuilderFilterTest extends TestCase
                 'f' => 'name',
                 'v' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Beatles',

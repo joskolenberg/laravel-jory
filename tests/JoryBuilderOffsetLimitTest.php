@@ -14,7 +14,7 @@ class JoryBuilderOffsetLimitTest extends TestCase
         $this->expectException(LaravelJoryException::class);
         $this->expectExceptionMessage('An offset cannot be set without a limit.');
 
-        Song::jory()->applyJson('{"offset":140}')->getModels();
+        Song::jory()->applyJson('{"offset":140}')->get();
     }
 
     /** @test */

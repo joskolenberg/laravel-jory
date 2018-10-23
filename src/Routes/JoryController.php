@@ -17,4 +17,17 @@ class JoryController extends Controller
 
         return $modelClass::jory()->applyRequest($request);
     }
+
+    public function show($uri, $id, Request $request)
+    {
+        $modelClass = config('jory.routes.'.$uri);
+
+        if (! $modelClass) {
+            abort(404);
+        }
+
+        $model = $modelClass::findOrFail($id);
+
+        return $modelClass::jory()->applyRequest($request)->onModel($model);
+    }
 }

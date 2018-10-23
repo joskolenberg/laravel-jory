@@ -10,13 +10,18 @@ class BandController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Band::jory()->applyRequest($request)->get();
-
-        return response()->json($data);
+        return Band::jory()->applyRequest($request);
     }
 
-    public function indexAsResponse(Request $request)
+    public function show($bandId, Request $request)
     {
-        return Band::jory()->applyRequest($request);
+        $band = Band::findOrFail($bandId);
+
+        return Band::jory()->applyRequest($request)->onModel($band);
+    }
+
+    public function firstByFilter(Request $request)
+    {
+        return Band::jory()->applyRequest($request)->first();
     }
 }
