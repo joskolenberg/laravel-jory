@@ -17,6 +17,7 @@ use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
+use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 
 /**
@@ -26,6 +27,8 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
  */
 class JoryBuilder implements Responsable
 {
+    use BuildsJoryRoutes;
+
     /**
      * @var Builder
      */

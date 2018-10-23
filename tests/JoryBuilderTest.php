@@ -17,7 +17,6 @@ class JoryBuilderTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('/band', BandController::class.'@index');
         Route::get('/band-as-response', BandController::class.'@indexAsResponse');
     }
 
@@ -71,7 +70,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_json_string_from_a_request()
     {
-        $response = $this->json('GET', '/band', [
+        $response = $this->json('GET', 'jory/band', [
             'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
         ]);
 
@@ -121,7 +120,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_be_returned_as_a_response_from_a_controller()
     {
-        $response = $this->json('GET', '/band-as-response', [
+        $response = $this->json('GET', 'band-as-response', [
             'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
         ]);
 
@@ -139,12 +138,12 @@ class JoryBuilderTest extends TestCase
     public function it_can_apply_a_custom_filter()
     {
         $actual = Album::jory()->applyArray([
-                'filter' => [
-                    'f' => 'number_of_songs',
-                    'o' => '>',
-                    'v' => 10,
-                ],
-            ])->getModels()->pluck('name')->toArray();
+            'filter' => [
+                'f' => 'number_of_songs',
+                'o' => '>',
+                'v' => 10,
+            ],
+        ])->getModels()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Exile on main st.',
@@ -161,21 +160,21 @@ class JoryBuilderTest extends TestCase
     public function it_can_apply_mulitple_custom_filters()
     {
         $actual = Album::jory()->applyArray([
-                'filter' => [
-                    'group_or' => [
-                        [
-                            'f' => 'number_of_songs',
-                            'o' => '>=',
-                            'v' => 11,
-                        ],
-                        [
-                            'f' => 'number_of_songs',
-                            'o' => '<=',
-                            'v' => 9,
-                        ],
+            'filter' => [
+                'group_or' => [
+                    [
+                        'f' => 'number_of_songs',
+                        'o' => '>=',
+                        'v' => 11,
+                    ],
+                    [
+                        'f' => 'number_of_songs',
+                        'o' => '<=',
+                        'v' => 9,
                     ],
                 ],
-            ])->getModels()->pluck('name')->toArray();
+            ],
+        ])->getModels()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Let it bleed',
@@ -195,21 +194,21 @@ class JoryBuilderTest extends TestCase
     public function it_can_combine_standard_and_custom_filters()
     {
         $actual = Album::jory()->applyArray([
-                'filter' => [
-                    'group_and' => [
-                        [
-                            'f' => 'number_of_songs',
-                            'o' => '>=',
-                            'v' => 11,
-                        ],
-                        [
-                            'f' => 'name',
-                            'o' => 'like',
-                            'v' => '%el%',
-                        ],
+            'filter' => [
+                'group_and' => [
+                    [
+                        'f' => 'number_of_songs',
+                        'o' => '>=',
+                        'v' => 11,
+                    ],
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'v' => '%el%',
                     ],
                 ],
-            ])->getModels()->pluck('name')->toArray();
+            ],
+        ])->getModels()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Sgt. Peppers lonely hearts club band',
@@ -221,12 +220,12 @@ class JoryBuilderTest extends TestCase
     public function it_can_override_the_basic_filter_function()
     {
         $actual = Instrument::jory()->applyArray([
-                'filter' => [
-                    'f' => 'name',
-                    'o' => 'like',
-                    'v' => '%t%',
-                ],
-            ])->getModels()->pluck('name')->toArray();
+            'filter' => [
+                'f' => 'name',
+                'o' => 'like',
+                'v' => '%t%',
+            ],
+        ])->getModels()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Guitar',

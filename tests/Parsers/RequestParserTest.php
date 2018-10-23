@@ -9,18 +9,10 @@ use JosKolenberg\LaravelJory\Tests\Controllers\PersonController;
 
 class RequestParserTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        Route::get('/person', PersonController::class.'@index');
-        Route::get('/band', BandController::class.'@index');
-    }
-
     /** @test */
     public function it_can_get_the_jory_parameter_from_a_request()
     {
-        $response = $this->json('GET', '/person', [
+        $response = $this->json('GET', 'jory/person', [
             'jory' => '{"filter":{"f": "first_name","v":"John"},"fld":["id","last_name"]}',
         ]);
 
@@ -39,7 +31,7 @@ class RequestParserTest extends TestCase
     /** @test */
     public function it_defaults_to_empty_when_no_data_is_passed()
     {
-        $response = $this->json('GET', '/band');
+        $response = $this->json('GET', 'jory/band');
 
         $response->assertStatus(200)->assertExactJson([
             [

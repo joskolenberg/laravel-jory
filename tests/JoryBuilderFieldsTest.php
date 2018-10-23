@@ -7,18 +7,10 @@ use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class JoryBuilderFieldsTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        Band::joryRoutes('band');
-        Person::joryRoutes('person');
-    }
-
     /** @test */
     public function it_can_specify_the_fields_to_return()
     {
-        $response = $this->json('GET', '/band', [
+        $response = $this->json('GET', 'jory/band', [
             'jory' => '{"fields":["id","name"]}',
         ]);
 
@@ -45,7 +37,7 @@ class JoryBuilderFieldsTest extends TestCase
     /** @test */
     public function it_can_specify_the_fields_to_return_on_a_relation()
     {
-        $response = $this->json('GET', '/band', [
+        $response = $this->json('GET', 'jory/band', [
             'jory' => '{"flt":{"f":"name","o":"like","v":"%zep%"},"rlt":{"songs":{"fld":["title"]}},"fields":["id","name"]}',
         ]);
 
@@ -146,7 +138,7 @@ class JoryBuilderFieldsTest extends TestCase
     /** @test */
     public function when_the_fields_parameter_is_not_specified_all_fields_will_be_returned()
     {
-        $response = $this->json('GET', '/band', [
+        $response = $this->json('GET', 'jory/band', [
             'jory' => '{}',
         ]);
 
@@ -181,7 +173,7 @@ class JoryBuilderFieldsTest extends TestCase
     /** @test */
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned()
     {
-        $response = $this->json('GET', '/band', [
+        $response = $this->json('GET', 'jory/band', [
             'jory' => '{"fld":[]}',
         ]);
 
@@ -196,7 +188,7 @@ class JoryBuilderFieldsTest extends TestCase
     /** @test */
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned_2()
     {
-        $response = $this->json('GET', '/band', [
+        $response = $this->json('GET', 'jory/band', [
             'jory' => '{"fld":[],"flt":{"f":"name","o":"like","v":"%zep%"},"rlt":{"songs":{"flt":{"f":"songs.id","o":">","v":54},"fld":["title"]}}}',
         ]);
 
@@ -244,7 +236,7 @@ class JoryBuilderFieldsTest extends TestCase
     /** @test */
     public function it_can_return_custom_model_attributes()
     {
-        $response = $this->json('GET', '/person', [
+        $response = $this->json('GET', 'jory/person', [
             'jory' => '{"fld":["full_name"]}',
         ]);
 

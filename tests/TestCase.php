@@ -5,10 +5,12 @@ namespace JosKolenberg\LaravelJory\Tests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Application;
 use Illuminate\Database\Schema\Blueprint;
+use JosKolenberg\LaravelJory\JoryBuilder;
 use Orchestra\Testbench\TestCase as Orchestra;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\JoryServiceProvider;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
@@ -22,6 +24,20 @@ class TestCase extends Orchestra
 
         $this->setUpDatabase($this->app);
         $this->seedDatabase();
+
+        JoryBuilder::routes('jory');
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        $app['config']->set('jory.routes', [
+            'band' => Band::class,
+            'album' => Album::class,
+            'album-cover' => AlbumCover::class,
+            'instrument' => Instrument::class,
+            'person' => Person::class,
+            'song' => Song::class,
+        ]);
     }
 
     protected function setUpDatabase(Application $app)
@@ -45,13 +61,9 @@ class TestCase extends Orchestra
         $app['db']->connection()->getSchemaBuilder()->create('band_members', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('person_id');
-            $table->foreign('person_id')
-                ->references('id')->on('people')
-                ->onDelete('restrict');
+            $table->foreign('person_id')->references('id')->on('people')->onDelete('restrict');
             $table->unsignedInteger('band_id');
-            $table->foreign('band_id')
-                ->references('id')->on('bands')
-                ->onDelete('restrict');
+            $table->foreign('band_id')->references('id')->on('bands')->onDelete('restrict');
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('instruments', function (Blueprint $table) {
@@ -62,22 +74,16 @@ class TestCase extends Orchestra
         $app['db']->connection()->getSchemaBuilder()->create('instrument_person', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('person_id');
-            $table->foreign('person_id')
-                ->references('id')->on('band_members')
-                ->onDelete('restrict');
+            $table->foreign('person_id')->references('id')->on('band_members')->onDelete('restrict');
             $table->unsignedInteger('instrument_id');
-            $table->foreign('instrument_id')
-                ->references('id')->on('instruments')
-                ->onDelete('restrict');
+            $table->foreign('instrument_id')->references('id')->on('instruments')->onDelete('restrict');
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('albums', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('band_id');
-            $table->foreign('band_id')
-                ->references('id')->on('bands')
-                ->onDelete('restrict');
+            $table->foreign('band_id')->references('id')->on('bands')->onDelete('restrict');
             $table->date('release_date');
         });
 
@@ -85,18 +91,14 @@ class TestCase extends Orchestra
             $table->increments('id');
             $table->string('title');
             $table->unsignedInteger('album_id');
-            $table->foreign('album_id')
-                ->references('id')->on('album')
-                ->onDelete('restrict');
+            $table->foreign('album_id')->references('id')->on('album')->onDelete('restrict');
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('album_covers', function (Blueprint $table) {
             $table->increments('id');
             $table->text('image');
             $table->unsignedInteger('album_id');
-            $table->foreign('album_id')
-                ->references('id')->on('album')
-                ->onDelete('restrict');
+            $table->foreign('album_id')->references('id')->on('album')->onDelete('restrict');
         });
     }
 
@@ -142,7 +144,7 @@ class TestCase extends Orchestra
                  ] as $bandId => $personIds) {
             foreach ($personIds as $personId) {
                 DB::table('band_members')->insert([
-                    'band_id'   => $bandId,
+                    'band_id' => $bandId,
                     'person_id' => $personId,
                 ]);
             }
@@ -182,8 +184,8 @@ class TestCase extends Orchestra
                  ] as $bandMemberId => $instrumentIds) {
             foreach ($instrumentIds as $instrumentId) {
                 DB::table('instrument_person')->insert([
-                    'person_id'      => $bandMemberId,
-                    'instrument_id'  => $instrumentId,
+                    'person_id' => $bandMemberId,
+                    'instrument_id' => $instrumentId,
                 ]);
             }
         }
@@ -196,7 +198,11 @@ class TestCase extends Orchestra
                      4 => ['band_id' => 2, 'name' => 'Led Zeppelin', 'release_date' => '1969-01-12'], // 9
                      5 => ['band_id' => 2, 'name' => 'Led Zeppelin II', 'release_date' => '1969-10-22'], // 9
                      6 => ['band_id' => 2, 'name' => 'Led Zeppelin III', 'release_date' => '1970-10-05'], // 10
-                     7 => ['band_id' => 3, 'name' => 'Sgt. Peppers lonely hearts club band', 'release_date' => '1967-06-01'], // 13
+                     7 => [
+                         'band_id' => 3,
+                         'name' => 'Sgt. Peppers lonely hearts club band',
+                         'release_date' => '1967-06-01',
+                     ], // 13
                      8 => ['band_id' => 3, 'name' => 'Abbey road', 'release_date' => '1969-09-26'], // 17
                      9 => ['band_id' => 3, 'name' => 'Let it be', 'release_date' => '1970-05-08'], // 12
                      10 => ['band_id' => 4, 'name' => 'Are you experienced', 'release_date' => '1967-05-12'], // 11
@@ -361,7 +367,9 @@ class TestCase extends Orchestra
 
         // Seed AlbumCovers
         foreach ([
-                     1 => ['album_id' => 1, 'image' => '...........................-..------..--.--........-------------.------........
+                     1 => [
+                         'album_id' => 1,
+                         'image' => '...........................-..------..--.--........-------------.------........
 ..-------------..-----------------------------------------------.---...........
 ..:=*+**:++*=*+:-*+*+:#*==:*:--+:+-+-:::-+++-*:*::+-------------.--............
 ..-..........................--------..------------.-------------..............
@@ -400,8 +408,11 @@ class TestCase extends Orchestra
 ................----+#@@@@@@@@@@@##@@@@@@@@#*++*@@@@@@@@@@@#+..................
 .......................-+=@@@@@@@@@@@@@@@@@@#=***=@@@@#*:-.....................
 .............................-::+*===#####==**++::-............................
-...............................................................................'],
-                     2 => ['album_id' => 2, 'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
+...............................................................................',
+                     ],
+                     2 => [
+                         'album_id' => 2,
+                         'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
 ........+W@@@W@#@=#@#@#=-+##*=#@#=:-:-@@+-@WWWWWW@WWWWWWWWWWWWWWWWWWWWWWWWWWW+.
@@ -440,8 +451,11 @@ class TestCase extends Orchestra
 ......:*=@WWWWWWWWWWWWWWWWWWWWWWWW+.....#===+++*=+*#@@@#@@@WWWWWWWWWWWWWWWWWWWW
 ...--::*#WWWWWWWWWWWWWWWWWWWWWWWW@......**=##+**+**=*###@@@WWWWWWWWWWWWWWWWWWWW
 ...--+*=@WWWWWWWWWWWWWWWWWWWWWWWW+......-@===++*+***==*@@@@WWWWWWWWWWWWWWW@@@W@
-...--+*#@WWWWWWWWWWWWWWWWWWWWWWW@-.......#=##==#======@#@@@@WWWWWWWWWWWWWW@@@@@'],
-                     3 => ['album_id' => 3, 'image' => '....-@@+*::+=W+:-#WW#:@=WWW@*#-+@W@@W#---*-*---@@=@#=*+#WW*@*W@#W==WWW##W@@@@@@
+...--+*#@WWWWWWWWWWWWWWWWWWWWWWW@-.......#=##==#======@#@@@@WWWWWWWWWWWWWW@@@@@',
+                     ],
+                     3 => [
+                         'album_id' => 3,
+                         'image' => '....-@@+*::+=W+:-#WW#:@=WWW@*#-+@W@@W#---*-*---@@=@#=*+#WW*@*W@#W==WWW##W@@@@@@
 ---..+@:++:***--::+:::*+:*::**:++*+*=*-++=**++-==++----:+:**=====+++=#*-::::+:-
 #=#:--@+-:WW@----*+*=#--=#@WWWWW-#@#:+:***=++-+*+:+-::*-*=@@WW@#@###**W+@W##*##
 ==@*#@#:#:W#@+--:=+##*=-+++@+-=W.=:=#=+*-#**-:--=@@*=@*=+@@@#=@@@W@=**#*#*###@@
@@ -480,8 +494,11 @@ WWWWWWW=WWWWWW+:+-@W+::::*:+:+:::::::+::+++++::+++++**+---=#@#==@*:+@#::::+++++
 ***+:+++----.-------:-------:---==#WW#*==*:+#+#@W=*@+#@=###W#@WWW#::::::::::+#W
 WWW@@@@*..--=@@@+..----+----*#+*+##@#@#@**::=+*#@=*#*W@@@@@@#=@@@@::-:::::::+=W
 #=##@@#:----#---:..-:---:=@@.=:-:===*****===+:*:*+++:+*****=**==*=+:::::-:-::#W
-W@@#WWW+.---*++:-.--==---+@:-:--*WW@#=+::*=*-:::===+-::::-@WWWWW@W@@WW#----:+=W'],
-                     4 => ['album_id' => 4, 'image' => '********=*++++:------------------...........--:*++-+=*=#**+*===+-.-...........-
+W@@#WWW+.---*++:-.--==---+@:-:--*WW@#=+::*=*-:::===+-::::-@WWWWW@W@@WW#----:+=W',
+                     ],
+                     4 => [
+                         'album_id' => 4,
+                         'image' => '********=*++++:------------------...........--:*++-+=*=#**+*===+-.-...........-
 *=*=====+==*****=****+:*=++-..................--:+=#*:*=*--*#=++++-....:++:+::-
 ========*==***+-*-:*+**+*+:..................:++===*+.+******==:=:.....-:--:---
 ==***==*++:-------.-.---.....................-**:*++*:==*=#=**==+=-...........-
@@ -520,8 +537,11 @@ W@@#WWW+.---*++:-.--==---+@:-:--*WW@#=+::*=*-:::===+-::::-@WWWWW@W@@WW#----:+=W'
 ..............................--..........-:...............----:*W@@@@@@#####@@
 .............................-----------.----.............----:*@@*@@#@=@=====@
 .....-=+.......-.............-------------.----.........------*W#@*:@#*=*****=#
-.....-@#......#@=-.........-----:::-:--:+:------..----------:*@W@##@W@@@@@@@@@@'],
-                     5 => ['album_id' => 5, 'image' => '++*++*+++++*++++++++*+++++++++++*+++*++*++*++*++++*+++*++*++*+++*++*++++++++*++
+.....-@#......#@=-.........-----:::-:--:+:------..----------:*@W@##@W@@@@@@@@@@',
+                     ],
+                     5 => [
+                         'album_id' => 5,
+                         'image' => '++*++*+++++*++++++++*+++++++++++*+++*++*++*++*++++*+++*++*++*+++*++*++++++++*++
 +**+**++++**+*++**+**++*+++***+**++**+*++*++**+++*+++*++**+**++**+**++*+**+**++
 ===============================================================================
 ===============================::*========+-*========================*=========
@@ -560,8 +580,11 @@ W@@#WWW+.---*++:-.--==---+@:-:--*WW@#=+::*=*-:::===+-::::-@WWWWW@W@@WW#----:+=W'
 ========================*++****:+*******=======*=*===*****::***+*++++++*+++:===
 ========================*++++++:-+:****+:+***+**************:+*+:::--:-----:===
 ========================+----:+*+++::::---::--::++++--:+*****+---:---------:===
-========================+-------:++-----------------::------:::------------:==='],
-                     6 => ['album_id' => 6, 'image' => '@###@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#*@==@@@@#########################@
+========================+-------:++-----------------::------:::------------:===',
+                     ],
+                     6 => [
+                         'album_id' => 6,
+                         'image' => '@###@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#*@==@@@@#########################@
 #-.------:=*=*:-----::-----=#=*++::---:*=*--:+:++**:----------:+::--.....-+*#--
 #-..------+::+-----*@-------*##=*++----::+=***:---:++:---------.-::-.....--....
 #-.-----------------::::------=##**:-----+#==#+-:::::::+++++**-..........-@@*--
@@ -600,8 +623,11 @@ W@@#WWW+.---*++:-.--==---+@:-:--*WW@#=+::*=*-:::===+-::::-@WWWWW@W@@WW#----:+=W'
 =:-:+:+:+::++:+:#+:--...+*-......-:*==+***+--.....--+-...---:::::...-**+-.:@+--
 =:+=+++:--+::*:=+---:...............---:-*=:-.....-:-....--::----...-:+:-++++#=
 #+:::+:+++-:-:*#-.-+*:.......-***+:-......-......:+:....--------........:-=@#**
-#++::::+*::+*#==.-:::-.......-:::-::::--..........:*:........--.........----=--'],
-                     7 => ['album_id' => 7, 'image' => '*+++++++++**+++++++++++***++++++++++++****+*****************+*+:+*+++++++++++++
+#++::::+*::+*#==.-:::-.......-:::-::::--..........:*:........--.........----=--',
+                     ],
+                     7 => [
+                         'album_id' => 7,
+                         'image' => '*+++++++++**+++++++++++***++++++++++++****+*****************+*+:+*+++++++++++++
 **++++**+:+***-=*#=+**#@*+**:+::#=:=*******=W@**:+==****=*#=**+++=#++++++++++++
 ***@=***=*=*+++=@=*+*#*+#**=###*#*+*****+=##@@=+::*@+***===#*==+:=*+=*++++++++=
 **@#=****##W@=+@@#+:++#=+**=@@#@=##*+**=#@=*#@=#:++++:+=#@@@#@@@#=#*==*+++++#@@
@@ -640,8 +666,11 @@ W##@@WW@####@@##@@#@WWWWWW@#@W@@##@==#@@@@W#####=#@@@#=######@@##W@#@#@@#@@W@@@
 @@@@#@WW@@@@@@@@@@#@##@#@W@@WWWW@@W###@@W=**=@@@@W@WW@@@@@WWWWW@@@@@@#@@@@@@@@@
 @WW@#WWWWWWWWWWWWWWWWWWWWWWWWWWWWW=@@#@W#++=+*++:*::*=+***=+*:::WWWWWW@@@@@@@WW
 W@@@WWWWWWWWWWWW@#@@@WWWWWWWWWWWWW@@@#@W@*#W@#*=@@=+==:+:=#@@#+:#@WWW@WWWWWWWWW
-WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'],
-                     8 => ['album_id' => 8, 'image' => '@@@@@@@@@#@@@@@@@@@@@@@@@#@@@@=#=:----------------------------------------+=###
+WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW',
+                     ],
+                     8 => [
+                         'album_id' => 8,
+                         'image' => '@@@@@@@@@#@@@@@@@@@@@@@@@#@@@@=#=:----------------------------------------+=###
 @@@@@@@@@@@@#@@@##@@@@@@@@@@@#=**+:---------------------------------------+###@
 @@@@@@@@@@@#@@@@#####@@@@@######+++------------------------------------++*#@@##
 @@@@@@@@@@@@@@@#@##@@#===###=*=:*=:---------------------------------:::#@@@##@@
@@ -680,8 +709,11 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
 #@*-:---::---+#=#=#=####+----------:#######==#*-----------=#===#====+----------
 *-::::::---:###==###=##*-----------*#====#=##=#------------#####======:--------
 ::::::::--=######=####*------------#=#=####=#=#:-----------:######===##+-------
-:::::---+@###########+------::----+##=#===#=###:------------:#######=###=------'],
-                     9 => ['album_id' => 9, 'image' => 'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+:::::---+@###########+------::----+##=#===#=###:------------:#######=###=------',
+                     ],
+                     9 => [
+                         'album_id' => 9,
+                         'image' => 'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW:@:+#:W+#-@*:+-*WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -720,8 +752,11 @@ WWWWWWW#@@@@WWWWWWWWWWWWWWWWWWWW@@@@##==-----........:=**+*W++:.......#WWWWWWWW
 WWWWWWW@=###############################***************======*********@WWWWWWWW
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'],
-                     10 => ['album_id' => 10, 'image' => '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+                     ],
+                     10 => [
+                         'album_id' => 10,
+                         'image' => '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ++++++++++++++++++++++++++++++++*==***=*==*==***+++++++++++++++++++++++++++++++
 +++++++***+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 +++++++====#*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -760,8 +795,11 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
 ++++++++++++**====*=***==*===*=**=*=**=====*===**==*===+**=*++***++++++++++++++
 +++++++++++++++++++*====**===*====*=****==*=*=**===*=*=***=++++++++++++++++++++
 +++++++++++++++++++++++++++++++++++****=**===*==+++****++++++++++++++++++++++++
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'],
-                     11 => ['album_id' => 11, 'image' => '************++++++++++++******+++:::+::----::+::::+******+++++++++*+***********
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
+                     ],
+                     11 => [
+                         'album_id' => 11,
+                         'image' => '************++++++++++++******+++:::+::----::+::::+******+++++++++*+***********
 ****************+++++++++++*+++:--:****+++*+**+--:+++++++++++++++**************
 ***************++***+::::::::--:***++::-::++*++**+--+:::++++++*+***************
 ++++************++++++++:::-.:***+::+++++++++:+:++*+--:::+**+*++************+++
@@ -800,8 +838,11 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
 ++++-.:*=:---:--*=*+:--++:**=*=**=-.-+***+:*++-.:*=*+---+:**:--:+*+=****++:---+
 +++++--+#++*=+++****+::-:*+*:***==:.:+*+:**-+*..:#*=*::+:+--+-++:=:-:-----+*::+
 ++++++-::--:++:+::++*==*-:**=+==+=-.-=::*-:**=-.+*+=**=-+*+:-+*+-+***:*=***::*+
-+++++:::***----+-:::+++++*=:***+=+--+:=#:--+*+:*#:++***=-*+*:*:*++---:+:::++:**'],
-                     12 => ['album_id' => 12, 'image' => '========================###========#===========================================
++++++:::***----+-:::+++++*=:***+=+--+:=#:--+*+:*#:++***=-*+*:*:*++---:+:::++:**',
+                     ],
+                     12 => [
+                         'album_id' => 12,
+                         'image' => '========================###========#===========================================
 =======================####=================********===========================
 =========================##=================**+*++++****===================*===
 ===========================#===============**++++++++++++**====================
@@ -840,9 +881,17 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
 @@WWWWWWWWWWW@=*+*****========**==#@@@@@@@@@###@#@#@#@#@@@@###@#####@##########
 @WW@WWWWWWWWWW#*****=**===*****===@@@@@@@@####@@###@@@@#@#@@@@##@#@############
 @@@@@@@WWW@@@@@=**==*****+***====@@@@@@@@@@@@#######@###@###@###@##############
-@@@@@@@@@@@@@@@=****+++******==#@#@@#@#@@@@@###################################'],
+@@@@@@@@@@@@@@@=****+++******==#@#@@#@#@@@@@###################################',
+                     ],
                  ] as $data) {
             AlbumCover::create($data);
         }
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            JoryServiceProvider::class,
+        ];
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\LaravelJory\JoryBuilder;
 
 /**
- * Trait to mark a Model as Jory-queryable.
+ * Trait to make a Model "Jory-queryable".
  *
  * Trait JoryTrait
  */
@@ -23,19 +23,7 @@ trait JoryTrait
      */
     public static function jory(): JoryBuilder
     {
-        return static::getJoryBuilder()->onQuery(static::getJoryBaseQuery());
-    }
-
-    /**
-     * Register the routes for querying this model using the data in the request's jory parameter.
-     *
-     * @return void
-     */
-    public static function joryRoutes($uri): void
-    {
-        Route::get($uri, function (Request $request) {
-            return static::jory()->applyRequest($request);
-        });
+        return static::getJoryBuilder()->onQuery((new static())->query());
     }
 
     /**
@@ -47,16 +35,6 @@ trait JoryTrait
     public static function getJoryBuilder(): JoryBuilder
     {
         return new JoryBuilder();
-    }
-
-    /**
-     * Get the base query to build upon with a jorybuilder.
-     *
-     * @return Builder
-     */
-    protected static function getJoryBaseQuery(): Builder
-    {
-        return (new static())->query();
     }
 
     /**
