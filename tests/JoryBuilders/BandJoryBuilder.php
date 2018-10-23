@@ -7,15 +7,15 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 
 class BandJoryBuilder extends JoryBuilder
 {
-    protected function applyNumberOfAlbumsInYearFilter($query, Filter $filter)
+    protected function scopeNumberOfAlbumsInYearFilter($query, $operator, $value)
     {
-        $data = $filter->getValue();
+        $data = $value;
         $year = $data['year'];
         $value = $data['value'];
 
         $query->whereHas('albums', function ($query) use ($year) {
             $query->where('release_date', '>=', $year.'-01-01');
             $query->where('release_date', '<=', $year.'-12-31');
-        }, $filter->getOperator(), $value);
+        }, $operator, $value);
     }
 }

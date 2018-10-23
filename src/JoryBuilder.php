@@ -131,7 +131,7 @@ class JoryBuilder implements Responsable
      */
     public function get(): Collection
     {
-        $collection = $this->getQuery()->get();
+        $collection = $this->buildQuery()->get();
 
         $this->loadRelations($collection, $this->jory->getRelations());
 
@@ -148,7 +148,7 @@ class JoryBuilder implements Responsable
         $model = $this->model;
 
         if (! $model) {
-            $model = $this->getQuery()->first();
+            $model = $this->buildQuery()->first();
         }
 
         if (! $model) {
@@ -184,16 +184,6 @@ class JoryBuilder implements Responsable
         }
 
         return $result;
-    }
-
-    /**
-     * Get the Laravel QueryBuilder based on the baseQuery and Jory data.
-     *
-     * @return Builder
-     */
-    public function getQuery(): Builder
-    {
-        return $this->buildQuery();
     }
 
     /**
@@ -256,13 +246,19 @@ class JoryBuilder implements Responsable
     protected function applyFieldFilter($query, Filter $filter): void
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
+        $modelClass = $query->getModel();
+        if (method_exists($modelClass, $customMethodName)) {
+            $modelClass::$customMethodName($query, $filter->getOperator(), $filter->getValue());
+
+            return;
+        }
         if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $filter);
+            $this->$customMethodName($query, $filter->getOperator(), $filter->getValue());
 
             return;
         }
 
-        $this->doApplyDefaultFieldFilter($query, $filter);
+        $this->doApplyDefaultFieldFilter($query, $filter->getField(), $filter->getOperator(), $filter->getValue());
     }
 
     /**
@@ -274,7 +270,7 @@ class JoryBuilder implements Responsable
      */
     protected function getCustomFilterMethodName(Filter $filter)
     {
-        return 'apply'.studly_case($filter->getField()).'Filter';
+        return 'scope'.studly_case($filter->getField()).'Filter';
     }
 
     /**
@@ -295,29 +291,31 @@ class JoryBuilder implements Responsable
      * Prefixed with 'do' to prevent clashing if a custom filter named 'default_field' should exist.
      *
      * @param mixed $query
-     * @param Filter $filter
+     * @param $field
+     * @param $operator
+     * @param $value
      */
-    protected function doApplyDefaultFieldFilter($query, Filter $filter): void
+    protected function doApplyDefaultFieldFilter($query, $field, $operator, $value): void
     {
-        switch ($filter->getOperator()) {
+        switch ($operator) {
             case 'null':
-                $query->whereNull($filter->getField());
+                $query->whereNull($field);
 
                 return;
             case 'not_null':
-                $query->whereNotNull($filter->getField());
+                $query->whereNotNull($field);
 
                 return;
             case 'in':
-                $query->whereIn($filter->getField(), $filter->getValue());
+                $query->whereIn($field, $value);
 
                 return;
             case 'not_in':
-                $query->whereNotIn($filter->getField(), $filter->getValue());
+                $query->whereNotIn($field, $value);
 
                 return;
             default:
-                $query->where($filter->getField(), $filter->getOperator() ?: '=', $filter->getValue());
+                $query->where($field, $operator ?: '=', $value);
         }
     }
 

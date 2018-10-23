@@ -476,4 +476,27 @@ class JoryBuilderFilterTest extends TestCase
             'Beatles',
         ], $actual);
     }
+
+    /** @test */
+    public function it_can_apply_a_filter_by_a_local_scope_on_the_related_model()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fields":["id","name"],"flt":{"f":"has_album_with_name","o":"like","v":"%a%"}}',
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            [
+                'id' => 1,
+                'name' => 'Rolling Stones',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Beatles',
+            ],
+            [
+                'id' => 4,
+                'name' => 'Jimi Hendrix Experience',
+            ],
+        ]);
+    }
 }

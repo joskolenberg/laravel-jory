@@ -8,15 +8,15 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 
 class AlbumJoryBuilder extends JoryBuilder
 {
-    protected function applyNumberOfSongsFilter($query, Filter $filter)
+    protected function scopeNumberOfSongsFilter($query, $operator, $value)
     {
-        $query->has('songs', $filter->getOperator(), $filter->getValue());
+        $query->has('songs', $operator, $value);
     }
 
-    protected function applyHasSongWithTitleFilter($query, Filter $filter)
+    protected function scopeHasSongWithTitleFilter($query, $operator, $value)
     {
-        $query->whereHas('songs', function ($query) use ($filter) {
-            $query->where('title', $filter->getOperator(), $filter->getValue());
+        $query->whereHas('songs', function ($query) use ($operator, $value) {
+            $query->where('title', $operator, $value);
         });
     }
 

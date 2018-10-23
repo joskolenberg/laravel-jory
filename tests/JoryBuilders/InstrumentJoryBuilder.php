@@ -7,9 +7,9 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 
 class InstrumentJoryBuilder extends JoryBuilder
 {
-    protected function applyNameFilter($query, Filter $filter)
+    protected function scopeNameFilter($query, $operator, $value)
     {
-        $this->doApplyDefaultFieldFilter($query, $filter);
+        $this->doApplyDefaultFieldFilter($query, 'name', $operator, $value);
         $query->has('people');
     }
 }
