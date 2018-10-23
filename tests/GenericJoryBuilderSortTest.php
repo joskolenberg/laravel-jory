@@ -22,9 +22,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"name":"asc"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 3,
                     'name' => 'Beatles',
@@ -59,9 +57,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"name":"desc"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -96,9 +92,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"desc","name":"asc"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -133,9 +127,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"desc","name":"desc"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -170,9 +162,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"asc","name":"asc"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -207,9 +197,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"asc","name":"desc"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -244,9 +232,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"name":"asc"},"rlt":{"people":{"srt":{"last_name":"asc"}}}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 3,
                     'name' => 'Beatles',
@@ -394,9 +380,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"flt":{"f":"name","o":"like","v":"%in%"},"srt":{"name":"desc"},"rlt":{"people":{"flt":{"f":"last_name","o":"like","v":"%a%"},"srt":{"last_name":"desc"},"fld":["last_name"]}}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -441,9 +425,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"number_of_songs":"asc","name":"asc"},"fld":["id","name"]}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 4,
                     'name' => 'Led Zeppelin',
@@ -502,9 +484,7 @@ class GenericJoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"band_name":"asc","number_of_songs":"asc"},"fld":["id","name"]}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 9,
                     'name' => 'Let it be',

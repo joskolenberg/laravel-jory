@@ -18,7 +18,7 @@ abstract class CustomJoryBuilder extends AbstractJoryBuilder
      * If not, run the standard filter method in the parent.
      *
      * @param Builder $query
-     * @param Filter  $filter
+     * @param Filter $filter
      */
     protected function applyFieldFilter($query, Filter $filter): void
     {

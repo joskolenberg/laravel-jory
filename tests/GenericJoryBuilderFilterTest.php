@@ -15,9 +15,9 @@ class GenericJoryBuilderFilterTest extends TestCase
     {
         $actual = Person::jory()->applyArray([
             'filter' => [
-                'field'    => 'first_name',
+                'field' => 'first_name',
                 'operator' => 'like',
-                'value'    => '%john%',
+                'value' => '%john%',
             ],
         ])->getModels()->pluck('last_name')->toArray();
 
@@ -33,14 +33,14 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_or' => [
                     [
-                        'field'    => 'first_name',
+                        'field' => 'first_name',
                         'operator' => 'like',
-                        'value'    => '%paul%',
+                        'value' => '%paul%',
                     ],
                     [
-                        'field'    => 'last_name',
+                        'field' => 'last_name',
                         'operator' => 'like',
-                        'value'    => '%le%',
+                        'value' => '%le%',
                     ],
                 ],
             ],
@@ -58,14 +58,14 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'first_name',
+                        'field' => 'first_name',
                         'operator' => 'like',
-                        'value'    => '%john%',
+                        'value' => '%john%',
                     ],
                     [
-                        'field'    => 'last_name',
+                        'field' => 'last_name',
                         'operator' => 'like',
-                        'value'    => '%le%',
+                        'value' => '%le%',
                     ],
                 ],
             ],
@@ -83,24 +83,24 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'title',
+                        'field' => 'title',
                         'operator' => 'like',
-                        'value'    => '%love%',
+                        'value' => '%love%',
                     ],
                 ],
             ],
         ])->getModels()->pluck('title')->toArray();
 
         $this->assertEquals([
-                'Love In Vain (Robert Johnson)',
-                'Whole Lotta Love',
-                'Lovely Rita',
-                'Love or Confusion',
-                'May This Be Love',
-                'Little Miss Lover',
-                'Bold as Love',
-                'And the Gods Made Love',
-            ], $actual);
+            'Love In Vain (Robert Johnson)',
+            'Whole Lotta Love',
+            'Lovely Rita',
+            'Love or Confusion',
+            'May This Be Love',
+            'Little Miss Lover',
+            'Bold as Love',
+            'And the Gods Made Love',
+        ], $actual);
     }
 
     /**
@@ -112,21 +112,21 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'title',
+                        'field' => 'title',
                         'operator' => 'like',
-                        'value'    => '%love%',
+                        'value' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field'    => 'title',
+                                'field' => 'title',
                                 'operator' => 'like',
-                                'value'    => '%bold%',
+                                'value' => '%bold%',
                             ],
                             [
-                                'field'    => 'title',
+                                'field' => 'title',
                                 'operator' => 'like',
-                                'value'    => '%er%',
+                                'value' => '%er%',
                             ],
                         ],
                     ],
@@ -135,10 +135,10 @@ class GenericJoryBuilderFilterTest extends TestCase
         ])->getModels()->pluck('title')->toArray();
 
         $this->assertEquals([
-                'Love In Vain (Robert Johnson)',
-                'Little Miss Lover',
-                'Bold as Love',
-            ], $actual);
+            'Love In Vain (Robert Johnson)',
+            'Little Miss Lover',
+            'Bold as Love',
+        ], $actual);
     }
 
     /**
@@ -150,33 +150,33 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'title',
+                        'field' => 'title',
                         'operator' => 'like',
-                        'value'    => '%love%',
+                        'value' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field'    => 'title',
+                                'field' => 'title',
                                 'operator' => 'like',
-                                'value'    => '%bold%',
+                                'value' => '%bold%',
                             ],
                             [
-                                'field'    => 'title',
+                                'field' => 'title',
                                 'operator' => 'like',
-                                'value'    => '%er%',
+                                'value' => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
-                                        'field'    => 'title',
+                                        'field' => 'title',
                                         'operator' => 'like',
-                                        'value'    => 'may%',
+                                        'value' => 'may%',
                                     ],
                                     [
-                                        'field'    => 'title',
+                                        'field' => 'title',
                                         'operator' => 'like',
-                                        'value'    => '%love',
+                                        'value' => '%love',
                                     ],
                                 ],
                             ],
@@ -187,11 +187,11 @@ class GenericJoryBuilderFilterTest extends TestCase
         ])->getModels()->pluck('title')->toArray();
 
         $this->assertEquals([
-                'Love In Vain (Robert Johnson)',
-                'May This Be Love',
-                'Little Miss Lover',
-                'Bold as Love',
-            ], $actual);
+            'Love In Vain (Robert Johnson)',
+            'May This Be Love',
+            'Little Miss Lover',
+            'Bold as Love',
+        ], $actual);
     }
 
     /**
@@ -203,45 +203,45 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'group_and' => [
                     [
-                        'field'    => 'title',
+                        'field' => 'title',
                         'operator' => 'like',
-                        'value'    => '%love%',
+                        'value' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
-                                'field'    => 'title',
+                                'field' => 'title',
                                 'operator' => 'like',
-                                'value'    => '%bold%',
+                                'value' => '%bold%',
                             ],
                             [
-                                'field'    => 'title',
+                                'field' => 'title',
                                 'operator' => 'like',
-                                'value'    => '%er%',
+                                'value' => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
-                                        'field'    => 'title',
+                                        'field' => 'title',
                                         'operator' => 'like',
-                                        'value'    => '%e%',
+                                        'value' => '%e%',
                                     ],
                                     [
-                                        'field'    => 'title',
+                                        'field' => 'title',
                                         'operator' => 'like',
-                                        'value'    => '%a%',
+                                        'value' => '%a%',
                                     ],
                                     [
                                         'group_or' => [
                                             [
-                                                'field'    => 'title',
+                                                'field' => 'title',
                                                 'operator' => 'like',
-                                                'value'    => '%whole%',
+                                                'value' => '%whole%',
                                             ],
                                             [
-                                                'field'    => 'title',
+                                                'field' => 'title',
                                                 'operator' => 'like',
-                                                'value'    => '%gods%',
+                                                'value' => '%gods%',
                                             ],
                                         ],
                                     ],
@@ -254,12 +254,12 @@ class GenericJoryBuilderFilterTest extends TestCase
         ])->getModels()->pluck('title')->toArray();
 
         $this->assertEquals([
-                'Love In Vain (Robert Johnson)',
-                'Whole Lotta Love',
-                'Little Miss Lover',
-                'Bold as Love',
-                'And the Gods Made Love',
-            ], $actual);
+            'Love In Vain (Robert Johnson)',
+            'Whole Lotta Love',
+            'Little Miss Lover',
+            'Bold as Love',
+            'And the Gods Made Love',
+        ], $actual);
     }
 
     /**

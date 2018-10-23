@@ -38,9 +38,7 @@ class JoryTraitTest extends TestCase
             'jory' => '{"filter":{"f":"name","o":"like","v":"%in%"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -63,9 +61,7 @@ class JoryTraitTest extends TestCase
             'jory' => '{"filter":{"f":"number_of_songs","o":">","v":10}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 3,
                     'band_id' => 1,
