@@ -396,7 +396,6 @@ abstract class AbstractJoryBuilder implements Responsable
         if ($offset && ! $limit) {
             throw new LaravelJoryException('An offset cannot be set without a limit.');
         }
-
         if ($offset) {
             $query->offset($offset);
         }
