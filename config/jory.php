@@ -20,4 +20,16 @@ return [
     'routes' => [
         //'user' => \App\User::class,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Request Key
+    |--------------------------------------------------------------------------
+    |
+    | This key will be looked for to get the JSON string
+    | holding the jory data in the request.
+    |
+    */
+
+    'request-key' => 'jory',
 ];
