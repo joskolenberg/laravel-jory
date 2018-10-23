@@ -11,6 +11,11 @@ class Album extends Model
 
     protected $table = 'albums';
 
+    protected $casts = [
+        'id' => 'integer',
+        'band_id' => 'integer',
+    ];
+
     public function songs()
     {
         return $this->hasMany(Song::class);

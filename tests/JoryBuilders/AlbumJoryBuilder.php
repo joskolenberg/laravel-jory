@@ -27,7 +27,6 @@ class AlbumJoryBuilder extends CustomJoryBuilder
 
     protected function applyBandNameSort($query, Sort $sort)
     {
-        $query->join('bands', 'band_id', 'bands.id')
-            ->orderBy('bands.name', $sort->getOrder());
+        $query->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $sort->getOrder());
     }
 }

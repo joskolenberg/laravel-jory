@@ -116,13 +116,25 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function get(): Collection
+    public function getModels(): Collection
     {
         $collection = $this->getQuery()->get();
 
         $this->loadRelations($collection, $this->jory->getRelations());
 
         return $collection;
+    }
+
+    public function get()
+    {
+        $models = $this->getModels();
+
+        $result = [];
+        foreach ($models as $model) {
+            $result[] = $model->toArrayByJory($this->jory);
+        }
+
+        return $result;
     }
 
     /**
@@ -158,7 +170,7 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Apply a filter (field, groupAnd or groupOr) on a query.
      *
-     * @param mixed           $query
+     * @param mixed $query
      * @param FilterInterface $filter
      */
     protected function applyFilter($query, FilterInterface $filter): void
@@ -187,7 +199,7 @@ abstract class AbstractJoryBuilder implements Responsable
     /**
      * Apply a filter to a field.
      *
-     * @param mixed  $query
+     * @param mixed $query
      * @param Filter $filter
      */
     protected function applyFieldFilter($query, Filter $filter): void
@@ -214,7 +226,7 @@ abstract class AbstractJoryBuilder implements Responsable
      *
      * Prefixed with 'do' to prevent clashing if a custom filter named 'default_field' should exist.
      *
-     * @param mixed  $query
+     * @param mixed $query
      * @param Filter $filter
      */
     protected function doApplyDefaultFieldFilter($query, Filter $filter): void
@@ -260,7 +272,7 @@ abstract class AbstractJoryBuilder implements Responsable
      * Load the given relations on the given model(s).
      *
      * @param Collection $models
-     * @param array      $relations
+     * @param array $relations
      */
     protected function loadRelations(Collection $models, array $relations): void
     {
@@ -273,7 +285,7 @@ abstract class AbstractJoryBuilder implements Responsable
      * Load the given relation on a collection of models.
      *
      * @param Collection $collection
-     * @param Relation   $relation
+     * @param Relation $relation
      */
     protected function loadRelation(Collection $collection, Relation $relation): void
     {
@@ -283,20 +295,27 @@ abstract class AbstractJoryBuilder implements Responsable
 
         $relationName = $relation->getName();
 
-        $collection->load([$relationName => function ($query) use ($relation) {
-            // Retrieve the model which will be queried to get the appropriate JoryBuilder
-            $relatedModel = $query->getRelated();
-            $joryBuilder = $relatedModel::getJoryBuilder();
+        $collection->load([
+            $relationName => function ($query) use ($relation) {
+                // Retrieve the model which will be queried to get the appropriate JoryBuilder
+                $relatedModel = $query->getRelated();
+                $joryBuilder = $relatedModel::getJoryBuilder();
 
-            // Apply the data in the subjory (filtering/sorting/...) on the query
-            $joryBuilder->applyJory($relation->getJory());
-            $joryBuilder->applyOnQuery($query);
-        }]);
+                // Apply the data in the subjory (filtering/sorting/...) on the query
+                $joryBuilder->applyJory($relation->getJory());
+                $joryBuilder->applyOnQuery($query);
+            },
+        ]);
 
         // Put all retrieved related models in single collection to load subrelations in a single call
         $allRelated = new Collection();
         foreach ($collection as $model) {
             $related = $model->$relationName;
+
+            if ($related == null) {
+                continue;
+            }
+
             if ($related instanceof Model) {
                 $allRelated->push($related);
             } else {

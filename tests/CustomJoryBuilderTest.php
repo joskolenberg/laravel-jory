@@ -18,7 +18,7 @@ class CustomJoryBuilderTest extends TestCase
                     'v' => 10,
                 ],
             ])
-            ->get()
+            ->getModels()
             ->pluck('name')
             ->toArray();
 
@@ -53,7 +53,7 @@ class CustomJoryBuilderTest extends TestCase
                     ],
                 ],
             ])
-            ->get()
+            ->getModels()
             ->pluck('name')
             ->toArray();
 
@@ -91,7 +91,7 @@ class CustomJoryBuilderTest extends TestCase
                     ],
                 ],
             ])
-            ->get()
+            ->getModels()
             ->pluck('name')
             ->toArray();
 
@@ -112,7 +112,7 @@ class CustomJoryBuilderTest extends TestCase
                     'v' => '%t%',
                 ],
             ])
-            ->get()
+            ->getModels()
             ->pluck('name')
             ->toArray();
 

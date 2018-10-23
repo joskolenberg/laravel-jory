@@ -25,7 +25,7 @@ class GenericJoryBuilderTest extends TestCase
     public function it_can_apply_on_a_querybuilder_instance()
     {
         $query = Band::query();
-        $actual = (new GenericJoryBuilder())->onQuery($query)->get()->pluck('name')->toArray();
+        $actual = (new GenericJoryBuilder())->onQuery($query)->getModels()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -38,11 +38,7 @@ class GenericJoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_json_string()
     {
-        $actual = Song::jory()
-            ->applyJson('{"filter":{"f":"title","o":"like","v":"%love"}}')
-            ->get()
-            ->pluck('title')
-            ->toArray();
+        $actual = Song::jory()->applyJson('{"filter":{"f":"title","o":"like","v":"%love"}}')->getModels()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Whole Lotta Love',
@@ -55,17 +51,13 @@ class GenericJoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_array()
     {
-        $actual = Song::jory()
-            ->applyArray([
+        $actual = Song::jory()->applyArray([
                 'filter' => [
                     'f' => 'title',
                     'o' => 'like',
                     'v' => 'love%',
                 ],
-            ])
-            ->get()
-            ->pluck('title')
-            ->toArray();
+            ])->getModels()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -81,12 +73,12 @@ class GenericJoryBuilderTest extends TestCase
             'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
-                    'id'   => 2,
+                    'id' => 2,
                     'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ]);
     }
@@ -102,11 +94,7 @@ class GenericJoryBuilderTest extends TestCase
             ],
         ]))->getJory();
 
-        $actual = Song::jory()
-            ->applyJory($jory)
-            ->get()
-            ->pluck('title')
-            ->toArray();
+        $actual = Song::jory()->applyJory($jory)->getModels()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -118,10 +106,7 @@ class GenericJoryBuilderTest extends TestCase
     /** @test */
     public function it_defaults_to_empty_when_no_jory_is_applied()
     {
-        $actual = Band::jory()
-            ->get()
-            ->pluck('name')
-            ->toArray();
+        $actual = Band::jory()->getModels()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -138,12 +123,12 @@ class GenericJoryBuilderTest extends TestCase
             'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
-                    'id'   => 2,
+                    'id' => 2,
                     'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ]);
     }

@@ -11,6 +11,16 @@ class Band extends Model
 
     protected $table = 'bands';
 
+    protected $hidden = [
+        'pivot',
+    ];
+
+    protected $casts = [
+        'id' => 'integer',
+        'year_start' => 'integer',
+        'year_end' => 'integer',
+    ];
+
     public static function getJoryBuilder()
     {
         return new BandJoryBuilder();
