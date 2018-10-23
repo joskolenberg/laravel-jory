@@ -12,7 +12,7 @@
   "minimum-stability": "stable",
   "require": {
     "laravel/framework": "^5.7",
-    "joskolenberg/jory": "dev-201810-fields"
+    "joskolenberg/jory": "0.5"
   },
   "autoload": {
     "psr-4": {
