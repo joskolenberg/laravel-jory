@@ -2,11 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
-use Illuminate\Database\Eloquent\Model;
+use JosKolenberg\Jory\Jory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\GenericJoryBuilder;
 use JosKolenberg\LaravelJory\AbstractJoryBuilder;
 
@@ -83,14 +83,14 @@ trait JoryTrait
         }
 
         // Add the relations to the result
-        foreach ($jory->getRelations() as $relation){
+        foreach ($jory->getRelations() as $relation) {
             $relationName = $relation->getName();
 
             $related = $this->$relationName;
 
-            if($related == null){
+            if ($related == null) {
                 $result[$relationName] = null;
-            } elseif ($related instanceof Model){
+            } elseif ($related instanceof Model) {
                 $result[$relationName] = $related->toArrayByJory($relation->getJory());
             } else {
                 $relationResult = [];

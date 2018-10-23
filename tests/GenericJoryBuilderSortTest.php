@@ -258,24 +258,28 @@ class GenericJoryBuilderSortTest extends TestCase
                             'first_name' => 'George',
                             'last_name' => 'Harrison',
                             'date_of_birth' => '1943-02-24',
+                            'full_name' => 'George Harrison',
                         ],
                         [
                             'id' => 9,
                             'first_name' => 'John',
                             'last_name' => 'Lennon',
                             'date_of_birth' => '1940-10-09',
+                            'full_name' => 'John Lennon',
                         ],
                         [
                             'id' => 10,
                             'first_name' => 'Paul',
                             'last_name' => 'McCartney',
                             'date_of_birth' => '1942-06-18',
+                            'full_name' => 'Paul McCartney',
                         ],
                         [
                             'id' => 12,
                             'first_name' => 'Ringo',
                             'last_name' => 'Starr',
                             'date_of_birth' => '1940-07-07',
+                            'full_name' => 'Ringo Starr',
                         ],
                     ],
                 ],
@@ -290,18 +294,21 @@ class GenericJoryBuilderSortTest extends TestCase
                             'first_name' => 'Jimi',
                             'last_name' => 'Hendrix',
                             'date_of_birth' => '1942-11-27',
+                            'full_name' => 'Jimi Hendrix',
                         ],
                         [
                             'id' => 15,
                             'first_name' => 'Mitch',
                             'last_name' => 'Mitchell',
                             'date_of_birth' => '1946-07-09',
+                            'full_name' => 'Mitch Mitchell',
                         ],
                         [
                             'id' => 14,
                             'first_name' => 'Noel',
                             'last_name' => 'Redding',
                             'date_of_birth' => '1945-12-25',
+                            'full_name' => 'Noel Redding',
                         ],
                     ],
                 ],
@@ -316,24 +323,28 @@ class GenericJoryBuilderSortTest extends TestCase
                             'first_name' => 'John',
                             'last_name' => 'Bonham',
                             'date_of_birth' => '1948-05-31',
+                            'full_name' => 'John Bonham',
                         ],
                         [
                             'id' => 7,
                             'first_name' => 'John Paul',
                             'last_name' => 'Jones',
                             'date_of_birth' => '1946-01-03',
+                            'full_name' => 'John Paul Jones',
                         ],
                         [
                             'id' => 6,
                             'first_name' => 'Jimmy',
                             'last_name' => 'Page',
                             'date_of_birth' => '1944-01-09',
+                            'full_name' => 'Jimmy Page',
                         ],
                         [
                             'id' => 5,
                             'first_name' => 'Robert',
                             'last_name' => 'Plant',
                             'date_of_birth' => '1948-08-20',
+                            'full_name' => 'Robert Plant',
                         ],
                     ],
                 ],
@@ -348,24 +359,28 @@ class GenericJoryBuilderSortTest extends TestCase
                             'first_name' => 'Mick',
                             'last_name' => 'Jagger',
                             'date_of_birth' => '1943-07-26',
+                            'full_name' => 'Mick Jagger',
                         ],
                         [
                             'id' => 2,
                             'first_name' => 'Keith',
                             'last_name' => 'Richards',
                             'date_of_birth' => '1943-12-18',
+                            'full_name' => 'Keith Richards',
                         ],
                         [
                             'id' => 4,
                             'first_name' => 'Charlie',
                             'last_name' => 'Watts',
                             'date_of_birth' => '1941-06-02',
+                            'full_name' => 'Charlie Watts',
                         ],
                         [
                             'id' => 3,
                             'first_name' => 'Ronnie',
                             'last_name' => 'Wood',
                             'date_of_birth' => '1947-06-01',
+                            'full_name' => 'Ronnie Wood',
                         ],
                     ],
                 ],
@@ -376,7 +391,7 @@ class GenericJoryBuilderSortTest extends TestCase
     public function it_can_combine_relations_filters_and_sorts()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"flt":{"f":"name","o":"like","v":"%in%"},"srt":{"name":"desc"},"rlt":{"people":{"flt":{"f":"last_name","o":"like","v":"%a%"},"srt":{"last_name":"desc"}}}}',
+            'jory' => '{"flt":{"f":"name","o":"like","v":"%in%"},"srt":{"name":"desc"},"rlt":{"people":{"flt":{"f":"last_name","o":"like","v":"%a%"},"srt":{"last_name":"desc"},"fld":["last_name"]}}}',
         ]);
 
         $response
@@ -389,22 +404,13 @@ class GenericJoryBuilderSortTest extends TestCase
                     'year_end' => null,
                     'people' => [
                         [
-                            'id' => 4,
-                            'first_name' => 'Charlie',
                             'last_name' => 'Watts',
-                            'date_of_birth' => '1941-06-02',
                         ],
                         [
-                            'id' => 2,
-                            'first_name' => 'Keith',
                             'last_name' => 'Richards',
-                            'date_of_birth' => '1943-12-18',
                         ],
                         [
-                            'id' => 1,
-                            'first_name' => 'Mick',
                             'last_name' => 'Jagger',
-                            'date_of_birth' => '1943-07-26',
                         ],
                     ],
                 ],
@@ -415,22 +421,13 @@ class GenericJoryBuilderSortTest extends TestCase
                     'year_end' => 1980,
                     'people' => [
                         [
-                            'id' => 5,
-                            'first_name' => 'Robert',
                             'last_name' => 'Plant',
-                            'date_of_birth' => '1948-08-20',
                         ],
                         [
-                            'id' => 6,
-                            'first_name' => 'Jimmy',
                             'last_name' => 'Page',
-                            'date_of_birth' => '1944-01-09',
                         ],
                         [
-                            'id' => 8,
-                            'first_name' => 'John',
                             'last_name' => 'Bonham',
-                            'date_of_birth' => '1948-05-31',
                         ],
                     ],
                 ],

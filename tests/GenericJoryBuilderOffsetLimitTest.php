@@ -2,13 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 
 class GenericJoryBuilderOffsetLimitTest extends TestCase
 {
-
     protected function setUp()
     {
         parent::setUp();
@@ -33,9 +32,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
             'jory' => '{"offset":140,"limit":20}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 141,
                     'album_id' => 12,
@@ -81,9 +78,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
             'jory' => '{"limit":3}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 1,
                     'album_id' => 1,
@@ -109,9 +104,7 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
             'jory' => '{"flt":{"f":"title","o":"like","v":"%love%"},"srt":{"title":"asc"},"offset":2,"limit":3}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 130,
                     'album_id' => 11,
@@ -134,12 +127,10 @@ class GenericJoryBuilderOffsetLimitTest extends TestCase
     public function it_can_apply_an_offset_and_limit_combined_with_with_sorts_and_filters_on_relations()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":{"title":"asc"},"offset":10,"limit":5,"fld":["id","title"]}}}'
+            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":{"title":"asc"},"offset":10,"limit":5,"fld":["id","title"]}}}',
         ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 3,
                     'name' => 'Beatles',

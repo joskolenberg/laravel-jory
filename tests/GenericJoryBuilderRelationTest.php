@@ -38,24 +38,28 @@ class GenericJoryBuilderRelationTest extends TestCase
                             'first_name'    => 'Robert',
                             'last_name'     => 'Plant',
                             'date_of_birth' => '1948-08-20',
+                            'full_name' => 'Robert Plant',
                         ],
                         [
                             'id'            => 6,
                             'first_name'    => 'Jimmy',
                             'last_name'     => 'Page',
                             'date_of_birth' => '1944-01-09',
+                            'full_name' => 'Jimmy Page',
                         ],
                         [
                             'id'            => 7,
                             'first_name'    => 'John Paul',
                             'last_name'     => 'Jones',
                             'date_of_birth' => '1946-01-03',
+                            'full_name' => 'John Paul Jones',
                         ],
                         [
                             'id'            => 8,
                             'first_name'    => 'John',
                             'last_name'     => 'Bonham',
                             'date_of_birth' => '1948-05-31',
+                            'full_name' => 'John Bonham',
                         ],
 
                     ],
@@ -483,7 +487,7 @@ class GenericJoryBuilderRelationTest extends TestCase
     public function it_can_load_and_filter_nested_relations_2()
     {
         $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"number_of_albums_in_year","o":"=","v":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","v":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","v":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}},"fld":["id","title"]},"people":{"rlt":{"instruments":{}}}}}',
+            'jory' => '{"filter":{"f":"number_of_albums_in_year","o":"=","v":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","v":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","v":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}},"fld":["id","title"]},"people":{"fld":["id","last_name"],"rlt":{"instruments":{}}}}}',
         ]);
 
         $response
@@ -567,9 +571,7 @@ class GenericJoryBuilderRelationTest extends TestCase
                     'people' => [
                         [
                             'id'            => 5,
-                            'first_name'    => 'Robert',
                             'last_name'     => 'Plant',
-                            'date_of_birth' => '1948-08-20',
                             'instruments'   => [
                                 [
                                     'id'   => 1,
@@ -579,9 +581,7 @@ class GenericJoryBuilderRelationTest extends TestCase
                         ],
                         [
                             'id'            => 6,
-                            'first_name'    => 'Jimmy',
                             'last_name'     => 'Page',
-                            'date_of_birth' => '1944-01-09',
                             'instruments'   => [
                                 [
                                     'id'   => 2,
@@ -591,9 +591,7 @@ class GenericJoryBuilderRelationTest extends TestCase
                         ],
                         [
                             'id'            => 7,
-                            'first_name'    => 'John Paul',
                             'last_name'     => 'Jones',
-                            'date_of_birth' => '1946-01-03',
                             'instruments'   => [
                                 [
                                     'id'   => 3,
@@ -607,9 +605,7 @@ class GenericJoryBuilderRelationTest extends TestCase
                         ],
                         [
                             'id'            => 8,
-                            'first_name'    => 'John',
                             'last_name'     => 'Bonham',
-                            'date_of_birth' => '1948-05-31',
                             'instruments'   => [
                                 [
                                     'id'   => 4,
@@ -713,9 +709,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                     'people' => [
                         [
                             'id'            => 9,
-                            'first_name'    => 'John',
                             'last_name'     => 'Lennon',
-                            'date_of_birth' => '1940-10-09',
                             'instruments'   => [
                                 [
                                     'id'   => 1,
@@ -729,9 +723,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                         [
                             'id'            => 10,
-                            'first_name'    => 'Paul',
                             'last_name'     => 'McCartney',
-                            'date_of_birth' => '1942-06-18',
                             'instruments'   => [
                                 [
                                     'id'   => 1,
@@ -757,9 +749,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                         [
                             'id'            => 11,
-                            'first_name'    => 'George',
                             'last_name'     => 'Harrison',
-                            'date_of_birth' => '1943-02-24',
                             'instruments'   => [
                                 [
                                     'id'   => 1,
@@ -773,9 +763,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                         [
                             'id'            => 12,
-                            'first_name'    => 'Ringo',
                             'last_name'     => 'Starr',
-                            'date_of_birth' => '1940-07-07',
                             'instruments'   => [
                                 [
                                     'id'   => 1,

@@ -13,32 +13,25 @@ class RequestParserTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('/person', PersonController::class . '@index');
-        Route::get('/band', BandController::class . '@index');
+        Route::get('/person', PersonController::class.'@index');
+        Route::get('/band', BandController::class.'@index');
     }
 
     /** @test */
     public function it_can_get_the_jory_parameter_from_a_request()
     {
-        $response = $this->json('GET', '/person',
-            [
-                'jory' => '{"filter":{"f": "first_name","v":"John"}}',
+        $response = $this->json('GET', '/person', [
+                'jory' => '{"filter":{"f": "first_name","v":"John"},"fld":["id","last_name"]}',
             ]);
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 8,
-                    'first_name' => 'John',
                     'last_name' => 'Bonham',
-                    'date_of_birth' => '1948-05-31',
                 ],
                 [
                     'id' => 9,
-                    'first_name' => 'John',
                     'last_name' => 'Lennon',
-                    'date_of_birth' => '1940-10-09',
                 ],
             ]);
     }
@@ -48,9 +41,7 @@ class RequestParserTest extends TestCase
     {
         $response = $this->json('GET', '/band');
 
-        $response
-            ->assertStatus(200)
-            ->assertExactJson([
+        $response->assertStatus(200)->assertExactJson([
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',

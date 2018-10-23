@@ -18,8 +18,17 @@ class Person extends Model
         'id' => 'integer',
     ];
 
+    protected $appends = [
+        'full_name',
+    ];
+
     public function instruments()
     {
         return $this->belongsToMany(Instrument::class, 'instrument_person');
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }
