@@ -133,6 +133,8 @@ class JoryBuilder implements Responsable
     {
         $collection = $this->buildQuery()->get();
 
+        $collection = $this->afterFetch($collection, $this->jory);
+
         $this->loadRelations($collection, $this->jory->getRelations());
 
         return $collection;
@@ -195,13 +197,7 @@ class JoryBuilder implements Responsable
     {
         $query = clone $this->builder;
 
-        // Apply filters if there are any
-        if ($this->jory->getFilter()) {
-            $this->applyFilter($query, $this->jory->getFilter());
-        }
-
-        $this->applySorts($query, $this->jory->getSorts());
-        $this->applyOffsetAndLimit($query, $this->jory->getOffset(), $this->jory->getLimit());
+        $this->applyOnQuery($query);
 
         return $query;
     }
@@ -324,14 +320,18 @@ class JoryBuilder implements Responsable
      *
      * @param $query
      */
-    protected function applyOnQuery($query): void
+    public function applyOnQuery($query): void
     {
+        $this->beforeQueryBuild($query, $this->jory);
+
         // Apply filters if there are any
         if ($this->jory->getFilter()) {
             $this->applyFilter($query, $this->jory->getFilter());
         }
         $this->applySorts($query, $this->jory->getSorts());
         $this->applyOffsetAndLimit($query, $this->jory->getOffset(), $this->jory->getLimit());
+
+        $this->afterQueryBuild($query, $this->jory);
     }
 
     /**
@@ -466,13 +466,16 @@ class JoryBuilder implements Responsable
     protected function applyOffsetAndLimit($query, int $offset = null, int $limit = null): void
     {
         // When setting an offset a limit is required in SQL
-        if ($offset && ! $limit) {
+        if ($offset != null && ! $limit != null) {
             throw new LaravelJoryException('An offset cannot be set without a limit.');
         }
-        if ($offset) {
+        if ($offset !== null) {
+            // Check on null, so even 0 will be applied.
+            // In case a default is set in beforeQueryBuild()
+            // this can be overruled by the request this way.
             $query->offset($offset);
         }
-        if ($limit) {
+        if ($limit !== null) {
             $query->limit($limit);
         }
     }
@@ -503,5 +506,68 @@ class JoryBuilder implements Responsable
         $this->first();
 
         return $this;
+    }
+
+    /**
+     * Hook into the query before all settings in Jory object are applied.
+     *
+     * Usage:
+     *  - Filtering: Any filters set will be applied on the query.
+     *  - Sorting: Any sorting applied here will have precedence over the ones requested.
+     *  - Offset/Limit: An applied offset or limit will be overruled by the requested (only when requested).
+     *  - Fields: All columns in the table will always be fetched even if not all fields are requested.
+     *      (the fields are filtered later to have all fields available for any custom attributes relying on them)
+     *      So altering the fields is discouraged unless you got a good reason to do so.
+     *  - Relations: Relations are loaded using that model's JoryBuilder, so no use altering the query for that.
+     *
+     * @param $query
+     * @param \JosKolenberg\Jory\Jory $jory
+     */
+    protected function beforeQueryBuild($query, Jory $jory)
+    {
+
+    }
+
+    /**
+     * Hook into the query after all settings in Jory object
+     * are applied and just before the query is executed.
+     *
+     * Usage:
+     *  - Filtering: Any filters set will be applied on the query.
+     *  - Sorting: Any sorting applied here will be applied as last, so the requested sorting will
+     *      have precedence over this one.
+     *  - Offset/Limit: An offset or limit applied here will overrule the ones requested.
+     *  - Fields: All columns in the table will always be fetched even if not all fields are requested.
+     *      (the fields are filtered later to have all fields available for any custom attributes relying on them)
+     *      So altering the fields is discouraged unless you got a good reason to do so.
+     *  - Relations: Relations are loaded using that model's JoryBuilder, so no use altering the query for that.
+     *
+     * @param $query
+     * @param \JosKolenberg\Jory\Jory $jory
+     */
+    protected function afterQueryBuild($query, Jory $jory)
+    {
+
+    }
+
+    /**
+     * Hook into the collection right after it is fetched.
+     *
+     * Here you can modify the collection before it is turned into an array.
+     * E.g. 1. you could eager load some relations when you have some
+     *      calculated values in custom attributes using relations.
+     *      # if $jory->hasField('total_price') $collection->load('invoices');
+     *      (any relations requested by the client could override these)
+     *
+     * E.g. 2. you could sort the collection in a way which is hard using queries
+     *      but easier done using a collection. (Does not work with pagination).
+     *
+     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param \JosKolenberg\Jory\Jory $jory
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function afterFetch(Collection $collection, Jory $jory): Collection
+    {
+        return $collection;
     }
 }
