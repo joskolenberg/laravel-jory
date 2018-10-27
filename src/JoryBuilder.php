@@ -258,7 +258,7 @@ class JoryBuilder implements Responsable
             return;
         }
 
-        $this->doApplyDefaultFieldFilter($query, $filter->getField(), $filter->getOperator(), $filter->getValue());
+        $this->applyDefaultFieldFilter($query, $filter->getField(), $filter->getOperator(), $filter->getValue());
     }
 
     /**
@@ -295,7 +295,7 @@ class JoryBuilder implements Responsable
      * @param $operator
      * @param $value
      */
-    protected function doApplyDefaultFieldFilter($query, $field, $operator, $value): void
+    protected function applyDefaultFieldFilter($query, $field, $operator, $value): void
     {
         switch ($operator) {
             case 'null':
