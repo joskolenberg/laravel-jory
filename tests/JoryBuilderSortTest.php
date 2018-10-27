@@ -527,4 +527,32 @@ class JoryBuilderSortTest extends TestCase
             ],
         ]);
     }
+
+    /** @test */
+    public function it_can_apply_a_sort_by_a_local_scope_on_the_related_model()
+    {
+        $response = $this->json('GET', 'jory/album-cover', [
+            'jory' => '{"srt":{"album_name":"asc"},"lmt":4,"fld":["id","album_id"]}',
+        ]);
+
+        $expected = [
+            [
+                'id' => 8,
+                'album_id' => 8,
+            ],
+            [
+                'id' => 10,
+                'album_id' => 10,
+            ],
+            [
+                'id' => 11,
+                'album_id' => 11,
+            ],
+            [
+                'id' => 12,
+                'album_id' => 12,
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
 }

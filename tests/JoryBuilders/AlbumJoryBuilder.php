@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
-use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\JoryBuilder;
 
 class AlbumJoryBuilder extends JoryBuilder
@@ -19,13 +18,13 @@ class AlbumJoryBuilder extends JoryBuilder
         });
     }
 
-    protected function applyNumberOfSongsSort($query, Sort $sort)
+    protected function scopeNumberOfSongsSort($query, string $order)
     {
-        $query->withCount('songs')->orderBy('songs_count', $sort->getOrder());
+        $query->withCount('songs')->orderBy('songs_count', $order);
     }
 
-    protected function applyBandNameSort($query, Sort $sort)
+    protected function scopeBandNameSort($query, string $order)
     {
-        $query->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $sort->getOrder());
+        $query->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $order);
     }
 }

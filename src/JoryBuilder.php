@@ -246,9 +246,9 @@ class JoryBuilder implements Responsable
     protected function applyFieldFilter($query, Filter $filter): void
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
-        $modelClass = $query->getModel();
-        if (method_exists($modelClass, $customMethodName)) {
-            $modelClass::$customMethodName($query, $filter->getOperator(), $filter->getValue());
+        $model = $query->getModel();
+        if (method_exists($model, $customMethodName)) {
+            $model->$customMethodName($query, $filter->getOperator(), $filter->getValue());
 
             return;
         }
@@ -415,13 +415,19 @@ class JoryBuilder implements Responsable
     protected function applySort($query, Sort $sort): void
     {
         $customMethodName = $this->getCustomSortMethodName($sort);
+        $model = $query->getModel();
+        if (method_exists($model, $customMethodName)) {
+            $model->$customMethodName($query, $sort->getOrder());
+
+            return;
+        }
         if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $sort);
+            $this->$customMethodName($query, $sort->getOrder());
 
             return;
         }
 
-        $this->doApplyDefaultSort($query, $sort);
+        $this->applyDefaultSort($query, $sort->getField(), $sort->getOrder());
     }
 
     /**
@@ -430,11 +436,12 @@ class JoryBuilder implements Responsable
      * Prefixed with 'do' to prevent clashing if a custom filter named 'default_field' should exist.
      *
      * @param $query
-     * @param Sort $sort
+     * @param string $field
+     * @param string $order
      */
-    protected function doApplyDefaultSort($query, Sort $sort): void
+    protected function applyDefaultSort($query, string $field, string $order): void
     {
-        $query->orderBy($sort->getField(), $sort->getOrder());
+        $query->orderBy($field, $order);
     }
 
     /**
@@ -445,7 +452,7 @@ class JoryBuilder implements Responsable
      */
     protected function getCustomSortMethodName(Sort $filter): string
     {
-        return 'apply'.studly_case($filter->getField()).'Sort';
+        return 'scope'.studly_case($filter->getField()).'Sort';
     }
 
     /**
