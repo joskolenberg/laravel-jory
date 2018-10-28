@@ -12,11 +12,13 @@ class JoryRoutesTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
+            'data' => [
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
             ],
         ]);
     }
@@ -29,16 +31,18 @@ class JoryRoutesTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'albums' => [
-                    [
-                        'id' => 6,
-                        'name' => 'Led Zeppelin III',
-                        'release_date' => '1970-10-05',
-                    ],
+            'data' => [
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'albums' => [
+                        [
+                            'id' => 6,
+                            'name' => 'Led Zeppelin III',
+                            'release_date' => '1970-10-05',
+                        ],
 
+                    ],
                 ],
             ],
         ]);
@@ -52,33 +56,35 @@ class JoryRoutesTest extends TestCase
         ]);
 
         $expected = [
-            'id' => 3,
-            'name' => 'Beatles',
-            'albums' => [
-                [
-                    'id' => 9,
-                    'band_id' => 3,
-                    'name' => 'Let it be',
-                    'release_date' => '1970-05-08',
-                    'songs' => [],
-                ],
-                [
-                    'id' => 8,
-                    'band_id' => 3,
-                    'name' => 'Abbey road',
-                    'release_date' => '1969-09-26',
-                    'songs' => [],
-                ],
-                [
-                    'id' => 7,
-                    'band_id' => 3,
-                    'name' => 'Sgt. Peppers lonely hearts club band',
-                    'release_date' => '1967-06-01',
-                    'songs' => [
-                        [
-                            'id' => 75,
-                            'album_id' => 7,
-                            'title' => 'Lovely Rita',
+            'data' => [
+                'id' => 3,
+                'name' => 'Beatles',
+                'albums' => [
+                    [
+                        'id' => 9,
+                        'band_id' => 3,
+                        'name' => 'Let it be',
+                        'release_date' => '1970-05-08',
+                        'songs' => [],
+                    ],
+                    [
+                        'id' => 8,
+                        'band_id' => 3,
+                        'name' => 'Abbey road',
+                        'release_date' => '1969-09-26',
+                        'songs' => [],
+                    ],
+                    [
+                        'id' => 7,
+                        'band_id' => 3,
+                        'name' => 'Sgt. Peppers lonely hearts club band',
+                        'release_date' => '1967-06-01',
+                        'songs' => [
+                            [
+                                'id' => 75,
+                                'album_id' => 7,
+                                'title' => 'Lovely Rita',
+                            ],
                         ],
                     ],
                 ],

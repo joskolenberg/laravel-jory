@@ -11,9 +11,9 @@ class ControllerUsageTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('band', BandController::class.'@index');
-        Route::get('band/first-by-filter', BandController::class.'@firstByFilter');
-        Route::get('band/{bandId}', BandController::class.'@show');
+        Route::get('band', BandController::class . '@index');
+        Route::get('band/first-by-filter', BandController::class . '@firstByFilter');
+        Route::get('band/{bandId}', BandController::class . '@show');
     }
 
     /** @test */
@@ -24,11 +24,13 @@ class ControllerUsageTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
+            'data' => [
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
             ],
         ]);
     }
@@ -39,10 +41,12 @@ class ControllerUsageTest extends TestCase
         $response = $this->json('GET', 'band/2');
 
         $response->assertStatus(200)->assertExactJson([
-            'id' => 2,
-            'name' => 'Led Zeppelin',
-            'year_start' => 1968,
-            'year_end' => 1980,
+            'data' => [
+                'id' => 2,
+                'name' => 'Led Zeppelin',
+                'year_start' => 1968,
+                'year_end' => 1980,
+            ],
         ]);
     }
 
@@ -52,10 +56,12 @@ class ControllerUsageTest extends TestCase
         $response = $this->json('GET', 'band/first-by-filter', ['jory' => '{"flt":{"f":"name","v":"Beatles"}}']);
 
         $response->assertStatus(200)->assertExactJson([
-            'id' => 3,
-            'name' => 'Beatles',
-            'year_start' => 1960,
-            'year_end' => 1970,
+            'data' => [
+                'id' => 3,
+                'name' => 'Beatles',
+                'year_start' => 1960,
+                'year_end' => 1970,
+            ],
         ]);
     }
 }

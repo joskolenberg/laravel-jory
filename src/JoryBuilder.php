@@ -278,7 +278,9 @@ class JoryBuilder implements Responsable
      */
     public function toResponse($request)
     {
-        return response($this->toArray());
+        return response([
+            'data' => $this->toArray(),
+        ]);
     }
 
     /**

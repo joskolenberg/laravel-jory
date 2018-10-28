@@ -15,21 +15,23 @@ class JoryBuilderFieldsTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                ],
             ],
         ]);
     }
@@ -42,93 +44,95 @@ class JoryBuilderFieldsTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'songs' => [
-                    [
-                        'title' => 'Good Times Bad Times',
-                    ],
-                    [
-                        'title' => 'Babe I\'m Gonna Leave You',
-                    ],
-                    [
-                        'title' => 'You Shook Me',
-                    ],
-                    [
-                        'title' => 'Dazed and Confused',
-                    ],
-                    [
-                        'title' => 'Your Time Is Gonna Come',
-                    ],
-                    [
-                        'title' => 'Black Mountain Side',
-                    ],
-                    [
-                        'title' => 'Communication Breakdown',
-                    ],
-                    [
-                        'title' => 'I Can\'t Quit You Baby',
-                    ],
-                    [
-                        'title' => 'How Many More Times',
-                    ],
-                    [
-                        'title' => 'Whole Lotta Love',
-                    ],
-                    [
-                        'title' => 'What Is and What Should Never Be',
-                    ],
-                    [
-                        'title' => 'The Lemon Song',
-                    ],
-                    [
-                        'title' => 'Thank You',
-                    ],
-                    [
-                        'title' => 'Heartbreaker',
-                    ],
-                    [
-                        'title' => 'Living Loving Maid (She\'s Just A Woman)',
-                    ],
-                    [
-                        'title' => 'Ramble On',
-                    ],
-                    [
-                        'title' => 'Moby Dick',
-                    ],
-                    [
-                        'title' => 'Bring It On Home',
-                    ],
-                    [
-                        'title' => 'Immigrant Song',
-                    ],
-                    [
-                        'title' => 'Friends',
-                    ],
-                    [
-                        'title' => 'Celebration Day',
-                    ],
-                    [
-                        'title' => 'Since I\'ve Been Loving You',
-                    ],
-                    [
-                        'title' => 'Out on the Tiles',
-                    ],
-                    [
-                        'title' => 'Gallows Pole',
-                    ],
-                    [
-                        'title' => 'Tangerine',
-                    ],
-                    [
-                        'title' => 'That\'s the Way',
-                    ],
-                    [
-                        'title' => 'Bron-Y-Aur Stomp',
-                    ],
-                    [
-                        'title' => 'Hats Off to (Roy) Harper',
+            'data' => [
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'songs' => [
+                        [
+                            'title' => 'Good Times Bad Times',
+                        ],
+                        [
+                            'title' => 'Babe I\'m Gonna Leave You',
+                        ],
+                        [
+                            'title' => 'You Shook Me',
+                        ],
+                        [
+                            'title' => 'Dazed and Confused',
+                        ],
+                        [
+                            'title' => 'Your Time Is Gonna Come',
+                        ],
+                        [
+                            'title' => 'Black Mountain Side',
+                        ],
+                        [
+                            'title' => 'Communication Breakdown',
+                        ],
+                        [
+                            'title' => 'I Can\'t Quit You Baby',
+                        ],
+                        [
+                            'title' => 'How Many More Times',
+                        ],
+                        [
+                            'title' => 'Whole Lotta Love',
+                        ],
+                        [
+                            'title' => 'What Is and What Should Never Be',
+                        ],
+                        [
+                            'title' => 'The Lemon Song',
+                        ],
+                        [
+                            'title' => 'Thank You',
+                        ],
+                        [
+                            'title' => 'Heartbreaker',
+                        ],
+                        [
+                            'title' => 'Living Loving Maid (She\'s Just A Woman)',
+                        ],
+                        [
+                            'title' => 'Ramble On',
+                        ],
+                        [
+                            'title' => 'Moby Dick',
+                        ],
+                        [
+                            'title' => 'Bring It On Home',
+                        ],
+                        [
+                            'title' => 'Immigrant Song',
+                        ],
+                        [
+                            'title' => 'Friends',
+                        ],
+                        [
+                            'title' => 'Celebration Day',
+                        ],
+                        [
+                            'title' => 'Since I\'ve Been Loving You',
+                        ],
+                        [
+                            'title' => 'Out on the Tiles',
+                        ],
+                        [
+                            'title' => 'Gallows Pole',
+                        ],
+                        [
+                            'title' => 'Tangerine',
+                        ],
+                        [
+                            'title' => 'That\'s the Way',
+                        ],
+                        [
+                            'title' => 'Bron-Y-Aur Stomp',
+                        ],
+                        [
+                            'title' => 'Hats Off to (Roy) Harper',
+                        ],
                     ],
                 ],
             ],
@@ -143,29 +147,31 @@ class JoryBuilderFieldsTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
             ],
         ]);
     }
@@ -178,10 +184,12 @@ class JoryBuilderFieldsTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [],
-            [],
-            [],
-            [],
+            'data' => [
+                [],
+                [],
+                [],
+                [],
+            ],
         ]);
     }
 
@@ -193,40 +201,42 @@ class JoryBuilderFieldsTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'songs' => [
-                    [
-                        'title' => 'Bring It On Home',
-                    ],
-                    [
-                        'title' => 'Immigrant Song',
-                    ],
-                    [
-                        'title' => 'Friends',
-                    ],
-                    [
-                        'title' => 'Celebration Day',
-                    ],
-                    [
-                        'title' => 'Since I\'ve Been Loving You',
-                    ],
-                    [
-                        'title' => 'Out on the Tiles',
-                    ],
-                    [
-                        'title' => 'Gallows Pole',
-                    ],
-                    [
-                        'title' => 'Tangerine',
-                    ],
-                    [
-                        'title' => 'That\'s the Way',
-                    ],
-                    [
-                        'title' => 'Bron-Y-Aur Stomp',
-                    ],
-                    [
-                        'title' => 'Hats Off to (Roy) Harper',
+            'data' => [
+                [
+                    'songs' => [
+                        [
+                            'title' => 'Bring It On Home',
+                        ],
+                        [
+                            'title' => 'Immigrant Song',
+                        ],
+                        [
+                            'title' => 'Friends',
+                        ],
+                        [
+                            'title' => 'Celebration Day',
+                        ],
+                        [
+                            'title' => 'Since I\'ve Been Loving You',
+                        ],
+                        [
+                            'title' => 'Out on the Tiles',
+                        ],
+                        [
+                            'title' => 'Gallows Pole',
+                        ],
+                        [
+                            'title' => 'Tangerine',
+                        ],
+                        [
+                            'title' => 'That\'s the Way',
+                        ],
+                        [
+                            'title' => 'Bron-Y-Aur Stomp',
+                        ],
+                        [
+                            'title' => 'Hats Off to (Roy) Harper',
+                        ],
                     ],
                 ],
             ],
@@ -241,50 +251,52 @@ class JoryBuilderFieldsTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'full_name' => 'Mick Jagger',
-            ],
-            [
-                'full_name' => 'Keith Richards',
-            ],
-            [
-                'full_name' => 'Ronnie Wood',
-            ],
-            [
-                'full_name' => 'Charlie Watts',
-            ],
-            [
-                'full_name' => 'Robert Plant',
-            ],
-            [
-                'full_name' => 'Jimmy Page',
-            ],
-            [
-                'full_name' => 'John Paul Jones',
-            ],
-            [
-                'full_name' => 'John Bonham',
-            ],
-            [
-                'full_name' => 'John Lennon',
-            ],
-            [
-                'full_name' => 'Paul McCartney',
-            ],
-            [
-                'full_name' => 'George Harrison',
-            ],
-            [
-                'full_name' => 'Ringo Starr',
-            ],
-            [
-                'full_name' => 'Jimi Hendrix',
-            ],
-            [
-                'full_name' => 'Noel Redding',
-            ],
-            [
-                'full_name' => 'Mitch Mitchell',
+            'data' => [
+                [
+                    'full_name' => 'Mick Jagger',
+                ],
+                [
+                    'full_name' => 'Keith Richards',
+                ],
+                [
+                    'full_name' => 'Ronnie Wood',
+                ],
+                [
+                    'full_name' => 'Charlie Watts',
+                ],
+                [
+                    'full_name' => 'Robert Plant',
+                ],
+                [
+                    'full_name' => 'Jimmy Page',
+                ],
+                [
+                    'full_name' => 'John Paul Jones',
+                ],
+                [
+                    'full_name' => 'John Bonham',
+                ],
+                [
+                    'full_name' => 'John Lennon',
+                ],
+                [
+                    'full_name' => 'Paul McCartney',
+                ],
+                [
+                    'full_name' => 'George Harrison',
+                ],
+                [
+                    'full_name' => 'Ringo Starr',
+                ],
+                [
+                    'full_name' => 'Jimi Hendrix',
+                ],
+                [
+                    'full_name' => 'Noel Redding',
+                ],
+                [
+                    'full_name' => 'Mitch Mitchell',
+                ],
             ],
         ]);
     }

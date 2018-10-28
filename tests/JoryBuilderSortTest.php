@@ -15,29 +15,31 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-            ],
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
+            'data' => [
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
             ],
         ]);
     }
@@ -50,29 +52,31 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
             ],
         ]);
     }
@@ -85,29 +89,31 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
+            'data' => [
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
             ],
         ]);
     }
@@ -120,29 +126,31 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
+            'data' => [
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
             ],
         ]);
     }
@@ -155,29 +163,31 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
             ],
         ]);
     }
@@ -190,29 +200,31 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
             ],
         ]);
     }
@@ -225,140 +237,142 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
-                'people' => [
-                    [
-                        'id' => 11,
-                        'first_name' => 'George',
-                        'last_name' => 'Harrison',
-                        'date_of_birth' => '1943-02-24',
-                        'full_name' => 'George Harrison',
-                    ],
-                    [
-                        'id' => 9,
-                        'first_name' => 'John',
-                        'last_name' => 'Lennon',
-                        'date_of_birth' => '1940-10-09',
-                        'full_name' => 'John Lennon',
-                    ],
-                    [
-                        'id' => 10,
-                        'first_name' => 'Paul',
-                        'last_name' => 'McCartney',
-                        'date_of_birth' => '1942-06-18',
-                        'full_name' => 'Paul McCartney',
-                    ],
-                    [
-                        'id' => 12,
-                        'first_name' => 'Ringo',
-                        'last_name' => 'Starr',
-                        'date_of_birth' => '1940-07-07',
-                        'full_name' => 'Ringo Starr',
-                    ],
-                ],
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
-                'year_start' => 1966,
-                'year_end' => 1970,
-                'people' => [
-                    [
-                        'id' => 13,
-                        'first_name' => 'Jimi',
-                        'last_name' => 'Hendrix',
-                        'date_of_birth' => '1942-11-27',
-                        'full_name' => 'Jimi Hendrix',
-                    ],
-                    [
-                        'id' => 15,
-                        'first_name' => 'Mitch',
-                        'last_name' => 'Mitchell',
-                        'date_of_birth' => '1946-07-09',
-                        'full_name' => 'Mitch Mitchell',
-                    ],
-                    [
-                        'id' => 14,
-                        'first_name' => 'Noel',
-                        'last_name' => 'Redding',
-                        'date_of_birth' => '1945-12-25',
-                        'full_name' => 'Noel Redding',
+            'data' => [
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                    'people' => [
+                        [
+                            'id' => 11,
+                            'first_name' => 'George',
+                            'last_name' => 'Harrison',
+                            'date_of_birth' => '1943-02-24',
+                            'full_name' => 'George Harrison',
+                        ],
+                        [
+                            'id' => 9,
+                            'first_name' => 'John',
+                            'last_name' => 'Lennon',
+                            'date_of_birth' => '1940-10-09',
+                            'full_name' => 'John Lennon',
+                        ],
+                        [
+                            'id' => 10,
+                            'first_name' => 'Paul',
+                            'last_name' => 'McCartney',
+                            'date_of_birth' => '1942-06-18',
+                            'full_name' => 'Paul McCartney',
+                        ],
+                        [
+                            'id' => 12,
+                            'first_name' => 'Ringo',
+                            'last_name' => 'Starr',
+                            'date_of_birth' => '1940-07-07',
+                            'full_name' => 'Ringo Starr',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-                'people' => [
-                    [
-                        'id' => 8,
-                        'first_name' => 'John',
-                        'last_name' => 'Bonham',
-                        'date_of_birth' => '1948-05-31',
-                        'full_name' => 'John Bonham',
-                    ],
-                    [
-                        'id' => 7,
-                        'first_name' => 'John Paul',
-                        'last_name' => 'Jones',
-                        'date_of_birth' => '1946-01-03',
-                        'full_name' => 'John Paul Jones',
-                    ],
-                    [
-                        'id' => 6,
-                        'first_name' => 'Jimmy',
-                        'last_name' => 'Page',
-                        'date_of_birth' => '1944-01-09',
-                        'full_name' => 'Jimmy Page',
-                    ],
-                    [
-                        'id' => 5,
-                        'first_name' => 'Robert',
-                        'last_name' => 'Plant',
-                        'date_of_birth' => '1948-08-20',
-                        'full_name' => 'Robert Plant',
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                    'people' => [
+                        [
+                            'id' => 13,
+                            'first_name' => 'Jimi',
+                            'last_name' => 'Hendrix',
+                            'date_of_birth' => '1942-11-27',
+                            'full_name' => 'Jimi Hendrix',
+                        ],
+                        [
+                            'id' => 15,
+                            'first_name' => 'Mitch',
+                            'last_name' => 'Mitchell',
+                            'date_of_birth' => '1946-07-09',
+                            'full_name' => 'Mitch Mitchell',
+                        ],
+                        [
+                            'id' => 14,
+                            'first_name' => 'Noel',
+                            'last_name' => 'Redding',
+                            'date_of_birth' => '1945-12-25',
+                            'full_name' => 'Noel Redding',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
-                'people' => [
-                    [
-                        'id' => 1,
-                        'first_name' => 'Mick',
-                        'last_name' => 'Jagger',
-                        'date_of_birth' => '1943-07-26',
-                        'full_name' => 'Mick Jagger',
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                    'people' => [
+                        [
+                            'id' => 8,
+                            'first_name' => 'John',
+                            'last_name' => 'Bonham',
+                            'date_of_birth' => '1948-05-31',
+                            'full_name' => 'John Bonham',
+                        ],
+                        [
+                            'id' => 7,
+                            'first_name' => 'John Paul',
+                            'last_name' => 'Jones',
+                            'date_of_birth' => '1946-01-03',
+                            'full_name' => 'John Paul Jones',
+                        ],
+                        [
+                            'id' => 6,
+                            'first_name' => 'Jimmy',
+                            'last_name' => 'Page',
+                            'date_of_birth' => '1944-01-09',
+                            'full_name' => 'Jimmy Page',
+                        ],
+                        [
+                            'id' => 5,
+                            'first_name' => 'Robert',
+                            'last_name' => 'Plant',
+                            'date_of_birth' => '1948-08-20',
+                            'full_name' => 'Robert Plant',
+                        ],
                     ],
-                    [
-                        'id' => 2,
-                        'first_name' => 'Keith',
-                        'last_name' => 'Richards',
-                        'date_of_birth' => '1943-12-18',
-                        'full_name' => 'Keith Richards',
-                    ],
-                    [
-                        'id' => 4,
-                        'first_name' => 'Charlie',
-                        'last_name' => 'Watts',
-                        'date_of_birth' => '1941-06-02',
-                        'full_name' => 'Charlie Watts',
-                    ],
-                    [
-                        'id' => 3,
-                        'first_name' => 'Ronnie',
-                        'last_name' => 'Wood',
-                        'date_of_birth' => '1947-06-01',
-                        'full_name' => 'Ronnie Wood',
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                    'people' => [
+                        [
+                            'id' => 1,
+                            'first_name' => 'Mick',
+                            'last_name' => 'Jagger',
+                            'date_of_birth' => '1943-07-26',
+                            'full_name' => 'Mick Jagger',
+                        ],
+                        [
+                            'id' => 2,
+                            'first_name' => 'Keith',
+                            'last_name' => 'Richards',
+                            'date_of_birth' => '1943-12-18',
+                            'full_name' => 'Keith Richards',
+                        ],
+                        [
+                            'id' => 4,
+                            'first_name' => 'Charlie',
+                            'last_name' => 'Watts',
+                            'date_of_birth' => '1941-06-02',
+                            'full_name' => 'Charlie Watts',
+                        ],
+                        [
+                            'id' => 3,
+                            'first_name' => 'Ronnie',
+                            'last_name' => 'Wood',
+                            'date_of_birth' => '1947-06-01',
+                            'full_name' => 'Ronnie Wood',
+                        ],
                     ],
                 ],
             ],
@@ -373,37 +387,39 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-                'year_start' => 1962,
-                'year_end' => null,
-                'people' => [
-                    [
-                        'last_name' => 'Watts',
-                    ],
-                    [
-                        'last_name' => 'Richards',
-                    ],
-                    [
-                        'last_name' => 'Jagger',
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                    'people' => [
+                        [
+                            'last_name' => 'Watts',
+                        ],
+                        [
+                            'last_name' => 'Richards',
+                        ],
+                        [
+                            'last_name' => 'Jagger',
+                        ],
                     ],
                 ],
-            ],
-            [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-                'people' => [
-                    [
-                        'last_name' => 'Plant',
-                    ],
-                    [
-                        'last_name' => 'Page',
-                    ],
-                    [
-                        'last_name' => 'Bonham',
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                    'people' => [
+                        [
+                            'last_name' => 'Plant',
+                        ],
+                        [
+                            'last_name' => 'Page',
+                        ],
+                        [
+                            'last_name' => 'Bonham',
+                        ],
                     ],
                 ],
             ],
@@ -418,53 +434,55 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 4,
-                'name' => 'Led Zeppelin',
-            ],
-            [
-                'id' => 5,
-                'name' => 'Led Zeppelin II',
-            ],
-            [
-                'id' => 1,
-                'name' => 'Let it bleed',
-            ],
-            [
-                'id' => 6,
-                'name' => 'Led Zeppelin III',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Sticky Fingers',
-            ],
-            [
-                'id' => 10,
-                'name' => 'Are you experienced',
-            ],
-            [
-                'id' => 9,
-                'name' => 'Let it be',
-            ],
-            [
-                'id' => 11,
-                'name' => 'Axis: Bold as love',
-            ],
-            [
-                'id' => 7,
-                'name' => 'Sgt. Peppers lonely hearts club band',
-            ],
-            [
-                'id' => 12,
-                'name' => 'Electric ladyland',
-            ],
-            [
-                'id' => 8,
-                'name' => 'Abbey road',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Exile on main st.',
+            'data' => [
+                [
+                    'id' => 4,
+                    'name' => 'Led Zeppelin',
+                ],
+                [
+                    'id' => 5,
+                    'name' => 'Led Zeppelin II',
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Let it bleed',
+                ],
+                [
+                    'id' => 6,
+                    'name' => 'Led Zeppelin III',
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Sticky Fingers',
+                ],
+                [
+                    'id' => 10,
+                    'name' => 'Are you experienced',
+                ],
+                [
+                    'id' => 9,
+                    'name' => 'Let it be',
+                ],
+                [
+                    'id' => 11,
+                    'name' => 'Axis: Bold as love',
+                ],
+                [
+                    'id' => 7,
+                    'name' => 'Sgt. Peppers lonely hearts club band',
+                ],
+                [
+                    'id' => 12,
+                    'name' => 'Electric ladyland',
+                ],
+                [
+                    'id' => 8,
+                    'name' => 'Abbey road',
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Exile on main st.',
+                ],
             ],
         ]);
     }
@@ -477,53 +495,55 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 9,
-                'name' => 'Let it be',
-            ],
-            [
-                'id' => 7,
-                'name' => 'Sgt. Peppers lonely hearts club band',
-            ],
-            [
-                'id' => 8,
-                'name' => 'Abbey road',
-            ],
-            [
-                'id' => 10,
-                'name' => 'Are you experienced',
-            ],
-            [
-                'id' => 11,
-                'name' => 'Axis: Bold as love',
-            ],
-            [
-                'id' => 12,
-                'name' => 'Electric ladyland',
-            ],
-            [
-                'id' => 4,
-                'name' => 'Led Zeppelin',
-            ],
-            [
-                'id' => 5,
-                'name' => 'Led Zeppelin II',
-            ],
-            [
-                'id' => 6,
-                'name' => 'Led Zeppelin III',
-            ],
-            [
-                'id' => 1,
-                'name' => 'Let it bleed',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Sticky Fingers',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Exile on main st.',
+            'data' => [
+                [
+                    'id' => 9,
+                    'name' => 'Let it be',
+                ],
+                [
+                    'id' => 7,
+                    'name' => 'Sgt. Peppers lonely hearts club band',
+                ],
+                [
+                    'id' => 8,
+                    'name' => 'Abbey road',
+                ],
+                [
+                    'id' => 10,
+                    'name' => 'Are you experienced',
+                ],
+                [
+                    'id' => 11,
+                    'name' => 'Axis: Bold as love',
+                ],
+                [
+                    'id' => 12,
+                    'name' => 'Electric ladyland',
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Led Zeppelin',
+                ],
+                [
+                    'id' => 5,
+                    'name' => 'Led Zeppelin II',
+                ],
+                [
+                    'id' => 6,
+                    'name' => 'Led Zeppelin III',
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Let it bleed',
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Sticky Fingers',
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Exile on main st.',
+                ],
             ],
         ]);
     }
@@ -536,21 +556,23 @@ class JoryBuilderSortTest extends TestCase
         ]);
 
         $expected = [
-            [
-                'id' => 8,
-                'album_id' => 8,
-            ],
-            [
-                'id' => 10,
-                'album_id' => 10,
-            ],
-            [
-                'id' => 11,
-                'album_id' => 11,
-            ],
-            [
-                'id' => 12,
-                'album_id' => 12,
+            'data' => [
+                [
+                    'id' => 8,
+                    'album_id' => 8,
+                ],
+                [
+                    'id' => 10,
+                    'album_id' => 10,
+                ],
+                [
+                    'id' => 11,
+                    'album_id' => 11,
+                ],
+                [
+                    'id' => 12,
+                    'album_id' => 12,
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);

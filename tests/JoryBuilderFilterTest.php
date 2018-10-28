@@ -485,17 +485,19 @@ class JoryBuilderFilterTest extends TestCase
         ]);
 
         $response->assertStatus(200)->assertExactJson([
-            [
-                'id' => 1,
-                'name' => 'Rolling Stones',
-            ],
-            [
-                'id' => 3,
-                'name' => 'Beatles',
-            ],
-            [
-                'id' => 4,
-                'name' => 'Jimi Hendrix Experience',
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                ],
             ],
         ]);
     }
