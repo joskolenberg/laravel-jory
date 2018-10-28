@@ -19,4 +19,11 @@ class Song extends Model
     {
         return $this->belongsTo(Album::class);
     }
+
+    public function scopeAlbumNameFilter($query, $operator, $value)
+    {
+        $query->whereHas('album', function ($query) use ($operator, $value) {
+            $query->where('name', $operator, $value);
+        });
+    }
 }

@@ -50,6 +50,11 @@ class JoryBuilder implements Responsable
     protected $model = null;
 
     /**
+     * @var bool
+     */
+    protected $count = false;
+
+    /**
      * JoryBuilder constructor.
      */
     public function __construct()
@@ -160,6 +165,23 @@ class JoryBuilder implements Responsable
         $this->loadRelations(new Collection([$model]), $this->jory->getRelations());
 
         return $model;
+    }
+
+    /**
+     * Count the records based on the filters in the Jory object.
+     *
+     * @return int
+     */
+    public function getCount(): int
+    {
+        $query = clone $this->builder;
+
+        // Apply filters if there are any
+        if ($this->jory->getFilter()) {
+            $this->applyFilter($query, $this->jory->getFilter());
+        }
+
+        return $query->count();
     }
 
     /**
@@ -279,7 +301,7 @@ class JoryBuilder implements Responsable
     public function toResponse($request)
     {
         return response([
-            'data' => $this->toArray(),
+            'data' => $this->count ? $this->getCount() : $this->toArray(),
         ]);
     }
 
@@ -506,6 +528,18 @@ class JoryBuilder implements Responsable
     {
         $this->model = $model;
         $this->first();
+
+        return $this;
+    }
+
+    /**
+     * Set the builder to return the record count instead of the records.
+     *
+     * @return JoryBuilder
+     */
+    public function count(): self
+    {
+        $this->count = true;
 
         return $this;
     }

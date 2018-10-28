@@ -94,4 +94,64 @@ class JoryRoutesTest extends TestCase
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
     }
+
+    /** @test */
+    public function it_can_return_the_record_count()
+    {
+        $response = $this->json('GET', 'jory/song/count', [
+            'jory' => '{}',
+        ]);
+
+        $expected = [
+            'data' => 147,
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_can_return_the_record_count_and_should_ignore_pagination()
+    {
+        $response = $this->json('GET', 'jory/song/count', [
+            'jory' => '{"ofs":3,"lmt":10}',
+        ]);
+
+        $expected = [
+            'data' => 147,
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_can_return_the_record_count_with_a_filter_applied()
+    {
+        $response = $this->json('GET', 'jory/song/count', [
+            'jory' => '{"flt":{"f":"title","o":"like","v":"%love%"},"ofs":3,"lmt":10}',
+        ]);
+
+        $expected = [
+            'data' => 8,
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_can_return_the_record_count_with_a_custom_filter_applied()
+    {
+        $response = $this->json('GET', 'jory/song/count', [
+            'jory' => '{"flt":{"and":[{"f":"title","o":"like","v":"%love%"},{"f":"album_name","o":"like","v":"%experienced%"}]},"ofs":3,"lmt":10}',
+        ]);
+
+        $expected = [
+            'data' => 2,
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
 }

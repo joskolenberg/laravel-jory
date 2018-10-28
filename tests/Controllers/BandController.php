@@ -24,4 +24,9 @@ class BandController extends Controller
     {
         return Band::jory()->applyRequest($request)->first();
     }
+
+    public function count(Request $request)
+    {
+        return Band::jory()->applyRequest($request)->count();
+    }
 }

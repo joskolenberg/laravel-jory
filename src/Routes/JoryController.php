@@ -18,6 +18,17 @@ class JoryController extends Controller
         return $modelClass::jory()->applyRequest($request);
     }
 
+    public function count($uri, Request $request)
+    {
+        $modelClass = config('jory.routes.'.$uri);
+
+        if (! $modelClass) {
+            abort(404);
+        }
+
+        return $modelClass::jory()->applyRequest($request)->count();
+    }
+
     public function show($uri, $id, Request $request)
     {
         $modelClass = config('jory.routes.'.$uri);

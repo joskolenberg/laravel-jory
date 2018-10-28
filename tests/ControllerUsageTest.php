@@ -13,6 +13,7 @@ class ControllerUsageTest extends TestCase
 
         Route::get('band', BandController::class . '@index');
         Route::get('band/first-by-filter', BandController::class . '@firstByFilter');
+        Route::get('band/count', BandController::class . '@count');
         Route::get('band/{bandId}', BandController::class . '@show');
     }
 
@@ -62,6 +63,16 @@ class ControllerUsageTest extends TestCase
                 'year_start' => 1960,
                 'year_end' => 1970,
             ],
+        ]);
+    }
+
+    /** @test */
+    public function it_can_return_a_record_count_based_on_jory_filters()
+    {
+        $response = $this->json('GET', 'band/count', ['jory' => '{"flt":{"f":"name","o":"like","v":"%r%"}}']);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => 2,
         ]);
     }
 }
