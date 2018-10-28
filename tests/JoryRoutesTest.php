@@ -154,4 +154,72 @@ class JoryRoutesTest extends TestCase
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
     }
+
+    /** @test */
+    public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_collection()
+    {
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Jory string is no valid json.'
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_single_record()
+    {
+        $response = $this->json('GET', 'jory/song/2', [
+            'jory' => '}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Jory string is no valid json.'
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_count()
+    {
+        $response = $this->json('GET', 'jory/song/count', [
+            'jory' => '}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Jory string is no valid json.'
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_collection_2()
+    {
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","v":"The End"},"rlt":{"album":{"rlt":{"songs":{"flt":{"wrong":"parameter"}}}}}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'A filter should contain one of the these fields: "f", "field", "and", "group_and", "or" or "group_or". (Location: album.songs.filter)'
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+    }
 }

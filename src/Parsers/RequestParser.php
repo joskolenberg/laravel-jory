@@ -34,6 +34,7 @@ class RequestParser implements JoryParserInterface
      * Get the jory object based on the given Request.
      *
      * @return Jory
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getJory(): Jory
     {

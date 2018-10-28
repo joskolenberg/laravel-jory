@@ -2,16 +2,15 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
 class JoryBuilderOffsetLimitTest extends TestCase
 {
     /** @test */
     public function it_cannot_apply_an_offset_without_a_limit()
     {
-        $this->expectException(LaravelJoryException::class);
+        $this->expectException(LaravelJoryCallException::class);
         $this->expectExceptionMessage('An offset cannot be set without a limit.');
 
         Song::jory()->applyJson('{"offset":140}')->get();

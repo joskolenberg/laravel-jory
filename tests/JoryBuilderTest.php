@@ -2,12 +2,14 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 
 class JoryBuilderTest extends TestCase
 {
@@ -17,7 +19,7 @@ class JoryBuilderTest extends TestCase
     public function it_can_apply_on_a_querybuilder_instance()
     {
         $query = Band::query();
-        $actual = (new JoryBuilder())->onQuery($query)->get()->pluck('name')->toArray();
+        $actual = (new JoryBuilder())->applyJory(new Jory())->onQuery($query)->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -98,9 +100,12 @@ class JoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_defaults_to_empty_when_no_jory_is_applied()
+    public function it_throws_an_exception_when_no_jory_is_applied()
     {
-        $actual = Band::jory()->get()->pluck('name')->toArray();
+        $this->expectException(LaravelJoryException::class);
+        $this->expectExceptionMessage('No jorydata has been set on JoryBuilder.');
+
+        Band::jory()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -213,7 +218,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_return_a_single_model()
     {
-        $actual = Instrument::jory()->first()->toArray();
+        $actual = Instrument::jory()->applyJory(new Jory())->first()->toArray();
 
         $this->assertEquals([
             'id' => 1,

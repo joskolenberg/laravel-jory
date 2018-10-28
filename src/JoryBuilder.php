@@ -15,10 +15,13 @@ use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\Jory\Support\GroupOrFilter;
 use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
+use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
+use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
 /**
  * Class to query models based on Jory data.
@@ -35,9 +38,9 @@ class JoryBuilder implements Responsable
     protected $builder;
 
     /**
-     * @var Jory
+     * @var null|Jory
      */
-    protected $jory;
+    protected $jory = null;
 
     /**
      * @var bool
@@ -55,13 +58,9 @@ class JoryBuilder implements Responsable
     protected $count = false;
 
     /**
-     * JoryBuilder constructor.
+     * @var null|JoryParserInterface
      */
-    public function __construct()
-    {
-        // Set to empty jory by default in case none is applied.
-        $this->jory = new Jory();
-    }
+    protected $joryParser = null;
 
     /**
      * Set a builder instance to build the query upon.
@@ -86,7 +85,9 @@ class JoryBuilder implements Responsable
      */
     public function applyArray(array $array): self
     {
-        return $this->applyJory((new ArrayParser($array))->getJory());
+        $this->joryParser = new ArrayParser($array);
+
+        return $this;
     }
 
     /**
@@ -94,13 +95,13 @@ class JoryBuilder implements Responsable
      *
      * @param string $json
      *
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
-     *
      * @return JoryBuilder
      */
     public function applyJson(string $json): self
     {
-        return $this->applyJory((new JsonParser($json))->getJory());
+        $this->joryParser = new JsonParser($json);
+
+        return $this;
     }
 
     /**
@@ -112,7 +113,9 @@ class JoryBuilder implements Responsable
      */
     public function applyRequest(Request $request): self
     {
-        return $this->applyJory((new RequestParser($request))->getJory());
+        $this->joryParser = new RequestParser($request);
+
+        return $this;
     }
 
     /**
@@ -133,14 +136,17 @@ class JoryBuilder implements Responsable
      * Get a collection of Models based on the baseQuery and Jory data.
      *
      * @return \Illuminate\Database\Eloquent\Collection
+     * @throws LaravelJoryException
+     * @throws LaravelJoryCallException
      */
     public function get(): Collection
     {
         $collection = $this->buildQuery()->get();
 
-        $collection = $this->afterFetch($collection, $this->jory);
+        $jory = $this->getJory();
+        $collection = $this->afterFetch($collection, $jory);
 
-        $this->loadRelations($collection, $this->jory->getRelations());
+        $this->loadRelations($collection, $jory->getRelations());
 
         return $collection;
     }
@@ -149,20 +155,22 @@ class JoryBuilder implements Responsable
      * Get the first Model based on the baseQuery and Jory data.
      *
      * @return \Illuminate\Database\Eloquent\Model|null
+     * @throws LaravelJoryCallException
+     * @throws LaravelJoryException
      */
-    public function getFirst(): ? Model
+    public function getFirst(): ?Model
     {
         $model = $this->model;
 
-        if (! $model) {
+        if (!$model) {
             $model = $this->buildQuery()->first();
         }
 
-        if (! $model) {
+        if (!$model) {
             return null;
         }
 
-        $this->loadRelations(new Collection([$model]), $this->jory->getRelations());
+        $this->loadRelations(new Collection([$model]), $this->getJory()->getRelations());
 
         return $model;
     }
@@ -171,14 +179,17 @@ class JoryBuilder implements Responsable
      * Count the records based on the filters in the Jory object.
      *
      * @return int
+     * @throws LaravelJoryException
      */
     public function getCount(): int
     {
         $query = clone $this->builder;
 
+        $jory = $this->getJory();
+
         // Apply filters if there are any
-        if ($this->jory->getFilter()) {
-            $this->applyFilter($query, $this->jory->getFilter());
+        if ($jory->getFilter()) {
+            $this->applyFilter($query, $jory->getFilter());
         }
 
         return $query->count();
@@ -188,23 +199,27 @@ class JoryBuilder implements Responsable
      * Get the result array.
      *
      * @return array|null
+     * @throws LaravelJoryException
+     * @throws LaravelJoryCallException
      */
-    public function toArray(): ? array
+    public function toArray(): ?array
     {
+        $jory = $this->getJory();
+
         if ($this->first) {
             $model = $this->getFirst();
-            if (! $model) {
+            if (!$model) {
                 return null;
             }
 
-            return $model->toArrayByJory($this->jory);
+            return $model->toArrayByJory($jory);
         }
 
         $models = $this->get();
 
         $result = [];
         foreach ($models as $model) {
-            $result[] = $model->toArrayByJory($this->jory);
+            $result[] = $model->toArrayByJory($jory);
         }
 
         return $result;
@@ -214,6 +229,8 @@ class JoryBuilder implements Responsable
      * Build a new query based on the baseQuery and Jory data.
      *
      * @return Builder
+     * @throws LaravelJoryCallException
+     * @throws LaravelJoryException
      */
     protected function buildQuery(): Builder
     {
@@ -288,7 +305,7 @@ class JoryBuilder implements Responsable
      */
     protected function getCustomFilterMethodName(Filter $filter)
     {
-        return 'scope'.studly_case($filter->getField()).'Filter';
+        return 'scope' . studly_case($filter->getField()) . 'Filter';
     }
 
     /**
@@ -297,11 +314,28 @@ class JoryBuilder implements Responsable
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
+     * @throws LaravelJoryException
      */
     public function toResponse($request)
     {
+        try {
+            $data = $this->count ? $this->getCount() : $this->toArray();
+        } catch (JoryException $e) {
+            return response([
+                'errors' => [
+                    $e->getMessage(),
+                ],
+            ], 422);
+        } catch (LaravelJoryCallException $e) {
+            return response([
+                'errors' => [
+                    $e->getMessage(),
+                ],
+            ], 422);
+        }
+
         return response([
-            'data' => $this->count ? $this->getCount() : $this->toArray(),
+            'data' => $data,
         ]);
     }
 
@@ -343,19 +377,22 @@ class JoryBuilder implements Responsable
      * Apply the jory data on an existing query.
      *
      * @param $query
+     * @throws LaravelJoryCallException
+     * @throws LaravelJoryException
      */
     public function applyOnQuery($query): void
     {
-        $this->beforeQueryBuild($query, $this->jory);
+        $jory = $this->getJory();
+        $this->beforeQueryBuild($query, $jory);
 
         // Apply filters if there are any
-        if ($this->jory->getFilter()) {
-            $this->applyFilter($query, $this->jory->getFilter());
+        if ($jory->getFilter()) {
+            $this->applyFilter($query, $jory->getFilter());
         }
-        $this->applySorts($query, $this->jory->getSorts());
-        $this->applyOffsetAndLimit($query, $this->jory->getOffset(), $this->jory->getLimit());
+        $this->applySorts($query, $jory->getSorts());
+        $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
-        $this->afterQueryBuild($query, $this->jory);
+        $this->afterQueryBuild($query, $jory);
     }
 
     /**
@@ -476,7 +513,7 @@ class JoryBuilder implements Responsable
      */
     protected function getCustomSortMethodName(Sort $filter): string
     {
-        return 'scope'.studly_case($filter->getField()).'Sort';
+        return 'scope' . studly_case($filter->getField()) . 'Sort';
     }
 
     /**
@@ -485,13 +522,13 @@ class JoryBuilder implements Responsable
      * @param $query
      * @param int|null $offset
      * @param int|null $limit
-     * @throws LaravelJoryException
+     * @throws LaravelJoryCallException
      */
     protected function applyOffsetAndLimit($query, int $offset = null, int $limit = null): void
     {
         // When setting an offset a limit is required in SQL
-        if ($offset != null && ! $limit != null) {
-            throw new LaravelJoryException('An offset cannot be set without a limit.');
+        if ($offset != null && !$limit != null) {
+            throw new LaravelJoryCallException('An offset cannot be set without a limit.');
         }
         if ($offset !== null) {
             // Check on null, so even 0 will be applied.
@@ -605,5 +642,27 @@ class JoryBuilder implements Responsable
     protected function afterFetch(Collection $collection, Jory $jory): Collection
     {
         return $collection;
+    }
+
+    /**
+     * Get the jory object which needs to be applied.
+     *
+     * @return Jory
+     * @throws LaravelJoryException
+     */
+    protected function getJory(): Jory
+    {
+        // If instance already is set return this one.
+        if ($this->jory) {
+            return $this->jory;
+        }
+
+        // If a parser has been set return the one from the parser
+        if ($this->joryParser) {
+            $this->jory = $this->joryParser->getJory();
+            return $this->jory;
+        }
+
+        throw new LaravelJoryException('No jorydata has been set on JoryBuilder.');
     }
 }
