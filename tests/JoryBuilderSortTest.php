@@ -2,9 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
-
 class JoryBuilderSortTest extends TestCase
 {
     /** @test */
@@ -14,7 +11,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"name":"asc"}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 3,
@@ -41,7 +38,8 @@ class JoryBuilderSortTest extends TestCase
                     'year_end' => null,
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -51,7 +49,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"name":"desc"}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 1,
@@ -78,7 +76,8 @@ class JoryBuilderSortTest extends TestCase
                     'year_end' => 1970,
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -88,7 +87,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"desc","name":"asc"}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 2,
@@ -115,7 +114,8 @@ class JoryBuilderSortTest extends TestCase
                     'year_end' => null,
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -125,7 +125,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"desc","name":"desc"}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 2,
@@ -152,7 +152,8 @@ class JoryBuilderSortTest extends TestCase
                     'year_end' => null,
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -162,7 +163,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"asc","name":"asc"}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 1,
@@ -189,7 +190,8 @@ class JoryBuilderSortTest extends TestCase
                     'year_end' => 1980,
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -199,7 +201,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"year_end":"asc","name":"desc"}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 1,
@@ -226,7 +228,8 @@ class JoryBuilderSortTest extends TestCase
                     'year_end' => 1980,
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -236,7 +239,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"name":"asc"},"rlt":{"people":{"srt":{"last_name":"asc"}}}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 3,
@@ -376,7 +379,8 @@ class JoryBuilderSortTest extends TestCase
                     ],
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -386,7 +390,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"flt":{"f":"name","o":"like","v":"%in%"},"srt":{"name":"desc"},"rlt":{"people":{"flt":{"f":"last_name","o":"like","v":"%a%"},"srt":{"last_name":"desc"},"fld":["last_name"]}}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 1,
@@ -423,7 +427,8 @@ class JoryBuilderSortTest extends TestCase
                     ],
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -433,7 +438,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"number_of_songs":"asc","name":"asc"},"fld":["id","name"]}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 4,
@@ -484,7 +489,8 @@ class JoryBuilderSortTest extends TestCase
                     'name' => 'Exile on main st.',
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
@@ -494,7 +500,7 @@ class JoryBuilderSortTest extends TestCase
             'jory' => '{"srt":{"band_name":"asc","number_of_songs":"asc"},"fld":["id","name"]}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'id' => 9,
@@ -545,7 +551,8 @@ class JoryBuilderSortTest extends TestCase
                     'name' => 'Exile on main st.',
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
