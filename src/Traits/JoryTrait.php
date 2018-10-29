@@ -63,7 +63,7 @@ trait JoryTrait
 
             $related = $this->$cameledRelationName;
 
-            if ($related == null) {
+            if ($related === null) {
                 $result[$relationName] = null;
             } elseif ($related instanceof Model) {
                 $result[$relationName] = $related->toArrayByJory($relation->getJory());

@@ -443,7 +443,7 @@ class JoryBuilder implements Responsable
         foreach ($collection as $model) {
             $related = $model->$relationName;
 
-            if ($related == null) {
+            if ($related === null) {
                 continue;
             }
 
@@ -535,7 +535,7 @@ class JoryBuilder implements Responsable
     protected function applyOffsetAndLimit($query, int $offset = null, int $limit = null): void
     {
         // When setting an offset a limit is required in SQL
-        if ($offset != null && !$limit != null) {
+        if ($offset !== null && $limit === null) {
             throw new LaravelJoryCallException('An offset cannot be set without a limit.');
         }
         if ($offset !== null) {
