@@ -31,7 +31,7 @@ trait JoryTrait
      */
     public static function getJoryBuilder(): JoryBuilder
     {
-        return new JoryBuilder();
+        return app()->make(JoryBuilder::class);
     }
 
     /**
