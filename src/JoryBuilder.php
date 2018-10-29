@@ -293,7 +293,11 @@ class JoryBuilder implements Responsable
             return;
         }
 
-        $this->applyDefaultFieldFilter($query, $filter->getField(), $filter->getOperator(), $filter->getValue());
+        // Always apply the filter on the table of the model which
+        // is being queried even if a join is applied (e.g. when filtering
+        // a belongsToMany relation), so we prefix the field with the table name.
+        $field = $query->getModel()->getTable() . '.' . $filter->getField();
+        $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getValue());
     }
 
     /**
@@ -488,7 +492,11 @@ class JoryBuilder implements Responsable
             return;
         }
 
-        $this->applyDefaultSort($query, $sort->getField(), $sort->getOrder());
+        // Always apply the sort on the table of the model which
+        // is being queried even if a join is applied (e.g. when filtering
+        // a belongsToMany relation), so we prefix the field with the table name.
+        $field = $query->getModel()->getTable() . '.' . $sort->getField();
+        $this->applyDefaultSort($query, $field, $sort->getOrder());
     }
 
     /**
@@ -598,7 +606,7 @@ class JoryBuilder implements Responsable
      */
     protected function beforeQueryBuild($query, Jory $jory)
     {
-
+        $this->selectOnlyRootTable($query);
     }
 
     /**
@@ -664,5 +672,17 @@ class JoryBuilder implements Responsable
         }
 
         throw new LaravelJoryException('No jorydata has been set on JoryBuilder.');
+    }
+
+    /**
+     * Alter the query to select only the columns of
+     * the model which is being queried.
+     *
+     * @param $query
+     */
+    protected function selectOnlyRootTable($query): void
+    {
+        $table = $query->getModel()->getTable();
+        $query->select($table . '.*');
     }
 }

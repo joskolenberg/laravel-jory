@@ -238,4 +238,50 @@ class JoryBuilderTest extends TestCase
 
         $this->assertNull($actual);
     }
+
+    /** @test */
+    public function it_can_filter_sort_and_select_on_an_ambiguous_column_when_using_a_belongs_to_many_relation()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"id","o":">","v":2},"srt":["-id"],"fld":["id","name"],"rlt":{"people":{"filter":{"f":"id","o":"<","v":14},"srt":["-id"],"fld":["id","last_name"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'people' => [
+                        [
+                            'id' => 13,
+                            'last_name' => 'Hendrix',
+                        ],
+                    ],
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'people' => [
+                        [
+                            'id' => 12,
+                            'last_name' => 'Starr',
+                        ],
+                        [
+                            'id' => 11,
+                            'last_name' => 'Harrison',
+                        ],
+                        [
+                            'id' => 10,
+                            'last_name' => 'McCartney',
+                        ],
+                        [
+                            'id' => 9,
+                            'last_name' => 'Lennon',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
 }

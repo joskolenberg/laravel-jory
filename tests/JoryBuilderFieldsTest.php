@@ -197,10 +197,10 @@ class JoryBuilderFieldsTest extends TestCase
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":[],"flt":{"f":"name","o":"like","v":"%zep%"},"rlt":{"songs":{"flt":{"f":"songs.id","o":">","v":54},"fld":["title"]}}}',
+            'jory' => '{"fld":[],"flt":{"f":"name","o":"like","v":"%zep%"},"rlt":{"songs":{"flt":{"f":"id","o":">","v":54},"fld":["title"]}}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $expected = [
             'data' => [
                 [
                     'songs' => [
@@ -240,7 +240,8 @@ class JoryBuilderFieldsTest extends TestCase
                     ],
                 ],
             ],
-        ]);
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */
