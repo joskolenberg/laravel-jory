@@ -19,7 +19,7 @@ class Blueprint implements Responsable
     /**
      * @var array
      */
-    protected $filters = [];
+    protected $filters = null;
 
     /**
      * @var array
@@ -47,7 +47,7 @@ class Blueprint implements Responsable
      * @param $field
      * @return Field
      */
-    public function field($field)
+    public function field($field): Field
     {
         $field = new Field($field);
         if($this->fields === null){
@@ -59,13 +59,40 @@ class Blueprint implements Responsable
     }
 
     /**
+     * Add a filter to the blueprint.
+     *
+     * @param $field
+     * @return Filter
+     */
+    public function filter($field): Filter
+    {
+        $filter = new Filter($field);
+        if($this->filters === null){
+            $this->filters = [];
+        }
+
+        $this->filters[] = $filter;
+        return $filter;
+    }
+
+    /**
      * Get the fields in the blueprint.
      *
      * @return array|null
      */
-    public function getFields()
+    public function getFields():? array
     {
         return $this->fields;
+    }
+
+    /**
+     * Get the filters in the blueprint.
+     *
+     * @return array|null
+     */
+    public function getFilters():? array
+    {
+        return $this->filters;
     }
 
     /**
@@ -88,6 +115,7 @@ class Blueprint implements Responsable
     {
         return [
             'fields' => $this->fieldsToArray(),
+            'filters' => $this->filtersToArray(),
         ];
     }
 
@@ -107,6 +135,29 @@ class Blueprint implements Responsable
             $result[$field->getField()] = [
                 'description' => $field->getDescription(),
                 'show_by_default' => $field->isShownByDefault(),
+            ];
+        }
+
+        return $result;
+
+    }
+
+    /**
+     * Turn the filters part of the blueprint into an array.
+     *
+     * @return array|string
+     */
+    protected function filtersToArray()
+    {
+        if($this->filters === null){
+            return 'Not defined.';
+        }
+
+        $result = [];
+        foreach ($this->filters as $filter) {
+            $result[$filter->getField()] = [
+                'description' => $filter->getDescription(),
+                'operators' => $filter->getOperators(),
             ];
         }
 

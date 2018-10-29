@@ -32,4 +32,48 @@ return [
     */
 
     'request-key' => 'jory',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Blueprint
+    |--------------------------------------------------------------------------
+    |
+    | Here are some settings used as the standard implementation in
+    | blueprints. You can override these for a resource by setting
+    | a value in the JoryBuilder's blueprint.
+    |
+    */
+
+    'blueprint' => [
+
+        'filters' => [
+
+            /*
+            |--------------------------------------------------------------------------
+            | Operators
+            |--------------------------------------------------------------------------
+            |
+            | Here you can define which operators are
+            | available by default for any filter.
+            |
+            */
+
+            'operators' => [
+                '=',
+                '!=',
+                '<>',
+                '>',
+                '>=',
+                '<',
+                '<=',
+                'like',
+                'null',
+                'not_null',
+                'in',
+                'not_in',
+            ],
+
+        ],
+
+    ],
 ];
