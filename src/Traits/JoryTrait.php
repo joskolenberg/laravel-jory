@@ -45,7 +45,7 @@ trait JoryTrait
         // We will load the relations manually so remove them from Laravel's toArray() export.
         $relationNames = [];
         foreach ($jory->getRelations() as $relation) {
-            $relationNames = $relation->getName();
+            $relationNames[] = camel_case($relation->getName());
         }
         $this->makeHidden($relationNames);
 
@@ -59,8 +59,9 @@ trait JoryTrait
         // Add the relations to the result
         foreach ($jory->getRelations() as $relation) {
             $relationName = $relation->getName();
+            $cameledRelationName = camel_case($relationName);
 
-            $related = $this->$relationName;
+            $related = $this->$cameledRelationName;
 
             if ($related == null) {
                 $result[$relationName] = null;

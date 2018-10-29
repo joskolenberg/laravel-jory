@@ -420,7 +420,7 @@ class JoryBuilder implements Responsable
             return;
         }
 
-        $relationName = $relation->getName();
+        $relationName = camel_case($relation->getName());
 
         $collection->load([
             $relationName => function ($query) use ($relation) {
