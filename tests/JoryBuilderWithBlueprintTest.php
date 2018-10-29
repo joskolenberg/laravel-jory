@@ -53,7 +53,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" not available. Did you mean "title"? (Location: fields)',
+                'Field "titel" not available. Did you mean "title"? (Location: fields.0)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -100,8 +100,16 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 'album_id' => [
                     'description' => 'Filter on the album id.',
                     'operators' => [
-                        '='
+                        '=',
                     ],
+                ],
+            ],
+            'sorts' => [
+                'title' => [
+                    'description' => 'Order by the title.',
+                ],
+                'id' => [
+                    'description' => 'Not defined.',
                 ],
             ],
         ];
@@ -200,6 +208,45 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 'Field "titel" is not supported for filtering. Did you mean "title"? (Location: filter(and).0)',
                 'Field "albumm_id" is not supported for filtering. Did you mean "album_id"? (Location: filter(and).2)',
                 'Operator "like" is not supported by field "album_id". (Location: filter(and).3.album_id)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_sort_is_available()
+    {
+        $response = $this->json('GET', 'song', [
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","v":"%love%"},"srt":["title"]}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    "title" => "And the Gods Made Love",
+                ],
+                [
+                    "title" => "Bold as Love",
+                ],
+                [
+                    "title" => "Little Miss Lover",
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_sort_is_not_available()
+    {
+        $response = $this->json('GET', 'song', [
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","v":"%love%"},"srt":["tite","if"]}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "tite" is not supported for sorting. Did you mean "title"? (Location: sorts.0)',
+                'Field "if" is not supported for sorting. Did you mean "id"? (Location: sorts.1)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);

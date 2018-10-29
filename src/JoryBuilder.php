@@ -22,6 +22,7 @@ use JosKolenberg\LaravelJory\Blueprint\Validator;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
+use JosKolenberg\LaravelJory\Blueprint\BlueprintApplier;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
@@ -685,7 +686,12 @@ class JoryBuilder implements Responsable
 
         // If a parser has been set return the one from the parser
         if ($this->joryParser) {
-            $this->jory = $this->joryParser->getJory();
+            $jory = $this->joryParser->getJory();
+
+            // Apply any default settings in the blueprint to the Jory
+            (new BlueprintApplier($this->blueprint, $jory))->apply();
+
+            $this->jory = $jory;
             return $this->jory;
         }
 

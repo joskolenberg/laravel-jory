@@ -11,7 +11,7 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 /**
  * Class Validator
  *
- * Class to validate and update a Jory object by the settings in the Blueprint.
+ * Class to validate a Jory object by the settings in the Blueprint.
  *
  * @package JosKolenberg\LaravelJory\Blueprint
  */
@@ -60,6 +60,7 @@ class Validator
     {
         $this->validateFields();
         $this->validateFilter();
+        $this->validateSorts();
 
         if(count($this->errors) > 0){
             throw new LaravelJoryCallException($this->errors);
@@ -67,27 +68,12 @@ class Validator
     }
 
     /**
-     * Validate and update the fields in the Jory object by the settings in the Blueprint.
+     * Validate the fields in the Jory object by the settings in the Blueprint.
      */
     protected function validateFields():void
     {
-        if($this->blueprint->getFields() === null) {
+        if($this->blueprint->getFields() === null || $this->jory->getFields() === null) {
             // No fields specified, perform no validation
-            return;
-        }
-
-        if($this->jory->getFields() === null){
-            // No fields set on the jory
-            // than we will update the fields with the ones to be shown by default.
-            $defaultFields = [];
-            foreach ($this->blueprint->getFields() as $field){
-                if($field->isShownByDefault()){
-                    $defaultFields[] = $field->getField();
-                }
-                $this->jory->setFields($defaultFields);
-            }
-
-            // No validation needed in this case, so return.
             return;
         }
 
@@ -97,9 +83,9 @@ class Validator
             $availableFields[] = $field->getField();
         }
 
-        foreach ($this->jory->getFields() as $joryField){
+        foreach ($this->jory->getFields() as $key => $joryField){
             if(!in_array($joryField, $availableFields)){
-                $this->errors[] = 'Field "' . $joryField . '" not available. Did you mean "' . $this->getSuggestion($availableFields, $joryField) . '"? (Location: ' . $this->address . 'fields)';
+                $this->errors[] = 'Field "' . $joryField . '" not available. Did you mean "' . $this->getSuggestion($availableFields, $joryField) . '"? (Location: ' . $this->address . 'fields.' . $key . ')';
             }
         }
     }
@@ -157,6 +143,29 @@ class Validator
             $availableFields[] = $bpf->getField();
         }
         $this->errors[] = 'Field "' . $joryFilter->getField() . '" is not supported for filtering. Did you mean "' . $this->getSuggestion($availableFields, $joryFilter->getField()) . '"? (Location: ' . $address . ')';
+    }
+
+    /**
+     * Validate the sorts in the Jory object by the settings in the Blueprint.
+     */
+    protected function validateSorts():void
+    {
+        if($this->blueprint->getSorts() === null || $this->jory->getSorts() === null) {
+            // No sorts specified in blueprint or jory, perform no validation
+            return;
+        }
+
+        // There are fields in the Jory object and Blueprint, validate them.
+        $availableFields = [];
+        foreach ($this->blueprint->getSorts() as $sort){
+            $availableFields[] = $sort->getField();
+        }
+
+        foreach ($this->jory->getSorts() as $key => $jorySort){
+            if(!in_array($jorySort->getField(), $availableFields)){
+                $this->errors[] = 'Field "' . $jorySort->getField() . '" is not supported for sorting. Did you mean "' . $this->getSuggestion($availableFields, $jorySort->getField()) . '"? (Location: ' . $this->address . 'sorts.' . $key . ')';
+            }
+        }
     }
 
     /**

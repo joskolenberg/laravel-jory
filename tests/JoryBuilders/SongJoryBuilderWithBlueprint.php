@@ -15,5 +15,8 @@ class SongJoryBuilderWithBlueprint extends JoryBuilder
 
         $blueprint->filter('title')->description('Filter on the title.');
         $blueprint->filter('album_id')->description('Filter on the album id.')->operators(['=']);
+
+        $blueprint->sort('title')->description('Order by the title.');
+        $blueprint->sort('id');
     }
 }

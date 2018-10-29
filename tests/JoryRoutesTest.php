@@ -231,6 +231,7 @@ class JoryRoutesTest extends TestCase
         $expected = [
             'fields' => 'Not defined.',
             'filters' => 'Not defined.',
+            'sorts' => 'Not defined.',
         ];
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
