@@ -17,6 +17,8 @@ use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Contracts\FilterInterface;
+use JosKolenberg\LaravelJory\Blueprint\Blueprint;
+use JosKolenberg\LaravelJory\Blueprint\Validator;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
@@ -61,6 +63,21 @@ class JoryBuilder implements Responsable
      * @var null|JoryParserInterface
      */
     protected $joryParser = null;
+
+    /**
+     * @var Blueprint|null
+     */
+    protected $blueprint = null;
+
+    /**
+     * JoryBuilder constructor.
+     */
+    public function __construct()
+    {
+        // Create the blueprint based on the settings in blueprint()
+        $this->blueprint = new Blueprint();
+        $this->blueprint($this->blueprint);
+    }
 
     /**
      * Set a builder instance to build the query upon.
@@ -324,6 +341,7 @@ class JoryBuilder implements Responsable
     public function toResponse($request)
     {
         try {
+            $this->validate();
             $data = $this->count ? $this->getCount() : $this->toArray();
         } catch (JoryException $e) {
             return response([
@@ -333,9 +351,7 @@ class JoryBuilder implements Responsable
             ], 422);
         } catch (LaravelJoryCallException $e) {
             return response([
-                'errors' => [
-                    $e->getMessage(),
-                ],
+                'errors' => $e->getErrors(),
             ], 422);
         }
 
@@ -538,7 +554,7 @@ class JoryBuilder implements Responsable
     {
         // When setting an offset a limit is required in SQL
         if ($offset !== null && $limit === null) {
-            throw new LaravelJoryCallException('An offset cannot be set without a limit.');
+            throw new LaravelJoryCallException(['An offset cannot be set without a limit.'], 'An offset cannot be set without a limit.');
         }
         if ($offset !== null) {
             // Check on null, so even 0 will be applied.
@@ -686,5 +702,43 @@ class JoryBuilder implements Responsable
     {
         $table = $query->getModel()->getTable();
         $query->select($table . '.*');
+    }
+
+    /**
+     * Create the blueprint for this builder.
+     *
+     * This blueprint will be used to:
+     *      - Show the options for the resource when using the OPTIONS http method
+     *      - Fields:
+     *          - Validate if the requested fields are available.
+     *          - Update the Jory's fields attribute with the ones marked to be shown by default
+     *              when no particular fields are requested.
+     *
+     * @param Blueprint $blueprint
+     */
+    protected function blueprint(Blueprint $blueprint): void
+    {
+
+    }
+
+    /**
+     * Validate the Jory object by the settings in the Blueprint.
+     *
+     * @throws LaravelJoryCallException
+     * @throws LaravelJoryException
+     */
+    protected function validate(): void
+    {
+        (new Validator($this->blueprint, $this->getJory()))->validate();
+    }
+
+    /**
+     * Get the Blueprint.
+     *
+     * @return Blueprint
+     */
+    public function getBlueprint(): Blueprint
+    {
+        return $this->blueprint;
     }
 }

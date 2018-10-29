@@ -41,4 +41,14 @@ class JoryController extends Controller
 
         return $modelClass::jory()->applyRequest($request)->onModel($model);
     }
+
+    public function options($uri)
+    {
+        $modelClass = config('jory.routes.'.$uri);
+
+        if (! $modelClass) {
+            abort(404);
+        }
+        return $modelClass::jory()->getBlueprint();
+    }
 }

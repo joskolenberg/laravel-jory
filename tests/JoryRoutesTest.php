@@ -222,4 +222,17 @@ class JoryRoutesTest extends TestCase
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
     }
+
+    /** @test */
+    public function it_can_return_the_options_for_a_resource()
+    {
+        $response = $this->json('OPTIONS', 'jory/song');
+
+        $expected = [
+            'fields' => 'Not defined.',
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
 }

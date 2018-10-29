@@ -12,4 +12,21 @@ namespace JosKolenberg\LaravelJory\Exceptions;
  */
 class LaravelJoryCallException extends \Exception
 {
+
+    protected $errors = [];
+
+    public function __construct(array $errors, string $message = "", int $code = 0, \Throwable $previous = null)
+    {
+        $this->errors = $errors;
+        parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
 }
