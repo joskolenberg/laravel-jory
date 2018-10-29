@@ -281,14 +281,15 @@ class JoryBuilder implements Responsable
     protected function applyFieldFilter($query, Filter $filter): void
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
-        $model = $query->getModel();
-        if (method_exists($model, $customMethodName)) {
-            $model->$customMethodName($query, $filter->getOperator(), $filter->getValue());
+        if (method_exists($this, $customMethodName)) {
+            $this->$customMethodName($query, $filter->getOperator(), $filter->getValue());
 
             return;
         }
-        if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $filter->getOperator(), $filter->getValue());
+
+        $model = $query->getModel();
+        if (method_exists($model, $customMethodName)) {
+            $model->$customMethodName($query, $filter->getOperator(), $filter->getValue());
 
             return;
         }
@@ -480,14 +481,15 @@ class JoryBuilder implements Responsable
     protected function applySort($query, Sort $sort): void
     {
         $customMethodName = $this->getCustomSortMethodName($sort);
-        $model = $query->getModel();
-        if (method_exists($model, $customMethodName)) {
-            $model->$customMethodName($query, $sort->getOrder());
+        if (method_exists($this, $customMethodName)) {
+            $this->$customMethodName($query, $sort->getOrder());
 
             return;
         }
-        if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $sort->getOrder());
+
+        $model = $query->getModel();
+        if (method_exists($model, $customMethodName)) {
+            $model->$customMethodName($query, $sort->getOrder());
 
             return;
         }
