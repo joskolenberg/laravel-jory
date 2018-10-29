@@ -96,7 +96,7 @@ class JoryBuilderOffsetLimitTest extends TestCase
     public function it_can_apply_an_offset_and_limit_combined_with_with_sorts_and_filters()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"flt":{"f":"title","o":"like","v":"%love%"},"srt":{"title":"asc"},"offset":2,"limit":3}',
+            'jory' => '{"flt":{"f":"title","o":"like","v":"%love%"},"srt":["title"],"offset":2,"limit":3}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -124,7 +124,7 @@ class JoryBuilderOffsetLimitTest extends TestCase
     public function it_can_apply_an_offset_and_limit_combined_with_with_sorts_and_filters_on_relations()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":{"title":"asc"},"offset":10,"limit":5,"fld":["id","title"]}}}',
+            'jory' => '{"flt":{"f":"name","v":"Beatles"},"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%a%"},"srt":["title"],"offset":10,"limit":5,"fld":["id","title"]}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([

@@ -2,14 +2,14 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterFetchHook;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQuerySortHook;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildSortHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQueryOffsetLimitHook;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQuerySortHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildOffsetLimitHook;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildSortHook;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class JoryBuilderHookTest extends TestCase
 {
@@ -25,7 +25,7 @@ class JoryBuilderHookTest extends TestCase
                 'v' => '%love%',
             ],
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -58,7 +58,7 @@ class JoryBuilderHookTest extends TestCase
                 'v' => '%love%',
             ],
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -95,7 +95,7 @@ class JoryBuilderHookTest extends TestCase
                 'v' => '%love%',
             ],
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -128,7 +128,7 @@ class JoryBuilderHookTest extends TestCase
         $builder->onQuery(Song::query());
         $builder->applyArray([
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -162,7 +162,7 @@ class JoryBuilderHookTest extends TestCase
                 'v' => '%and%',
             ],
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -185,7 +185,7 @@ class JoryBuilderHookTest extends TestCase
         $builder->onQuery(Song::query());
         $builder->applyArray([
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -220,7 +220,7 @@ class JoryBuilderHookTest extends TestCase
         $builder->onQuery(Song::query());
         $builder->applyArray([
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -254,7 +254,7 @@ class JoryBuilderHookTest extends TestCase
                 'v' => '%and%',
             ],
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -282,7 +282,7 @@ class JoryBuilderHookTest extends TestCase
                 'v' => '%love%',
             ],
             'srt' => [
-                'title' => 'asc',
+                'title',
             ],
             'fld' => [
                 'title',
@@ -344,7 +344,7 @@ class JoryBuilderHookTest extends TestCase
         $builder->onQuery(Song::query());
         $builder->applyArray([
             'srt' => [
-                'album_id' => 'asc',
+                'album_id',
             ],
             'fld' => [
                 'title',
@@ -379,8 +379,8 @@ class JoryBuilderHookTest extends TestCase
         $builder->onQuery(Song::query());
         $builder->applyArray([
             'srt' => [
-                'album_id' => 'desc',
-                'title' => 'asc',
+                '-album_id',
+                'title',
             ],
             'flt' => [
                 'f' => 'title',

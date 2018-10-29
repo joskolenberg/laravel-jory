@@ -8,7 +8,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_sort_a_query_ascending()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":{"name":"asc"}}',
+            'jory' => '{"srt":["name"]}',
         ]);
 
         $expected = [
@@ -46,7 +46,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_sort_a_query_descending()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":{"name":"desc"}}',
+            'jory' => '{"srt":["-name"]}',
         ]);
 
         $expected = [
@@ -84,7 +84,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_1()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":{"year_end":"desc","name":"asc"}}',
+            'jory' => '{"srt":["-year_end","name"]}',
         ]);
 
         $expected = [
@@ -122,7 +122,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":{"year_end":"desc","name":"desc"}}',
+            'jory' => '{"srt":["-year_end","-name"]}',
         ]);
 
         $expected = [
@@ -160,7 +160,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_3()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":{"year_end":"asc","name":"asc"}}',
+            'jory' => '{"srt":["year_end","name"]}',
         ]);
 
         $expected = [
@@ -198,7 +198,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_4()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":{"year_end":"asc","name":"desc"}}',
+            'jory' => '{"srt":["year_end","-name"]}',
         ]);
 
         $expected = [
@@ -236,7 +236,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_sort_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":{"name":"asc"},"rlt":{"people":{"srt":{"last_name":"asc"}}}}',
+            'jory' => '{"srt":["name"],"rlt":{"people":{"srt":["last_name"]}}}',
         ]);
 
         $expected = [
@@ -387,7 +387,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_combine_relations_filters_and_sorts()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"name","o":"like","v":"%in%"},"srt":{"name":"desc"},"rlt":{"people":{"flt":{"f":"last_name","o":"like","v":"%a%"},"srt":{"last_name":"desc"},"fld":["last_name"]}}}',
+            'jory' => '{"flt":{"f":"name","o":"like","v":"%in%"},"srt":["-name"],"rlt":{"people":{"flt":{"f":"last_name","o":"like","v":"%a%"},"srt":["-last_name"],"fld":["last_name"]}}}',
         ]);
 
         $expected = [
@@ -435,7 +435,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_apply_a_custom_sort()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":{"number_of_songs":"asc","name":"asc"},"fld":["id","name"]}',
+            'jory' => '{"srt":["number_of_songs","name"],"fld":["id","name"]}',
         ]);
 
         $expected = [
@@ -497,7 +497,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_apply_a_custom_sort_2()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":{"band_name":"asc","number_of_songs":"asc"},"fld":["id","name"]}',
+            'jory' => '{"srt":["band_name","number_of_songs"],"fld":["id","name"]}',
         ]);
 
         $expected = [
@@ -559,7 +559,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_apply_a_sort_by_a_local_scope_on_the_related_model()
     {
         $response = $this->json('GET', 'jory/album-cover', [
-            'jory' => '{"srt":{"album_name":"asc"},"lmt":4,"fld":["id","album_id"]}',
+            'jory' => '{"srt":["album_name"],"lmt":4,"fld":["id","album_id"]}',
         ]);
 
         $expected = [

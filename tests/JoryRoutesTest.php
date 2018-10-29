@@ -52,7 +52,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_a_single_record()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["id","name"],"rlt":{"albums":{"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%love%"}}},"srt":{"release_date":"desc"}}}}',
+            'jory' => '{"fld":["id","name"],"rlt":{"albums":{"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%love%"}}},"srt":["-release_date"]}}}',
         ]);
 
         $expected = [
