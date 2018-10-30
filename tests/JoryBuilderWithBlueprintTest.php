@@ -121,7 +121,12 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 'default' => 50,
                 'max' => 250,
             ],
-            'relations' => [],
+            'relations' => [
+                'album' => [
+                    'description' => 'The album relation.',
+                    'type' => 'Not defined.',
+                ]
+            ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
@@ -139,7 +144,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 'default' => 'Unlimited.',
                 'max' => 'Unlimited.',
             ],
-            'relations' => [],
+            'relations' => 'Not defined.',
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
@@ -157,7 +162,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 'default' => 10,
                 'max' => 10,
             ],
-            'relations' => [],
+            'relations' => 'Not defined.',
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
@@ -886,5 +891,64 @@ class JoryBuilderWithBlueprintTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_relation_is_available_in_a_relation()
+    {
+        $response = $this->json('GET', 'song', [
+            'jory' => '{"fld":["title"],"lmt":5,"rlt":{"album":{"fld":["name"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'title' => 'Gimme Shelter',
+                    'album' => [
+                        'name' => 'Let it bleed',
+                    ],
+                ],
+                [
+                    'title' => 'Love In Vain (Robert Johnson)',
+                    'album' => [
+                        'name' => 'Let it bleed',
+                    ],
+                ],
+                [
+                    'title' => 'Country Honk',
+                    'album' => [
+                        'name' => 'Let it bleed',
+                    ],
+                ],
+                [
+                    'title' => 'Live With Me',
+                    'album' => [
+                        'name' => 'Let it bleed',
+                    ],
+                ],
+                [
+                    'title' => 'Let It Bleed',
+                    'album' => [
+                        'name' => 'Let it bleed',
+                    ],
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_relation_is_not_available_in_a_relation()
+    {
+        $response = $this->json('GET', 'song', [
+            'jory' => '{"fld":["title"],"lmt":5,"rlt":{"albumm":{"fld":["name"]}}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Relation "albumm" is not supported. Did you mean "album"? (Location: relations.0)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
     }
 }

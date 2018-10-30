@@ -39,7 +39,7 @@ class Blueprint implements Responsable
     /**
      * @var array
      */
-    protected $relations = [];
+    protected $relations = null;
 
     /**
      * @var null|int
@@ -149,6 +149,9 @@ class Blueprint implements Responsable
     public function relation(string $name): Relation
     {
         $relation = new Relation($name);
+        if ($this->relations === null) {
+            $this->relations = [];
+        }
         $this->relations[] = $relation;
         return $relation;
     }
@@ -204,6 +207,16 @@ class Blueprint implements Responsable
     public function getLimitMax(): ? int
     {
         return $this->limitMax;
+    }
+
+    /**
+     * Get the relations in the blueprint.
+     *
+     * @return array|null
+     */
+    public function getRelations(): ? array
+    {
+        return $this->relations;
     }
 
     /**
@@ -308,6 +321,10 @@ class Blueprint implements Responsable
      */
     protected function relationsToArray()
     {
+        if ($this->relations === null) {
+            return 'Not defined.';
+        }
+
         $result = [];
         foreach ($this->relations as $relation) {
             $result[$relation->getName()] = [

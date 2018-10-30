@@ -236,7 +236,7 @@ class JoryRoutesTest extends TestCase
                 'default' => 100,
                 'max' => 1000,
                 ],
-            'relations' => [],
+            'relations' => 'Not defined.',
         ];
 
         // ExactJson doesn't tell if the sort order is right so do both checks.

@@ -20,5 +20,7 @@ class SongJoryBuilderWithBlueprint extends JoryBuilder
         $blueprint->sort('id');
 
         $blueprint->limitDefault(50)->limitMax(250);
+
+        $blueprint->relation('album');
     }
 }

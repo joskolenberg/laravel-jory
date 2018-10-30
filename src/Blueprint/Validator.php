@@ -62,6 +62,7 @@ class Validator
         $this->validateFilter();
         $this->validateSorts();
         $this->validateOffsetLimit();
+        $this->validateRelations();
 
         if (count($this->errors) > 0) {
             throw new LaravelJoryCallException($this->errors);
@@ -184,6 +185,28 @@ class Validator
         if($this->blueprint->getLimitMax() !== null){
             if ($this->jory->getLimit() > $this->blueprint->getLimitMax()) {
                 $this->errors[] = 'The maximum limit for this resource is ' . $this->blueprint->getLimitMax() . ', please lower your limit or drop the limit parameter. (Location: '.$this->address.'limit)';
+            }
+        }
+    }
+
+    /**
+     * Validate the relations in the Jory object by the settings in the Blueprint.
+     */
+    protected function validateRelations(): void
+    {
+        if ($this->blueprint->getRelations() === null) {
+            // No relations specified in blueprint, perform no validation
+            return;
+        }
+
+        $availableRelations = [];
+        foreach ($this->blueprint->getRelations() as $relation) {
+            $availableRelations[] = $relation->getName();
+        }
+
+        foreach ($this->jory->getRelations() as $key => $joryRelation) {
+            if (! in_array($joryRelation->getName(), $availableRelations)) {
+                $this->errors[] = 'Relation "'.$joryRelation->getName().'" is not supported. Did you mean "'.$this->getSuggestion($availableRelations, $joryRelation->getName()).'"? (Location: '.$this->address.'relations.'.$key.')';
             }
         }
     }
