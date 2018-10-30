@@ -9,8 +9,8 @@ class SongJoryBuilderWithAfterQuerySortHook extends JoryBuilder
 {
     protected function afterQueryBuild($query, Jory $jory)
     {
-        $query->orderBy('title', 'desc');
+        parent::afterQueryBuild($query, $jory);
 
-        parent::beforeQueryBuild($query, $jory);
+        $query->orderBy('title', 'desc');
     }
 }

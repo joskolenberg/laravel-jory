@@ -9,8 +9,8 @@ class SongJoryBuilderWithAfterQueryBuildFilterHook extends JoryBuilder
 {
     protected function afterQueryBuild($query, Jory $jory)
     {
-        $query->where('title', 'like', '%love%');
+        parent::afterQueryBuild($query, $jory);
 
-        parent::beforeQueryBuild($query, $jory);
+        $query->where('title', 'like', '%love%');
     }
 }

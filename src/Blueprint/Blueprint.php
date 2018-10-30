@@ -42,6 +42,25 @@ class Blueprint implements Responsable
     protected $relations = [];
 
     /**
+     * @var null|int
+     */
+    protected $limitDefault = null;
+
+    /**
+     * @var null|int
+     */
+    protected $limitMax = null;
+
+    /**
+     * Blueprint constructor.
+     */
+    public function __construct()
+    {
+        $this->limitDefault = config('jory.blueprint.limit.default');
+        $this->limitMax = config('jory.blueprint.limit.max');
+    }
+
+    /**
      * Add a field to the blueprint.
      *
      * @param $field
@@ -50,11 +69,12 @@ class Blueprint implements Responsable
     public function field($field): Field
     {
         $field = new Field($field);
-        if($this->fields === null){
+        if ($this->fields === null) {
             $this->fields = [];
         }
 
         $this->fields[] = $field;
+
         return $field;
     }
 
@@ -67,11 +87,12 @@ class Blueprint implements Responsable
     public function filter($field): Filter
     {
         $filter = new Filter($field);
-        if($this->filters === null){
+        if ($this->filters === null) {
             $this->filters = [];
         }
 
         $this->filters[] = $filter;
+
         return $filter;
     }
 
@@ -84,12 +105,39 @@ class Blueprint implements Responsable
     public function sort($field): Sort
     {
         $sort = new Sort($field);
-        if($this->sorts === null){
+        if ($this->sorts === null) {
             $this->sorts = [];
         }
 
         $this->sorts[] = $sort;
+
         return $sort;
+    }
+
+    /**
+     * Set the default value for limit parameter.
+     *
+     * @param null|int $default
+     * @return Blueprint
+     */
+    public function limitDefault(?int $default): self
+    {
+        $this->limitDefault = $default;
+
+        return $this;
+    }
+
+    /**
+     * Set the maximum value for limit parameter.
+     *
+     * @param null|int $max
+     * @return Blueprint
+     */
+    public function limitMax(?int $max): self
+    {
+        $this->limitMax = $max;
+
+        return $this;
     }
 
     /**
@@ -97,7 +145,7 @@ class Blueprint implements Responsable
      *
      * @return array|null
      */
-    public function getFields():? array
+    public function getFields(): ? array
     {
         return $this->fields;
     }
@@ -107,7 +155,7 @@ class Blueprint implements Responsable
      *
      * @return array|null
      */
-    public function getFilters():? array
+    public function getFilters(): ? array
     {
         return $this->filters;
     }
@@ -117,9 +165,32 @@ class Blueprint implements Responsable
      *
      * @return array|null
      */
-    public function getSorts():? array
+    public function getSorts(): ? array
     {
         return $this->sorts;
+    }
+
+    /**
+     * Get the default value for limit.
+     *
+     * @return null|int
+     */
+    public function getLimitDefault(): ? int
+    {
+        if($this->limitDefault !== null){
+            return $this->limitDefault;
+        }
+        return $this->limitMax;
+    }
+
+    /**
+     * Get the maximum value for limit.
+     *
+     * @return null|int
+     */
+    public function getLimitMax(): ? int
+    {
+        return $this->limitMax;
     }
 
     /**
@@ -144,6 +215,10 @@ class Blueprint implements Responsable
             'fields' => $this->fieldsToArray(),
             'filters' => $this->filtersToArray(),
             'sorts' => $this->sortsToArray(),
+            'limit' => [
+                'default' => ($this->getLimitDefault() === null ? 'Unlimited.' : $this->getLimitDefault()),
+                'max' => ($this->getLimitMax() === null ? 'Unlimited.' : $this->getLimitMax()),
+            ],
         ];
     }
 
@@ -154,7 +229,7 @@ class Blueprint implements Responsable
      */
     protected function fieldsToArray()
     {
-        if($this->fields === null){
+        if ($this->fields === null) {
             return 'Not defined.';
         }
 
@@ -167,7 +242,6 @@ class Blueprint implements Responsable
         }
 
         return $result;
-
     }
 
     /**
@@ -177,7 +251,7 @@ class Blueprint implements Responsable
      */
     protected function filtersToArray()
     {
-        if($this->filters === null){
+        if ($this->filters === null) {
             return 'Not defined.';
         }
 
@@ -190,7 +264,6 @@ class Blueprint implements Responsable
         }
 
         return $result;
-
     }
 
     /**
@@ -200,7 +273,7 @@ class Blueprint implements Responsable
      */
     protected function sortsToArray()
     {
-        if($this->sorts === null){
+        if ($this->sorts === null) {
             return 'Not defined.';
         }
 
@@ -212,6 +285,5 @@ class Blueprint implements Responsable
         }
 
         return $result;
-
     }
 }

@@ -9,8 +9,8 @@ class SongJoryBuilderWithBeforeQueryBuildOffsetLimitHook extends JoryBuilder
 {
     protected function beforeQueryBuild($query, Jory $jory)
     {
-        $query->offset(2)->limit(3);
-
         parent::beforeQueryBuild($query, $jory);
+
+        $query->offset(2)->limit(3);
     }
 }

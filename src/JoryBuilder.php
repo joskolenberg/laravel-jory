@@ -548,14 +548,9 @@ class JoryBuilder implements Responsable
      * @param $query
      * @param int|null $offset
      * @param int|null $limit
-     * @throws LaravelJoryCallException
      */
     protected function applyOffsetAndLimit($query, int $offset = null, int $limit = null): void
     {
-        // When setting an offset a limit is required in SQL
-        if ($offset !== null && $limit === null) {
-            throw new LaravelJoryCallException(['An offset cannot be set without a limit.'], 'An offset cannot be set without a limit.');
-        }
         if ($offset !== null) {
             // Check on null, so even 0 will be applied.
             // In case a default is set in beforeQueryBuild()
@@ -625,6 +620,9 @@ class JoryBuilder implements Responsable
     protected function beforeQueryBuild($query, Jory $jory)
     {
         $this->selectOnlyRootTable($query);
+        if($this->blueprint->getLimitDefault() !== null){
+            $query->limit($this->blueprint->getLimitDefault());
+        }
     }
 
     /**

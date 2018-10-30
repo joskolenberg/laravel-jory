@@ -18,5 +18,7 @@ class SongJoryBuilderWithBlueprint extends JoryBuilder
 
         $blueprint->sort('title')->description('Order by the title.');
         $blueprint->sort('id');
+
+        $blueprint->limitDefault(50)->limitMax(250);
     }
 }

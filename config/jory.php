@@ -75,5 +75,25 @@ return [
 
         ],
 
+        'limit' => [
+
+            /*
+            |--------------------------------------------------------------------------
+            | Limit default & max
+            |--------------------------------------------------------------------------
+            |
+            | Here you can set how much records should be returned by default.
+            | The max parameter is the maximum value a client can set
+            | for the limit parameter in the request.
+            |
+            */
+
+
+            'default' => 100,
+
+            'max' => 1000,
+
+        ],
+
     ],
 ];
