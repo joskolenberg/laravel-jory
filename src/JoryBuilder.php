@@ -204,10 +204,14 @@ class JoryBuilder implements Responsable
 
         $jory = $this->getJory();
 
+        $this->beforeQueryBuild($query, $jory, true);
+
         // Apply filters if there are any
         if ($jory->getFilter()) {
             $this->applyFilter($query, $jory->getFilter());
         }
+
+        $this->afterQueryBuild($query, $jory, true);
 
         return $query->count();
     }
@@ -616,12 +620,15 @@ class JoryBuilder implements Responsable
      *
      * @param $query
      * @param \JosKolenberg\Jory\Jory $jory
+     * @param bool $count
      */
-    protected function beforeQueryBuild($query, Jory $jory)
+    protected function beforeQueryBuild($query, Jory $jory, $count = false)
     {
-        $this->selectOnlyRootTable($query);
-        if($this->blueprint->getLimitDefault() !== null){
-            $query->limit($this->blueprint->getLimitDefault());
+        if(!$count){
+            $this->selectOnlyRootTable($query);
+            if($this->blueprint->getLimitDefault() !== null){
+                $query->limit($this->blueprint->getLimitDefault());
+            }
         }
     }
 
@@ -641,8 +648,9 @@ class JoryBuilder implements Responsable
      *
      * @param $query
      * @param \JosKolenberg\Jory\Jory $jory
+     * @param bool $count
      */
-    protected function afterQueryBuild($query, Jory $jory)
+    protected function afterQueryBuild($query, Jory $jory, $count = false)
     {
 
     }

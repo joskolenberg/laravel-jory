@@ -7,7 +7,7 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 
 class SongJoryBuilderWithAfterQuerySortHook extends JoryBuilder
 {
-    protected function afterQueryBuild($query, Jory $jory)
+    protected function afterQueryBuild($query, Jory $jory, $count = false)
     {
         parent::afterQueryBuild($query, $jory);
 
