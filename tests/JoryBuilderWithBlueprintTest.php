@@ -57,7 +57,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" not available. Did you mean "title"? (Location: fields.0)',
+                'Field "titel" not available. Did you mean "title"? (Location: fields.titel)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -124,8 +124,8 @@ class JoryBuilderWithBlueprintTest extends TestCase
             'relations' => [
                 'album' => [
                     'description' => 'The album relation.',
-                    'type' => 'Not defined.',
-                ]
+                    'type' => 'album',
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
@@ -308,7 +308,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
             'relations' => [
                 'albums' => [
                     'description' => 'Get the related albums for the band.',
-                    'type' => 'Not defined.',
+                    'type' => 'album',
                 ],
                 'people' => [
                     'description' => 'The people relation.',
@@ -316,7 +316,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 ],
                 'songs' => [
                     'description' => 'The songs relation.',
-                    'type' => 'Not defined.',
+                    'type' => 'song',
                 ],
             ],
         ];
@@ -402,6 +402,24 @@ class JoryBuilderWithBlueprintTest extends TestCase
                         'not_in',
                     ],
                 ],
+                'release_date' => [
+                    'description' => 'Filter on the release_date field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
                 'number_of_songs' => [
                     'description' => 'Filter on the number_of_songs field.',
                     'operators' => [
@@ -449,6 +467,9 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 'band_id' => [
                     'description' => 'Sort by the band_id field.',
                 ],
+                'release_date' => [
+                    'description' => 'Sort by the release_date field.',
+                ],
                 'number_of_songs' => [
                     'description' => 'Sort by the number_of_songs field.',
                 ],
@@ -463,19 +484,19 @@ class JoryBuilderWithBlueprintTest extends TestCase
             'relations' => [
                 'songs' => [
                     'description' => 'The songs relation.',
-                    'type' => 'Not defined.',
+                    'type' => 'song',
                 ],
                 'band' => [
                     'description' => 'The band relation.',
-                    'type' => 'Not defined.',
+                    'type' => 'band',
                 ],
                 'cover' => [
                     'description' => 'The cover relation.',
-                    'type' => 'Not defined.',
+                    'type' => 'album-cover',
                 ],
                 'album_cover' => [
                     'description' => 'The album_cover relation.',
-                    'type' => 'Not defined.',
+                    'type' => 'album-cover',
                 ],
             ],
         ];
@@ -540,7 +561,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" is not supported for filtering. Did you mean "title"? (Location: filter)',
+                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(titel))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -555,8 +576,8 @@ class JoryBuilderWithBlueprintTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" is not supported for filtering. Did you mean "title"? (Location: filter(and).0)',
-                'Field "albumm_id" is not supported for filtering. Did you mean "album_id"? (Location: filter(and).2)',
+                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(and).0(titel))',
+                'Field "albumm_id" is not available for filtering. Did you mean "album_id"? (Location: filter(and).2(albumm_id))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -571,9 +592,9 @@ class JoryBuilderWithBlueprintTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" is not supported for filtering. Did you mean "title"? (Location: filter(and).0)',
-                'Field "albumm_id" is not supported for filtering. Did you mean "album_id"? (Location: filter(and).2)',
-                'Operator "like" is not supported by field "album_id". (Location: filter(and).3.album_id)',
+                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(and).0(titel))',
+                'Field "albumm_id" is not available for filtering. Did you mean "album_id"? (Location: filter(and).2(albumm_id))',
+                'Operator "like" is not available for field "album_id". (Location: filter(and).3(album_id))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -611,8 +632,8 @@ class JoryBuilderWithBlueprintTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "tite" is not supported for sorting. Did you mean "title"? (Location: sorts.0)',
-                'Field "if" is not supported for sorting. Did you mean "id"? (Location: sorts.1)',
+                'Field "tite" is not available for sorting. Did you mean "title"? (Location: sorts.tite)',
+                'Field "if" is not available for sorting. Did you mean "id"? (Location: sorts.if)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -946,7 +967,108 @@ class JoryBuilderWithBlueprintTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Relation "albumm" is not supported. Did you mean "album"? (Location: relations.0)',
+                'Relation "albumm" is not available. Did you mean "album"? (Location: relations.albumm)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_field_is_not_available_in_a_relation()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"]}}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_filter_is_not_available_in_a_relation()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"],"flt":{"f":"ids"}}}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
+                'Field "ids" is not available for filtering. Did you mean "id"? (Location: albums.filter(ids))',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_subfilter_is_not_available_in_a_relation()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
+                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
+                'Field "ids" is not available for filtering. Did you mean "id"? (Location: albums.filter(and).0(ids))',
+                'Field "relese_date" is not available for filtering. Did you mean "release_date"? (Location: albums.filter(and).2(relese_date))',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_requested_sort_is_not_available_in_a_relation()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"srt":["name","releese_date"],"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
+                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
+                'Field "ids" is not available for filtering. Did you mean "id"? (Location: albums.filter(and).0(ids))',
+                'Field "relese_date" is not available for filtering. Did you mean "release_date"? (Location: albums.filter(and).2(relese_date))',
+                'Field "releese_date" is not available for sorting. Did you mean "release_date"? (Location: albums.sorts.releese_date)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_limit_is_exceeded_in_a_relation()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
+                'The maximum limit for this resource is 1000, please lower your limit or drop the limit parameter. (Location: albums.limit)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_a_relation_is_available_in_a_relation()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134,"rlt":{"band":{},"songgs":{}}}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
+                'The maximum limit for this resource is 1000, please lower your limit or drop the limit parameter. (Location: albums.limit)',
+                'Relation "songgs" is not available. Did you mean "songs"? (Location: albums.relations.songgs)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);

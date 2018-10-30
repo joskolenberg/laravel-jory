@@ -19,6 +19,11 @@ class Relation
     /**
      * @var string
      */
+    protected $modelClass;
+
+    /**
+     * @var string
+     */
     protected $type;
 
     /**
@@ -30,10 +35,12 @@ class Relation
      * Relation constructor.
      *
      * @param string $name
+     * @param string $modelClass
      */
-    public function __construct(string $name)
+    public function __construct(string $name, string $modelClass)
     {
         $this->name = $name;
+        $this->modelClass = $modelClass;
     }
 
     /**
@@ -84,6 +91,16 @@ class Relation
     }
 
     /**
+     * Get the related model class.
+     *
+     * @return string
+     */
+    public function getModelClass(): string
+    {
+        return $this->modelClass;
+    }
+
+    /**
      * Get the related model type.
      *
      * @return string
@@ -91,7 +108,16 @@ class Relation
     public function getType(): string
     {
         if ($this->type === null) {
-            return 'Not defined.';
+            $registered = config('jory.routes');
+            $type = null;
+            foreach ($registered as $key => $className) {
+                if($this->modelClass === $className){
+                    $type = $key;
+                    break;
+                }
+            }
+
+            return $type ? $type : 'Not defined.';
         }
 
         return $this->type;

@@ -3,7 +3,10 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Blueprint\Blueprint;
+use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class BandJoryBuilder extends JoryBuilder
 {
@@ -42,8 +45,8 @@ class BandJoryBuilder extends JoryBuilder
 
         $blueprint->limitDefault(30)->limitMax(120);
 
-        $blueprint->relation('albums')->description('Get the related albums for the band.');
-        $blueprint->relation('people')->type('person');
-        $blueprint->relation('songs');
+        $blueprint->relation('albums', Album::class)->description('Get the related albums for the band.');
+        $blueprint->relation('people', Person::class)->type('person');
+        $blueprint->relation('songs', Song::class);
     }
 }

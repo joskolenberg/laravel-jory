@@ -144,11 +144,12 @@ class Blueprint implements Responsable
      * Add a relation to the blueprint.
      *
      * @param string $name
+     * @param string $modelClass
      * @return Relation
      */
-    public function relation(string $name): Relation
+    public function relation(string $name, string $modelClass): Relation
     {
-        $relation = new Relation($name);
+        $relation = new Relation($name, $modelClass);
         if ($this->relations === null) {
             $this->relations = [];
         }

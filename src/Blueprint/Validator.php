@@ -63,6 +63,7 @@ class Validator
         $this->validateSorts();
         $this->validateOffsetLimit();
         $this->validateRelations();
+        $this->validateSubJories();
 
         if (count($this->errors) > 0) {
             throw new LaravelJoryCallException($this->errors);
@@ -85,9 +86,9 @@ class Validator
             $availableFields[] = $field->getField();
         }
 
-        foreach ($this->jory->getFields() as $key => $joryField) {
+        foreach ($this->jory->getFields() as $joryField) {
             if (! in_array($joryField, $availableFields)) {
-                $this->errors[] = 'Field "'.$joryField.'" not available. Did you mean "'.$this->getSuggestion($availableFields, $joryField).'"? (Location: '.$this->address.'fields.'.$key.')';
+                $this->errors[] = 'Field "'.$joryField.'" not available. Did you mean "'.$this->getSuggestion($availableFields, $joryField).'"? (Location: '.$this->address.'fields.'.$joryField.')';
             }
         }
     }
@@ -135,7 +136,7 @@ class Validator
         foreach ($blueprintFilters as $blueprintFilter) {
             if ($blueprintFilter->getField() === $joryFilter->getField()) {
                 if ($joryFilter->getOperator() !== null &&  ! in_array($joryFilter->getOperator(), $blueprintFilter->getOperators())) {
-                    $this->errors[] = 'Operator "'.$joryFilter->getOperator().'" is not supported by field "'.$joryFilter->getField().'". (Location: '.$address.'.'.$joryFilter->getField().')';
+                    $this->errors[] = 'Operator "'.$joryFilter->getOperator().'" is not available for field "'.$joryFilter->getField().'". (Location: '.$address.'('.$joryFilter->getField().'))';
                 }
 
                 return;
@@ -147,7 +148,7 @@ class Validator
         foreach ($blueprintFilters as $bpf) {
             $availableFields[] = $bpf->getField();
         }
-        $this->errors[] = 'Field "'.$joryFilter->getField().'" is not supported for filtering. Did you mean "'.$this->getSuggestion($availableFields, $joryFilter->getField()).'"? (Location: '.$address.')';
+        $this->errors[] = 'Field "'.$joryFilter->getField().'" is not available for filtering. Did you mean "'.$this->getSuggestion($availableFields, $joryFilter->getField()).'"? (Location: '.$address.'('.$joryFilter->getField().'))';
     }
 
     /**
@@ -166,9 +167,9 @@ class Validator
             $availableFields[] = $sort->getField();
         }
 
-        foreach ($this->jory->getSorts() as $key => $jorySort) {
+        foreach ($this->jory->getSorts() as $jorySort) {
             if (! in_array($jorySort->getField(), $availableFields)) {
-                $this->errors[] = 'Field "'.$jorySort->getField().'" is not supported for sorting. Did you mean "'.$this->getSuggestion($availableFields, $jorySort->getField()).'"? (Location: '.$this->address.'sorts.'.$key.')';
+                $this->errors[] = 'Field "'.$jorySort->getField().'" is not available for sorting. Did you mean "'.$this->getSuggestion($availableFields, $jorySort->getField()).'"? (Location: '.$this->address.'sorts.'.$jorySort->getField().')';
             }
         }
     }
@@ -204,9 +205,36 @@ class Validator
             $availableRelations[] = $relation->getName();
         }
 
-        foreach ($this->jory->getRelations() as $key => $joryRelation) {
+        foreach ($this->jory->getRelations() as $joryRelation) {
             if (! in_array($joryRelation->getName(), $availableRelations)) {
-                $this->errors[] = 'Relation "'.$joryRelation->getName().'" is not supported. Did you mean "'.$this->getSuggestion($availableRelations, $joryRelation->getName()).'"? (Location: '.$this->address.'relations.'.$key.')';
+                $this->errors[] = 'Relation "'.$joryRelation->getName().'" is not available. Did you mean "'.$this->getSuggestion($availableRelations, $joryRelation->getName()).'"? (Location: '.$this->address.'relations.'.$joryRelation->getName().')';
+            }
+        }
+    }
+
+    protected function validateSubJories(): void
+    {
+        if ($this->blueprint->getRelations() === null) {
+            // No relations specified in blueprint, perform no validation
+            return;
+        }
+
+        foreach ($this->jory->getRelations() as $joryRelation) {
+            $relatedBlueprint = null;
+            foreach ($this->blueprint->getRelations() as $blueprintRelation) {
+                if($joryRelation->getName() === $blueprintRelation->getName()){
+                    $relatedModelClass = $blueprintRelation->getModelClass();
+                    $relatedBlueprint = $relatedModelClass::getJoryBuilder()->getBlueprint();
+                }
+            }
+            if($relatedBlueprint === null){
+                break;
+            }
+
+            try{
+                (new Validator($relatedBlueprint, $joryRelation->getJory(), ($this->address ? $this->address . '.' : '') . $joryRelation->getName() . '.'))->validate();
+            }catch (LaravelJoryCallException $e){
+                $this->errors = array_merge($this->errors, $e->getErrors());
             }
         }
     }

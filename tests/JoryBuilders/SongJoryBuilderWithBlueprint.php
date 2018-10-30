@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Blueprint\Blueprint;
 
 class SongJoryBuilderWithBlueprint extends JoryBuilder
@@ -21,6 +22,6 @@ class SongJoryBuilderWithBlueprint extends JoryBuilder
 
         $blueprint->limitDefault(50)->limitMax(250);
 
-        $blueprint->relation('album');
+        $blueprint->relation('album', Album::class);
     }
 }
