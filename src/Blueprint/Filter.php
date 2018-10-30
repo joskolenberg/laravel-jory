@@ -34,7 +34,7 @@ class Filter
     public function __construct(string $field)
     {
         $this->field = $field;
-        $this->operators = config('jory.blueprint.filters.operators');
+        $this->operators = config('jory.filters.operators');
     }
 
     /**

@@ -56,8 +56,8 @@ class Blueprint implements Responsable
      */
     public function __construct()
     {
-        $this->limitDefault = config('jory.blueprint.limit.default');
-        $this->limitMax = config('jory.blueprint.limit.max');
+        $this->limitDefault = config('jory.limit.default');
+        $this->limitMax = config('jory.limit.max');
     }
 
     /**

@@ -94,6 +94,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
                         '>=',
                         '<',
                         '<=',
+                        '<=>',
                         'like',
                         'null',
                         'not_null',

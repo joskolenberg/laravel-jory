@@ -17,8 +17,7 @@ return [
     |
     */
 
-    'routes' => [
-        //'user' => \App\User::class,
+    'routes' => [//'user' => \App\User::class,
     ],
 
     /*
@@ -35,65 +34,51 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Blueprint
+    | Filter operators
     |--------------------------------------------------------------------------
     |
-    | Here are some settings used as the standard implementation in
-    | blueprints. You can override these for a resource by setting
-    | a value in the JoryBuilder's blueprint.
+    | Here you can define which operators are
+    | available by default for any filter.
     |
     */
 
-    'blueprint' => [
+    'filters' => [
 
-        'filters' => [
-
-            /*
-            |--------------------------------------------------------------------------
-            | Operators
-            |--------------------------------------------------------------------------
-            |
-            | Here you can define which operators are
-            | available by default for any filter.
-            |
-            */
-
-            'operators' => [
-                '=',
-                '!=',
-                '<>',
-                '>',
-                '>=',
-                '<',
-                '<=',
-                'like',
-                'null',
-                'not_null',
-                'in',
-                'not_in',
-            ],
-
-        ],
-
-        'limit' => [
-
-            /*
-            |--------------------------------------------------------------------------
-            | Limit default & max
-            |--------------------------------------------------------------------------
-            |
-            | Here you can set how much records should be returned by default.
-            | The max parameter is the maximum value a client can set
-            | for the limit parameter in the request.
-            |
-            */
-
-
-            'default' => 100,
-
-            'max' => 1000,
-
+        'operators' => [
+            '=',
+            '!=',
+            '<>',
+            '>',
+            '>=',
+            '<',
+            '<=',
+            '<=>',
+            'like',
+            'null',
+            'not_null',
+            'in',
+            'not_in',
         ],
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Limit default & max
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set how much records should be returned by default.
+    | The max parameter is the maximum value a client can set
+    | for the limit parameter in the request.
+    |
+    */
+
+    'limit' => [
+
+        'default' => 100,
+
+        'max' => 1000,
+
+    ],
+
 ];
