@@ -17,9 +17,19 @@ class Sort
     protected $field;
 
     /**
-     * @var null
+     * @var null|string
      */
     protected $description = null;
+
+    /**
+     * @var null|int
+     */
+    protected $defaultIndex = null;
+
+    /**
+     * @var null|int
+     */
+    protected $defaultOrder = 'asc';
 
     /**
      * Sort constructor.
@@ -64,5 +74,41 @@ class Sort
             return "Sort by the " . $this->field . " field.";
         }
         return $this->description;
+    }
+
+    /**
+     * Mark this sort to be applied by default.
+     *
+     * @param int $index
+     * @param string $order
+     * @return Sort
+     */
+    public function default(int $index = 0, string $order = 'asc'): self
+    {
+        $this->defaultIndex = $index;
+        $this->defaultOrder = $order;
+
+        return $this;
+    }
+
+    /**
+     * Get the index for default sorting.
+     * Null means there won't be sorted on this field by default.
+     *
+     * @return int|null
+     */
+    public function getDefaultIndex(): ? int
+    {
+        return $this->defaultIndex;
+    }
+
+    /**
+     * Get the sort order ('asc' or 'desc') if this sort needs to be applied by default.
+     *
+     * @return string|null
+     */
+    public function getDefaultOrder(): string
+    {
+        return $this->defaultOrder;
     }
 }

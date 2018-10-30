@@ -652,7 +652,9 @@ class JoryBuilder implements Responsable
      */
     protected function afterQueryBuild($query, Jory $jory, $count = false)
     {
-
+        if(!$count){
+            $this->applyDefaultSortsFromBlueprint($query);
+        }
     }
 
     /**
@@ -797,5 +799,27 @@ class JoryBuilder implements Responsable
         }
 
         return $jory;
+    }
+
+    /**
+     * Apply any the sorts marked as default in the blueprint on the query.
+     *
+     * @param $query
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     */
+    protected function applyDefaultSortsFromBlueprint($query): void
+    {
+        $defaultSorts = [];
+        if ($this->blueprint->getSorts() !== null) {
+            foreach ($this->blueprint->getSorts() as $sort) {
+                if ($sort->getDefaultIndex() !== null) {
+                    $defaultSorts[$sort->getDefaultIndex()] = new Sort($sort->getField(), $sort->getDefaultOrder());
+                }
+            }
+            ksort($defaultSorts);
+            foreach ($defaultSorts as $sort) {
+                $this->applySort($query, $sort);
+            }
+        }
     }
 }

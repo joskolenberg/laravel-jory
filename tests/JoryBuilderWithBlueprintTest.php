@@ -112,9 +112,11 @@ class JoryBuilderWithBlueprintTest extends TestCase
             'sorts' => [
                 'title' => [
                     'description' => 'Order by the title.',
+                    'default' => false,
                 ],
                 'id' => [
                     'description' => 'Sort by the id field.',
+                    'default' => false,
                 ],
             ],
             'limit' => [
@@ -157,7 +159,16 @@ class JoryBuilderWithBlueprintTest extends TestCase
         $expected = [
             'fields' => 'Not defined.',
             'filters' => 'Not defined.',
-            'sorts' => 'Not defined.',
+            'sorts' => [
+                'title' => [
+                    'description' => 'Sort by the title field.',
+                    'default' => 'index 2, desc',
+                ],
+                'album_name' => [
+                    'description' => 'Sort by the album_name field.',
+                    'default' => 'index 1, asc',
+                ],
+            ],
             'limit' => [
                 'default' => 10,
                 'max' => 10,
@@ -284,15 +295,19 @@ class JoryBuilderWithBlueprintTest extends TestCase
             'sorts' => [
                 'id' => [
                     'description' => 'Sort by the id field.',
+                    'default' => false,
                 ],
                 'name' => [
                     'description' => 'Sort by the name field.',
+                    'default' => false,
                 ],
                 'year_start' => [
                     'description' => 'Sort by the year_start field.',
+                    'default' => false,
                 ],
                 'year_end' => [
                     'description' => 'Sort by the year_end field.',
+                    'default' => false,
                 ],
             ],
             'limit' => [
@@ -454,21 +469,27 @@ class JoryBuilderWithBlueprintTest extends TestCase
             'sorts' => [
                 'id' => [
                     'description' => 'Sort by the id field.',
+                    'default' => false,
                 ],
                 'name' => [
                     'description' => 'Sort by the name field.',
+                    'default' => false,
                 ],
                 'band_id' => [
                     'description' => 'Sort by the band_id field.',
+                    'default' => false,
                 ],
                 'release_date' => [
                     'description' => 'Sort by the release_date field.',
+                    'default' => false,
                 ],
                 'number_of_songs' => [
                     'description' => 'Sort by the number_of_songs field.',
+                    'default' => false,
                 ],
                 'band_name' => [
                     'description' => 'Sort by the band_name field.',
+                    'default' => false,
                 ],
             ],
             'limit' => [
@@ -865,7 +886,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
     }
 
     /** @test */
-    public function it_applies_the_max_limit_as_default_when_only_the_max_is_given()
+    public function it_applies_the_max_limit_as_default_when_only_the_max_is_given_and_applies_default_sorts()
     {
         $response = $this->json('GET', 'song-three', [
             'jory' => '{"fld":["title"]}',
@@ -874,34 +895,34 @@ class JoryBuilderWithBlueprintTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'title' => 'Gimme Shelter',
+                    'title' => 'You Never Give Me Your Money',
                 ],
                 [
-                    'title' => 'Love In Vain (Robert Johnson)',
+                    'title' => 'The End',
                 ],
                 [
-                    'title' => 'Country Honk',
+                    'title' => 'Sun King',
                 ],
                 [
-                    'title' => 'Live With Me',
+                    'title' => 'Something',
                 ],
                 [
-                    'title' => 'Let It Bleed',
+                    'title' => 'She Came in Through the Bathroom Window',
                 ],
                 [
-                    'title' => 'Midnight Rambler',
+                    'title' => 'Polythene Pam',
                 ],
                 [
-                    'title' => 'You Got The Silver',
+                    'title' => 'Oh! Darling',
                 ],
                 [
-                    'title' => 'Monkey Man',
+                    'title' => 'Octopus\'s Garden',
                 ],
                 [
-                    'title' => 'You Can\'t Always Get What You Want',
+                    'title' => 'Mean Mr. Mustard',
                 ],
                 [
-                    'title' => 'Brown Sugar',
+                    'title' => 'Maxwell\'s Silver Hammer',
                 ],
             ],
         ];

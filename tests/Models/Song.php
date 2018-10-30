@@ -26,4 +26,9 @@ class Song extends Model
             $query->where('name', $operator, $value);
         });
     }
+
+    public function scopeAlbumNameSort($query, string $order)
+    {
+        $query->join('albums', 'songs.album_id', 'albums.id')->orderBy('albums.name', $order);
+    }
 }

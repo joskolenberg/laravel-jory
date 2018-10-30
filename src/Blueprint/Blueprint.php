@@ -327,6 +327,7 @@ class Blueprint implements Responsable
         foreach ($this->getSorts() as $sort) {
             $result[$sort->getField()] = [
                 'description' => $sort->getDescription(),
+                'default' => ($sort->getDefaultIndex() === null ? false : 'index ' . $sort->getDefaultIndex() . ', ' . $sort->getDefaultOrder()),
             ];
         }
 
