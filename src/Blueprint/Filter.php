@@ -89,7 +89,7 @@ class Filter
     public function getDescription(): string
     {
         if($this->description === null){
-            return "Not defined.";
+            return "Filter on the " . $this->field . " field.";
         }
         return $this->description;
     }

@@ -141,6 +141,19 @@ class Blueprint implements Responsable
     }
 
     /**
+     * Add a relation to the blueprint.
+     *
+     * @param string $name
+     * @return Relation
+     */
+    public function relation(string $name): Relation
+    {
+        $relation = new Relation($name);
+        $this->relations[] = $relation;
+        return $relation;
+    }
+
+    /**
      * Get the fields in the blueprint.
      *
      * @return array|null
@@ -219,6 +232,7 @@ class Blueprint implements Responsable
                 'default' => ($this->getLimitDefault() === null ? 'Unlimited.' : $this->getLimitDefault()),
                 'max' => ($this->getLimitMax() === null ? 'Unlimited.' : $this->getLimitMax()),
             ],
+            'relations' => $this->relationsToArray(),
         ];
     }
 
@@ -281,6 +295,24 @@ class Blueprint implements Responsable
         foreach ($this->sorts as $sort) {
             $result[$sort->getField()] = [
                 'description' => $sort->getDescription(),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Turn the relations part of the blueprint into an array.
+     *
+     * @return array|string
+     */
+    protected function relationsToArray()
+    {
+        $result = [];
+        foreach ($this->relations as $relation) {
+            $result[$relation->getName()] = [
+                'description' => $relation->getDescription(),
+                'type' => $relation->getType(),
             ];
         }
 

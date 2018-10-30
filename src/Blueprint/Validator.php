@@ -133,7 +133,7 @@ class Validator
         // It is a filter on a field, do validation on field an operator
         foreach ($blueprintFilters as $blueprintFilter) {
             if ($blueprintFilter->getField() === $joryFilter->getField()) {
-                if (! in_array($joryFilter->getOperator(), $blueprintFilter->getOperators())) {
+                if ($joryFilter->getOperator() !== null &&  ! in_array($joryFilter->getOperator(), $blueprintFilter->getOperators())) {
                     $this->errors[] = 'Operator "'.$joryFilter->getOperator().'" is not supported by field "'.$joryFilter->getField().'". (Location: '.$address.'.'.$joryFilter->getField().')';
                 }
 
@@ -141,7 +141,7 @@ class Validator
             }
         }
 
-        // When we get here the field was not ound in the blueprint
+        // When we get here the field was not found in the blueprint
         $availableFields = [];
         foreach ($blueprintFilters as $bpf) {
             $availableFields[] = $bpf->getField();

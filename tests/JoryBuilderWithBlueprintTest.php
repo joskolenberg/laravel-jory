@@ -71,7 +71,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
         $expected = [
             'fields' => [
                 'id' => [
-                    'description' => 'Not defined.',
+                    'description' => 'The id field.',
                     'show_by_default' => true,
                 ],
                 'title' => [
@@ -79,7 +79,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
                     'show_by_default' => true,
                 ],
                 'album_id' => [
-                    'description' => 'Not defined.',
+                    'description' => 'The album_id field.',
                     'show_by_default' => false,
                 ],
             ],
@@ -114,13 +114,14 @@ class JoryBuilderWithBlueprintTest extends TestCase
                     'description' => 'Order by the title.',
                 ],
                 'id' => [
-                    'description' => 'Not defined.',
+                    'description' => 'Sort by the id field.',
                 ],
             ],
             'limit' => [
                 'default' => 50,
                 'max' => 250,
             ],
+            'relations' => [],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
@@ -138,6 +139,7 @@ class JoryBuilderWithBlueprintTest extends TestCase
                 'default' => 'Unlimited.',
                 'max' => 'Unlimited.',
             ],
+            'relations' => [],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
@@ -154,6 +156,322 @@ class JoryBuilderWithBlueprintTest extends TestCase
             'limit' => [
                 'default' => 10,
                 'max' => 10,
+            ],
+            'relations' => [],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_show_the_options_for_the_resource_4()
+    {
+        $response = $this->json('OPTIONS', 'jory/band');
+
+        $expected = [
+            'fields' => [
+                'id' => [
+                    'description' => 'The id field.',
+                    'show_by_default' => true,
+                ],
+                'name' => [
+                    'description' => 'The name field.',
+                    'show_by_default' => true,
+                ],
+                'year_start' => [
+                    'description' => 'The year in which the band started.',
+                    'show_by_default' => true,
+                ],
+                'year_end' => [
+                    'description' => 'The year in which the band quitted, could be null if band still exists.',
+                    'show_by_default' => true,
+                ],
+            ],
+            'filters' => [
+                'id' => [
+                    'description' => 'Filter on the id field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'name' => [
+                    'description' => 'Filter on the name field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'year_start' => [
+                    'description' => 'Filter on the year_start field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'year_end' => [
+                    'description' => 'Filter on the year_end field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'has_album_with_name' => [
+                    'description' => 'Filter bands that have an album with a given name.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'number_of_albums_in_year' => [
+                    'description' => 'Filter the bands that released a given number of albums in a year, pass value and year parameter.',
+                    'operators' => ["=", ">", "<", "<=", ">=", "<>", "!="],
+                ],
+            ],
+            'sorts' => [
+                'id' => [
+                    'description' => 'Sort by the id field.',
+                ],
+                'name' => [
+                    'description' => 'Sort by the name field.',
+                ],
+                'year_start' => [
+                    'description' => 'Sort by the year_start field.',
+                ],
+                'year_end' => [
+                    'description' => 'Sort by the year_end field.',
+                ],
+            ],
+            'limit' => [
+                'default' => 30,
+                'max' => 120,
+            ],
+            'relations' => [
+                'albums' => [
+                    'description' => 'Get the related albums for the band.',
+                    'type' => 'Not defined.',
+                ],
+                'people' => [
+                    'description' => 'The people relation.',
+                    'type' => 'person',
+                ],
+                'songs' => [
+                    'description' => 'The songs relation.',
+                    'type' => 'Not defined.',
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_show_the_options_for_the_resource_5()
+    {
+        $response = $this->json('OPTIONS', 'jory/album');
+
+        $expected = [
+            'fields' => [
+                'id' => [
+                    'description' => 'The id field.',
+                    'show_by_default' => true,
+                ],
+                'name' => [
+                    'description' => 'The name field.',
+                    'show_by_default' => true,
+                ],
+                'band_id' => [
+                    'description' => 'The band_id field.',
+                    'show_by_default' => true,
+                ],
+                'release_date' => [
+                    'description' => 'The release_date field.',
+                    'show_by_default' => true,
+                ],
+            ],
+            'filters' => [
+                'id' => [
+                    'description' => 'Filter on the id field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'name' => [
+                    'description' => 'Filter on the name field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'band_id' => [
+                    'description' => 'Filter on the band_id field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'number_of_songs' => [
+                    'description' => 'Filter on the number_of_songs field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                'has_song_with_title' => [
+                    'description' => 'Filter on the has_song_with_title field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+            ],
+            'sorts' => [
+                'id' => [
+                    'description' => 'Sort by the id field.',
+                ],
+                'name' => [
+                    'description' => 'Sort by the name field.',
+                ],
+                'band_id' => [
+                    'description' => 'Sort by the band_id field.',
+                ],
+                'number_of_songs' => [
+                    'description' => 'Sort by the number_of_songs field.',
+                ],
+                'band_name' => [
+                    'description' => 'Sort by the band_name field.',
+                ],
+            ],
+            'limit' => [
+                'default' => 100,
+                'max' => 1000,
+            ],
+            'relations' => [
+                'songs' => [
+                    'description' => 'The songs relation.',
+                    'type' => 'Not defined.',
+                ],
+                'band' => [
+                    'description' => 'The band relation.',
+                    'type' => 'Not defined.',
+                ],
+                'cover' => [
+                    'description' => 'The cover relation.',
+                    'type' => 'Not defined.',
+                ],
+                'album_cover' => [
+                    'description' => 'The album_cover relation.',
+                    'type' => 'Not defined.',
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);

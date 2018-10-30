@@ -77,7 +77,7 @@ class Field
     public function getDescription(): string
     {
         if($this->description === null){
-            return "Not defined.";
+            return "The " . $this->field . " field.";
         }
         return $this->description;
     }
