@@ -3,6 +3,8 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Blueprint\Sort;
+use JosKolenberg\LaravelJory\Blueprint\Filter;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Blueprint\Blueprint;
 
@@ -10,15 +12,23 @@ class SongJoryBuilderWithBlueprint extends JoryBuilder
 {
     protected function blueprint(Blueprint $blueprint): void
     {
-        $blueprint->field('id');
-        $blueprint->field('title')->description('The songs title.');
-        $blueprint->field('album_id')->hideByDefault();
+        $blueprint->field('id')
+            ->sortable();
 
-        $blueprint->filter('title')->description('Filter on the title.');
-        $blueprint->filter('album_id')->description('Filter on the album id.')->operators(['=']);
+        $blueprint->field('title')
+            ->description('The songs title.')
+            ->filterable(function (Filter $filter){
+                $filter->description('Filter on the title.');
+            })
+            ->sortable(function(Sort $sort){
+                $sort->description('Order by the title.');
+            });
 
-        $blueprint->sort('title')->description('Order by the title.');
-        $blueprint->sort('id');
+        $blueprint->field('album_id')
+            ->hideByDefault()
+            ->filterable(function(Filter $filter){
+                $filter->description('Filter on the album id.')->operators(['=']);
+            });
 
         $blueprint->limitDefault(50)->limitMax(250);
 

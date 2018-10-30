@@ -174,7 +174,16 @@ class Blueprint implements Responsable
      */
     public function getFilters(): ? array
     {
-        return $this->filters;
+        $filters = $this->filters;
+
+        if($this->fields !== null){
+            foreach ($this->fields as $field){
+                if($field->getFilter() !== null){
+                    $filters[] = $field->getFilter();
+                }
+            }
+        }
+        return $filters;
     }
 
     /**
@@ -184,7 +193,16 @@ class Blueprint implements Responsable
      */
     public function getSorts(): ? array
     {
-        return $this->sorts;
+        $sorts = $this->sorts;
+
+        if($this->fields !== null){
+            foreach ($this->fields as $field){
+                if($field->getSort() !== null){
+                    $sorts[] = $field->getSort();
+                }
+            }
+        }
+        return $sorts;
     }
 
     /**
@@ -279,12 +297,12 @@ class Blueprint implements Responsable
      */
     protected function filtersToArray()
     {
-        if ($this->filters === null) {
+        if ($this->getFilters() === null) {
             return 'Not defined.';
         }
 
         $result = [];
-        foreach ($this->filters as $filter) {
+        foreach ($this->getFilters() as $filter) {
             $result[$filter->getField()] = [
                 'description' => $filter->getDescription(),
                 'operators' => $filter->getOperators(),
@@ -301,12 +319,12 @@ class Blueprint implements Responsable
      */
     protected function sortsToArray()
     {
-        if ($this->sorts === null) {
+        if ($this->getSorts() === null) {
             return 'Not defined.';
         }
 
         $result = [];
-        foreach ($this->sorts as $sort) {
+        foreach ($this->getSorts() as $sort) {
             $result[$sort->getField()] = [
                 'description' => $sort->getDescription(),
             ];

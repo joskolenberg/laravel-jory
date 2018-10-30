@@ -27,6 +27,16 @@ class Field
     protected $description = null;
 
     /**
+     * @var null|Filter
+     */
+    protected $filter = null;
+
+    /**
+     * @var null|Sort
+     */
+    protected $sort = null;
+
+    /**
      * Field constructor.
      *
      * @param string $field
@@ -90,6 +100,60 @@ class Field
     public function isShownByDefault(): bool
     {
         return $this->showByDefault;
+    }
+
+    /**
+     * Mark this field to be filterable.
+     *
+     * @param null $callback
+     * @return Field
+     */
+    public function filterable($callback = null): self
+    {
+        $this->filter = new Filter($this->field);
+
+        if(is_callable($callback)){
+            call_user_func($callback, $this->filter);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the filter.
+     *
+     * @return Filter|null
+     */
+    public function getFilter(): ? Filter
+    {
+        return $this->filter;
+    }
+
+    /**
+     * Mark this field to be sortable.
+     *
+     * @param null $callback
+     * @return Field
+     */
+    public function sortable($callback = null): self
+    {
+        $this->sort = new Sort($this->field);
+
+        if(is_callable($callback)){
+            call_user_func($callback, $this->sort);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the sort.
+     *
+     * @return Sort|null
+     */
+    public function getSort(): ? Sort
+    {
+        return $this->sort;
     }
 
 }
