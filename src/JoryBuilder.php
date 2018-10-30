@@ -22,7 +22,6 @@ use JosKolenberg\LaravelJory\Blueprint\Validator;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
-use JosKolenberg\LaravelJory\Blueprint\BlueprintApplier;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
@@ -222,7 +221,7 @@ class JoryBuilder implements Responsable
      */
     public function toArray(): ?array
     {
-        $jory = $this->getJory();
+        $jory = $this->getJoryForArrayExport();
 
         if ($this->first) {
             $model = $this->getFirst();
@@ -688,9 +687,6 @@ class JoryBuilder implements Responsable
         if ($this->joryParser) {
             $jory = $this->joryParser->getJory();
 
-            // Apply any default settings in the blueprint to the Jory
-            (new BlueprintApplier($this->blueprint, $jory))->apply();
-
             $this->jory = $jory;
             return $this->jory;
         }
@@ -746,5 +742,54 @@ class JoryBuilder implements Responsable
     public function getBlueprint(): Blueprint
     {
         return $this->blueprint;
+    }
+
+    /**
+     * Get a new Jory object with only fields and relations based on
+     * the original Jory in the request and the JoryBuilder's blueprint.
+     *
+     * This new Jory will be used to export the models to arrays.
+     *
+     * @return \JosKolenberg\Jory\Jory
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     */
+    protected function getJoryForArrayExport()
+    {
+        $jory = new Jory();
+
+        $originalJory = $this->getJory();
+
+        if($originalJory->getFields() !== null){
+            // There are fields specified in the request, use these
+            $jory->setFields($originalJory->getFields());
+        } elseif ($this->blueprint->getFields() !== null){
+            // No fields set in the request, but there are fields
+            // specified in the blueprint, than we will update the fields
+            // with the ones to be shown by default.
+            $defaultFields = [];
+            foreach ($this->blueprint->getFields() as $field){
+                if($field->isShownByDefault()){
+                    $defaultFields[] = $field->getField();
+                }
+                $jory->setFields($defaultFields);
+            }
+        }else{
+            // No fields set in request or blueprint.
+            // No action needed, the full model's toArray() result will be returned during export.
+        }
+
+        // Apply relations
+        $baseModel = $this->builder->getModel();
+        foreach ($originalJory->getRelations() as $originalRelation){
+            $relationName = camel_case($originalRelation->getName());
+            $relatedModel = $baseModel->$relationName()->getModel();
+            $relatedJoryBuilder = $relatedModel::jory();
+            $relatedJoryBuilder->applyJory($originalRelation->getJory());
+
+            $jory->addRelation(new Relation($originalRelation->getName(), $relatedJoryBuilder->getJoryForArrayExport()));
+        }
+
+        return $jory;
     }
 }
