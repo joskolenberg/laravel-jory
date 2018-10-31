@@ -38,6 +38,6 @@ class RequestParser implements JoryParserInterface
      */
     public function getJory(): Jory
     {
-        return (new JsonParser($this->request->input(config('jory.request-key'), '{}')))->getJory();
+        return (new JsonParser($this->request->input(config('jory.request.key'), '{}')))->getJory();
     }
 }

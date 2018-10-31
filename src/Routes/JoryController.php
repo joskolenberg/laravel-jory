@@ -94,6 +94,9 @@ class JoryController extends Controller
         $results = [];
         $errors = [];
 
+        $dataResponseKey = config('jory.response.data-key');
+        $errorResponseKey = config('jory.response.errors-key');
+
         foreach ($jories as $name => $json) {
             $exploded = $this->explodeResourceName($name);
             $modelName = $exploded['modelName'];
@@ -126,7 +129,8 @@ class JoryController extends Controller
 
             if ($response->getStatusCode() === 422) {
                 // Errors occurred, merge all errors into one array prefixed with the resource name
-                foreach ($response->getOriginalContent()['errors'] as $error) {
+                $currentErrors = $errorResponseKey === null ? $response->getOriginalContent() : $response->getOriginalContent()[$errorResponseKey];
+                foreach ($currentErrors as $error) {
                     $errors[] = $name.': '.$error;
                 }
 
@@ -135,17 +139,21 @@ class JoryController extends Controller
             }
 
             // Everything went well, put result into total array
-            $results[$alias] = $response->getOriginalContent()['data'];
+            $currenData = $dataResponseKey === null ? $response->getOriginalContent() : $response->getOriginalContent()[$dataResponseKey];
+            $results[$alias] = $currenData;
         }
 
         if (count($errors) > 0) {
             // If only one error occurred, return only errors
             // All data must be valid to get a 200 response
-            return response(['errors' => $errors], 422);
+
+            $response = $errorResponseKey === null ? $errors : [$errorResponseKey => $errors];
+            return response($response, 422);
         }
 
         // Everything went well, return result
-        return response(['data' => $results]);
+        $response = $dataResponseKey === null ? $results : [$dataResponseKey => $results];
+        return response($response);
     }
 
     /**

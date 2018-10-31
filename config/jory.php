@@ -22,7 +22,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Request Key
+    | Request key
     |--------------------------------------------------------------------------
     |
     | This key will be looked for to get the JSON string
@@ -30,7 +30,31 @@ return [
     |
     */
 
-    'request-key' => 'jory',
+    'request' => [
+
+        'key' => 'jory',
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Response keys
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the keys on
+    | which the data will be returned.
+    |
+    | Set to null to return data in root.
+    |
+    */
+
+    'response' => [
+
+        'data-key' => 'data',
+
+        'errors-key' => 'errors',
+
+    ],
 
     /*
     |--------------------------------------------------------------------------

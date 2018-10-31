@@ -355,14 +355,14 @@ class JoryBuilder implements Responsable
                 ],
             ], 422);
         } catch (LaravelJoryCallException $e) {
-            return response([
-                'errors' => $e->getErrors(),
-            ], 422);
+            $responseKey = $this->getErrorResponseKey();
+            $response = $responseKey === null ? $e->getErrors() : [$responseKey => $e->getErrors()];
+            return response($response, 422);
         }
 
-        return response([
-            'data' => $data,
-        ]);
+        $responseKey = $this->getDataResponseKey();
+        $response = $responseKey === null ? $data : [$responseKey => $data];
+        return response($response);
     }
 
     /**
@@ -822,5 +822,25 @@ class JoryBuilder implements Responsable
                 $this->applySort($query, $sort);
             }
         }
+    }
+
+    /**
+     * Get the key on which data should be returned.
+     *
+     * @return null|string
+     */
+    protected function getDataResponseKey()
+    {
+        return config('jory.response.data-key');
+    }
+
+    /**
+     * Get the key on which errors should be returned.
+     *
+     * @return null|string
+     */
+    protected function getErrorResponseKey()
+    {
+        return config('jory.response.errors-key');
     }
 }
