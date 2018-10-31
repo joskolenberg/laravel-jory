@@ -164,7 +164,7 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Jory string is no valid json.'
+                'Jory string is no valid json.',
             ],
         ];
 
@@ -181,7 +181,7 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Jory string is no valid json.'
+                'Jory string is no valid json.',
             ],
         ];
 
@@ -198,7 +198,7 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Jory string is no valid json.'
+                'Jory string is no valid json.',
             ],
         ];
 
@@ -215,7 +215,7 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'A filter should contain one of the these fields: "f", "field", "and", "group_and", "or" or "group_or". (Location: album.songs.filter)'
+                'A filter should contain one of the these fields: "f", "field", "and", "group_and", "or" or "group_or". (Location: album.songs.filter)',
             ],
         ];
 
@@ -235,8 +235,175 @@ class JoryRoutesTest extends TestCase
             'limit' => [
                 'default' => 100,
                 'max' => 1000,
-                ],
+            ],
             'relations' => 'Not defined.',
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_can_load_multiple_resources_at_once()
+    {
+        $response = $this->json('GET', 'jory', [
+            'band as btls' => '{"flt":{"f":"id","v":3}}',
+            'band:2 as ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%II%"}}}}',
+            'song:count as song_count' => '{"flt":{"f":"title","o":"like","v":"%Love%"}}',
+            'song as lovesongs' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":["title"],"srt":["title"]}',
+            'song' => '{"flt":{"f":"title","o":"like","v":"%Lovel%"},"fld":["title"],"srt":["title"]}',
+            'band:count' => '{"flt":{"f":"name","o":"like","v":"%r%"}}',
+            'person:3' => '{"fld":["first_name","last_name"]}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'btls' => [
+                    [
+                        'id' => 3,
+                        'name' => 'Beatles',
+                        'year_start' => 1960,
+                        'year_end' => 1970,
+                    ],
+                ],
+                'ledz' => [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                    'albums' => [
+                        [
+                            'id' => 5,
+                            'band_id' => 2,
+                            'name' => 'Led Zeppelin II',
+                            'release_date' => '1969-10-22',
+                        ],
+                        [
+                            'id' => 6,
+                            'band_id' => 2,
+                            'name' => 'Led Zeppelin III',
+                            'release_date' => '1970-10-05',
+                        ],
+                    ],
+                ],
+                'song_count' => 8,
+                'lovesongs' => [
+                    [
+                        'title' => 'And the Gods Made Love',
+                    ],
+                    [
+                        'title' => 'Bold as Love',
+                    ],
+                    [
+                        'title' => 'Little Miss Lover',
+                    ],
+                    [
+                        'title' => 'Love In Vain (Robert Johnson)',
+                    ],
+                    [
+                        'title' => 'Love or Confusion',
+                    ],
+                    [
+                        'title' => 'Lovely Rita',
+                    ],
+                    [
+                        'title' => 'May This Be Love',
+                    ],
+                    [
+                        'title' => 'Whole Lotta Love',
+                    ],
+                ],
+                'song' => [
+                    [
+                        'title' => 'Lovely Rita',
+                    ],
+                ],
+                'band:count' => 2,
+                'person:3' => [
+                    'first_name' => 'Ronnie',
+                    'last_name' => 'Wood',
+                ],
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_returns_an_error_when_a_resource_is_not_found()
+    {
+        $response = $this->json('GET', 'jory', [
+            'bandd' => '{"flt":{"f":"id","v":3}}',
+            'band:2 as ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%II%"}}}}',
+            'song as lovesongs' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":["title"],"srt":["title"]}',
+            'son as lovesong' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":["title"],"srt":["title"]}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Resource "bandd" is not available, did you mean "band"?',
+                'Resource "son" is not available, did you mean "song"?',
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_returns_an_error_when_a_JoryException_has_occured()
+    {
+        $response = $this->json('GET', 'jory', [
+            'song' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":[title"],"srt":["title"]}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                "song: Jory string is no valid json.",
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_returns_an_error_when_a_LaravelJoryCallException_has_occured()
+    {
+        $response = $this->json('GET', 'jory', [
+            'band' => '{"flt":{"f":"name","o":"like","v":"%bea%"},"fld":["name"],"srt":["naame"]}',
+            'band as band_2' => '{"flt":{"f":"name","o":"like","v":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}',
+            'song' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":[title"],"srt":["title"]}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'band: Field "naame" is not available for sorting. Did you mean "name"? (Location: sorts.naame)',
+                'band as band_2: Field "naame" is not available for sorting. Did you mean "name"? (Location: sorts.naame)',
+                'band as band_2: Relation "songgs" is not available. Did you mean "songs"? (Location: relations.songgs)',
+                "song: Jory string is no valid json.",
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+    }
+
+    /** @test */
+    public function it_can_display_all_the_available_resources()
+    {
+        $response = $this->json('OPTIONS', 'jory');
+
+        $expected = [
+            'resources' => [
+                'band',
+                'album',
+                'album-cover',
+                'instrument',
+                'person',
+                'song',
+            ],
         ];
 
         // ExactJson doesn't tell if the sort order is right so do both checks.

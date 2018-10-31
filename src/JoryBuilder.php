@@ -222,6 +222,7 @@ class JoryBuilder implements Responsable
      * @return array|null
      * @throws LaravelJoryException
      * @throws LaravelJoryCallException
+     * @throws JoryException
      */
     public function toArray(): ?array
     {
