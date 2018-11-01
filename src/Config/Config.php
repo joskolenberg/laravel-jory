@@ -359,5 +359,4 @@ class Config implements Responsable
 
         return $result;
     }
-
 }
