@@ -1,13 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Blueprint;
+namespace JosKolenberg\LaravelJory\Config;
 
 /**
- * Class Field
+ * Class Filter.
  *
- * Represents a filter in the blueprint.
- *
- * @package JosKolenberg\LaravelJory\Blueprint
+ * Represents a filter in the config.
  */
 class Filter
 {

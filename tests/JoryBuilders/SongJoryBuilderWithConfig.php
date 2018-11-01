@@ -3,19 +3,19 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Blueprint\Sort;
-use JosKolenberg\LaravelJory\Blueprint\Filter;
+use JosKolenberg\LaravelJory\Config\Sort;
+use JosKolenberg\LaravelJory\Config\Filter;
+use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
-use JosKolenberg\LaravelJory\Blueprint\Blueprint;
 
-class SongJoryBuilderWithBlueprint extends JoryBuilder
+class SongJoryBuilderWithConfig extends JoryBuilder
 {
-    protected function blueprint(Blueprint $blueprint): void
+    protected function config(Config $config): void
     {
-        $blueprint->field('id')
+        $config->field('id')
             ->sortable();
 
-        $blueprint->field('title')
+        $config->field('title')
             ->description('The songs title.')
             ->filterable(function (Filter $filter){
                 $filter->description('Filter on the title.');
@@ -24,14 +24,14 @@ class SongJoryBuilderWithBlueprint extends JoryBuilder
                 $sort->description('Order by the title.');
             });
 
-        $blueprint->field('album_id')
+        $config->field('album_id')
             ->hideByDefault()
             ->filterable(function(Filter $filter){
                 $filter->description('Filter on the album id.')->operators(['=']);
             });
 
-        $blueprint->limitDefault(50)->limitMax(250);
+        $config->limitDefault(50)->limitMax(250);
 
-        $blueprint->relation('album', Album::class);
+        $config->relation('album', Album::class);
     }
 }

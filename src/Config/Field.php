@@ -1,13 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Blueprint;
+namespace JosKolenberg\LaravelJory\Config;
 
 /**
- * Class Field
+ * Class Field.
  *
- * Represents a field in the blueprint.
- *
- * @package JosKolenberg\LaravelJory\Blueprint
+ * Represents a field in the config.
  */
 class Field
 {
@@ -61,7 +59,7 @@ class Field
      * Set the fields description.
      *
      * @param string $description
-     * @return \JosKolenberg\LaravelJory\Blueprint\Field
+     * @return \JosKolenberg\LaravelJory\Config\Field
      */
     public function description(string $description): self
     {

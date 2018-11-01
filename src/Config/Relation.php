@@ -1,13 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Blueprint;
+namespace JosKolenberg\LaravelJory\Config;
 
 /**
- * Class Relation
+ * Class Relation.
  *
- * Represents a relation in the blueprint.
- *
- * @package JosKolenberg\LaravelJory\Blueprint
+ * Represents a relation in the config.
  */
 class Relation
 {

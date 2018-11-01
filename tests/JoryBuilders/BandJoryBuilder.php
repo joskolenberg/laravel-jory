@@ -3,10 +3,10 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Blueprint\Filter;
+use JosKolenberg\LaravelJory\Config\Config;
+use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
-use JosKolenberg\LaravelJory\Blueprint\Blueprint;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class BandJoryBuilder extends JoryBuilder
@@ -23,32 +23,32 @@ class BandJoryBuilder extends JoryBuilder
         }, $operator, $value);
     }
 
-    protected function blueprint(Blueprint $blueprint): void
+    protected function config(Config $config): void
     {
-        parent::blueprint($blueprint);
+        parent::config($config);
 
-        $blueprint->field('id')
+        $config->field('id')
             ->filterable(function (Filter $filter) {
                 $filter->description('Try this filter by id!')
                     ->operators(["=", ">", "<", "<=", ">=", "<>", "!="]);
             })->sortable();
 
-        $blueprint->field('name')
+        $config->field('name')
             ->filterable()
             ->sortable();
 
-        $blueprint->field('year_start')
+        $config->field('year_start')
             ->description('The year in which the band started.')
             ->filterable()
             ->sortable();
 
-        $blueprint->field('year_end')
+        $config->field('year_end')
             ->description('The year in which the band quitted, could be null if band still exists.')
             ->filterable()
             ->sortable();
 
-        $blueprint->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
-        $blueprint->filter('number_of_albums_in_year')->operators([
+        $config->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
+        $config->filter('number_of_albums_in_year')->operators([
             "=",
             ">",
             "<",
@@ -58,10 +58,10 @@ class BandJoryBuilder extends JoryBuilder
             "!=",
         ])->description('Filter the bands that released a given number of albums in a year, pass value and year parameter.');
 
-        $blueprint->limitDefault(30)->limitMax(120);
+        $config->limitDefault(30)->limitMax(120);
 
-        $blueprint->relation('albums', Album::class)->description('Get the related albums for the band.');
-        $blueprint->relation('people', Person::class)->type('person');
-        $blueprint->relation('songs', Song::class);
+        $config->relation('albums', Album::class)->description('Get the related albums for the band.');
+        $config->relation('people', Person::class)->type('person');
+        $config->relation('songs', Song::class);
     }
 }

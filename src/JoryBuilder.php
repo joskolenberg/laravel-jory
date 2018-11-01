@@ -11,14 +11,14 @@ use JosKolenberg\Jory\Support\Relation;
 use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\Jory\Parsers\JsonParser;
 use JosKolenberg\Jory\Parsers\ArrayParser;
+use JosKolenberg\LaravelJory\Config\Config;
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\Jory\Support\GroupOrFilter;
 use Illuminate\Contracts\Support\Responsable;
 use JosKolenberg\Jory\Support\GroupAndFilter;
+use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Contracts\FilterInterface;
-use JosKolenberg\LaravelJory\Blueprint\Blueprint;
-use JosKolenberg\LaravelJory\Blueprint\Validator;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
@@ -65,18 +65,18 @@ class JoryBuilder implements Responsable
     protected $joryParser = null;
 
     /**
-     * @var Blueprint|null
+     * @var Config|null
      */
-    protected $blueprint = null;
+    protected $config = null;
 
     /**
      * JoryBuilder constructor.
      */
     public function __construct()
     {
-        // Create the blueprint based on the settings in blueprint()
-        $this->blueprint = new Blueprint();
-        $this->blueprint($this->blueprint);
+        // Create the config based on the settings in config()
+        $this->config = new Config();
+        $this->config($this->config);
     }
 
     /**
@@ -627,8 +627,8 @@ class JoryBuilder implements Responsable
     {
         if(!$count){
             $this->selectOnlyRootTable($query);
-            if($this->blueprint->getLimitDefault() !== null){
-                $query->limit($this->blueprint->getLimitDefault());
+            if($this->config->getLimitDefault() !== null){
+                $query->limit($this->config->getLimitDefault());
             }
         }
     }
@@ -654,7 +654,7 @@ class JoryBuilder implements Responsable
     protected function afterQueryBuild($query, Jory $jory, $count = false)
     {
         if(!$count){
-            $this->applyDefaultSortsFromBlueprint($query);
+            $this->applyDefaultSortsFromConfig($query);
         }
     }
 
@@ -716,46 +716,46 @@ class JoryBuilder implements Responsable
     }
 
     /**
-     * Create the blueprint for this builder.
+     * Create the config for this builder.
      *
-     * This blueprint will be used to:
+     * This config will be used to:
      *      - Show the options for the resource when using the OPTIONS http method
      *      - Fields:
      *          - Validate if the requested fields are available.
      *          - Update the Jory's fields attribute with the ones marked to be shown by default
      *              when no particular fields are requested.
      *
-     * @param Blueprint $blueprint
+     * @param Config $config
      */
-    protected function blueprint(Blueprint $blueprint): void
+    protected function config(Config $config): void
     {
 
     }
 
     /**
-     * Validate the Jory object by the settings in the Blueprint.
+     * Validate the Jory object by the settings in the Config.
      *
      * @throws LaravelJoryCallException
      * @throws LaravelJoryException
      */
     protected function validate(): void
     {
-        (new Validator($this->blueprint, $this->getJory()))->validate();
+        (new Validator($this->config, $this->getJory()))->validate();
     }
 
     /**
-     * Get the Blueprint.
+     * Get the Config.
      *
-     * @return Blueprint
+     * @return Config
      */
-    public function getBlueprint(): Blueprint
+    public function getConfig(): Config
     {
-        return $this->blueprint;
+        return $this->config;
     }
 
     /**
      * Get a new Jory object with only fields and relations based on
-     * the original Jory in the request and the JoryBuilder's blueprint.
+     * the original Jory in the request and the JoryBuilder's config.
      *
      * This new Jory will be used to export the models to arrays.
      *
@@ -772,19 +772,19 @@ class JoryBuilder implements Responsable
         if($originalJory->getFields() !== null){
             // There are fields specified in the request, use these
             $jory->setFields($originalJory->getFields());
-        } elseif ($this->blueprint->getFields() !== null){
+        } elseif ($this->config->getFields() !== null){
             // No fields set in the request, but there are fields
-            // specified in the blueprint, than we will update the fields
+            // specified in the config, than we will update the fields
             // with the ones to be shown by default.
             $defaultFields = [];
-            foreach ($this->blueprint->getFields() as $field){
+            foreach ($this->config->getFields() as $field){
                 if($field->isShownByDefault()){
                     $defaultFields[] = $field->getField();
                 }
                 $jory->setFields($defaultFields);
             }
         }else{
-            // No fields set in request or blueprint.
+            // No fields set in request or config.
             // No action needed, the full model's toArray() result will be returned during export.
         }
 
@@ -803,16 +803,16 @@ class JoryBuilder implements Responsable
     }
 
     /**
-     * Apply any the sorts marked as default in the blueprint on the query.
+     * Apply any the sorts marked as default in the config on the query.
      *
      * @param $query
      * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
-    protected function applyDefaultSortsFromBlueprint($query): void
+    protected function applyDefaultSortsFromConfig($query): void
     {
         $defaultSorts = [];
-        if ($this->blueprint->getSorts() !== null) {
-            foreach ($this->blueprint->getSorts() as $sort) {
+        if ($this->config->getSorts() !== null) {
+            foreach ($this->config->getSorts() as $sort) {
                 if ($sort->getDefaultIndex() !== null) {
                     $defaultSorts[$sort->getDefaultIndex()] = new Sort($sort->getField(), $sort->getDefaultOrder());
                 }

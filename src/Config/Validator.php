@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Blueprint;
+namespace JosKolenberg\LaravelJory\Config;
 
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\GroupOrFilter;
@@ -9,18 +9,16 @@ use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
 /**
- * Class Validator
+ * Class Validator.
  *
- * Class to validate a Jory object by the settings in the Blueprint.
- *
- * @package JosKolenberg\LaravelJory\Blueprint
+ * Class to validate a Jory object by the settings in the Config.
  */
 class Validator
 {
     /**
-     * @var \JosKolenberg\LaravelJory\Blueprint\Blueprint
+     * @var \JosKolenberg\LaravelJory\Config\Config
      */
-    protected $blueprint;
+    protected $config;
 
     /**
      * @var \JosKolenberg\Jory\Jory
@@ -40,19 +38,19 @@ class Validator
     /**
      * Validator constructor.
      *
-     * @param Blueprint $blueprint
+     * @param Config $config
      * @param Jory $jory
      * @param string $address
      */
-    public function __construct(Blueprint $blueprint, Jory $jory, string $address = '')
+    public function __construct(Config $config, Jory $jory, string $address = '')
     {
-        $this->blueprint = $blueprint;
+        $this->config = $config;
         $this->jory = $jory;
         $this->address = $address;
     }
 
     /**
-     * Validate and update the Jory object by the settings in the Blueprint.
+     * Validate and update the Jory object by the settings in the Config.
      *
      * @throws LaravelJoryCallException
      */
@@ -71,18 +69,18 @@ class Validator
     }
 
     /**
-     * Validate the fields in the Jory object by the settings in the Blueprint.
+     * Validate the fields in the Jory object by the settings in the Config.
      */
     protected function validateFields(): void
     {
-        if ($this->blueprint->getFields() === null || $this->jory->getFields() === null) {
+        if ($this->config->getFields() === null || $this->jory->getFields() === null) {
             // No fields specified, perform no validation
             return;
         }
 
-        // There are fields in the Jory object and Blueprint, validate them.
+        // There are fields in the Jory object and Config, validate them.
         $availableFields = [];
-        foreach ($this->blueprint->getFields() as $field) {
+        foreach ($this->config->getFields() as $field) {
             $availableFields[] = $field->getField();
         }
 
@@ -94,31 +92,31 @@ class Validator
     }
 
     /**
-     * Validate filter in the Jory object by the settings in the Blueprint.
+     * Validate filter in the Jory object by the settings in the Config.
      */
     protected function validateFilter(): void
     {
-        if ($this->blueprint->getFilters() === null || $this->jory->getFilter() === null) {
-            // No filters specified in blueprint or jory, perform no validation
+        if ($this->config->getFilters() === null || $this->jory->getFilter() === null) {
+            // No filters specified in config or jory, perform no validation
             return;
         }
 
-        $this->doValidateFilter($this->blueprint->getFilters(), $this->jory->getFilter(), $this->address.'filter');
+        $this->doValidateFilter($this->config->getFilters(), $this->jory->getFilter(), $this->address.'filter');
     }
 
     /**
-     * Validate Jory Filter object by the settings in the Blueprint.
+     * Validate Jory Filter object by the settings in the Config.
      *
-     * @param array $blueprintFilters
+     * @param array $configFilters
      * @param \JosKolenberg\Jory\Contracts\FilterInterface $joryFilter
      * @param string $address
      */
-    protected function doValidateFilter(array $blueprintFilters, FilterInterface $joryFilter, string $address): void
+    protected function doValidateFilter(array $configFilters, FilterInterface $joryFilter, string $address): void
     {
         // If it is a grouped OR filter, check subfilters recursive
         if ($joryFilter instanceof GroupOrFilter) {
             foreach ($joryFilter as $key => $subFilter) {
-                $this->doValidateFilter($blueprintFilters, $subFilter, $address.'(or).'.$key);
+                $this->doValidateFilter($configFilters, $subFilter, $address.'(or).'.$key);
             }
 
             return;
@@ -126,16 +124,16 @@ class Validator
         // If it is a grouped AND filter, check subfilters recursive
         if ($joryFilter instanceof GroupAndFilter) {
             foreach ($joryFilter as $key => $subFilter) {
-                $this->doValidateFilter($blueprintFilters, $subFilter, $address.'(and).'.$key);
+                $this->doValidateFilter($configFilters, $subFilter, $address.'(and).'.$key);
             }
 
             return;
         }
 
         // It is a filter on a field, do validation on field an operator
-        foreach ($blueprintFilters as $blueprintFilter) {
-            if ($blueprintFilter->getField() === $joryFilter->getField()) {
-                if ($joryFilter->getOperator() !== null &&  ! in_array($joryFilter->getOperator(), $blueprintFilter->getOperators())) {
+        foreach ($configFilters as $configFilter) {
+            if ($configFilter->getField() === $joryFilter->getField()) {
+                if ($joryFilter->getOperator() !== null &&  ! in_array($joryFilter->getOperator(), $configFilter->getOperators())) {
                     $this->errors[] = 'Operator "'.$joryFilter->getOperator().'" is not available for field "'.$joryFilter->getField().'". (Location: '.$address.'('.$joryFilter->getField().'))';
                 }
 
@@ -143,27 +141,27 @@ class Validator
             }
         }
 
-        // When we get here the field was not found in the blueprint
+        // When we get here the field was not found in the config
         $availableFields = [];
-        foreach ($blueprintFilters as $bpf) {
+        foreach ($configFilters as $bpf) {
             $availableFields[] = $bpf->getField();
         }
         $this->errors[] = 'Field "'.$joryFilter->getField().'" is not available for filtering. Did you mean "'.$this->getSuggestion($availableFields, $joryFilter->getField()).'"? (Location: '.$address.'('.$joryFilter->getField().'))';
     }
 
     /**
-     * Validate the sorts in the Jory object by the settings in the Blueprint.
+     * Validate the sorts in the Jory object by the settings in the Config.
      */
     protected function validateSorts(): void
     {
-        if ($this->blueprint->getSorts() === null || $this->jory->getSorts() === null) {
-            // No sorts specified in blueprint or jory, perform no validation
+        if ($this->config->getSorts() === null || $this->jory->getSorts() === null) {
+            // No sorts specified in config or jory, perform no validation
             return;
         }
 
-        // There are fields in the Jory object and Blueprint, validate them.
+        // There are fields in the Jory object and Config, validate them.
         $availableFields = [];
-        foreach ($this->blueprint->getSorts() as $sort) {
+        foreach ($this->config->getSorts() as $sort) {
             $availableFields[] = $sort->getField();
         }
 
@@ -175,33 +173,33 @@ class Validator
     }
 
     /**
-     * Validate the offset and limit in the Jory object by the settings in the Blueprint.
+     * Validate the offset and limit in the Jory object by the settings in the Config.
      */
     protected function validateOffsetLimit(): void
     {
         // When setting an offset a limit is required in SQL
-        if ($this->jory->getOffset() !== null && $this->jory->getLimit() === null && $this->blueprint->getLimitDefault() === null) {
+        if ($this->jory->getOffset() !== null && $this->jory->getLimit() === null && $this->config->getLimitDefault() === null) {
             $this->errors[] = 'An offset cannot be set without a limit. (Location: '.$this->address.'offset)';
         }
-        if($this->blueprint->getLimitMax() !== null){
-            if ($this->jory->getLimit() > $this->blueprint->getLimitMax()) {
-                $this->errors[] = 'The maximum limit for this resource is ' . $this->blueprint->getLimitMax() . ', please lower your limit or drop the limit parameter. (Location: '.$this->address.'limit)';
+        if($this->config->getLimitMax() !== null){
+            if ($this->jory->getLimit() > $this->config->getLimitMax()) {
+                $this->errors[] = 'The maximum limit for this resource is ' . $this->config->getLimitMax() . ', please lower your limit or drop the limit parameter. (Location: '.$this->address.'limit)';
             }
         }
     }
 
     /**
-     * Validate the relations in the Jory object by the settings in the Blueprint.
+     * Validate the relations in the Jory object by the settings in the Config.
      */
     protected function validateRelations(): void
     {
-        if ($this->blueprint->getRelations() === null) {
-            // No relations specified in blueprint, perform no validation
+        if ($this->config->getRelations() === null) {
+            // No relations specified in config, perform no validation
             return;
         }
 
         $availableRelations = [];
-        foreach ($this->blueprint->getRelations() as $relation) {
+        foreach ($this->config->getRelations() as $relation) {
             $availableRelations[] = $relation->getName();
         }
 
@@ -214,25 +212,25 @@ class Validator
 
     protected function validateSubJories(): void
     {
-        if ($this->blueprint->getRelations() === null) {
-            // No relations specified in blueprint, perform no validation
+        if ($this->config->getRelations() === null) {
+            // No relations specified in config, perform no validation
             return;
         }
 
         foreach ($this->jory->getRelations() as $joryRelation) {
-            $relatedBlueprint = null;
-            foreach ($this->blueprint->getRelations() as $blueprintRelation) {
-                if($joryRelation->getName() === $blueprintRelation->getName()){
-                    $relatedModelClass = $blueprintRelation->getModelClass();
-                    $relatedBlueprint = $relatedModelClass::getJoryBuilder()->getBlueprint();
+            $relatedConfig = null;
+            foreach ($this->config->getRelations() as $configRelation) {
+                if($joryRelation->getName() === $configRelation->getName()){
+                    $relatedModelClass = $configRelation->getModelClass();
+                    $relatedConfig = $relatedModelClass::getJoryBuilder()->getConfig();
                 }
             }
-            if($relatedBlueprint === null){
+            if($relatedConfig === null){
                 break;
             }
 
             try{
-                (new Validator($relatedBlueprint, $joryRelation->getJory(), ($this->address ? $this->address . '.' : '') . $joryRelation->getName() . '.'))->validate();
+                (new Validator($relatedConfig, $joryRelation->getJory(), ($this->address ? $this->address . '.' : '') . $joryRelation->getName() . '.'))->validate();
             }catch (LaravelJoryCallException $e){
                 $this->errors = array_merge($this->errors, $e->getErrors());
             }

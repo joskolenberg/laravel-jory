@@ -1,15 +1,15 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Blueprint;
+namespace JosKolenberg\LaravelJory\Config;
 
 use Illuminate\Contracts\Support\Responsable;
 
 /**
- * Class Blueprint
+ * Class Config.
  *
- * @package JosKolenberg\LaravelJory\Blueprint
+ * Holds the configuration for a JoryBuilder.
  */
-class Blueprint implements Responsable
+class Config implements Responsable
 {
     /**
      * @var null|array
@@ -52,7 +52,7 @@ class Blueprint implements Responsable
     protected $limitMax = null;
 
     /**
-     * Blueprint constructor.
+     * Config constructor.
      */
     public function __construct()
     {
@@ -61,7 +61,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Add a field to the blueprint.
+     * Add a field to the config.
      *
      * @param $field
      * @return Field
@@ -79,7 +79,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Add a filter to the blueprint.
+     * Add a filter to the config.
      *
      * @param $field
      * @return Filter
@@ -97,7 +97,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Add a sort to the blueprint.
+     * Add a sort to the config.
      *
      * @param $field
      * @return Sort
@@ -118,7 +118,7 @@ class Blueprint implements Responsable
      * Set the default value for limit parameter.
      *
      * @param null|int $default
-     * @return Blueprint
+     * @return Config
      */
     public function limitDefault(?int $default): self
     {
@@ -131,7 +131,7 @@ class Blueprint implements Responsable
      * Set the maximum value for limit parameter.
      *
      * @param null|int $max
-     * @return Blueprint
+     * @return Config
      */
     public function limitMax(?int $max): self
     {
@@ -141,7 +141,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Add a relation to the blueprint.
+     * Add a relation to the config.
      *
      * @param string $name
      * @param string $modelClass
@@ -158,7 +158,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Get the fields in the blueprint.
+     * Get the fields in the config.
      *
      * @return array|null
      */
@@ -168,7 +168,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Get the filters in the blueprint.
+     * Get the filters in the config.
      *
      * @return array|null
      */
@@ -187,7 +187,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Get the sorts in the blueprint.
+     * Get the sorts in the config.
      *
      * @return array|null
      */
@@ -229,7 +229,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Get the relations in the blueprint.
+     * Get the relations in the config.
      *
      * @return array|null
      */
@@ -250,7 +250,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Convert the blueprint to an array to be shown when using OPTIONS.
+     * Convert the config to an array to be shown when using OPTIONS.
      *
      * @return array
      */
@@ -269,7 +269,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Turn the fields part of the blueprint into an array.
+     * Turn the fields part of the config into an array.
      *
      * @return array|string
      */
@@ -291,7 +291,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Turn the filters part of the blueprint into an array.
+     * Turn the filters part of the config into an array.
      *
      * @return array|string
      */
@@ -313,7 +313,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Turn the sorts part of the blueprint into an array.
+     * Turn the sorts part of the config into an array.
      *
      * @return array|string
      */
@@ -335,7 +335,7 @@ class Blueprint implements Responsable
     }
 
     /**
-     * Turn the relations part of the blueprint into an array.
+     * Turn the relations part of the config into an array.
      *
      * @return array|string
      */

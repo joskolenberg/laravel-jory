@@ -1,13 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Blueprint;
+namespace JosKolenberg\LaravelJory\Config;
 
 /**
- * Class Sort
+ * Class Sort.
  *
- * Represents a sort in the blueprint.
- *
- * @package JosKolenberg\LaravelJory\Blueprint
+ * Represents a sort in the config.
  */
 class Sort
 {

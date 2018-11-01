@@ -3,20 +3,20 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use Illuminate\Support\Facades\Route;
-use JosKolenberg\LaravelJory\Tests\Controllers\SongWithBlueprintController;
+use JosKolenberg\LaravelJory\Tests\Controllers\SongWithConfigController;
 
-class JoryBuilderWithBlueprintTest extends TestCase
+class JoryBuilderWithConfigTest extends TestCase
 {
     protected function setUp()
     {
         parent::setUp();
 
-        Route::get('song', SongWithBlueprintController::class.'@index');
-        Route::get('song-two', SongWithBlueprintController::class.'@indexTwo');
-        Route::get('song-three', SongWithBlueprintController::class.'@indexThree');
-        Route::options('song', SongWithBlueprintController::class.'@options');
-        Route::options('song-two', SongWithBlueprintController::class.'@optionsTwo');
-        Route::options('song-three', SongWithBlueprintController::class.'@optionsThree');
+        Route::get('song', SongWithConfigController::class.'@index');
+        Route::get('song-two', SongWithConfigController::class.'@indexTwo');
+        Route::get('song-three', SongWithConfigController::class.'@indexThree');
+        Route::options('song', SongWithConfigController::class.'@options');
+        Route::options('song-two', SongWithConfigController::class.'@optionsTwo');
+        Route::options('song-three', SongWithConfigController::class.'@optionsThree');
     }
 
     /** @test */

@@ -78,7 +78,7 @@ class JoryController extends Controller
             abort(404);
         }
 
-        return $modelClass::jory()->getBlueprint();
+        return $modelClass::jory()->getConfig();
     }
 
     /**

@@ -3,9 +3,9 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
 use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
-use JosKolenberg\LaravelJory\Blueprint\Blueprint;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 
 class AlbumJoryBuilder extends JoryBuilder
@@ -32,24 +32,24 @@ class AlbumJoryBuilder extends JoryBuilder
         $query->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $order);
     }
 
-    protected function blueprint(Blueprint $blueprint): void
+    protected function config(Config $config): void
     {
-        parent::blueprint($blueprint);
+        parent::config($config);
 
-        $blueprint->field('id')->filterable()->sortable();
-        $blueprint->field('name')->filterable()->sortable();
-        $blueprint->field('band_id')->filterable()->sortable();
-        $blueprint->field('release_date')->filterable()->sortable();
+        $config->field('id')->filterable()->sortable();
+        $config->field('name')->filterable()->sortable();
+        $config->field('band_id')->filterable()->sortable();
+        $config->field('release_date')->filterable()->sortable();
 
-        $blueprint->filter('number_of_songs');
-        $blueprint->filter('has_song_with_title');
+        $config->filter('number_of_songs');
+        $config->filter('has_song_with_title');
 
-        $blueprint->sort('number_of_songs');
-        $blueprint->sort('band_name');
+        $config->sort('number_of_songs');
+        $config->sort('band_name');
 
-        $blueprint->relation('songs', Song::class);
-        $blueprint->relation('band', Band::class);
-        $blueprint->relation('cover', AlbumCover::class);
-        $blueprint->relation('album_cover', AlbumCover::class);
+        $config->relation('songs', Song::class);
+        $config->relation('band', Band::class);
+        $config->relation('cover', AlbumCover::class);
+        $config->relation('album_cover', AlbumCover::class);
     }
 }
