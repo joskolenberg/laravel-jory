@@ -154,6 +154,7 @@ class Config implements Responsable
             $this->relations = [];
         }
         $this->relations[] = $relation;
+
         return $relation;
     }
 
@@ -176,13 +177,14 @@ class Config implements Responsable
     {
         $filters = $this->filters;
 
-        if($this->fields !== null){
-            foreach ($this->fields as $field){
-                if($field->getFilter() !== null){
+        if ($this->fields !== null) {
+            foreach ($this->fields as $field) {
+                if ($field->getFilter() !== null) {
                     $filters[] = $field->getFilter();
                 }
             }
         }
+
         return $filters;
     }
 
@@ -195,13 +197,14 @@ class Config implements Responsable
     {
         $sorts = $this->sorts;
 
-        if($this->fields !== null){
-            foreach ($this->fields as $field){
-                if($field->getSort() !== null){
+        if ($this->fields !== null) {
+            foreach ($this->fields as $field) {
+                if ($field->getSort() !== null) {
                     $sorts[] = $field->getSort();
                 }
             }
         }
+
         return $sorts;
     }
 
@@ -212,9 +215,10 @@ class Config implements Responsable
      */
     public function getLimitDefault(): ? int
     {
-        if($this->limitDefault !== null){
+        if ($this->limitDefault !== null) {
             return $this->limitDefault;
         }
+
         return $this->limitMax;
     }
 
@@ -327,7 +331,7 @@ class Config implements Responsable
         foreach ($this->getSorts() as $sort) {
             $result[$sort->getField()] = [
                 'description' => $sort->getDescription(),
-                'default' => ($sort->getDefaultIndex() === null ? false : 'index ' . $sort->getDefaultIndex() . ', ' . $sort->getDefaultOrder()),
+                'default' => ($sort->getDefaultIndex() === null ? false : 'index '.$sort->getDefaultIndex().', '.$sort->getDefaultOrder()),
             ];
         }
 
@@ -355,4 +359,5 @@ class Config implements Responsable
 
         return $result;
     }
+
 }
