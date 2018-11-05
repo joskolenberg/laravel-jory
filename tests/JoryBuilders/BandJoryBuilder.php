@@ -27,8 +27,8 @@ class BandJoryBuilder extends JoryBuilder
         parent::config($config);
 
         $config->field('id')->filterable(function (Filter $filter) {
-                $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=']);
-            })->sortable();
+            $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=']);
+        })->sortable();
 
         $config->field('name')->filterable()->sortable();
 
