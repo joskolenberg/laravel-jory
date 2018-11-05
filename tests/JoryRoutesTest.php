@@ -409,4 +409,40 @@ class JoryRoutesTest extends TestCase
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
     }
+
+    /** @test */
+    public function it_returns_a_404_when_an_unknown_model_is_configured()
+    {
+        $this->json('GET', 'jory/bandd', [
+            'jory' => '{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]}',
+        ])->assertStatus(404);
+
+        $this->json('GET', 'jory/bandd/3')->assertStatus(404);
+
+        $this->json('GET', 'jory/bandd/count')->assertStatus(404);
+
+        $this->json('OPTIONS', 'jory/bandd')->assertStatus(404);
+    }
+
+    /** @test */
+    public function it_returns_null_when_a_model_is_not_found_by_id_when_loading_multiple_resources()
+    {
+        $response = $this->json('GET', 'jory', [
+            'person:3' => '{"fld":["first_name","last_name"]}',
+            'song:1234' => '{}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'person:3' => [
+                    'first_name' => 'Ronnie',
+                    'last_name' => 'Wood',
+                ],
+                'song:1234' => null,
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
 }

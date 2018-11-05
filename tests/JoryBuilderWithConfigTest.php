@@ -583,7 +583,7 @@ class JoryBuilderWithConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_can_validate_if_requested_filters_are_not_available()
+    public function it_can_validate_if_requested_filters_are_not_available_1()
     {
         $response = $this->json('GET', 'song', [
             'jory' => '{"fld":["title"],"lmt":3,"flt":{"and":[{"f":"titel","o":"like","d":"%love%"},{"f":"title","o":"like","d":"%test%"},{"f":"albumm_id","d":11}]}}',
@@ -593,6 +593,22 @@ class JoryBuilderWithConfigTest extends TestCase
             'errors' => [
                 'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(and).0(titel))',
                 'Field "albumm_id" is not available for filtering. Did you mean "album_id"? (Location: filter(and).2(albumm_id))',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_can_validate_if_requested_filters_are_not_available_2()
+    {
+        $response = $this->json('GET', 'song', [
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"or":[{"f":"titel","o":"like","d":"%love%"},{"f":"title","o":"like","d":"%test%"},{"f":"albumm_id","d":11}]}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(or).0(titel))',
+                'Field "albumm_id" is not available for filtering. Did you mean "album_id"? (Location: filter(or).2(albumm_id))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -883,6 +899,21 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function it_gives_an_error_when_an_offset_is_applied_but_no_limit_is_available_in_request_and_config()
+    {
+        $response = $this->json('GET', 'song-two', [
+            'jory' => '{"ofs":2}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'An offset cannot be set without a limit. (Location: offset)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
     }
 
     /** @test */

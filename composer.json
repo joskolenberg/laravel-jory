@@ -12,7 +12,7 @@
   "minimum-stability": "stable",
   "require": {
     "laravel/framework": "^5.5",
-    "joskolenberg/jory": "dev-master"
+    "joskolenberg/jory": "^0.6"
   },
   "autoload": {
     "psr-4": {
@@ -27,13 +27,6 @@
   "require-dev": {
     "orchestra/testbench": "^3.5"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/joskolenberg/jory",
-      "no-api": true
-    }
-  ],
   "extra": {
     "laravel": {
       "providers": [

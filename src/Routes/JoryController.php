@@ -118,7 +118,7 @@ class JoryController extends Controller
                 // Return a single item
                 $model = $modelClass::find($id);
                 if (! $model) {
-                    $errors[] = 'Resource with id '.$id.' was not found on resource '.$modelName;
+                    $results[$alias] = null;
                     continue;
                 }
                 $response = $modelClass::jory()->applyJson($json)->onModel($model)->toResponse($request);
