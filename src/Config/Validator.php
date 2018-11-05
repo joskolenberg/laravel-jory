@@ -230,7 +230,7 @@ class Validator
             }
 
             try {
-                (new Validator($relatedConfig, $joryRelation->getJory(), ($this->address ? $this->address.'.' : '').$joryRelation->getName().'.'))->validate();
+                (new self($relatedConfig, $joryRelation->getJory(), ($this->address ? $this->address.'.' : '').$joryRelation->getName().'.'))->validate();
             } catch (LaravelJoryCallException $e) {
                 $this->errors = array_merge($this->errors, $e->getErrors());
             }

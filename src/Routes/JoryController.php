@@ -181,7 +181,6 @@ class JoryController extends Controller
         $bestMatch = '';
 
         foreach ($array as $item) {
-
             $lev = levenshtein($value, $item);
 
             if ($lev <= $bestScore || $bestScore < 0) {
@@ -226,6 +225,6 @@ class JoryController extends Controller
             $id = $nameParts[1];
         }
 
-        return compact("modelName", "alias", "type", "id");
+        return compact('modelName', 'alias', 'type', 'id');
     }
 }

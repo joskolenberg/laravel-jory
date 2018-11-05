@@ -732,7 +732,6 @@ class JoryBuilder implements Responsable
      */
     protected function config(Config $config): void
     {
-
     }
 
     /**

@@ -70,7 +70,7 @@ class Sort
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return "Sort by the ".$this->field." field.";
+            return 'Sort by the '.$this->field.' field.';
         }
 
         return $this->description;

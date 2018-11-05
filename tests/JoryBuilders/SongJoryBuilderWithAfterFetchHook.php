@@ -13,7 +13,7 @@ class SongJoryBuilderWithAfterFetchHook extends JoryBuilder
         $collection = parent::afterFetch($collection, $jory);
 
         return $collection->filter(function ($model) {
-            return ($model->id > 100);
+            return $model->id > 100;
         });
     }
 }

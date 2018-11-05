@@ -206,13 +206,13 @@ class JoryBuilderWithConfigTest extends TestCase
                 'id' => [
                     'description' => 'Try this filter by id!',
                     'operators' => [
-                        "=",
-                        ">",
-                        "<",
-                        "<=",
-                        ">=",
-                        "<>",
-                        "!=",
+                        '=',
+                        '>',
+                        '<',
+                        '<=',
+                        '>=',
+                        '<>',
+                        '!=',
                     ],
                 ],
                 'name' => [
@@ -289,7 +289,7 @@ class JoryBuilderWithConfigTest extends TestCase
                 ],
                 'number_of_albums_in_year' => [
                     'description' => 'Filter the bands that released a given number of albums in a year, pass value and year parameter.',
-                    'operators' => ["=", ">", "<", "<=", ">=", "<>", "!="],
+                    'operators' => ['=', '>', '<', '<=', '>=', '<>', '!='],
                 ],
             ],
             'sorts' => [
@@ -625,13 +625,13 @@ class JoryBuilderWithConfigTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    "title" => "And the Gods Made Love",
+                    'title' => "And the Gods Made Love",
                 ],
                 [
-                    "title" => "Bold as Love",
+                    'title' => "Bold as Love",
                 ],
                 [
-                    "title" => "Little Miss Lover",
+                    'title' => "Little Miss Lover",
                 ],
             ],
         ];
@@ -679,16 +679,16 @@ class JoryBuilderWithConfigTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    "title" => "And the Gods Made Love",
+                    'title' => "And the Gods Made Love",
                 ],
                 [
-                    "title" => "Bold as Love",
+                    'title' => "Bold as Love",
                 ],
                 [
-                    "title" => "May This Be Love",
+                    'title' => "May This Be Love",
                 ],
                 [
-                    "title" => "Whole Lotta Love",
+                    'title' => "Whole Lotta Love",
                 ],
             ],
         ];
@@ -869,16 +869,16 @@ class JoryBuilderWithConfigTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    "title" => "And the Gods Made Love",
+                    'title' => "And the Gods Made Love",
                 ],
                 [
-                    "title" => "Bold as Love",
+                    'title' => "Bold as Love",
                 ],
                 [
-                    "title" => "May This Be Love",
+                    'title' => "May This Be Love",
                 ],
                 [
-                    "title" => "Whole Lotta Love",
+                    'title' => "Whole Lotta Love",
                 ],
             ],
         ];

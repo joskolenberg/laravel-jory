@@ -2,9 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Tests\Models\Song;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
-
 class JoryBuilderOffsetLimitTest extends TestCase
 {
     /** @test */

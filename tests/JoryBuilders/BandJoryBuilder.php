@@ -27,7 +27,7 @@ class BandJoryBuilder extends JoryBuilder
         parent::config($config);
 
         $config->field('id')->filterable(function (Filter $filter) {
-                $filter->description('Try this filter by id!')->operators(["=", ">", "<", "<=", ">=", "<>", "!="]);
+                $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=']);
             })->sortable();
 
         $config->field('name')->filterable()->sortable();
@@ -38,13 +38,13 @@ class BandJoryBuilder extends JoryBuilder
 
         $config->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
         $config->filter('number_of_albums_in_year')->operators([
-            "=",
-            ">",
-            "<",
-            "<=",
-            ">=",
-            "<>",
-            "!=",
+            '=',
+            '>',
+            '<',
+            '<=',
+            '>=',
+            '<>',
+            '!=',
         ])->description('Filter the bands that released a given number of albums in a year, pass value and year parameter.');
 
         $config->limitDefault(30)->limitMax(120);

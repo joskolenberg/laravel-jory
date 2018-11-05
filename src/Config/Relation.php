@@ -85,7 +85,7 @@ class Relation
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return "The ".$this->name." relation.";
+            return 'The '.$this->name.' relation.';
         }
 
         return $this->description;

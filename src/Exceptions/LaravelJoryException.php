@@ -7,8 +7,6 @@ namespace JosKolenberg\LaravelJory\Exceptions;
  * because of an error in the implementation.
  *
  * Class LaravelJoryException
- *
- * @package JosKolenberg\LaravelJory\Exceptions
  */
 class LaravelJoryException extends \Exception
 {

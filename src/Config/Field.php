@@ -87,7 +87,7 @@ class Field
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return "The ".$this->field." field.";
+            return 'The '.$this->field.' field.';
         }
 
         return $this->description;

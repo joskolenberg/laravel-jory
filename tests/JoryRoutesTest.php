@@ -360,7 +360,7 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                "song: Jory string is no valid json.",
+                'song: Jory string is no valid json.',
             ],
         ];
 
@@ -382,7 +382,7 @@ class JoryRoutesTest extends TestCase
                 'band: Field "naame" is not available for sorting. Did you mean "name"? (Location: sorts.naame)',
                 'band as band_2: Field "naame" is not available for sorting. Did you mean "name"? (Location: sorts.naame)',
                 'band as band_2: Relation "songgs" is not available. Did you mean "songs"? (Location: relations.songgs)',
-                "song: Jory string is no valid json.",
+                'song: Jory string is no valid json.',
             ],
         ];
 
