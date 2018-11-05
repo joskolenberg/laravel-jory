@@ -6,25 +6,17 @@ use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 
-class GenericJoryBuilderRelationTest extends TestCase
+class JoryBuilderRelationTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        Band::joryRoutes('band');
-        Song::joryRoutes('song');
-        Album::joryRoutes('album');
-    }
-
     /** @test */
     public function it_can_load_a_many_to_many_relation()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"people":{}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"people":{}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -59,20 +51,21 @@ class GenericJoryBuilderRelationTest extends TestCase
                             'date_of_birth' => '1948-05-31',
                             'full_name' => 'John Bonham',
                         ],
-
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_a_has_many_relation()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -99,17 +92,19 @@ class GenericJoryBuilderRelationTest extends TestCase
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_a_has_many_relation_with_no_result()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","v":"Led Zeppelin IV"}}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","d":"Led Zeppelin IV"}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -117,17 +112,19 @@ class GenericJoryBuilderRelationTest extends TestCase
                     'year_end' => 1980,
                     'albums' => [],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_subrelations_on_a_has_many_relation_with_no_result()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","v":"Led Zeppelin IV"},"rlt":{"songs":{}}}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","d":"Led Zeppelin IV"},"rlt":{"songs":{}}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -135,17 +132,19 @@ class GenericJoryBuilderRelationTest extends TestCase
                     'year_end' => 1980,
                     'albums' => [],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_a_belongs_to_relation()
     {
-        $response = $this->json('GET', '/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","v":"Wild Horses"},"rlt":{"album":{}}}',
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 12,
                     'album_id' => 2,
@@ -157,51 +156,57 @@ class GenericJoryBuilderRelationTest extends TestCase
                         'release_date' => '1971-04-23',
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_a_belongs_to_relation_with_no_result()
     {
-        $response = $this->json('GET', '/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","v":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","v":"another"}}}}',
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","d":"another"}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 12,
                     'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => null,
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_subrelations_on_a_belongs_to_relation_with_no_result()
     {
-        $response = $this->json('GET', '/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","v":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","v":"another"},"rlt":{"band":{}}}}}',
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","d":"another"},"rlt":{"band":{}}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 12,
                     'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => null,
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_a_has_many_through_relation()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"=","v":"Led Zeppelin"},"rlt":{"songs":{"fld":["id","title"]}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"=","d":"Led Zeppelin"},"rlt":{"songs":{"fld":["id","title"]}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -322,17 +327,19 @@ class GenericJoryBuilderRelationTest extends TestCase
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_a_has_one_relation()
     {
-        $response = $this->json('GET', '/album', [
-            'jory' => '{"filter":{"f":"name","o":"=","v":"Abbey road"},"rlt":{"cover":{}}}',
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => '{"filter":{"f":"name","o":"=","d":"Abbey road"},"rlt":{"cover":{}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 8,
                     'band_id' => 3,
@@ -383,17 +390,19 @@ class GenericJoryBuilderRelationTest extends TestCase
 :::::---+@###########+------::----+##=#===#=###:------------:#######=###=------',
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_nested_relations()
     {
-        $response = $this->json('GET', '/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","v":"Wild Horses"},"rlt":{"album":{"rlt":{"band":{}}}}}',
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{"rlt":{"band":{}}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 12,
                     'album_id' => 2,
@@ -411,17 +420,19 @@ class GenericJoryBuilderRelationTest extends TestCase
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_and_filter_nested_relations_1()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%in%"},"rlt":{"songs":{"fld":["id","title"],"flt":{"f":"title","o":"like","v":"%love%"},"rlt":{"album":{}}}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%in%"},"rlt":{"songs":{"fld":["id","title"],"flt":{"f":"title","o":"like","d":"%love%"},"rlt":{"album":{}}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -458,17 +469,19 @@ class GenericJoryBuilderRelationTest extends TestCase
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_load_and_filter_nested_relations_2()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"number_of_albums_in_year","o":"=","v":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","v":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","v":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}},"fld":["id","title"]},"people":{"fld":["id","last_name"],"rlt":{"instruments":{}}}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"number_of_albums_in_year","o":"=","d":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","d":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","d":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}},"fld":["id","title"]},"people":{"fld":["id","last_name"],"rlt":{"instruments":{}}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -753,17 +766,19 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_apply_a_filter_on_a_relation()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%III%"}}},"fld":["id","name"]}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
@@ -776,27 +791,29 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_have_a_relation_on_empty_collection()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"=","v":"foo"},"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%III%"}}}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"=","d":"foo"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([]);
+        $response->assertStatus(200)->assertExactJson(['data' => []]);
     }
 
     /** @test */
     public function it_can_load_and_filter_nested_relations_3()
     {
-        $response = $this->json('GET', '/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","v":"The End"},"rlt":{"album":{"rlt":{"songs":{}}}}}',
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","d":"The End"},"rlt":{"album":{"rlt":{"songs":{}}}}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 94,
                     'album_id' => 8,
@@ -896,6 +913,70 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         ],
                     ],
                 ],
-            ]);
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function it_can_load_a_relation_using_snake_case_notation()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => '{"filter":{"f":"name","o":"=","d":"Abbey road"},"rlt":{"album_cover":{}}}',
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'id' => 8,
+                    'band_id' => 3,
+                    'name' => 'Abbey road',
+                    'release_date' => '1969-09-26',
+                    'album_cover' => [
+                        'id' => 8,
+                        'album_id' => 8,
+                        'image' => '@@@@@@@@@#@@@@@@@@@@@@@@@#@@@@=#=:----------------------------------------+=###
+@@@@@@@@@@@@#@@@##@@@@@@@@@@@#=**+:---------------------------------------+###@
+@@@@@@@@@@@#@@@@#####@@@@@######+++------------------------------------++*#@@##
+@@@@@@@@@@@@@@@#@##@@#===###=*=:*=:---------------------------------:::#@@@##@@
+@@@@@@@@@@@@@@######==###@@=*#====*+++**:------------------------+::=*@@#@@#@=#
+@@@@@@@@@@@@@@@@@@###@@#@@@####=###===*----------------::--::-::+=:*=+*#@#@@@==
+@@@@@@@@@@@@@@####======#@#=#==****+::-------------:+**====#=*=*#=**=*=#==##=#@
+@@@@@@@@@@@@@@@@#=#@@@######=#=##+----------------:*=######=#==#==#=@###===#=##
+@#@@@@@@@@@@@@@@@@@@@@#@@@@@@@@#=+---------------+=##=##=###=====#@@@@@#@##@@@@
+@@@@@@@@@@@@@@@@@@#@@@@#====#@#=##*-------------+=#@#####========@@@@###@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@####@#=+:::-----------*#=#=@#@##=###=#@@@@@@@@@@@@@@@
+@@@@@@@@@@@@#@@@@@@@@@@#@@@##=#===*:----------:-++===#######==#@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@#@@@###=#==*:---------:=#@@#@*=#####@@#@@@#@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@##@@####+:------:+*==#@####=#=#@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@####@###=+------+#=#=#@=#@#@*=##@###@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@#@@@@@@@@@@##=##@#=#@#=+----+###==#@@@@@@=@@@##@@@@@@@@@@@@@@@@@@@@
+@@@@#*#@@@@@#@@@@@@@@@@@@=#@@###@===*-==###=@##==@@@##@@@@@@###@@##@@@##@@@@@@@
+@#@==*#@@@@@@##@@@@@#*=@@#==*@@@##=#==#=######=+++====#@@@@@@@@@@####@#@@@@@@@@
+@@@@@@@@@@@@@#@@@#@@@==#@#*+=##*==+++++:***=*****=====#=#@@@@==@**===@=*#=@@###
+@@@@@@@@@@@@#@@@@#@####====+***::+**********=*=+****::*@@@@@#@@@#+***#@=##@@@@@
+@@@@@@@@@@@##@#===*:-:*###==**=@##***==***==***==###=+*@#@@@@##@@#@@@@@@@#@@@@#
+@@@@@@@@@@@@++*::+++:=*+####@@#**========*=======#@@#+*#@=#=#=###***@@@@@@@@@@@
+@@@@@@@@@@####**=:-:-:*-####@=:*=##====*=*===#=*:*****=====***=##==*####@@@@@@@
+@@@######**=#==#*+**+##@#=====#*=========**==@#:===****++**++**----***++******=
+########=**=*=@@@@@@@#=====####=#=======***=@@@@=======******+:----**+*****+***
+########=*+*=######======*=#####@#=======*:=@@@@#========****+-----+++=#*+**+++
+@########=***###==============##@@========:*@@@@@============+----:**+++++*#=++
+==#@##=***=##:+*==*=======##==###@========+#@@@@@===========:-----+********+++*
+#==========#@=*===========#@+*#===========@@@@@@@@+========:-:----:==*****+++++
+==*====*===*#=============#@@*##==========@@@@@@@=============::---*=**********
+==***++*=====#=#:::::::*###@####*-:::-*===#@@*-@@@:--=#===#=+---:--:#=#===*+++*
+------*=======*==+:--:####@##==##*---:#==@@@#*--@@=--:#####:-----:---+#======:-
+---*#=====#*:++=**+-=######@#++=@##+-*=#@@@###:-+@@@--:##:--:#=--------+##===##
++=#====##+:*+::+==+:+=**=#@*:****##+-=#@@@@@@#+*+=@@#------#@@@@+--------+#####
+##=#+::++:------:=####==##+-----:++**#@@@@#===:--+#@##::-*@#####@#+--------+###
+####=:---------=###===###+----------=##=======+---------:+===######:--:------+#
+#@*-:---::---+#=#=#=####+----------:#######==#*-----------=#===#====+----------
+*-::::::---:###==###=##*-----------*#====#=##=#------------#####======:--------
+::::::::--=######=####*------------#=#=####=#=#:-----------:######===##+-------
+:::::---+@###########+------::----+##=#===#=###:------------:#######=###=------',
+                    ],
+                ],
+            ],
+        ]);
     }
 }

@@ -6,7 +6,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
-class GenericJoryBuilderFilterTest extends TestCase
+class JoryBuilderFilterTest extends TestCase
 {
     /**
      * @test
@@ -17,9 +17,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'field' => 'first_name',
                 'operator' => 'like',
-                'value' => '%john%',
+                'data' => '%john%',
             ],
-        ])->getModels()->pluck('last_name')->toArray();
+        ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Bonham', 'Lennon'], $actual);
     }
@@ -35,16 +35,16 @@ class GenericJoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'first_name',
                         'operator' => 'like',
-                        'value' => '%paul%',
+                        'data' => '%paul%',
                     ],
                     [
                         'field' => 'last_name',
                         'operator' => 'like',
-                        'value' => '%le%',
+                        'data' => '%le%',
                     ],
                 ],
             ],
-        ])->getModels()->pluck('last_name')->toArray();
+        ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Lennon', 'McCartney'], $actual);
     }
@@ -60,16 +60,16 @@ class GenericJoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'first_name',
                         'operator' => 'like',
-                        'value' => '%john%',
+                        'data' => '%john%',
                     ],
                     [
                         'field' => 'last_name',
                         'operator' => 'like',
-                        'value' => '%le%',
+                        'data' => '%le%',
                     ],
                 ],
             ],
-        ])->getModels()->pluck('last_name')->toArray();
+        ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Lennon'], $actual);
     }
@@ -85,11 +85,11 @@ class GenericJoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -114,25 +114,25 @@ class GenericJoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'data' => '%bold%',
                             ],
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'data' => '%er%',
                             ],
                         ],
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -152,31 +152,31 @@ class GenericJoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'data' => '%bold%',
                             ],
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'data' => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => 'may%',
+                                        'data' => 'may%',
                                     ],
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => '%love',
+                                        'data' => '%love',
                                     ],
                                 ],
                             ],
@@ -184,7 +184,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -205,43 +205,43 @@ class GenericJoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'data' => '%bold%',
                             ],
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'data' => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => '%e%',
+                                        'data' => '%e%',
                                     ],
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => '%a%',
+                                        'data' => '%a%',
                                     ],
                                     [
                                         'group_or' => [
                                             [
                                                 'field' => 'title',
                                                 'operator' => 'like',
-                                                'value' => '%whole%',
+                                                'data' => '%whole%',
                                             ],
                                             [
                                                 'field' => 'title',
                                                 'operator' => 'like',
-                                                'value' => '%gods%',
+                                                'data' => '%gods%',
                                             ],
                                         ],
                                     ],
@@ -251,7 +251,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->getModels()->pluck('title')->toArray();
+        ])->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -267,7 +267,7 @@ class GenericJoryBuilderFilterTest extends TestCase
      */
     public function it_doesnt_apply_any_filter_when_parameter_is_omitted()
     {
-        $actual = Band::jory()->applyArray([])->getModels()->pluck('name')->toArray();
+        $actual = Band::jory()->applyArray([])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -285,9 +285,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '=',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
@@ -296,9 +296,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '>',
-                'v' => 'KISS',
+                'd' => 'KISS',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
@@ -308,9 +308,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '<',
-                'v' => 'Cult',
+                'd' => 'Cult',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
@@ -319,9 +319,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '<>',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
@@ -332,9 +332,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '!=',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
@@ -345,9 +345,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
-                'v' => 'Beat%',
+                'd' => 'Beat%',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
@@ -356,9 +356,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
-                'v' => '%Stones',
+                'd' => '%Stones',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
         ], $actual);
@@ -367,9 +367,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
-                'v' => '%s%',
+                'd' => '%s%',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Beatles',
@@ -379,9 +379,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'not like',
-                'v' => '%s%',
+                'd' => '%s%',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Jimi Hendrix Experience',
@@ -391,9 +391,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'id',
                 'o' => '>=',
-                'v' => '3',
+                'd' => '3',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
             'Jimi Hendrix Experience',
@@ -408,7 +408,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                 'f' => 'year_end',
                 'o' => 'null',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
         ], $actual);
@@ -422,7 +422,7 @@ class GenericJoryBuilderFilterTest extends TestCase
                 'f' => 'year_end',
                 'o' => 'not_null',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Beatles',
@@ -437,9 +437,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'id',
                 'o' => 'in',
-                'v' => [1, 3],
+                'd' => [1, 3],
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Beatles',
@@ -453,9 +453,9 @@ class GenericJoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'id',
                 'o' => 'not_in',
-                'v' => [1, 3],
+                'd' => [1, 3],
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Jimi Hendrix Experience',
@@ -468,12 +468,37 @@ class GenericJoryBuilderFilterTest extends TestCase
         $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
-        ])->getModels()->pluck('name')->toArray();
+        ])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Beatles',
         ], $actual);
+    }
+
+    /** @test */
+    public function it_can_apply_a_filter_by_a_local_scope_on_the_related_model()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fields":["id","name"],"flt":{"f":"has_album_with_name","o":"like","d":"%a%"}}',
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                ],
+            ],
+        ]);
     }
 }

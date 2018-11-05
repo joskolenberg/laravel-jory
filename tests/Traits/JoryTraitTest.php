@@ -2,43 +2,35 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Traits;
 
+use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Tests\TestCase;
-use JosKolenberg\LaravelJory\CustomJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\GenericJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
 
 class JoryTraitTest extends TestCase
 {
-    protected function setUp()
+    /** @test */
+    public function it_can_give_a_JoryBuilder_when_applied()
     {
-        parent::setUp();
-
-        Band::joryRoutes('band');
-        Album::joryRoutes('album');
+        $this->assertInstanceOf(JoryBuilder::class, Person::jory());
     }
 
     /** @test */
-    public function it_can_give_a_genericJoryBuilder_when_applied()
+    public function it_can_give_a_custom_JoryBuilder_when_applied_and_overridden()
     {
-        $this->assertInstanceOf(GenericJoryBuilder::class, Person::jory());
-    }
-
-    /** @test */
-    public function it_can_give_a_customJoryBuilder_when_applied_and_overridden()
-    {
-        $this->assertInstanceOf(CustomJoryBuilder::class, Album::jory());
+        $this->assertInstanceOf(AlbumJoryBuilder::class, Album::jory());
     }
 
     /** @test */
     public function it_can_define_a_route()
     {
-        $response = $this->json('GET', '/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%in%"}}',
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%in%"}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
@@ -51,17 +43,19 @@ class JoryTraitTest extends TestCase
                     'year_start' => 1968,
                     'year_end' => 1980,
                 ],
-            ]);
+            ],
+        ]);
     }
 
     /** @test */
     public function it_can_define_a_route_for_a_custom_builder()
     {
-        $response = $this->json('GET', '/album', [
-            'jory' => '{"filter":{"f":"number_of_songs","o":">","v":10}}',
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => '{"filter":{"f":"number_of_songs","o":">","d":10}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
+            'data' => [
                 [
                     'id' => 3,
                     'band_id' => 1,
@@ -104,6 +98,7 @@ class JoryTraitTest extends TestCase
                     'name' => 'Electric ladyland',
                     'release_date' => '1968-10-16',
                 ],
-            ]);
+            ],
+        ]);
     }
 }

@@ -11,8 +11,8 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "laravel/framework": "^5.7",
-    "joskolenberg/jory": "0.5"
+    "laravel/framework": "^5.5",
+    "joskolenberg/jory": "^0.6"
   },
   "autoload": {
     "psr-4": {
@@ -25,14 +25,13 @@
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "^7.3",
-    "orchestra/testbench": "^3.7"
+    "orchestra/testbench": "^3.5"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/joskolenberg/jory",
-      "no-api": true
+  "extra": {
+    "laravel": {
+      "providers": [
+        "JosKolenberg\\LaravelJory\\JoryServiceProvider"
+      ]
     }
-  ]
+  }
 }

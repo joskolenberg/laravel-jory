@@ -3,15 +3,11 @@
 namespace JosKolenberg\LaravelJory\Traits;
 
 use JosKolenberg\Jory\Jory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use JosKolenberg\LaravelJory\GenericJoryBuilder;
-use JosKolenberg\LaravelJory\AbstractJoryBuilder;
+use JosKolenberg\LaravelJory\JoryBuilder;
 
 /**
- * Trait to mark a Model as Jory-queryable.
+ * Trait to make a Model "Jory-queryable".
  *
  * Trait JoryTrait
  */
@@ -20,44 +16,22 @@ trait JoryTrait
     /**
      * Return the JoryBuilder to query on this model.
      *
-     * @return AbstractJoryBuilder
+     * @return JoryBuilder
      */
-    public static function jory(): AbstractJoryBuilder
+    public static function jory(): JoryBuilder
     {
-        return static::getJoryBuilder()->onQuery(static::getJoryBaseQuery());
-    }
-
-    /**
-     * Register the routes for querying this model using the data in the request's jory parameter.
-     *
-     * @return void
-     */
-    public static function joryRoutes($uri): void
-    {
-        Route::get($uri, function (Request $request) {
-            return static::jory()->applyRequest($request);
-        });
+        return static::getJoryBuilder()->onQuery((new static())->query());
     }
 
     /**
      * Get a new JoryBuilder instance for the model.
      * Override to apply a custom JoryBuilder class for the model.
      *
-     * @return GenericJoryBuilder
+     * @return JoryBuilder
      */
-    public static function getJoryBuilder(): AbstractJoryBuilder
+    public static function getJoryBuilder(): JoryBuilder
     {
-        return new GenericJoryBuilder();
-    }
-
-    /**
-     * Get the base query to build upon with a jorybuilder.
-     *
-     * @return Builder
-     */
-    protected static function getJoryBaseQuery(): Builder
-    {
-        return (new static())->query();
+        return app()->make(JoryBuilder::class);
     }
 
     /**
@@ -71,7 +45,7 @@ trait JoryTrait
         // We will load the relations manually so remove them from Laravel's toArray() export.
         $relationNames = [];
         foreach ($jory->getRelations() as $relation) {
-            $relationNames = $relation->getName();
+            $relationNames[] = camel_case($relation->getName());
         }
         $this->makeHidden($relationNames);
 
@@ -85,10 +59,11 @@ trait JoryTrait
         // Add the relations to the result
         foreach ($jory->getRelations() as $relation) {
             $relationName = $relation->getName();
+            $cameledRelationName = camel_case($relationName);
 
-            $related = $this->$relationName;
+            $related = $this->$cameledRelationName;
 
-            if ($related == null) {
+            if ($related === null) {
                 $result[$relationName] = null;
             } elseif ($related instanceof Model) {
                 $result[$relationName] = $related->toArrayByJory($relation->getJory());

@@ -35,4 +35,9 @@ class Album extends Model
     {
         return $this->hasOne(AlbumCover::class);
     }
+
+    public function albumCover()
+    {
+        return $this->hasOne(AlbumCover::class);
+    }
 }
