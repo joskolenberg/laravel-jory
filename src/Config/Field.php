@@ -52,6 +52,7 @@ class Field
     public function hideByDefault(): self
     {
         $this->showByDefault = false;
+
         return $this;
     }
 
@@ -64,6 +65,7 @@ class Field
     public function description(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -84,9 +86,10 @@ class Field
      */
     public function getDescription(): string
     {
-        if($this->description === null){
-            return "The " . $this->field . " field.";
+        if ($this->description === null) {
+            return "The ".$this->field." field.";
         }
+
         return $this->description;
     }
 
@@ -110,7 +113,7 @@ class Field
     {
         $this->filter = new Filter($this->field);
 
-        if(is_callable($callback)){
+        if (is_callable($callback)) {
             call_user_func($callback, $this->filter);
         }
 
@@ -137,7 +140,7 @@ class Field
     {
         $this->sort = new Sort($this->field);
 
-        if(is_callable($callback)){
+        if (is_callable($callback)) {
             call_user_func($callback, $this->sort);
         }
 
@@ -153,5 +156,4 @@ class Field
     {
         return $this->sort;
     }
-
 }

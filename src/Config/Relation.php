@@ -50,6 +50,7 @@ class Relation
     public function description(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -62,6 +63,7 @@ class Relation
     public function type(string $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -82,9 +84,10 @@ class Relation
      */
     public function getDescription(): string
     {
-        if($this->description === null){
-            return "The " . $this->name . " relation.";
+        if ($this->description === null) {
+            return "The ".$this->name." relation.";
         }
+
         return $this->description;
     }
 
@@ -109,7 +112,7 @@ class Relation
             $registered = config('jory.routes');
             $type = null;
             foreach ($registered as $key => $className) {
-                if($this->modelClass === $className){
+                if ($this->modelClass === $className) {
                     $type = $key;
                     break;
                 }
@@ -120,5 +123,4 @@ class Relation
 
         return $this->type;
     }
-
 }

@@ -133,7 +133,7 @@ class Validator
         // It is a filter on a field, do validation on field an operator
         foreach ($configFilters as $configFilter) {
             if ($configFilter->getField() === $joryFilter->getField()) {
-                if ($joryFilter->getOperator() !== null &&  ! in_array($joryFilter->getOperator(), $configFilter->getOperators())) {
+                if ($joryFilter->getOperator() !== null && ! in_array($joryFilter->getOperator(), $configFilter->getOperators())) {
                     $this->errors[] = 'Operator "'.$joryFilter->getOperator().'" is not available for field "'.$joryFilter->getField().'". (Location: '.$address.'('.$joryFilter->getField().'))';
                 }
 
@@ -181,9 +181,9 @@ class Validator
         if ($this->jory->getOffset() !== null && $this->jory->getLimit() === null && $this->config->getLimitDefault() === null) {
             $this->errors[] = 'An offset cannot be set without a limit. (Location: '.$this->address.'offset)';
         }
-        if($this->config->getLimitMax() !== null){
+        if ($this->config->getLimitMax() !== null) {
             if ($this->jory->getLimit() > $this->config->getLimitMax()) {
-                $this->errors[] = 'The maximum limit for this resource is ' . $this->config->getLimitMax() . ', please lower your limit or drop the limit parameter. (Location: '.$this->address.'limit)';
+                $this->errors[] = 'The maximum limit for this resource is '.$this->config->getLimitMax().', please lower your limit or drop the limit parameter. (Location: '.$this->address.'limit)';
             }
         }
     }
@@ -220,18 +220,18 @@ class Validator
         foreach ($this->jory->getRelations() as $joryRelation) {
             $relatedConfig = null;
             foreach ($this->config->getRelations() as $configRelation) {
-                if($joryRelation->getName() === $configRelation->getName()){
+                if ($joryRelation->getName() === $configRelation->getName()) {
                     $relatedModelClass = $configRelation->getModelClass();
                     $relatedConfig = $relatedModelClass::getJoryBuilder()->getConfig();
                 }
             }
-            if($relatedConfig === null){
+            if ($relatedConfig === null) {
                 break;
             }
 
-            try{
-                (new Validator($relatedConfig, $joryRelation->getJory(), ($this->address ? $this->address . '.' : '') . $joryRelation->getName() . '.'))->validate();
-            }catch (LaravelJoryCallException $e){
+            try {
+                (new Validator($relatedConfig, $joryRelation->getJory(), ($this->address ? $this->address.'.' : '').$joryRelation->getName().'.'))->validate();
+            } catch (LaravelJoryCallException $e) {
                 $this->errors = array_merge($this->errors, $e->getErrors());
             }
         }

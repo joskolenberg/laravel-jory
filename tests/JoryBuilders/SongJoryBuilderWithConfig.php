@@ -12,21 +12,15 @@ class SongJoryBuilderWithConfig extends JoryBuilder
 {
     protected function config(Config $config): void
     {
-        $config->field('id')
-            ->sortable();
+        $config->field('id')->sortable();
 
-        $config->field('title')
-            ->description('The songs title.')
-            ->filterable(function (Filter $filter){
+        $config->field('title')->description('The songs title.')->filterable(function (Filter $filter) {
                 $filter->description('Filter on the title.');
-            })
-            ->sortable(function(Sort $sort){
+            })->sortable(function (Sort $sort) {
                 $sort->description('Order by the title.');
             });
 
-        $config->field('album_id')
-            ->hideByDefault()
-            ->filterable(function(Filter $filter){
+        $config->field('album_id')->hideByDefault()->filterable(function (Filter $filter) {
                 $filter->description('Filter on the album id.')->operators(['=']);
             });
 

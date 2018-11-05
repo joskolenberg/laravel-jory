@@ -179,11 +179,11 @@ class JoryBuilder implements Responsable
     {
         $model = $this->model;
 
-        if (!$model) {
+        if (! $model) {
             $model = $this->buildQuery()->first();
         }
 
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 
@@ -230,7 +230,7 @@ class JoryBuilder implements Responsable
 
         if ($this->first) {
             $model = $this->getFirst();
-            if (!$model) {
+            if (! $model) {
                 return null;
             }
 
@@ -319,7 +319,7 @@ class JoryBuilder implements Responsable
         // Always apply the filter on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable() . '.' . $filter->getField();
+        $field = $query->getModel()->getTable().'.'.$filter->getField();
         $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
     }
 
@@ -332,7 +332,7 @@ class JoryBuilder implements Responsable
      */
     protected function getCustomFilterMethodName(Filter $filter)
     {
-        return 'scope' . studly_case($filter->getField()) . 'Filter';
+        return 'scope'.studly_case($filter->getField()).'Filter';
     }
 
     /**
@@ -357,11 +357,13 @@ class JoryBuilder implements Responsable
         } catch (LaravelJoryCallException $e) {
             $responseKey = $this->getErrorResponseKey();
             $response = $responseKey === null ? $e->getErrors() : [$responseKey => $e->getErrors()];
+
             return response($response, 422);
         }
 
         $responseKey = $this->getDataResponseKey();
         $response = $responseKey === null ? $data : [$responseKey => $data];
+
         return response($response);
     }
 
@@ -518,7 +520,7 @@ class JoryBuilder implements Responsable
         // Always apply the sort on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable() . '.' . $sort->getField();
+        $field = $query->getModel()->getTable().'.'.$sort->getField();
         $this->applyDefaultSort($query, $field, $sort->getOrder());
     }
 
@@ -544,7 +546,7 @@ class JoryBuilder implements Responsable
      */
     protected function getCustomSortMethodName(Sort $filter): string
     {
-        return 'scope' . studly_case($filter->getField()) . 'Sort';
+        return 'scope'.studly_case($filter->getField()).'Sort';
     }
 
     /**
@@ -625,9 +627,9 @@ class JoryBuilder implements Responsable
      */
     protected function beforeQueryBuild($query, Jory $jory, $count = false)
     {
-        if(!$count){
+        if (! $count) {
             $this->selectOnlyRootTable($query);
-            if($this->config->getLimitDefault() !== null){
+            if ($this->config->getLimitDefault() !== null) {
                 $query->limit($this->config->getLimitDefault());
             }
         }
@@ -653,7 +655,7 @@ class JoryBuilder implements Responsable
      */
     protected function afterQueryBuild($query, Jory $jory, $count = false)
     {
-        if(!$count){
+        if (! $count) {
             $this->applyDefaultSortsFromConfig($query);
         }
     }
@@ -697,6 +699,7 @@ class JoryBuilder implements Responsable
             $jory = $this->joryParser->getJory();
 
             $this->jory = $jory;
+
             return $this->jory;
         }
 
@@ -712,7 +715,7 @@ class JoryBuilder implements Responsable
     protected function selectOnlyRootTable($query): void
     {
         $table = $query->getModel()->getTable();
-        $query->select($table . '.*');
+        $query->select($table.'.*');
     }
 
     /**
@@ -769,28 +772,28 @@ class JoryBuilder implements Responsable
 
         $originalJory = $this->getJory();
 
-        if($originalJory->getFields() !== null){
+        if ($originalJory->getFields() !== null) {
             // There are fields specified in the request, use these
             $jory->setFields($originalJory->getFields());
-        } elseif ($this->config->getFields() !== null){
+        } elseif ($this->config->getFields() !== null) {
             // No fields set in the request, but there are fields
             // specified in the config, than we will update the fields
             // with the ones to be shown by default.
             $defaultFields = [];
-            foreach ($this->config->getFields() as $field){
-                if($field->isShownByDefault()){
+            foreach ($this->config->getFields() as $field) {
+                if ($field->isShownByDefault()) {
                     $defaultFields[] = $field->getField();
                 }
                 $jory->setFields($defaultFields);
             }
-        }else{
+        } else {
             // No fields set in request or config.
             // No action needed, the full model's toArray() result will be returned during export.
         }
 
         // Apply relations
         $baseModel = $this->builder->getModel();
-        foreach ($originalJory->getRelations() as $originalRelation){
+        foreach ($originalJory->getRelations() as $originalRelation) {
             $relationName = camel_case($originalRelation->getName());
             $relatedModel = $baseModel->$relationName()->getModel();
             $relatedJoryBuilder = $relatedModel::jory();

@@ -48,6 +48,7 @@ class Sort
     public function description(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -68,9 +69,10 @@ class Sort
      */
     public function getDescription(): string
     {
-        if($this->description === null){
-            return "Sort by the " . $this->field . " field.";
+        if ($this->description === null) {
+            return "Sort by the ".$this->field." field.";
         }
+
         return $this->description;
     }
 

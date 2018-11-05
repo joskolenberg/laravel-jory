@@ -148,11 +148,13 @@ class JoryController extends Controller
             // All data must be valid to get a 200 response
 
             $response = $errorResponseKey === null ? $errors : [$errorResponseKey => $errors];
+
             return response($response, 422);
         }
 
         // Everything went well, return result
         $response = $dataResponseKey === null ? $results : [$dataResponseKey => $results];
+
         return response($response);
     }
 

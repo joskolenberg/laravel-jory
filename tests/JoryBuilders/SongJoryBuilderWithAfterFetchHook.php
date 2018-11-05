@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class SongJoryBuilderWithAfterFetchHook extends JoryBuilder
 {
-
     protected function afterFetch(Collection $collection, Jory $jory): Collection
     {
         $collection = parent::afterFetch($collection, $jory);
@@ -16,6 +15,5 @@ class SongJoryBuilderWithAfterFetchHook extends JoryBuilder
         return $collection->filter(function ($model) {
             return ($model->id > 100);
         });
-
     }
 }

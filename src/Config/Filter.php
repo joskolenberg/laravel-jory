@@ -44,6 +44,7 @@ class Filter
     public function description(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -56,6 +57,7 @@ class Filter
     public function operators(array $operators): self
     {
         $this->operators = $operators;
+
         return $this;
     }
 
@@ -86,9 +88,10 @@ class Filter
      */
     public function getDescription(): string
     {
-        if($this->description === null){
-            return "Filter on the " . $this->field . " field.";
+        if ($this->description === null) {
+            return "Filter on the ".$this->field." field.";
         }
+
         return $this->description;
     }
 }

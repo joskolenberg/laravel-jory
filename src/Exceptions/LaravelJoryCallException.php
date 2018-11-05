@@ -8,11 +8,11 @@ namespace JosKolenberg\LaravelJory\Exceptions;
  * These exceptions will be used to show in the errors return array.
  *
  * Class LaravelJoryCallException
+ *
  * @package JosKolenberg\LaravelJory\Exceptions
  */
 class LaravelJoryCallException extends \Exception
 {
-
     protected $errors = [];
 
     public function __construct(array $errors, string $message = "", int $code = 0, \Throwable $previous = null)
@@ -28,5 +28,4 @@ class LaravelJoryCallException extends \Exception
     {
         return $this->errors;
     }
-
 }

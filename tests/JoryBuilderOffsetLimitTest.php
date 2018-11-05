@@ -7,7 +7,6 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
 class JoryBuilderOffsetLimitTest extends TestCase
 {
-
     /** @test */
     public function it_can_apply_an_offset_and_limit()
     {

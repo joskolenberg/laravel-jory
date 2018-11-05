@@ -26,25 +26,15 @@ class BandJoryBuilder extends JoryBuilder
     {
         parent::config($config);
 
-        $config->field('id')
-            ->filterable(function (Filter $filter) {
-                $filter->description('Try this filter by id!')
-                    ->operators(["=", ">", "<", "<=", ">=", "<>", "!="]);
+        $config->field('id')->filterable(function (Filter $filter) {
+                $filter->description('Try this filter by id!')->operators(["=", ">", "<", "<=", ">=", "<>", "!="]);
             })->sortable();
 
-        $config->field('name')
-            ->filterable()
-            ->sortable();
+        $config->field('name')->filterable()->sortable();
 
-        $config->field('year_start')
-            ->description('The year in which the band started.')
-            ->filterable()
-            ->sortable();
+        $config->field('year_start')->description('The year in which the band started.')->filterable()->sortable();
 
-        $config->field('year_end')
-            ->description('The year in which the band quitted, could be null if band still exists.')
-            ->filterable()
-            ->sortable();
+        $config->field('year_end')->description('The year in which the band quitted, could be null if band still exists.')->filterable()->sortable();
 
         $config->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
         $config->filter('number_of_albums_in_year')->operators([

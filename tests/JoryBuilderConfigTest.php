@@ -64,5 +64,4 @@ class JoryBuilderConfigTest extends TestCase
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
     }
-
 }
