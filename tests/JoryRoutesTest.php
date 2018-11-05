@@ -8,7 +8,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_multiple_records()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -27,7 +27,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_multiple_records_with_jory_data_applied()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%III%"},"fld":["id","name","release_date"]}},"fld":["id","name"]}',
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"},"fld":["id","name","release_date"]}},"fld":["id","name"]}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -52,7 +52,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_a_single_record()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["id","name"],"rlt":{"albums":{"rlt":{"songs":{"flt":{"f":"title","o":"like","v":"%love%"}}},"srt":["-release_date"]}}}',
+            'jory' => '{"fld":["id","name"],"rlt":{"albums":{"rlt":{"songs":{"flt":{"f":"title","o":"like","d":"%love%"}}},"srt":["-release_date"]}}}',
         ]);
 
         $expected = [
@@ -129,7 +129,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_the_record_count_with_a_filter_applied()
     {
         $response = $this->json('GET', 'jory/song/count', [
-            'jory' => '{"flt":{"f":"title","o":"like","v":"%love%"},"ofs":3,"lmt":10}',
+            'jory' => '{"flt":{"f":"title","o":"like","d":"%love%"},"ofs":3,"lmt":10}',
         ]);
 
         $expected = [
@@ -144,7 +144,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_the_record_count_with_a_custom_filter_applied()
     {
         $response = $this->json('GET', 'jory/song/count', [
-            'jory' => '{"flt":{"and":[{"f":"title","o":"like","v":"%love%"},{"f":"album_name","o":"like","v":"%experienced%"}]},"ofs":3,"lmt":10}',
+            'jory' => '{"flt":{"and":[{"f":"title","o":"like","d":"%love%"},{"f":"album_name","o":"like","d":"%experienced%"}]},"ofs":3,"lmt":10}',
         ]);
 
         $expected = [
@@ -210,7 +210,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_collection_2()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","v":"The End"},"rlt":{"album":{"rlt":{"songs":{"flt":{"wrong":"parameter"}}}}}}',
+            'jory' => '{"filter":{"f":"title","o":"=","d":"The End"},"rlt":{"album":{"rlt":{"songs":{"flt":{"wrong":"parameter"}}}}}}',
         ]);
 
         $expected = [
@@ -247,12 +247,12 @@ class JoryRoutesTest extends TestCase
     public function it_can_load_multiple_resources_at_once()
     {
         $response = $this->json('GET', 'jory', [
-            'band as btls' => '{"flt":{"f":"id","v":3}}',
-            'band:2 as ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%II%"}}}}',
-            'song:count as song_count' => '{"flt":{"f":"title","o":"like","v":"%Love%"}}',
-            'song as lovesongs' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":["title"],"srt":["title"]}',
-            'song' => '{"flt":{"f":"title","o":"like","v":"%Lovel%"},"fld":["title"],"srt":["title"]}',
-            'band:count' => '{"flt":{"f":"name","o":"like","v":"%r%"}}',
+            'band as btls' => '{"flt":{"f":"id","d":3}}',
+            'band:2 as ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}}',
+            'song:count as song_count' => '{"flt":{"f":"title","o":"like","d":"%Love%"}}',
+            'song as lovesongs' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
+            'song' => '{"flt":{"f":"title","o":"like","d":"%Lovel%"},"fld":["title"],"srt":["title"]}',
+            'band:count' => '{"flt":{"f":"name","o":"like","d":"%r%"}}',
             'person:3' => '{"fld":["first_name","last_name"]}',
         ]);
 
@@ -334,10 +334,10 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_resource_is_not_found()
     {
         $response = $this->json('GET', 'jory', [
-            'bandd' => '{"flt":{"f":"id","v":3}}',
-            'band:2 as ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","v":"%II%"}}}}',
-            'song as lovesongs' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":["title"],"srt":["title"]}',
-            'son as lovesong' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":["title"],"srt":["title"]}',
+            'bandd' => '{"flt":{"f":"id","d":3}}',
+            'band:2 as ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}}',
+            'song as lovesongs' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
+            'son as lovesong' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
         ]);
 
         $expected = [
@@ -355,7 +355,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_JoryException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
-            'song' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":[title"],"srt":["title"]}',
+            'song' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":[title"],"srt":["title"]}',
         ]);
 
         $expected = [
@@ -372,9 +372,9 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_LaravelJoryCallException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
-            'band' => '{"flt":{"f":"name","o":"like","v":"%bea%"},"fld":["name"],"srt":["naame"]}',
-            'band as band_2' => '{"flt":{"f":"name","o":"like","v":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}',
-            'song' => '{"flt":{"f":"title","o":"like","v":"%Love%"},"fld":[title"],"srt":["title"]}',
+            'band' => '{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]}',
+            'band as band_2' => '{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}',
+            'song' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":[title"],"srt":["title"]}',
         ]);
 
         $expected = [

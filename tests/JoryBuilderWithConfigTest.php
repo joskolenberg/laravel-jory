@@ -548,7 +548,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_filter_is_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","v":"%love%"}}',
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","d":"%love%"}}',
         ]);
 
         $expected = [
@@ -571,7 +571,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_filter_is_not_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"titel","o":"like","v":"%love%"}}',
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"titel","o":"like","d":"%love%"}}',
         ]);
 
         $expected = [
@@ -586,7 +586,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_requested_filters_are_not_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"and":[{"f":"titel","o":"like","v":"%love%"},{"f":"title","o":"like","v":"%test%"},{"f":"albumm_id","v":11}]}}',
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"and":[{"f":"titel","o":"like","d":"%love%"},{"f":"title","o":"like","d":"%test%"},{"f":"albumm_id","d":11}]}}',
         ]);
 
         $expected = [
@@ -602,7 +602,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_the_requested_operator_is_available_on_a_filter()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"and":[{"f":"titel","o":"like","v":"%love%"},{"f":"title","o":"like","v":"%test%"},{"f":"albumm_id","v":11},{"f":"album_id","o":"like","v":11}]}}',
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"and":[{"f":"titel","o":"like","d":"%love%"},{"f":"title","o":"like","d":"%test%"},{"f":"albumm_id","d":11},{"f":"album_id","o":"like","d":11}]}}',
         ]);
 
         $expected = [
@@ -619,7 +619,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_sort_is_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","v":"%love%"},"srt":["title"]}',
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","d":"%love%"},"srt":["title"]}',
         ]);
 
         $expected = [
@@ -642,7 +642,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_sort_is_not_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","v":"%love%"},"srt":["tite","if"]}',
+            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","d":"%love%"},"srt":["tite","if"]}',
         ]);
 
         $expected = [
@@ -658,7 +658,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_the_requested_limit_exceeds_the_maximum()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","v":"%love%"},"lmt":1500}',
+            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","d":"%love%"},"lmt":1500}',
         ]);
 
         $expected = [
@@ -673,7 +673,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_the_requested_limit_does_not_exceed_the_maximum()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","v":"%love"},"srt":["title"],"lmt":250}',
+            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","d":"%love"},"srt":["title"],"lmt":250}',
         ]);
 
         $expected = [
@@ -863,7 +863,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_does_not_validate_on_limit_when_the_max_is_set_to_null()
     {
         $response = $this->json('GET', 'song-two', [
-            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","v":"%love"},"srt":["title"],"lmt":321311}',
+            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","d":"%love"},"srt":["title"],"lmt":321311}',
         ]);
 
         $expected = [
@@ -1023,7 +1023,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_subfilter_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","d":"2018-01-01"}}',
         ]);
 
         $expected = [
@@ -1041,7 +1041,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_sort_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"srt":["name","releese_date"],"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"srt":["name","releese_date"],"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","d":"2018-01-01"}}',
         ]);
 
         $expected = [
@@ -1060,7 +1060,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_limit_is_exceeded_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134}},"flt":{"f":"date_start","d":"2018-01-01"}}',
         ]);
 
         $expected = [
@@ -1076,7 +1076,7 @@ class JoryBuilderWithConfigTest extends TestCase
     public function it_can_validate_if_a_relation_is_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134,"rlt":{"band":{},"songgs":{}}}},"flt":{"f":"date_start","v":"2018-01-01"}}',
+            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134,"rlt":{"band":{},"songgs":{}}}},"flt":{"f":"date_start","d":"2018-01-01"}}',
         ]);
 
         $expected = [

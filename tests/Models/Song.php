@@ -20,10 +20,10 @@ class Song extends Model
         return $this->belongsTo(Album::class);
     }
 
-    public function scopeAlbumNameFilter($query, $operator, $value)
+    public function scopeAlbumNameFilter($query, $operator, $data)
     {
-        $query->whereHas('album', function ($query) use ($operator, $value) {
-            $query->where('name', $operator, $value);
+        $query->whereHas('album', function ($query) use ($operator, $data) {
+            $query->where('name', $operator, $data);
         });
     }
 

@@ -10,15 +10,15 @@ use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 
 class AlbumJoryBuilder extends JoryBuilder
 {
-    protected function scopeNumberOfSongsFilter($query, $operator, $value)
+    protected function scopeNumberOfSongsFilter($query, $operator, $data)
     {
-        $query->has('songs', $operator, $value);
+        $query->has('songs', $operator, $data);
     }
 
-    protected function scopeHasSongWithTitleFilter($query, $operator, $value)
+    protected function scopeHasSongWithTitleFilter($query, $operator, $data)
     {
-        $query->whereHas('songs', function ($query) use ($operator, $value) {
-            $query->where('title', $operator, $value);
+        $query->whereHas('songs', function ($query) use ($operator, $data) {
+            $query->where('title', $operator, $data);
         });
     }
 

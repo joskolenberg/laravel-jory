@@ -26,7 +26,7 @@ class JoryTraitTest extends TestCase
     public function it_can_define_a_route()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%in%"}}',
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%in%"}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -51,7 +51,7 @@ class JoryTraitTest extends TestCase
     public function it_can_define_a_route_for_a_custom_builder()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"filter":{"f":"number_of_songs","o":">","v":10}}',
+            'jory' => '{"filter":{"f":"number_of_songs","o":">","d":10}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([

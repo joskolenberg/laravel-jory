@@ -32,7 +32,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_json_string()
     {
-        $actual = Song::jory()->applyJson('{"filter":{"f":"title","o":"like","v":"%love"}}')->get()->pluck('title')->toArray();
+        $actual = Song::jory()->applyJson('{"filter":{"f":"title","o":"like","d":"%love"}}')->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Whole Lotta Love',
@@ -49,7 +49,7 @@ class JoryBuilderTest extends TestCase
             'filter' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => 'love%',
+                'd' => 'love%',
             ],
         ])->get()->pluck('title')->toArray();
 
@@ -64,7 +64,7 @@ class JoryBuilderTest extends TestCase
     public function it_can_apply_a_jory_json_string_from_a_request()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -86,7 +86,7 @@ class JoryBuilderTest extends TestCase
             'filter' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => 'love%',
+                'd' => 'love%',
             ],
         ]))->getJory();
 
@@ -122,7 +122,7 @@ class JoryBuilderTest extends TestCase
             'filter' => [
                 'f' => 'number_of_songs',
                 'o' => '>',
-                'v' => 10,
+                'd' => 10,
             ],
         ])->get()->pluck('name')->toArray();
 
@@ -146,12 +146,12 @@ class JoryBuilderTest extends TestCase
                     [
                         'f' => 'number_of_songs',
                         'o' => '>=',
-                        'v' => 11,
+                        'd' => 11,
                     ],
                     [
                         'f' => 'number_of_songs',
                         'o' => '<=',
-                        'v' => 9,
+                        'd' => 9,
                     ],
                 ],
             ],
@@ -180,12 +180,12 @@ class JoryBuilderTest extends TestCase
                     [
                         'f' => 'number_of_songs',
                         'o' => '>=',
-                        'v' => 11,
+                        'd' => 11,
                     ],
                     [
                         'f' => 'name',
                         'o' => 'like',
-                        'v' => '%el%',
+                        'd' => '%el%',
                     ],
                 ],
             ],
@@ -204,7 +204,7 @@ class JoryBuilderTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
-                'v' => '%t%',
+                'd' => '%t%',
             ],
         ])->get()->pluck('name')->toArray();
 
@@ -232,7 +232,7 @@ class JoryBuilderTest extends TestCase
         $actual = Instrument::jory()->applyArray([
             'flt' => [
                 'f' => 'name',
-                'v' => 'Hobo',
+                'd' => 'Hobo',
             ],
         ])->first()->toArray();
 
@@ -243,7 +243,7 @@ class JoryBuilderTest extends TestCase
     public function it_can_filter_sort_and_select_on_an_ambiguous_column_when_using_a_belongs_to_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"id","o":">","v":2},"srt":["-id"],"fld":["id","name"],"rlt":{"people":{"filter":{"f":"id","o":"<","v":14},"srt":["-id"],"fld":["id","last_name"]}}}',
+            'jory' => '{"filter":{"f":"id","o":">","d":2},"srt":["-id"],"fld":["id","name"],"rlt":{"people":{"filter":{"f":"id","o":"<","d":14},"srt":["-id"],"fld":["id","last_name"]}}}',
         ]);
 
         $expected = [

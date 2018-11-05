@@ -387,7 +387,7 @@ class JoryBuilderSortTest extends TestCase
     public function it_can_combine_relations_filters_and_sorts()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"name","o":"like","v":"%in%"},"srt":["-name"],"rlt":{"people":{"flt":{"f":"last_name","o":"like","v":"%a%"},"srt":["-last_name"],"fld":["last_name"]}}}',
+            'jory' => '{"flt":{"f":"name","o":"like","d":"%in%"},"srt":["-name"],"rlt":{"people":{"flt":{"f":"last_name","o":"like","d":"%a%"},"srt":["-last_name"],"fld":["last_name"]}}}',
         ]);
 
         $expected = [

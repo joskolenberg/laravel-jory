@@ -17,7 +17,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'field' => 'first_name',
                 'operator' => 'like',
-                'value' => '%john%',
+                'data' => '%john%',
             ],
         ])->get()->pluck('last_name')->toArray();
 
@@ -35,12 +35,12 @@ class JoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'first_name',
                         'operator' => 'like',
-                        'value' => '%paul%',
+                        'data' => '%paul%',
                     ],
                     [
                         'field' => 'last_name',
                         'operator' => 'like',
-                        'value' => '%le%',
+                        'data' => '%le%',
                     ],
                 ],
             ],
@@ -60,12 +60,12 @@ class JoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'first_name',
                         'operator' => 'like',
-                        'value' => '%john%',
+                        'data' => '%john%',
                     ],
                     [
                         'field' => 'last_name',
                         'operator' => 'like',
-                        'value' => '%le%',
+                        'data' => '%le%',
                     ],
                 ],
             ],
@@ -85,7 +85,7 @@ class JoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                 ],
             ],
@@ -114,19 +114,19 @@ class JoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'data' => '%bold%',
                             ],
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'data' => '%er%',
                             ],
                         ],
                     ],
@@ -152,31 +152,31 @@ class JoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'data' => '%bold%',
                             ],
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'data' => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => 'may%',
+                                        'data' => 'may%',
                                     ],
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => '%love',
+                                        'data' => '%love',
                                     ],
                                 ],
                             ],
@@ -205,43 +205,43 @@ class JoryBuilderFilterTest extends TestCase
                     [
                         'field' => 'title',
                         'operator' => 'like',
-                        'value' => '%love%',
+                        'data' => '%love%',
                     ],
                     [
                         'group_or' => [
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%bold%',
+                                'data' => '%bold%',
                             ],
                             [
                                 'field' => 'title',
                                 'operator' => 'like',
-                                'value' => '%er%',
+                                'data' => '%er%',
                             ],
                             [
                                 'group_and' => [
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => '%e%',
+                                        'data' => '%e%',
                                     ],
                                     [
                                         'field' => 'title',
                                         'operator' => 'like',
-                                        'value' => '%a%',
+                                        'data' => '%a%',
                                     ],
                                     [
                                         'group_or' => [
                                             [
                                                 'field' => 'title',
                                                 'operator' => 'like',
-                                                'value' => '%whole%',
+                                                'data' => '%whole%',
                                             ],
                                             [
                                                 'field' => 'title',
                                                 'operator' => 'like',
-                                                'value' => '%gods%',
+                                                'data' => '%gods%',
                                             ],
                                         ],
                                     ],
@@ -285,7 +285,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '=',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -296,7 +296,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '>',
-                'v' => 'KISS',
+                'd' => 'KISS',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -308,7 +308,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '<',
-                'v' => 'Cult',
+                'd' => 'Cult',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -319,7 +319,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '<>',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -332,7 +332,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => '!=',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -345,7 +345,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
-                'v' => 'Beat%',
+                'd' => 'Beat%',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -356,7 +356,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
-                'v' => '%Stones',
+                'd' => '%Stones',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -367,7 +367,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
-                'v' => '%s%',
+                'd' => '%s%',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -379,7 +379,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'name',
                 'o' => 'not like',
-                'v' => '%s%',
+                'd' => '%s%',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -391,7 +391,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'id',
                 'o' => '>=',
-                'v' => '3',
+                'd' => '3',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -437,7 +437,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'id',
                 'o' => 'in',
-                'v' => [1, 3],
+                'd' => [1, 3],
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -453,7 +453,7 @@ class JoryBuilderFilterTest extends TestCase
             'filter' => [
                 'f' => 'id',
                 'o' => 'not_in',
-                'v' => [1, 3],
+                'd' => [1, 3],
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
@@ -468,7 +468,7 @@ class JoryBuilderFilterTest extends TestCase
         $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'name',
-                'v' => 'Beatles',
+                'd' => 'Beatles',
             ],
         ])->get()->pluck('name')->toArray();
 
@@ -481,7 +481,7 @@ class JoryBuilderFilterTest extends TestCase
     public function it_can_apply_a_filter_by_a_local_scope_on_the_related_model()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fields":["id","name"],"flt":{"f":"has_album_with_name","o":"like","v":"%a%"}}',
+            'jory' => '{"fields":["id","name"],"flt":{"f":"has_album_with_name","o":"like","d":"%a%"}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([

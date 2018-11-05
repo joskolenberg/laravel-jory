@@ -21,7 +21,7 @@ class ControllerUsageTest extends TestCase
     public function it_can_return_a_collection_based_on_request()
     {
         $response = $this->json('GET', 'band', [
-            'jory' => '{"filter":{"f":"name","o":"like","v":"%zep%"}}',
+            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"}}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -54,7 +54,7 @@ class ControllerUsageTest extends TestCase
     /** @test */
     public function it_can_return_a_single_record_filtered_by_jory()
     {
-        $response = $this->json('GET', 'band/first-by-filter', ['jory' => '{"flt":{"f":"name","v":"Beatles"}}']);
+        $response = $this->json('GET', 'band/first-by-filter', ['jory' => '{"flt":{"f":"name","d":"Beatles"}}']);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
@@ -69,7 +69,7 @@ class ControllerUsageTest extends TestCase
     /** @test */
     public function it_can_return_a_record_count_based_on_jory_filters()
     {
-        $response = $this->json('GET', 'band/count', ['jory' => '{"flt":{"f":"name","o":"like","v":"%r%"}}']);
+        $response = $this->json('GET', 'band/count', ['jory' => '{"flt":{"f":"name","o":"like","d":"%r%"}}']);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => 2,

@@ -22,7 +22,7 @@ class JoryBuilderHookTest extends TestCase
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => '%love%',
+                'd' => '%love%',
             ],
             'srt' => [
                 'title',
@@ -55,7 +55,7 @@ class JoryBuilderHookTest extends TestCase
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => '%love%',
+                'd' => '%love%',
             ],
             'srt' => [
                 'title',
@@ -92,7 +92,7 @@ class JoryBuilderHookTest extends TestCase
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => '%love%',
+                'd' => '%love%',
             ],
             'srt' => [
                 'title',
@@ -159,7 +159,7 @@ class JoryBuilderHookTest extends TestCase
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => '%and%',
+                'd' => '%and%',
             ],
             'srt' => [
                 'title',
@@ -251,7 +251,7 @@ class JoryBuilderHookTest extends TestCase
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => '%and%',
+                'd' => '%and%',
             ],
             'srt' => [
                 'title',
@@ -279,7 +279,7 @@ class JoryBuilderHookTest extends TestCase
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => '%love%',
+                'd' => '%love%',
             ],
             'srt' => [
                 'title',
@@ -385,7 +385,7 @@ class JoryBuilderHookTest extends TestCase
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
-                'v' => '%love%',
+                'd' => '%love%',
             ],
             'fld' => [
                 'title',

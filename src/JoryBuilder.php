@@ -304,14 +304,14 @@ class JoryBuilder implements Responsable
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
         if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $filter->getOperator(), $filter->getValue());
+            $this->$customMethodName($query, $filter->getOperator(), $filter->getData());
 
             return;
         }
 
         $model = $query->getModel();
         if (method_exists($model, $customMethodName)) {
-            $model->$customMethodName($query, $filter->getOperator(), $filter->getValue());
+            $model->$customMethodName($query, $filter->getOperator(), $filter->getData());
 
             return;
         }
@@ -320,7 +320,7 @@ class JoryBuilder implements Responsable
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
         $field = $query->getModel()->getTable() . '.' . $filter->getField();
-        $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getValue());
+        $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
     }
 
     /**
@@ -373,9 +373,9 @@ class JoryBuilder implements Responsable
      * @param mixed $query
      * @param $field
      * @param $operator
-     * @param $value
+     * @param $data
      */
-    protected function applyDefaultFieldFilter($query, $field, $operator, $value): void
+    protected function applyDefaultFieldFilter($query, $field, $operator, $data): void
     {
         switch ($operator) {
             case 'null':
@@ -387,15 +387,15 @@ class JoryBuilder implements Responsable
 
                 return;
             case 'in':
-                $query->whereIn($field, $value);
+                $query->whereIn($field, $data);
 
                 return;
             case 'not_in':
-                $query->whereNotIn($field, $value);
+                $query->whereNotIn($field, $data);
 
                 return;
             default:
-                $query->where($field, $operator ?: '=', $value);
+                $query->where($field, $operator ?: '=', $data);
         }
     }
 

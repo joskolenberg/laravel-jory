@@ -41,10 +41,10 @@ class Band extends Model
         return $this->hasManyThrough(Song::class, Album::class);
     }
 
-    public function scopeHasAlbumWithNameFilter($query, $operator, $value)
+    public function scopeHasAlbumWithNameFilter($query, $operator, $data)
     {
-        $query->whereHas('albums', function ($query) use ($operator, $value) {
-            $query->where('name', $operator, $value);
+        $query->whereHas('albums', function ($query) use ($operator, $data) {
+            $query->where('name', $operator, $data);
         });
     }
 }

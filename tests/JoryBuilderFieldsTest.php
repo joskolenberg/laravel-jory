@@ -40,7 +40,7 @@ class JoryBuilderFieldsTest extends TestCase
     public function it_can_specify_the_fields_to_return_on_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"name","o":"like","v":"%zep%"},"rlt":{"songs":{"fld":["title"]}},"fields":["id","name"]}',
+            'jory' => '{"flt":{"f":"name","o":"like","d":"%zep%"},"rlt":{"songs":{"fld":["title"]}},"fields":["id","name"]}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -197,7 +197,7 @@ class JoryBuilderFieldsTest extends TestCase
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":[],"flt":{"f":"name","o":"like","v":"%zep%"},"rlt":{"songs":{"flt":{"f":"id","o":">","v":54},"fld":["title"]}}}',
+            'jory' => '{"fld":[],"flt":{"f":"name","o":"like","d":"%zep%"},"rlt":{"songs":{"flt":{"f":"id","o":">","d":54},"fld":["title"]}}}',
         ]);
 
         $expected = [

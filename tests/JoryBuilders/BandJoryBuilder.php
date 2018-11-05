@@ -11,9 +11,8 @@ use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class BandJoryBuilder extends JoryBuilder
 {
-    protected function scopeNumberOfAlbumsInYearFilter($query, $operator, $value)
+    protected function scopeNumberOfAlbumsInYearFilter($query, $operator, $data)
     {
-        $data = $value;
         $year = $data['year'];
         $value = $data['value'];
 
