@@ -250,7 +250,6 @@ class Validator
         $bestMatch = '';
 
         foreach ($array as $item) {
-
             $lev = levenshtein($value, $item);
 
             if ($lev <= $bestScore || $bestScore < 0) {
