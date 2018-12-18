@@ -58,10 +58,9 @@ class JoryController extends Controller
         if (! $modelClass) {
             abort(404);
         }
+        $query = $modelClass::whereKey($id);
 
-        $model = $modelClass::findOrFail($id);
-
-        return $modelClass::jory()->applyRequest($request)->onModel($model);
+        return $modelClass::jory()->applyRequest($request)->onQuery($query)->first();
     }
 
     /**

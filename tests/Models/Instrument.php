@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
+use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Traits\JoryTrait;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\InstrumentJoryBuilder;
 
@@ -24,7 +25,7 @@ class Instrument extends Model
         return $this->belongsToMany(Person::class);
     }
 
-    public static function getJoryBuilder()
+    public static function getJoryBuilder(): JoryBuilder
     {
         return new InstrumentJoryBuilder();
     }

@@ -15,6 +15,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Person;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
+use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryBuilder;
 
 class TestCase extends Orchestra
 {
@@ -37,6 +38,7 @@ class TestCase extends Orchestra
             'instrument' => Instrument::class,
             'person' => Person::class,
             'song' => Song::class,
+            'song-custom' => SongWithCustomJoryBuilder::class,
         ]);
     }
 

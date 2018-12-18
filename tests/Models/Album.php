@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
+use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Traits\JoryTrait;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
 
@@ -26,7 +27,7 @@ class Album extends Model
         return $this->belongsTo(Band::class);
     }
 
-    public static function getJoryBuilder()
+    public static function getJoryBuilder(): JoryBuilder
     {
         return new AlbumJoryBuilder();
     }
