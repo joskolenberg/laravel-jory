@@ -7,7 +7,6 @@ use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBu
 
 class SongWithCustomJoryBuilder extends Song
 {
-
     public static function getJoryBuilder(): JoryBuilder
     {
         return new SongJoryBuilderWithBeforeQueryBuildFilterHook();
