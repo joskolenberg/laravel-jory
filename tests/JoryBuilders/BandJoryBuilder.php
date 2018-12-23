@@ -50,7 +50,7 @@ class BandJoryBuilder extends JoryBuilder
         $config->limitDefault(30)->limitMax(120);
 
         $config->relation('albums', Album::class)->description('Get the related albums for the band.');
-        $config->relation('people', Person::class)->type('person');
+        $config->relation('people', Person::class);
         $config->relation('songs', Song::class);
     }
 }

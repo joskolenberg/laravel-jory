@@ -22,11 +22,6 @@ class Relation
     /**
      * @var string
      */
-    protected $type;
-
-    /**
-     * @var string
-     */
     protected $description;
 
     /**
@@ -55,19 +50,6 @@ class Relation
     }
 
     /**
-     * Set the related model type.
-     *
-     * @param string $type
-     * @return Relation
-     */
-    public function type(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
      * Get the name.
      *
      * @return string
@@ -85,7 +67,7 @@ class Relation
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'The '.$this->name.' relation.';
+            return 'The ' . $this->name . ' relation.';
         }
 
         return $this->description;
@@ -108,19 +90,15 @@ class Relation
      */
     public function getType(): string
     {
-        if ($this->type === null) {
-            $registered = config('jory.routes');
-            $type = null;
-            foreach ($registered as $key => $className) {
-                if ($this->modelClass === $className) {
-                    $type = $key;
-                    break;
-                }
+        $registered = config('jory.routes');
+        $type = null;
+        foreach ($registered as $key => $className) {
+            if ($this->modelClass === $className) {
+                $type = $key;
+                break;
             }
-
-            return $type ? $type : 'Not defined.';
         }
 
-        return $this->type;
+        return $type ? $type : 'Not defined.';
     }
 }
