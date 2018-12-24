@@ -45,23 +45,6 @@ class JoryBuildersRegister
     }
 
     /**
-     * Get a registration by a JoryBuilder's classname.
-     *
-     * @param string $builderClass
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration|null
-     */
-    public function getRegistrationByBuilderClass(string $builderClass): ? JoryBuilderRegistration
-    {
-        foreach ($this->registrations as $registration) {
-            if ($registration->getBuilderClass() == $builderClass) {
-                return $registration;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Get a registration by uri.
      *
      * @param string $uri
