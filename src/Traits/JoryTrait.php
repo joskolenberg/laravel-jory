@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Traits;
 use JosKolenberg\Jory\Jory;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 /**
  * Trait to make a Model "Jory-queryable".
@@ -31,7 +32,16 @@ trait JoryTrait
      */
     public static function getJoryBuilder(): JoryBuilder
     {
-        return app()->make(JoryBuilder::class);
+        $register = app()->make(JoryBuildersRegister::class);
+
+        $registration = $register->getRegistrationByModelClass(static::class);
+
+        if(!$registration || !$registration->getBuilderClass()){
+            return app()->makeWith(JoryBuilder::class, ['modelClass' => static::class]);
+        } else{
+            $builderClass = $registration->getBuilderClass();
+            return new $builderClass(static::class);
+        }
     }
 
     /**

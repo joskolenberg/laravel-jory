@@ -5,9 +5,6 @@ namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Filter;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class BandJoryBuilder extends JoryBuilder
 {
@@ -49,8 +46,8 @@ class BandJoryBuilder extends JoryBuilder
 
         $config->limitDefault(30)->limitMax(120);
 
-        $config->relation('albums', Album::class)->description('Get the related albums for the band.');
-        $config->relation('people', Person::class);
-        $config->relation('songs', Song::class);
+        $config->relation('albums')->description('Get the related albums for the band.');
+        $config->relation('people');
+        $config->relation('songs');
     }
 }

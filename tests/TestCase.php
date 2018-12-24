@@ -15,7 +15,11 @@ use JosKolenberg\LaravelJory\Tests\Models\Person;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\InstrumentJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
 
 class TestCase extends Orchestra
 {
@@ -25,21 +29,9 @@ class TestCase extends Orchestra
 
         $this->setUpDatabase($this->app);
         $this->seedDatabase();
+        $this->registerJoryBuilders();
 
         JoryBuilder::routes('jory');
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('jory.routes', [
-            'band' => Band::class,
-            'album' => Album::class,
-            'album-cover' => AlbumCover::class,
-            'instrument' => Instrument::class,
-            'person' => Person::class,
-            'song' => Song::class,
-            'song-custom' => SongWithCustomJoryBuilder::class,
-        ]);
     }
 
     protected function setUpDatabase(Application $app)
@@ -895,5 +887,16 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         return [
             JoryServiceProvider::class,
         ];
+    }
+
+    protected function registerJoryBuilders()
+    {
+        JoryBuilder::register(Band::class)->builder(BandJoryBuilder::class);
+        JoryBuilder::register(Album::class, AlbumJoryBuilder::class);
+        JoryBuilder::register(AlbumCover::class);
+        JoryBuilder::register(Instrument::class)->builder(InstrumentJoryBuilder::class);
+        JoryBuilder::register(Person::class);
+        JoryBuilder::register(Song::class);
+        JoryBuilder::register(SongWithCustomJoryBuilder::class)->builder(SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
     }
 }

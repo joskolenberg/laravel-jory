@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+
 /**
  * Class Relation.
  *
@@ -90,15 +92,8 @@ class Relation
      */
     public function getType(): string
     {
-        $registered = config('jory.routes');
-        $type = null;
-        foreach ($registered as $key => $className) {
-            if ($this->modelClass === $className) {
-                $type = $key;
-                break;
-            }
-        }
+        $registration = app()->make(JoryBuildersRegister::class)->getRegistrationByModelClass($this->modelClass);
 
-        return $type ? $type : 'Not defined.';
+        return $registration ? $registration->getUri() : 'Not defined.';
     }
 }

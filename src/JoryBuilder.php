@@ -22,6 +22,7 @@ use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
+use JosKolenberg\LaravelJory\Register\RegistersJoryBuilders;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
@@ -32,7 +33,12 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
  */
 class JoryBuilder implements Responsable
 {
-    use BuildsJoryRoutes;
+    use BuildsJoryRoutes, RegistersJoryBuilders;
+
+    /**
+     * @var string
+     */
+    protected $modelClass;
 
     /**
      * @var Builder
@@ -71,11 +77,15 @@ class JoryBuilder implements Responsable
 
     /**
      * JoryBuilder constructor.
+     *
+     * @param string $modelClass
      */
-    public function __construct()
+    public function __construct(string $modelClass)
     {
+        $this->modelClass = $modelClass;
+
         // Create the config based on the settings in config()
-        $this->config = new Config();
+        $this->config = new Config($this->modelClass);
         $this->config($this->config);
     }
 

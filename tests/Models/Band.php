@@ -2,9 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
-use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Traits\JoryTrait;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 
 class Band extends Model
 {
@@ -21,11 +19,6 @@ class Band extends Model
         'year_start' => 'integer',
         'year_end' => 'integer',
     ];
-
-    public static function getJoryBuilder(): JoryBuilder
-    {
-        return new BandJoryBuilder();
-    }
 
     public function people()
     {

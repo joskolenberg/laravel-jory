@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Config;
 
 use Illuminate\Contracts\Support\Responsable;
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 /**
  * Class Config.
@@ -11,6 +12,11 @@ use Illuminate\Contracts\Support\Responsable;
  */
 class Config implements Responsable
 {
+    /**
+     * @var string
+     */
+    protected $modelClass = null;
+
     /**
      * @var null|array
      */
@@ -53,9 +59,12 @@ class Config implements Responsable
 
     /**
      * Config constructor.
+     *
+     * @param string $modelClass
      */
-    public function __construct()
+    public function __construct(string $modelClass)
     {
+        $this->modelClass = $modelClass;
         $this->limitDefault = config('jory.limit.default');
         $this->limitMax = config('jory.limit.max');
     }
@@ -144,12 +153,16 @@ class Config implements Responsable
      * Add a relation to the config.
      *
      * @param string $name
-     * @param string $modelClass
      * @return Relation
      */
-    public function relation(string $name, string $modelClass): Relation
+    public function relation(string $name): Relation
     {
-        $relation = new Relation($name, $modelClass);
+        $registration = app()->make(JoryBuildersRegister::class)->getRegistrationByModelClass($this->modelClass);
+        $baseModelClass = $registration->getModelClass();
+        $relationMethod = camel_case($name);
+        $relatedClass = get_class((new $baseModelClass())->{$relationMethod}()->getRelated());
+
+        $relation = new Relation($name, $relatedClass);
         if ($this->relations === null) {
             $this->relations = [];
         }

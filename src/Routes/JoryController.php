@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Routes;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 class JoryController extends Controller
 {
@@ -12,15 +13,18 @@ class JoryController extends Controller
      *
      * @param $uri
      * @param \Illuminate\Http\Request $request
+     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function index($uri, Request $request)
+    public function index($uri, Request $request, JoryBuildersRegister $register)
     {
-        $modelClass = config('jory.routes.'.$uri);
+        $registration = $register->getRegistrationByUri($uri);
 
-        if (! $modelClass) {
+        if (! $registration) {
             abort(404);
         }
+
+        $modelClass = $registration->getModelClass();
 
         return $modelClass::jory()->applyRequest($request);
     }
@@ -30,15 +34,18 @@ class JoryController extends Controller
      *
      * @param $uri
      * @param \Illuminate\Http\Request $request
+     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function count($uri, Request $request)
+    public function count($uri, Request $request, JoryBuildersRegister $register)
     {
-        $modelClass = config('jory.routes.'.$uri);
+        $registration = $register->getRegistrationByUri($uri);
 
-        if (! $modelClass) {
+        if (! $registration) {
             abort(404);
         }
+
+        $modelClass = $registration->getModelClass();
 
         return $modelClass::jory()->applyRequest($request)->count();
     }
@@ -49,15 +56,19 @@ class JoryController extends Controller
      * @param $uri
      * @param $id
      * @param \Illuminate\Http\Request $request
+     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function show($uri, $id, Request $request)
+    public function show($uri, $id, Request $request, JoryBuildersRegister $register)
     {
-        $modelClass = config('jory.routes.'.$uri);
+        $registration = $register->getRegistrationByUri($uri);
 
-        if (! $modelClass) {
+        if (! $registration) {
             abort(404);
         }
+
+        $modelClass = $registration->getModelClass();
+
         $query = $modelClass::whereKey($id);
 
         return $modelClass::jory()->applyRequest($request)->onQuery($query)->first();
@@ -67,15 +78,18 @@ class JoryController extends Controller
      * Give the options for a resource.
      *
      * @param $uri
+     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function options($uri)
+    public function options($uri, JoryBuildersRegister $register)
     {
-        $modelClass = config('jory.routes.'.$uri);
+        $registration = $register->getRegistrationByUri($uri);
 
-        if (! $modelClass) {
+        if (! $registration) {
             abort(404);
         }
+
+        $modelClass = $registration->getModelClass();
 
         return $modelClass::jory()->getConfig();
     }
@@ -84,9 +98,10 @@ class JoryController extends Controller
      * Load multiple resources at once.
      *
      * @param \Illuminate\Http\Request $request
+     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|void
      */
-    public function multiple(Request $request)
+    public function multiple(Request $request, JoryBuildersRegister $register)
     {
         $jories = $request->all();
 
@@ -103,12 +118,13 @@ class JoryController extends Controller
             $alias = $exploded['alias'];
             $id = $exploded['id'];
 
-            $modelClass = config('jory.routes.'.$modelName);
+            $registration = $register->getRegistrationByUri($modelName);
 
-            if (! $modelClass) {
-                $errors[] = 'Resource "'.$modelName.'" is not available, did you mean "'.$this->getSuggestion(array_keys(config('jory.routes')), $modelName).'"?';
+            if (! $registration) {
+                $errors[] = 'Resource "'.$modelName.'" is not available, did you mean "'.$this->getSuggestion($register->getUrisArray(), $modelName).'"?';
                 continue;
             }
+            $modelClass = $registration->getModelClass();;
 
             if ($type === 'count') {
                 // Return the count for a resource
@@ -160,11 +176,12 @@ class JoryController extends Controller
     /**
      * Display a list of available resources.
      *
+     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function resourceList()
+    public function resourceList(JoryBuildersRegister $register)
     {
-        return response(['resources' => array_keys(config('jory.routes'))]);
+        return response(['resources' => $register->getUrisArray()]);
     }
 
     /**
@@ -197,7 +214,7 @@ class JoryController extends Controller
      * @param $name
      * @return array
      */
-    protected function explodeResourceName($name)
+    protected function explodeResourceName($name): array
     {
         $nameParts = explode(' as ', $name);
 

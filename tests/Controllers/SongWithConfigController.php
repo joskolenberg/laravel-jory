@@ -13,31 +13,31 @@ class SongWithConfigController extends Controller
 {
     public function index(Request $request)
     {
-        return (new SongJoryBuilderWithConfig())->onQuery(Song::query())->applyRequest($request);
+        return (new SongJoryBuilderWithConfig(Song::class))->onQuery(Song::query())->applyRequest($request);
     }
 
     public function indexTwo(Request $request)
     {
-        return (new SongJoryBuilderWithConfigTwo())->onQuery(Song::query())->applyRequest($request);
+        return (new SongJoryBuilderWithConfigTwo(Song::class))->onQuery(Song::query())->applyRequest($request);
     }
 
     public function indexThree(Request $request)
     {
-        return (new SongJoryBuilderWithConfigThree())->onQuery(Song::query())->applyRequest($request);
+        return (new SongJoryBuilderWithConfigThree(Song::class))->onQuery(Song::query())->applyRequest($request);
     }
 
     public function options()
     {
-        return (new SongJoryBuilderWithConfig())->getConfig();
+        return (new SongJoryBuilderWithConfig(Song::class))->getConfig();
     }
 
     public function optionsTwo()
     {
-        return (new SongJoryBuilderWithConfigTwo())->getConfig();
+        return (new SongJoryBuilderWithConfigTwo(Song::class))->getConfig();
     }
 
     public function optionsThree()
     {
-        return (new SongJoryBuilderWithConfigThree())->getConfig();
+        return (new SongJoryBuilderWithConfigThree(Song::class))->getConfig();
     }
 }

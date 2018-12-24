@@ -6,7 +6,6 @@ use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Filter;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
 
 class SongJoryBuilderWithConfig extends JoryBuilder
 {
@@ -26,6 +25,6 @@ class SongJoryBuilderWithConfig extends JoryBuilder
 
         $config->limitDefault(50)->limitMax(250);
 
-        $config->relation('album', Album::class);
+        $config->relation('album');
     }
 }
