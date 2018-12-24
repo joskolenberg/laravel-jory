@@ -124,7 +124,7 @@ class JoryController extends Controller
                 $errors[] = 'Resource "'.$modelName.'" is not available, did you mean "'.$this->getSuggestion($register->getUrisArray(), $modelName).'"?';
                 continue;
             }
-            $modelClass = $registration->getModelClass();;
+            $modelClass = $registration->getModelClass();
 
             if ($type === 'count') {
                 // Return the count for a resource

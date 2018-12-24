@@ -3,7 +3,7 @@
 namespace JosKolenberg\LaravelJory\Register;
 
 /**
- * Class JoryBuilderRegistration
+ * Class JoryBuilderRegistration.
  *
  * Collects data for registered Models with associated JoryBuilders and routes.
  */
@@ -43,7 +43,7 @@ class JoryBuilderRegistration
      * @param string $builderClass
      * @return JoryBuilderRegistration
      */
-    public function builder(string $builderClass): JoryBuilderRegistration
+    public function builder(string $builderClass): self
     {
         $this->builderClass = $builderClass;
 
@@ -56,7 +56,7 @@ class JoryBuilderRegistration
      * @param string $uri
      * @return JoryBuilderRegistration
      */
-    public function uri(string $uri): JoryBuilderRegistration
+    public function uri(string $uri): self
     {
         $this->uri = $uri;
 

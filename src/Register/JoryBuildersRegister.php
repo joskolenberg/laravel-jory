@@ -3,7 +3,7 @@
 namespace JosKolenberg\LaravelJory\Register;
 
 /**
- * Class JoryBuildersRegister
+ * Class JoryBuildersRegister.
  *
  * Collects the registered JoryBuilders.
  */

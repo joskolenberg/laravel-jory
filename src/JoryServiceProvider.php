@@ -18,7 +18,7 @@ class JoryServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/jory.php', 'jory');
 
-        $this->app->singleton(JoryBuildersRegister::class, function() {
+        $this->app->singleton(JoryBuildersRegister::class, function () {
             return new JoryBuildersRegister();
         });
     }

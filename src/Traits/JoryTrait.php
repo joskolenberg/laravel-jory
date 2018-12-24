@@ -36,10 +36,11 @@ trait JoryTrait
 
         $registration = $register->getRegistrationByModelClass(static::class);
 
-        if(!$registration || !$registration->getBuilderClass()){
+        if (! $registration || ! $registration->getBuilderClass()) {
             return app()->makeWith(JoryBuilder::class, ['modelClass' => static::class]);
-        } else{
+        } else {
             $builderClass = $registration->getBuilderClass();
+
             return new $builderClass(static::class);
         }
     }
