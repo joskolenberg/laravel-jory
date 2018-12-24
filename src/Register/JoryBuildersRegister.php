@@ -89,6 +89,7 @@ class JoryBuildersRegister
         foreach ($this->registrations as $registration) {
             $result[] = $registration->getUri();
         }
+
         return $result;
     }
 }
