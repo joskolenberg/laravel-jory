@@ -226,7 +226,7 @@ class JoryController extends Controller
             $alias = $nameParts[1];
         }
 
-        $nameParts = explode(':', $modelName);
+        $nameParts = explode('_', $modelName);
 
         if (count($nameParts) === 1) {
             $type = 'multiple';
