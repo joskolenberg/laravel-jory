@@ -459,3 +459,88 @@ $config->relation('albums')->description('The band\'s albums');
 
 Registered relations will be used for validating and are shown in the ```OPTIONS```.
 
+#### Setting pagination defaults
+Use the ```limitDefault()``` method to set the default limit when no limit is given.
+Use the ```limitMax()``` to set the maximum number of records that can be requested at once for this resource.
+
+```php
+$config->limitDefault(25)->limitMax(100);
+```
+
+These options will be used for validating and are shown in the ```OPTIONS```.
+
+### Defining custom filters
+Often you want to be able to filter on more than just a field. You can add custom filters using the following convention ```scope{CustomName}Filter()```.
+
+For each filter the JoryBuilder will look for that method in the JoryBuilder.
+```php
+protected function scopeHasSongWithTitleFilter($query, $operator, $data)
+{
+    $query->whereHas('songs', function ($query) use ($operator, $data) {
+        $query->where('title', $operator, $data);
+    });
+}
+```
+And don't forget to register the field in the configuration:
+```php
+$config->filter('has_song_with_title')
+    ->description('Filter by the number of songs the band has')
+    ->operators(['=', '<', '>', '<=', '>=']);
+```
+
+Alternatively you can make use of Laravel's built in scopes on a model. When the custom filter function is available on the model the JoryBuilder will find it as well.
+
+### Defining custom sorts
+Applying custom sorts is the same as custom filters except for the naming convention being ```scope{CustomName}Sort()```.
+
+### Defining custom fields
+All the returned fields are collected using the Eloquent model's ```toArray()``` method. To make custom fields available for your Jory api add them as custom attributes and append them in your model.
+
+## Hooks
+Sometimes you may want to hook into the process to do some additional tweaking.
+
+The JoryBuilder has these methods which can be overridden there to do so:
+- ```beforeQueryBuild()``` Modify the query before all settings in the Jory string are applied.
+- ```afterQueryBuild()``` Modify the query after all settings in the Jory string are applied but before it is executed.
+- ```afterFetch()``` Modify the models right after they are fetched from the database.
+
+The ```beforeQueryBuild()``` and ```afterQueryBuild()``` hooks can be useful to add some global scoping on all queries or add some additional fields when they are requested.
+```php
+protected function beforeQueryBuild($query, Jory $jory, $count = false)
+{
+    parent::beforeQueryBuild($query, $jory, $count);
+    
+    // Archived items are not available for the API
+    $query->where('is_archived', false);
+
+    // Only when the song_count field is requested, execute Laravel's withCount() method.
+    if ($jory->hasField('song_count')) {
+        $query->withCount('songs as song_count');
+    }
+}
+```
+The ```afterFetch()``` hook is useful to modify the models before the data is retrieved from them. For example, if an Invoice model has a calculated 'total_price' custom attribute which loops through all attached InvoiceLines you might want to eager load the InvoiceLines on the Invoices to save on querying. (This method always receives a collection even if only one item is requested.)
+```php
+protected function afterFetch(Collection $collection, Jory $jory): Collection
+{
+    $collection = parent::afterFetch($collection, $jory);
+
+    if ($jory->hasField('total_price')) {
+        $collection->load('invoiceLines');
+    }
+    
+    return $collection;
+}
+``` 
+
+## Config
+To override Jory's default settings publish the config file using:
+```
+php artisan vendor:publish --provider="JosKolenberg\LaravelJory\JoryServiceProvider"
+```
+
+That's it! Any suggestions or issues? Please contact me!
+
+Happy coding!
+
+Jos Kolenberg <joskolenberg@gmail.com>
