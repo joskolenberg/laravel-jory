@@ -114,7 +114,7 @@ Notes on the previous example:
 - Take a look at the [jory](https://packagist.org/packages/joskolenberg/jory) package to learn about how to write Jory arrays/Json-strings.
 
 ## Registering & Routes
-Registering JoryBuilders is not required but allows you to register standard routes for each model and apply custom JoryBuilders (more on that later).
+Registering JoryBuilders is not required but allows you to register standard routes for each model and apply [custom JoryBuilders](#custom-jorybuilders).
 
 JoryBuilders can best be registered in the boot method of a service provider (use the AppServiceProvider or create a dedicated one):
 ```php
@@ -142,12 +142,12 @@ JoryBuilder::routes('my-jory-api');
 
 ### Available routes
 The JoryBuilder::routes() method will register the following routes (using kebab-cased model names for ```{resource}```):
-- ```OPTIONS``` ```/``` List all available resources.
-- ```OPTIONS``` ```/{resource}``` Show the options for this resource.
-- ```GET``` ```/{resource}``` Get a list of items for this resource based on the Jory string in the 'jory' parameter.
-- ```GET``` ```/{resource}/{id}``` Get a single record and apply the 'jory' parameter. 
-- ```GET``` ```/{resource}/count``` Get the record count for the resource based on the 'jory' parameter.
-- ```GET``` ```/``` Get multiple unrelated resources in one call.
+- ```OPTIONS``` ```/``` [List](#available-resources) all available resources.
+- ```OPTIONS``` ```/{resource}``` Show the [options](#resource-options) for this resource.
+- ```GET``` ```/{resource}``` Get a [list of items](#resource-list) for this resource based on the Jory string in the 'jory' parameter.
+- ```GET``` ```/{resource}/{id}``` Get a [single record](#single-resource) and apply the 'jory' parameter. 
+- ```GET``` ```/{resource}/count``` Get the [record count](#resource-count) for the resource based on the 'jory' parameter.
+- ```GET``` ```/``` Get [multiple](#multiple-resources) unrelated resources in one call.
 
 #### Available resources
 An ```OPTIONS``` call to ```/``` lists all available resources without further detail.
@@ -165,7 +165,7 @@ Output example:
 ```
 
 #### Resource options
-An ```OPTIONS``` call to ```/{resource}``` shows the options for the given resource. This becomes more useful when custom JoryBuilders are defined.
+An ```OPTIONS``` call to ```/{resource}``` shows the options for the given resource. This will become more useful when [custom JoryBuilders](#custom-jorybuilders) are defined.
 
 Example call:
 ```
@@ -237,7 +237,7 @@ Result:
 ```
 
 #### Single resource
-A ```GET``` call to ```/{resource}/{id}``` returns a single items based on the ```id``` with the ```jory``` parameter applied.
+A ```GET``` call to ```/{resource}/{id}``` returns a single item based on the ```id``` with the ```jory``` parameter applied.
 
 Example call fetching a band's name including related album names and release dates:
 ```
@@ -336,12 +336,11 @@ Result:
 ```
 
 ## Custom JoryBuilders
-When registering a model, by default the base JoryBuilder will be applied.
-Creating custom JoryBuilders allow you to:
+When registering a model, by default the base JoryBuilder will be applied, but creating custom JoryBuilders allow you to:
 - Validate incoming requests and returning useful error messages.
 - Give the users good documentation when calling the ```OPTIONS``` for a resource.
-- Define custom filter and sort options.
-- Define global scopes.
+- Define custom [filter](#defining-custom-filters) and [sort](#defining-custom-sorts) options.
+- [Hook](#hooks) into queries and collections.
 
 You can bind a custom JoryBuilder to a model by creating a JoryBuilder class which extends the base JoryBuilder and pass it as the second argument to the register method:
 ```php
@@ -416,7 +415,7 @@ Because filters will be validated once one filter has been registered; when you 
 #### Registering sorts
 A sort option can be registered using the ```sort()``` method. Optionally a description can be provided.
 
-Apply the ```default()``` method on the sort to apply ordering on this field by default.
+Apply the ```default()``` method on the sort to apply sorting on this field by default.
 ```php
 $config->sort('id');
 
@@ -484,8 +483,8 @@ protected function scopeHasSongWithTitleFilter($query, $operator, $data)
 And don't forget to register the field in the configuration:
 ```php
 $config->filter('has_song_with_title')
-    ->description('Filter by the number of songs the band has')
-    ->operators(['=', '<', '>', '<=', '>=']);
+    ->description('Filter only bands which have a given title.')
+    ->operators(['like', '=']);
 ```
 
 Alternatively you can make use of Laravel's built in scopes on a model. When the custom filter function is available on the model the JoryBuilder will find it as well.
@@ -494,17 +493,17 @@ Alternatively you can make use of Laravel's built in scopes on a model. When the
 Applying custom sorts is the same as custom filters except for the naming convention being ```scope{CustomName}Sort()```.
 
 ### Defining custom fields
-All the returned fields are collected using the Eloquent model's ```toArray()``` method. To make custom fields available for your Jory api add them as custom attributes and append them in your model.
+All the returned fields are collected using the Eloquent model's ```toArray()``` method. To make custom fields available for your Jory api add them as custom attributes and append them in your model. When using a custom JoryBuilder make sure to add this field in the config.
 
-## Hooks
+### Hooks
 Sometimes you may want to hook into the process to do some additional tweaking.
 
-The JoryBuilder has these methods which can be overridden there to do so:
-- ```beforeQueryBuild()``` Modify the query before all settings in the Jory string are applied.
-- ```afterQueryBuild()``` Modify the query after all settings in the Jory string are applied but before it is executed.
+The JoryBuilder has these methods which can be overridden to do so:
+- ```beforeQueryBuild()``` Modify the query before all settings from the Jory input are applied.
+- ```afterQueryBuild()``` Modify the query after all settings from the Jory input are applied but before it is executed.
 - ```afterFetch()``` Modify the models right after they are fetched from the database.
 
-The ```beforeQueryBuild()``` and ```afterQueryBuild()``` hooks can be useful to add some global scoping on all queries or add some additional fields when they are requested.
+The ```beforeQueryBuild()``` and ```afterQueryBuild()``` hooks can be useful to add some global scoping or add some additional fields when they are requested.
 ```php
 protected function beforeQueryBuild($query, Jory $jory, $count = false)
 {
@@ -538,6 +537,8 @@ To override Jory's default settings publish the config file using:
 ```
 php artisan vendor:publish --provider="JosKolenberg\LaravelJory\JoryServiceProvider"
 ```
+
+
 
 That's it! Any suggestions or issues? Please contact me!
 
