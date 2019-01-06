@@ -390,7 +390,7 @@ class JoryBuilder implements Responsable
     protected function applyDefaultFieldFilter($query, $field, $operator, $data): void
     {
         switch ($operator) {
-            case 'null':
+            case 'is_null':
                 $query->whereNull($field);
 
                 return;

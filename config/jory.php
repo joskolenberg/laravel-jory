@@ -60,7 +60,7 @@ return [
             '<=',
             '<=>',
             'like',
-            'null',
+            'is_null',
             'not_null',
             'in',
             'not_in',

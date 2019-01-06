@@ -406,7 +406,7 @@ class JoryBuilderFilterTest extends TestCase
         $actual = Band::jory()->applyArray([
             'filter' => [
                 'f' => 'year_end',
-                'o' => 'null',
+                'o' => 'is_null',
             ],
         ])->get()->pluck('name')->toArray();
         $this->assertEquals([
