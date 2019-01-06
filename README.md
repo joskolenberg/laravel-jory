@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/joskolenberg/laravel-jory.svg?branch=master)](https://travis-ci.org/joskolenberg/laravel-jory)
+[![Total Downloads](https://poser.pugx.org/joskolenberg/laravel-jory/downloads)](https://packagist.org/packages/joskolenberg/laravel-jory)
+[![Latest Stable Version](https://poser.pugx.org/joskolenberg/laravel-jory/v/stable)](https://packagist.org/packages/joskolenberg/laravel-jory)
 [![StyleCI](https://github.styleci.io/repos/148323995/shield?branch=master)](https://github.styleci.io/repos/148323995)
 [![Code Coverage](https://codecov.io/gh/joskolenberg/laravel-jory/branch/master/graph/badge.svg)](https://codecov.io/gh/joskolenberg/laravel-jory/branch/master/graph/badge.svg)
+[![License](https://poser.pugx.org/joskolenberg/laravel-jory/license)](https://packagist.org/packages/joskolenberg/laravel-jory)
 
 # Laravel-Jory
 Jory is a way of defining database queries using a JSON string, useful for loading dynamic data from the front-end. Jory can add high flexibility to your REST API and can easily be used alongside your existing code.

@@ -1,8 +1,8 @@
 {
   "name": "joskolenberg/laravel-jory",
-  "description": "Build queries based on json",
+  "description": "Laravel package for creating Jory endpoints.",
   "license": "MIT",
-  "keywords": ["query", "laravel"],
+  "keywords": ["query", "laravel", "jory", "json"],
   "authors": [
     {
       "name": "Jos Kolenberg",
