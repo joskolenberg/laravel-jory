@@ -216,7 +216,7 @@ class JoryController extends Controller
      */
     protected function explodeResourceName($name): array
     {
-        $nameParts = explode(' as ', $name);
+        $nameParts = explode('_as_', $name);
 
         if (count($nameParts) === 1) {
             $modelName = $nameParts[0];
