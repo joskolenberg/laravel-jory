@@ -513,6 +513,10 @@ class JoryBuilderWithConfigTest extends TestCase
                     'description' => 'The album_cover relation.',
                     'type' => 'album-cover',
                 ],
+                'camel_case_album_cover' => [
+                    'description' => 'The camel_case_album_cover relation.',
+                    'type' => 'album-cover',
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
