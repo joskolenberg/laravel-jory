@@ -197,6 +197,9 @@ class JoryBuilder implements Responsable
             return null;
         }
 
+        $jory = $this->getJory();
+        $model = $this->afterFetch(new Collection([$model]), $jory)->first();
+
         $this->loadRelations(new Collection([$model]), $this->getJory()->getRelations());
 
         return $model;
