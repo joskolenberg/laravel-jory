@@ -1092,11 +1092,11 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         \DB::enableQueryLog();
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{}}}}}}}}}',
+            'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"cover":{"rlt":{"album":{"rlt":{"band":{"rlt":{"people":{"rlt":{"instruments":{}}}}}}}}}}}}}}}}}}}}}',
         ]);
 
         $response->assertStatus(200)->assertJson([]);
 
-        $this->assertEquals(5, count(\DB::getQueryLog()));
+        $this->assertEquals(11, count(\DB::getQueryLog()));
     }
 }
