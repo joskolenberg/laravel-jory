@@ -463,12 +463,12 @@ class JoryBuilder implements Responsable
 
         $relationName = camel_case($relation->getName());
 
-        $collection->load([
-            $relationName => function ($query) use ($relation) {
-                // Retrieve the model which will be queried to get the appropriate JoryBuilder
-                $relatedModel = $query->getRelated();
-                $joryBuilder = $relatedModel::getJoryBuilder();
+        // Retrieve the model which will be queried to get the appropriate JoryBuilder
+        $relatedModel = $collection->first()->{$relationName}()->getRelated();
+        $joryBuilder = $relatedModel::getJoryBuilder();
 
+        $collection->load([
+            $relationName => function ($query) use ($joryBuilder, $relation, $relatedModel) {
                 // Apply the data in the subjory (filtering/sorting/...) on the query
                 $joryBuilder->applyJory($relation->getJory());
                 $joryBuilder->applyOnQuery($query);
@@ -490,6 +490,9 @@ class JoryBuilder implements Responsable
                 $allRelated = $allRelated->merge($related);
             }
         }
+
+        // Hook into the afterFetch() method on the related JoryBuilder
+        $allRelated = $joryBuilder->afterFetch($allRelated, $relation->getJory());
 
         // Load the subrelations
         $this->loadRelations($allRelated, $relation->getJory()->getRelations());
