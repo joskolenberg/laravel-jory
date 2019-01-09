@@ -74,14 +74,19 @@ trait JoryTrait
 
             $related = $this->$cameledRelationName;
 
+            $relatedModel = $this->{$cameledRelationName}()->getRelated();
+            $joryBuilder = $relatedModel::getJoryBuilder();
+            $jory = $relation->getJory();
+            $joryBuilder->applyConfigToJory($jory);
+
             if ($related === null) {
                 $result[$relationName] = null;
             } elseif ($related instanceof Model) {
-                $result[$relationName] = $related->toArrayByJory($relation->getJory());
+                $result[$relationName] = $related->toArrayByJory($jory);
             } else {
                 $relationResult = [];
                 foreach ($related as $relatedModel) {
-                    $relationResult[] = $relatedModel->toArrayByJory($relation->getJory());
+                    $relationResult[] = $relatedModel->toArrayByJory($jory);
                 }
                 $result[$relationName] = $relationResult;
             }

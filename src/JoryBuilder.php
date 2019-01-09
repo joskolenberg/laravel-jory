@@ -156,6 +156,8 @@ class JoryBuilder implements Responsable
     {
         $this->jory = $jory;
 
+        $this->applyConfigToJory($jory);
+
         return $this;
     }
 
@@ -779,7 +781,7 @@ class JoryBuilder implements Responsable
      * When no fields are specified in the request, the default fields in Config will be set on the Jory.
      *
      */
-    protected function applyConfigToJory(Jory $jory): void
+    public function applyConfigToJory(Jory $jory): void
     {
         if ($jory->getFields() === null && $this->config->getFields() !== null) {
             // No fields set in the request, but there are fields
