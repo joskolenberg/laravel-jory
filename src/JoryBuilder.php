@@ -154,9 +154,19 @@ class JoryBuilder implements Responsable
      */
     public function applyJory(Jory $jory): self
     {
-        $this->jory = $jory;
+        return $this->setJory($jory);
+    }
 
-        $this->applyConfigToJory($jory);
+    /**
+     * Set a Jory object.
+     *
+     * @param Jory $jory
+     *
+     * @return JoryBuilder
+     */
+    public function setJory(Jory $jory): self
+    {
+        $this->jory = $this->applyConfigToJory($jory);
 
         return $this;
     }
@@ -237,26 +247,23 @@ class JoryBuilder implements Responsable
      * @return array|null
      * @throws LaravelJoryException
      * @throws LaravelJoryCallException
-     * @throws JoryException
      */
     public function toArray(): ?array
     {
-        $jory = $this->getJory();
-
         if ($this->first) {
             $model = $this->getFirst();
             if (! $model) {
                 return null;
             }
 
-            return $model->toArrayByJory($jory);
+            return $this->modelToArray($model);
         }
 
         $models = $this->get();
 
         $result = [];
         foreach ($models as $model) {
-            $result[] = $model->toArrayByJory($jory);
+            $result[] = $this->modelToArray($model);
         }
 
         return $result;
@@ -372,7 +379,6 @@ class JoryBuilder implements Responsable
         } catch (LaravelJoryCallException $e) {
             $responseKey = $this->getErrorResponseKey();
             $response = $responseKey === null ? $e->getErrors() : [$responseKey => $e->getErrors()];
-
             return response($response, 422);
         }
 
@@ -716,9 +722,7 @@ class JoryBuilder implements Responsable
         if ($this->joryParser) {
             $jory = $this->joryParser->getJory();
 
-            $this->applyConfigToJory($jory);
-
-            $this->jory = $jory;
+            $this->setJory($jory);
 
             return $this->jory;
         }
@@ -780,8 +784,10 @@ class JoryBuilder implements Responsable
      *
      * When no fields are specified in the request, the default fields in Config will be set on the Jory.
      *
+     * @param \JosKolenberg\Jory\Jory $jory
+     * @return \JosKolenberg\Jory\Jory
      */
-    public function applyConfigToJory(Jory $jory): void
+    public function applyConfigToJory(Jory $jory): Jory
     {
         if ($jory->getFields() === null && $this->config->getFields() !== null) {
             // No fields set in the request, but there are fields
@@ -795,6 +801,8 @@ class JoryBuilder implements Responsable
                 $jory->setFields($defaultFields);
             }
         }
+
+        return $jory;
     }
 
     /**
@@ -838,4 +846,59 @@ class JoryBuilder implements Responsable
     {
         return config('jory.response.errors-key');
     }
+
+    /**
+     * Convert a single model to an array based on the request in the Jory object.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return array
+     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     */
+    public function modelToArray(Model $model)
+    {
+        $jory = $this->getJory();
+
+        // When no fields are specified, we'll use all the model's fields
+        // if fields are specified, we use only these.
+        if ($jory->getFields() === null) {
+            // We will load the relations manually so remove them from Laravel's toArray() export.
+            $relationNames = [];
+            foreach ($jory->getRelations() as $relation) {
+                $relationNames[] = camel_case($relation->getName());
+            }
+            $model->makeHidden($relationNames);
+            $result = $model->toArray();
+        } else {
+            $result = [];
+            foreach ($jory->getFields() as $field){
+                $result[$field] = $model->$field;
+            }
+        }
+
+        // Add the relations to the result
+        foreach ($jory->getRelations() as $relation) {
+            $relationName = $relation->getName();
+            $cameledRelationName = camel_case($relationName);
+
+            $related = $model->$cameledRelationName;
+
+            $relatedModel = $model->{$cameledRelationName}()->getRelated();
+            $relatedJoryBuilder = $relatedModel::getJoryBuilder()->applyJory($relation->getJory());
+
+            if ($related === null) {
+                $result[$relationName] = null;
+            } elseif ($related instanceof Model) {
+                $result[$relationName] = $relatedJoryBuilder->modelToArray($related);
+            } else {
+                $relationResult = [];
+                foreach ($related as $relatedModel) {
+                    $relationResult[] = $relatedJoryBuilder->modelToArray($relatedModel);
+                }
+                $result[$relationName] = $relationResult;
+            }
+        }
+
+        return $result;
+    }
+
 }

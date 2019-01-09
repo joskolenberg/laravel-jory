@@ -1086,4 +1086,17 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
             ],
         ]);
     }
+
+    /** @test */
+    public function it_can_load_nested_relations_with_as_little_queries_as_possible()
+    {
+        \DB::enableQueryLog();
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{}}}}}}}}}',
+        ]);
+
+        $response->assertStatus(200)->assertJson([]);
+
+        $this->assertEquals(5, count(\DB::getQueryLog()));
+    }
 }
