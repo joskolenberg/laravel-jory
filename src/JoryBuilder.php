@@ -492,7 +492,7 @@ class JoryBuilder implements Responsable
         }
 
         // Hook into the afterFetch() method on the related JoryBuilder
-        $allRelated = $joryBuilder->afterFetch($allRelated, $relation->getJory());
+        $allRelated = $joryBuilder->afterFetch($allRelated, $joryBuilder->getJory());
 
         // Load the subrelations
         $this->loadRelations($allRelated, $relation->getJory()->getRelations());
