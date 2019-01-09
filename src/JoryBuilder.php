@@ -239,7 +239,7 @@ class JoryBuilder implements Responsable
      */
     public function toArray(): ?array
     {
-        $jory = $this->getJoryForArrayExport();
+        $jory = $this->getJory();
 
         if ($this->first) {
             $model = $this->getFirst();
@@ -711,6 +711,8 @@ class JoryBuilder implements Responsable
         if ($this->joryParser) {
             $jory = $this->joryParser->getJory();
 
+            $this->applyConfigToJory($jory);
+
             $this->jory = $jory;
 
             return $this->jory;
@@ -769,25 +771,14 @@ class JoryBuilder implements Responsable
     }
 
     /**
-     * Get a new Jory object with only fields and relations based on
-     * the original Jory in the request and the JoryBuilder's config.
+     * Apply the settings in the Config on the Jory.
      *
-     * This new Jory will be used to export the models to arrays.
+     * When no fields are specified in the request, the default fields in Config will be set on the Jory.
      *
-     * @return \JosKolenberg\Jory\Jory
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
-     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
      */
-    protected function getJoryForArrayExport()
+    protected function applyConfigToJory(Jory $jory): void
     {
-        $jory = new Jory();
-
-        $originalJory = $this->getJory();
-
-        if ($originalJory->getFields() !== null) {
-            // There are fields specified in the request, use these
-            $jory->setFields($originalJory->getFields());
-        } elseif ($this->config->getFields() !== null) {
+        if ($jory->getFields() === null && $this->config->getFields() !== null) {
             // No fields set in the request, but there are fields
             // specified in the config, than we will update the fields
             // with the ones to be shown by default.
@@ -798,23 +789,7 @@ class JoryBuilder implements Responsable
                 }
                 $jory->setFields($defaultFields);
             }
-        } else {
-            // No fields set in request or config.
-            // No action needed, the full model's toArray() result will be returned during export.
         }
-
-        // Apply relations
-        $baseModel = $this->builder->getModel();
-        foreach ($originalJory->getRelations() as $originalRelation) {
-            $relationName = camel_case($originalRelation->getName());
-            $relatedModel = $baseModel->$relationName()->getModel();
-            $relatedJoryBuilder = $relatedModel::jory();
-            $relatedJoryBuilder->applyJory($originalRelation->getJory());
-
-            $jory->addRelation(new Relation($originalRelation->getName(), $relatedJoryBuilder->getJoryForArrayExport()));
-        }
-
-        return $jory;
     }
 
     /**
