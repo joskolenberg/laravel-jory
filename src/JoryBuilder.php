@@ -488,6 +488,9 @@ class JoryBuilder implements Responsable
         foreach ($collection as $model) {
             $related = $model->$relationName;
 
+            $model->addJoryRelation($relationName, $related);
+            $model->setRelations([]);
+
             if ($related === null) {
                 continue;
             }
@@ -863,12 +866,6 @@ class JoryBuilder implements Responsable
         // When no fields are specified, we'll use all the model's fields
         // if fields are specified, we use only these.
         if ($jory->getFields() === null) {
-            // We will load the relations manually so remove them from Laravel's toArray() export.
-            $relationNames = [];
-            foreach ($jory->getRelations() as $relation) {
-                $relationNames[] = camel_case($relation->getName());
-            }
-            $model->makeHidden($relationNames);
             $result = $model->toArray();
         } else {
             $result = [];
@@ -882,7 +879,7 @@ class JoryBuilder implements Responsable
             $relationName = $relation->getName();
             $cameledRelationName = camel_case($relationName);
 
-            $related = $model->$cameledRelationName;
+            $related = $model->getJoryRelation($cameledRelationName);
 
             $relatedModel = $model->{$cameledRelationName}()->getRelated();
             $relatedJoryBuilder = $relatedModel::getJoryBuilder()->applyJory($relation->getJory());

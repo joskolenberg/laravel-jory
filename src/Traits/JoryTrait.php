@@ -12,6 +12,9 @@ use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
  */
 trait JoryTrait
 {
+
+    protected $joryRelations = [];
+
     /**
      * Return the JoryBuilder to query on this model.
      *
@@ -41,5 +44,15 @@ trait JoryTrait
 
             return new $builderClass(static::class);
         }
+    }
+
+    public function addJoryRelation(string $name, $data)
+    {
+        $this->joryRelations[$name] = $data;
+    }
+
+    public function getJoryRelation(string $name)
+    {
+        return $this->joryRelations[$name];
     }
 }
