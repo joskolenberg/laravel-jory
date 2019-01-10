@@ -489,7 +489,6 @@ class JoryBuilder implements Responsable
             $related = $model->$relationName;
 
             $model->addJoryRelation($relationName, $related);
-            $model->setRelations([]);
 
             if ($related === null) {
                 continue;
@@ -503,6 +502,9 @@ class JoryBuilder implements Responsable
                 }
             }
         }
+        $collection->each(function($model){
+            $model->setRelations([]);
+        });
 
         // Hook into the afterFetch() method on the related JoryBuilder
         $allRelated = $joryBuilder->afterFetch($allRelated, $joryBuilder->getJory());
