@@ -495,7 +495,9 @@ class JoryBuilder implements Responsable
             if ($related instanceof Model) {
                 $allRelated->push($related);
             } else {
-                $allRelated = $allRelated->merge($related);
+                foreach ($related as $item){
+                    $allRelated->push($item);
+                }
             }
         }
 
