@@ -455,6 +455,15 @@ class JoryBuilder implements Responsable
         foreach ($relations as $relation) {
             $this->loadRelation($models, $relation);
         }
+
+        // We clear Eloquent's relations, so any filtering on relations
+        // doesn't affect any custom attributes which rely on relations.
+        $models->each(function($model){
+            $model->setRelations([]);
+        });
+
+        // Hook into the afterFetch() method on the related JoryBuilder
+        $this->afterFetch($models, $this->getJory());
     }
 
     /**
@@ -502,12 +511,6 @@ class JoryBuilder implements Responsable
                 }
             }
         }
-        $collection->each(function($model){
-            $model->setRelations([]);
-        });
-
-        // Hook into the afterFetch() method on the related JoryBuilder
-        $allRelated = $joryBuilder->afterFetch($allRelated, $joryBuilder->getJory());
 
         // Load the subrelations
         $this->loadRelations($allRelated, $relation->getJory()->getRelations());
