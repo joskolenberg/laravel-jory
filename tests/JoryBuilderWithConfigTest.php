@@ -201,6 +201,10 @@ class JoryBuilderWithConfigTest extends TestCase
                     'description' => 'The year in which the band quitted, could be null if band still exists.',
                     'show_by_default' => true,
                 ],
+                'all_albums_string' => [
+                    'description' => 'The all_albums_string field.',
+                    'show_by_default' => false,
+                ],
             ],
             'filters' => [
                 'id' => [

@@ -1099,4 +1099,29 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
 
         $this->assertEquals(11, count(\DB::getQueryLog()));
     }
+
+    /** @test */
+    public function filters_in_relations_do_not_affect_the_value_of_a_custom_attribute_which_relies_on_that_relation()
+    {
+        \DB::enableQueryLog();
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => '{"fld":["all_albums_string"],"rlt":{"albums":{"flt":{"f":"id","d":8}}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'all_albums_string' => 'Sgt. Peppers lonely hearts club band, Abbey road, Let it be',
+                'albums' => [
+                    [
+                        'id' => 8,
+                        'band_id' => 3,
+                        'name' => 'Abbey road',
+                        'release_date' => '1969-09-26',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+    }
 }

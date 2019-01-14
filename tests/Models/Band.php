@@ -41,4 +41,21 @@ class Band extends Model
             $query->where('name', $operator, $data);
         });
     }
+
+    public function getAllAlbumsStringAttribute()
+    {
+        $result = '';
+
+        $first = true;
+        foreach ($this->albums as $album) {
+            if ($first) {
+                $first = false;
+            } else {
+                $result .= ', ';
+            }
+            $result .= $album->name;
+        }
+
+        return $result;
+    }
 }
