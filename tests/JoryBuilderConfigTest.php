@@ -22,6 +22,8 @@ class JoryBuilderConfigTest extends TestCase
             'name' => 'Beatles',
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -37,6 +39,8 @@ class JoryBuilderConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -50,6 +54,8 @@ class JoryBuilderConfigTest extends TestCase
             'Field "naame" not available. Did you mean "name"? (Location: fields.naame)',
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -63,5 +69,7 @@ class JoryBuilderConfigTest extends TestCase
             'band_3_as_beatles: Field "naame" not available. Did you mean "name"? (Location: fields.naame)',
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 }

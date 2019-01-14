@@ -50,6 +50,8 @@ class JoryBuilderOffsetLimitTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -78,6 +80,8 @@ class JoryBuilderOffsetLimitTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -106,6 +110,8 @@ class JoryBuilderOffsetLimitTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -147,5 +153,7 @@ class JoryBuilderOffsetLimitTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 }

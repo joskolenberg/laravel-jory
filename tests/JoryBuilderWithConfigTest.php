@@ -46,6 +46,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -61,6 +63,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -131,6 +135,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -149,6 +155,8 @@ class JoryBuilderWithConfigTest extends TestCase
             'relations' => 'Not defined.',
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -176,6 +184,8 @@ class JoryBuilderWithConfigTest extends TestCase
             'relations' => 'Not defined.',
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -334,6 +344,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -524,6 +536,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -550,6 +564,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -573,6 +589,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -588,6 +606,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -604,6 +624,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -620,6 +642,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -637,6 +661,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -660,6 +686,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -676,6 +704,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -691,6 +721,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -717,6 +749,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -881,6 +915,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -907,6 +943,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -922,6 +960,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -966,6 +1006,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -1010,6 +1052,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -1025,6 +1069,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -1040,6 +1086,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -1056,6 +1104,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -1074,6 +1124,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -1093,6 +1145,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -1109,6 +1163,8 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -1126,5 +1182,7 @@ class JoryBuilderWithConfigTest extends TestCase
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
     }
 }

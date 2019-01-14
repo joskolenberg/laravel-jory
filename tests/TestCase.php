@@ -32,6 +32,8 @@ class TestCase extends Orchestra
         $this->registerJoryBuilders();
 
         JoryBuilder::routes('jory');
+
+        \DB::enableQueryLog();
     }
 
     protected function setUpDatabase(Application $app)
@@ -898,5 +900,10 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         JoryBuilder::register(Person::class);
         JoryBuilder::register(Song::class);
         JoryBuilder::register(SongWithCustomJoryBuilder::class)->builder(SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
+    }
+
+    public function assertQueryCount($expected)
+    {
+        $this->assertEquals($expected, count(\DB::getQueryLog()));
     }
 }

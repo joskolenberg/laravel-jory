@@ -21,6 +21,8 @@ class JoryRoutesTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -46,6 +48,8 @@ class JoryRoutesTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -93,6 +97,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
     }
 
     /** @test */
@@ -108,6 +114,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -123,6 +131,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -138,6 +148,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -153,6 +165,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -170,6 +184,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -187,6 +203,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -204,6 +222,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -221,6 +241,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -241,6 +263,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -328,6 +352,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(8);
     }
 
     /** @test */
@@ -349,6 +375,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -366,6 +394,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -388,6 +418,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(422)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -409,6 +441,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -423,6 +457,8 @@ class JoryRoutesTest extends TestCase
         $this->json('GET', 'jory/bandd/count')->assertStatus(404);
 
         $this->json('OPTIONS', 'jory/bandd')->assertStatus(404);
+
+        $this->assertQueryCount(0);
     }
 
     /** @test */
@@ -445,6 +481,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -460,6 +498,8 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -477,5 +517,7 @@ class JoryRoutesTest extends TestCase
 
         // ExactJson doesn't tell if the sort order is right so do both checks.
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
     }
 }

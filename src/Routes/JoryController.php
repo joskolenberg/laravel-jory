@@ -111,51 +111,61 @@ class JoryController extends Controller
         $dataResponseKey = config('jory.response.data-key');
         $errorResponseKey = config('jory.response.errors-key');
 
-        foreach ($jories as $name => $json) {
-            $exploded = $this->explodeResourceName($name);
-            $modelName = $exploded['modelName'];
-            $type = $exploded['type'];
-            $alias = $exploded['alias'];
-            $id = $exploded['id'];
+        $explodedJories = [];
 
-            $registration = $register->getRegistrationByUri($modelName);
+        foreach ($jories as $name => $json) {
+            $single = $this->explodeResourceName($name);
+
+            $registration = $register->getRegistrationByUri($single->modelName);
 
             if (! $registration) {
-                $errors[] = 'Resource "'.$modelName.'" is not available, did you mean "'.$this->getSuggestion($register->getUrisArray(), $modelName).'"?';
+                $errors[] = 'Resource "'.$single->modelName.'" is not available, did you mean "'.$this->getSuggestion($register->getUrisArray(), $single->modelName).'"?';
                 continue;
             }
-            $modelClass = $registration->getModelClass();
 
-            if ($type === 'count') {
-                // Return the count for a resource
-                $response = $modelClass::jory()->applyJson($json)->count()->toResponse($request);
-            } elseif ($type === 'single') {
-                // Return a single item
-                $model = $modelClass::find($id);
-                if (! $model) {
-                    $results[$alias] = null;
+            $single->registration = $registration;
+            $single->json = $json;
+            $single->name = $name;
+
+            $explodedJories[] = $single;
+        }
+
+        if(!$errors){
+            // Don't perform any queries when any of the requested resources was not found
+            foreach ($explodedJories as $single) {
+                $modelClass = $single->registration->getModelClass();
+
+                if ($single->type === 'count') {
+                    // Return the count for a resource
+                    $response = $modelClass::jory()->applyJson($single->json)->count()->toResponse($request);
+                } elseif ($single->type === 'single') {
+                    // Return a single item
+                    $model = $modelClass::find($single->id);
+                    if (! $model) {
+                        $results[$single->alias] = null;
+                        continue;
+                    }
+                    $response = $modelClass::jory()->applyJson($single->json)->onModel($model)->toResponse($request);
+                } else {
+                    // Return an array of items
+                    $response = $modelClass::jory()->applyJson($single->json)->toResponse($request);
+                }
+
+                if ($response->getStatusCode() === 422) {
+                    // Errors occurred, merge all errors into one array prefixed with the resource name
+                    $currentErrors = $errorResponseKey === null ? $response->getOriginalContent() : $response->getOriginalContent()[$errorResponseKey];
+                    foreach ($currentErrors as $error) {
+                        $errors[] = $single->name.': '.$error;
+                    }
+
+                    // Continue so we can display all errors for all requested resources
                     continue;
                 }
-                $response = $modelClass::jory()->applyJson($json)->onModel($model)->toResponse($request);
-            } else {
-                // Return an array of items
-                $response = $modelClass::jory()->applyJson($json)->toResponse($request);
+
+                // Everything went well, put result into total array
+                $currenData = $dataResponseKey === null ? $response->getOriginalContent() : $response->getOriginalContent()[$dataResponseKey];
+                $results[$single->alias] = $currenData;
             }
-
-            if ($response->getStatusCode() === 422) {
-                // Errors occurred, merge all errors into one array prefixed with the resource name
-                $currentErrors = $errorResponseKey === null ? $response->getOriginalContent() : $response->getOriginalContent()[$errorResponseKey];
-                foreach ($currentErrors as $error) {
-                    $errors[] = $name.': '.$error;
-                }
-
-                // Continue so we can display all errors for all requested resources
-                continue;
-            }
-
-            // Everything went well, put result into total array
-            $currenData = $dataResponseKey === null ? $response->getOriginalContent() : $response->getOriginalContent()[$dataResponseKey];
-            $results[$alias] = $currenData;
         }
 
         if (count($errors) > 0) {
@@ -212,9 +222,9 @@ class JoryController extends Controller
      * Cut the key into pieces when using "multiple".
      *
      * @param $name
-     * @return array
+     * @return \stdClass
      */
-    protected function explodeResourceName($name): array
+    protected function explodeResourceName($name): \stdClass
     {
         $nameParts = explode('_as_', $name);
 
@@ -241,6 +251,12 @@ class JoryController extends Controller
             $id = $nameParts[1];
         }
 
-        return compact('modelName', 'alias', 'type', 'id');
+        $result = new \stdClass();
+        $result->modelName = $modelName;
+        $result->alias = $alias;
+        $result->type = $type;
+        $result->id = $id;
+
+        return $result;
     }
 }

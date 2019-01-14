@@ -40,6 +40,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -78,6 +80,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -154,6 +158,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -192,6 +198,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -230,6 +238,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -381,6 +391,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -429,6 +441,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -491,6 +505,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -553,6 +569,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -743,5 +761,7 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 }

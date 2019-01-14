@@ -55,6 +55,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -94,6 +96,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -114,6 +118,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -134,6 +140,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -158,6 +166,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -177,6 +187,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -196,6 +208,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -329,6 +343,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -392,6 +408,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -499,6 +517,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(3);
     }
 
     /** @test */
@@ -529,6 +549,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(3);
     }
 
     /** @test */
@@ -578,6 +600,8 @@ class JoryBuilderRelationTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(3);
     }
 
     /** @test */
@@ -875,6 +899,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(8);
     }
 
     /** @test */
@@ -900,6 +926,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -910,6 +938,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         ]);
 
         $response->assertStatus(200)->assertExactJson(['data' => []]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -1022,6 +1052,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(3);
     }
 
     /** @test */
@@ -1085,25 +1117,25 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
     public function it_can_load_nested_relations_with_as_little_queries_as_possible()
     {
-        \DB::enableQueryLog();
         $response = $this->json('GET', 'jory/band', [
             'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"cover":{"rlt":{"album":{"rlt":{"band":{"rlt":{"people":{"rlt":{"instruments":{}}}}}}}}}}}}}}}}}}}}}',
         ]);
 
         $response->assertStatus(200)->assertJson([]);
 
-        $this->assertEquals(11, count(\DB::getQueryLog()));
+        $this->assertQueryCount(11);
     }
 
     /** @test */
     public function filters_in_relations_do_not_affect_the_value_of_a_custom_attribute_which_relies_on_that_relation()
     {
-        \DB::enableQueryLog();
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => '{"fld":["all_albums_string"],"rlt":{"albums":{"flt":{"f":"id","d":8}}}}',
         ]);
@@ -1123,5 +1155,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         ];
 
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
     }
 }
