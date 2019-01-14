@@ -35,7 +35,7 @@ class JoryBuilderMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        if ($this->option('pivot')) {
+        if ($this->option('example')) {
             return __DIR__.'/stubs/jory-builder-example.stub.stub';
         }
 
