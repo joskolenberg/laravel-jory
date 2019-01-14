@@ -541,6 +541,13 @@ To override Jory's default settings publish the config file using:
 php artisan vendor:publish --provider="JosKolenberg\LaravelJory\JoryServiceProvider"
 ```
 
+## Artisan commands
+Call the ```make:jory-builder``` command to create a new JoryBuilder. Optionally apply the ```--example``` flag to get some example configuration added to get started.
+```
+php artisan make:jory-builder AlbumJoryBuilder
+php artisan make:jory-builder SongJoryBuilder --example
+```
+
 
 
 That's it! Any suggestions or issues? Please contact me!

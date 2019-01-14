@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory;
 
 use JosKolenberg\Jory\Jory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\Jory\Support\Filter;
 use Illuminate\Database\Eloquent\Model;
@@ -222,6 +223,7 @@ class JoryBuilder implements Responsable
      *
      * @return int
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getCount(): int
     {
@@ -352,7 +354,7 @@ class JoryBuilder implements Responsable
      *
      * @return string
      */
-    protected function getCustomFilterMethodName(Filter $filter)
+    protected function getCustomFilterMethodName(Filter $filter): string
     {
         return 'scope'.studly_case($filter->getField()).'Filter';
     }
@@ -365,7 +367,7 @@ class JoryBuilder implements Responsable
      * @return \Illuminate\Http\Response
      * @throws LaravelJoryException
      */
-    public function toResponse($request)
+    public function toResponse($request): Response
     {
         try {
             $this->validate();
@@ -659,7 +661,7 @@ class JoryBuilder implements Responsable
      * @param \JosKolenberg\Jory\Jory $jory
      * @param bool $count
      */
-    protected function beforeQueryBuild($query, Jory $jory, $count = false)
+    protected function beforeQueryBuild($query, Jory $jory, $count = false): void
     {
         if (! $count) {
             $this->selectOnlyRootTable($query);
@@ -686,8 +688,9 @@ class JoryBuilder implements Responsable
      * @param $query
      * @param \JosKolenberg\Jory\Jory $jory
      * @param bool $count
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
-    protected function afterQueryBuild($query, Jory $jory, $count = false)
+    protected function afterQueryBuild($query, Jory $jory, $count = false): void
     {
         if (! $count) {
             $this->applyDefaultSortsFromConfig($query);
@@ -842,7 +845,7 @@ class JoryBuilder implements Responsable
      *
      * @return null|string
      */
-    protected function getDataResponseKey()
+    protected function getDataResponseKey():? string
     {
         return config('jory.response.data-key');
     }
@@ -852,7 +855,7 @@ class JoryBuilder implements Responsable
      *
      * @return null|string
      */
-    protected function getErrorResponseKey()
+    protected function getErrorResponseKey():? string
     {
         return config('jory.response.errors-key');
     }
@@ -864,7 +867,7 @@ class JoryBuilder implements Responsable
      * @return array
      * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
      */
-    public function modelToArray(Model $model)
+    public function modelToArray(Model $model): array
     {
         $jory = $this->getJory();
 

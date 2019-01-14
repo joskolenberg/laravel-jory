@@ -7,7 +7,7 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 
 class SongJoryBuilderWithBeforeQueryBuildOffsetLimitHook extends JoryBuilder
 {
-    protected function beforeQueryBuild($query, Jory $jory, $count = false)
+    protected function beforeQueryBuild($query, Jory $jory, $count = false): void
     {
         parent::beforeQueryBuild($query, $jory);
 

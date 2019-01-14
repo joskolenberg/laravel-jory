@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Console\JoryBuilderMakeCommand;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 class JoryServiceProvider extends ServiceProvider
@@ -12,6 +13,12 @@ class JoryServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/jory.php' => config_path('jory.php'),
         ]);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                JoryBuilderMakeCommand::class,
+            ]);
+        }
     }
 
     public function register()
