@@ -93,7 +93,7 @@ class DummyClass extends JoryBuilder
     }
 
     /**
-     * Apply custom 'group_name' filter.
+     * Apply custom 'group_name' sort.
      *
      * @param $query
      * @param string $order

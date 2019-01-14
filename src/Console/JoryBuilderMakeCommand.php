@@ -36,10 +36,10 @@ class JoryBuilderMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         if ($this->option('example')) {
-            return __DIR__.'/stubs/jory-builder-example.stub.stub';
+            return __DIR__.'/stubs/jory-builder-example.stub';
         }
 
-        return __DIR__.'/stubs/jory-builder.stub.stub';
+        return __DIR__.'/stubs/jory-builder.stub';
     }
 
     /**

@@ -542,7 +542,7 @@ php artisan vendor:publish --provider="JosKolenberg\LaravelJory\JoryServiceProvi
 ```
 
 ## Artisan commands
-Call the ```make:jory-builder``` command to create a new JoryBuilder. Optionally apply the ```--example``` flag to get some example configuration added to get started.
+Call the ```make:jory-builder``` command to create a new JoryBuilder. Apply the ```--example``` flag to get some example configuration added to get started.
 ```
 php artisan make:jory-builder AlbumJoryBuilder
 php artisan make:jory-builder SongJoryBuilder --example
