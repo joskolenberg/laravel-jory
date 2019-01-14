@@ -778,6 +778,7 @@ class JoryBuilder implements Responsable
      *
      * When no fields are specified in the request, the default fields in Config will be set on the Jory.
      *
+     * @param \JosKolenberg\Jory\Jory $jory
      */
     protected function applyConfigToJory(Jory $jory): void
     {
