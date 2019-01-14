@@ -14,6 +14,6 @@ class DummyClass extends JoryBuilder
      */
     protected function config(Config $config): void
     {
-        // Configure the JoryBuilder
+        // Configure the JoryBuilder...
     }
 }

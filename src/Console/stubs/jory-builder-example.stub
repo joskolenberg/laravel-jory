@@ -16,10 +16,12 @@ class DummyClass extends JoryBuilder
      */
     protected function config(Config $config): void
     {
-        // Register the first_name, full_name and has_comment_with_title field
+        // Register the first_name, full_name and field.
         // The first_name field is also available for filtering and sorting.
         $config->field('first_name')->filterable()->sortable();
         $config->field('full_name');
+
+        // Register the filter option for filtering on related comment's title field.
         $config->filter('has_comment_with_title');
 
         // Register the sort option for sorting by group name.
@@ -28,7 +30,7 @@ class DummyClass extends JoryBuilder
         // Register the comments relation.
         $config->relation('comments');
 
-        // Return 250 records when nu limit is specified in the request.
+        // Return 250 records when no limit is specified in the request.
         $config->limitDefault(250);
 
         // Allow a maximum of 1000 records in one go.
@@ -50,8 +52,12 @@ class DummyClass extends JoryBuilder
             $collection->load('invoiceLines');
         }
 
-        foreach ($collection as $model) {
-            $model->full_name = $model->first_name . ' ' . $model->last_name;
+        // Add a custom full_name attribute to each model when requested.
+        // (this could also be done using Laravel's custom attributes on the model)
+        if ($jory->hasField('full_name')) {
+            foreach ($collection as $model) {
+                $model->full_name = $model->first_name.' '.$model->last_name;
+            }
         }
 
         return parent::afterFetch($collection, $jory);
@@ -72,14 +78,14 @@ class DummyClass extends JoryBuilder
             $query->withCount('comments as comments_count');
         }
 
-        // Archived items are not available for the API
+        // Archived items are not available for the API.
         $query->where('is_archived', false);
 
         parent::beforeQueryBuild($query, $jory, $count);
     }
 
     /**
-     * Apply custom 'has_comment_with_title' filter.
+     * Apply the has_comment_with_title filter using a custom function.
      *
      * @param $query
      * @param string|null $operator
@@ -93,7 +99,7 @@ class DummyClass extends JoryBuilder
     }
 
     /**
-     * Apply custom 'group_name' sort.
+     * Apply the group_name sort using a custom function.
      *
      * @param $query
      * @param string $order
