@@ -3,8 +3,8 @@
 namespace JosKolenberg\LaravelJory;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\Console\JoryBuilderMakeCommand;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Console\JoryBuilderMakeCommand;
 
 class JoryServiceProvider extends ServiceProvider
 {
