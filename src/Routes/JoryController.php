@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Routes;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 class JoryController extends Controller
@@ -113,7 +114,7 @@ class JoryController extends Controller
 
         $explodedJories = [];
 
-        foreach ($jories as $name => $json) {
+        foreach ($jories as $name => $data) {
             $single = $this->explodeResourceName($name);
 
             $registration = $register->getRegistrationByUri($single->modelName);
@@ -124,7 +125,7 @@ class JoryController extends Controller
             }
 
             $single->registration = $registration;
-            $single->json = $json;
+            $single->data = $data;
             $single->name = $name;
 
             $explodedJories[] = $single;
@@ -139,7 +140,7 @@ class JoryController extends Controller
 
                 if ($single->type === 'count') {
                     // Return the count for a resource
-                    $response = $joryBuilder->applyJson($single->json)->count()->toResponse($request);
+                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->count()->toResponse($request);
                 } elseif ($single->type === 'single') {
                     // Return a single item
                     $model = $modelClass::find($single->id);
@@ -147,10 +148,10 @@ class JoryController extends Controller
                         $results[$single->alias] = null;
                         continue;
                     }
-                    $response = $joryBuilder->applyJson($single->json)->onModel($model)->toResponse($request);
+                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->onModel($model)->toResponse($request);
                 } else {
                     // Return an array of items
-                    $response = $joryBuilder->applyJson($single->json)->toResponse($request);
+                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->toResponse($request);
                 }
 
                 if ($response->getStatusCode() === 422) {
@@ -260,5 +261,23 @@ class JoryController extends Controller
         $result->id = $id;
 
         return $result;
+    }
+
+    /**
+     * Apply given data from the request to the JoryBuilder.
+     *
+     * @param \JosKolenberg\LaravelJory\JoryBuilder $joryBuilder
+     * @param mixed $data
+     * @return \JosKolenberg\LaravelJory\JoryBuilder
+     */
+    protected function applyArrayOrJson(JoryBuilder $joryBuilder, $data): JoryBuilder
+    {
+        if(is_array($data)){
+            $joryBuilder->applyArray($data);
+        }else{
+            $joryBuilder->applyJson($data);
+        }
+
+        return $joryBuilder;
     }
 }
