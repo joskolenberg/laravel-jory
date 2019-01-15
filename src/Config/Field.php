@@ -156,4 +156,12 @@ class Field
     {
         return $this->sort;
     }
+
+    /**
+     * Turn the field into camelCase.
+     */
+    public function toCamelCase(): void
+    {
+        $this->field = camel_case($this->field);
+    }
 }

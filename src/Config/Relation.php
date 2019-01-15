@@ -96,4 +96,12 @@ class Relation
 
         return $registration ? $registration->getUri() : 'Not defined.';
     }
+
+    /**
+     * Turn the relation into camelCase.
+     */
+    public function toCamelCase()
+    {
+        $this->name = camel_case($this->name);
+    }
 }

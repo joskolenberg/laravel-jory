@@ -111,4 +111,12 @@ class Sort
     {
         return $this->defaultOrder;
     }
+
+    /**
+     * Turn the sort into camelCase.
+     */
+    public function toCamelCase()
+    {
+        $this->field = camel_case($this->field);
+    }
 }

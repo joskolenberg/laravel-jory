@@ -379,4 +379,34 @@ class Config implements Responsable
 
         return $result;
     }
+
+    /**
+     * Turn the defined fields, filters, sorts and relations into camelCase.
+     */
+    public function toCamelCase(): void
+    {
+        if ($this->fields !== null) {
+            foreach ($this->fields as $field) {
+                $field->toCamelCase();
+            }
+        }
+
+        if ($this->getFilters() !== null) {
+            foreach ($this->getFilters() as $filter) {
+                $filter->toCamelCase();
+            }
+        }
+
+        if ($this->getSorts() !== null) {
+            foreach ($this->getSorts() as $sort) {
+                $sort->toCamelCase();
+            }
+        }
+
+        if ($this->relations !== null) {
+            foreach ($this->relations as $relation) {
+                $relation->toCamelCase();
+            }
+        }
+    }
 }

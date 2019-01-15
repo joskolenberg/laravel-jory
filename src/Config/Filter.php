@@ -94,4 +94,12 @@ class Filter
 
         return $this->description;
     }
+
+    /**
+     * Turn the filter into camelCase.
+     */
+    public function toCamelCase()
+    {
+        $this->field = camel_case($this->field);
+    }
 }
