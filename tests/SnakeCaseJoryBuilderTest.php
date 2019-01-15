@@ -8,13 +8,14 @@ class SnakeCaseJoryBuilderTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('jory.case', 'camel');
+        $app['config']->set('jory.request.case-key', 'case_key');
     }
 
     /** @test */
     public function it_returns_the_configs_default_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
@@ -34,7 +35,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_returns_the_toarray_default_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/song/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
@@ -53,7 +54,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_returns_the_defined_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"fld":["year_start","id","year_end"]}',
         ]);
 
@@ -73,7 +74,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_validates_the_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"fld":["yearStart","id","year_end"]}',
         ]);
 
@@ -92,7 +93,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_apply_default_filters_in_snakecase()
     {
         $response = $this->json('GET', 'jory/band', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"flt":{"f":"year_start","d":1968}}',
         ]);
 
@@ -116,7 +117,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_apply_custom_filters_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"flt":{"f":"number_of_songs","o":">=","d":15},"srt":["id"]}',
         ]);
 
@@ -152,7 +153,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_validates_the_filters_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"flt":{"f":"numberOfSongs","o":">=","d":15}}',
         ]);
 
@@ -171,7 +172,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_apply_default_sorts_in_snakecase()
     {
         $response = $this->json('GET', 'jory/band', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"srt":["year_end","-year_start"]}',
         ]);
 
@@ -213,7 +214,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_apply_custom_sorts_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"srt":["number_of_songs","-band_id"],"lmt":5,"offset":7}',
         ]);
 
@@ -261,7 +262,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_validates_the_sorts_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"srt":["numberOfSongs","-bandId"],"lmt":5,"offset":7}',
         ]);
 
@@ -281,7 +282,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_return_relations_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"rlt":{"album_cover":{}},"fld":["name"]}',
         ]);
 
@@ -344,7 +345,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_validates_the_relations_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"rlt":{"albumCover":{}},"fld":["name"]}',
         ]);
 
@@ -363,7 +364,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_return_multiple_records_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"lmt":2}',
         ]);
 
@@ -392,7 +393,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_do_a_count_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/count', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"flt":{"f":"year_end","d":1970}}',
         ]);
 
@@ -409,7 +410,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_get_a_single_record_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
@@ -429,7 +430,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_show_the_options_for_the_resource_in_snake_case()
     {
         $response = $this->json('OPTIONS', 'jory/band', [
-            'case' => 'snake',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
@@ -591,7 +592,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_get_apply_snake_case_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'album_as_album_with_cover' => '{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}',
             'album-cover_2_as_sticky_fingers_album_cover' => '{}',
         ]);
@@ -702,7 +703,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_validates_snake_case_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'album_as_album_with_cover' => '{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}',
         ]);
 
@@ -721,7 +722,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_handles_snake_case_in_relations()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"fld":["year_start","id","year_end"],"rlt":{"albums":{"fld":["release_date","band_id"],"srt":["-release_date"],"flt":{"or":[{"f":"release_date","d":"1969-01-12"},{"f":"release_date","d":"1970-10-05"}]}}}}',
         ]);
 
@@ -751,7 +752,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_validates_snake_case_in_relations()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'snake',
+            'case_key' => 'snake',
             'jory' => '{"fld":["year_start","id","year_end"],"rlt":{"albums":{"fld":["release_ate","band_id"],"srt":["-release_dates"],"flt":{"or":[{"f":"release_ate","d":"1969-01-12"},{"f":"releaseDaate","d":"1970-10-05"}]}}}}',
         ]);
 
