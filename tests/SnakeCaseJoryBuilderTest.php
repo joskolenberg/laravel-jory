@@ -4,7 +4,6 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 class SnakeCaseJoryBuilderTest extends TestCase
 {
-
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('jory.case', 'camel');

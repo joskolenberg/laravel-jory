@@ -41,7 +41,7 @@ class RequestParser implements JoryParserInterface
     {
         $data = $this->request->input(config('jory.request.key'), '{}');
 
-        if(is_array($data)){
+        if (is_array($data)) {
             return (new ArrayParser($data))->getJory();
         }
 

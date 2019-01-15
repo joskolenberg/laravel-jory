@@ -347,7 +347,7 @@ class JoryBuilder implements Responsable
         // Always apply the filter on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'. ($this->case->isCamel() ? snake_case($filter->getField()) : $filter->getField());
+        $field = $query->getModel()->getTable().'.'.($this->case->isCamel() ? snake_case($filter->getField()) : $filter->getField());
         $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
     }
 
@@ -493,12 +493,12 @@ class JoryBuilder implements Responsable
 
         // Remove the alias part if the relation has one
         $relationParts = explode('_as_', $relationName);
-        if(count($relationParts) > 1){
+        if (count($relationParts) > 1) {
             $relationName = $relationParts[0];
         }
 
         // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-        $relationName = !$this->case->isCamel() ? camel_case($relationName) : $relationName;
+        $relationName = ! $this->case->isCamel() ? camel_case($relationName) : $relationName;
 
         // Retrieve the model which will be queried to get the appropriate JoryBuilder
         $relatedModel = $collection->first()->{$relationName}()->getRelated();
@@ -575,7 +575,7 @@ class JoryBuilder implements Responsable
         // Always apply the sort on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'. ($this->case->isCamel() ? snake_case($sort->getField()) : $sort->getField());
+        $field = $query->getModel()->getTable().'.'.($this->case->isCamel() ? snake_case($sort->getField()) : $sort->getField());
         $this->applyDefaultSort($query, $field, $sort->getOrder());
     }
 
@@ -914,14 +914,13 @@ class JoryBuilder implements Responsable
 
             // Split the relation name in Laravel's relation name and the alias, if there is one.
             $relationParts = explode('_as_', $relationName);
-            if(count($relationParts) > 1){
+            if (count($relationParts) > 1) {
                 $relationName = $relationParts[0];
                 $relationAlias = $relationParts[1];
             }
 
-
             // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-            $relationName = !$this->case->isCamel() ? camel_case($relationName) : $relationName;
+            $relationName = ! $this->case->isCamel() ? camel_case($relationName) : $relationName;
 
             // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
             $related = $model->getJoryRelation($relation->getName());

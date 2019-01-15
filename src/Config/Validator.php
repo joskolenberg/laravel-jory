@@ -208,7 +208,7 @@ class Validator
 
             // Remove the alias part if the relation has one
             $relationParts = explode('_as_', $relationName);
-            if(count($relationParts) > 1){
+            if (count($relationParts) > 1) {
                 $relationName = $relationParts[0];
             }
 

@@ -12,7 +12,6 @@ use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
  */
 trait JoryTrait
 {
-
     protected $joryRelations = [];
 
     /**

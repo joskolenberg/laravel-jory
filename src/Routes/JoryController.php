@@ -131,7 +131,7 @@ class JoryController extends Controller
             $explodedJories[] = $single;
         }
 
-        if(!$errors){
+        if (! $errors) {
             // Don't perform any queries when any of the requested resources was not found
             foreach ($explodedJories as $single) {
                 $modelClass = $single->registration->getModelClass();
@@ -272,9 +272,9 @@ class JoryController extends Controller
      */
     protected function applyArrayOrJson(JoryBuilder $joryBuilder, $data): JoryBuilder
     {
-        if(is_array($data)){
+        if (is_array($data)) {
             $joryBuilder->applyArray($data);
-        }else{
+        } else {
             $joryBuilder->applyJson($data);
         }
 
