@@ -204,8 +204,16 @@ class Validator
         }
 
         foreach ($this->jory->getRelations() as $joryRelation) {
-            if (! in_array($joryRelation->getName(), $availableRelations)) {
-                $this->errors[] = 'Relation "'.$joryRelation->getName().'" is not available. Did you mean "'.$this->getSuggestion($availableRelations, $joryRelation->getName()).'"? (Location: '.$this->address.'relations.'.$joryRelation->getName().')';
+            $relationName = $joryRelation->getName();
+
+            // Remove the alias part if the relation has one
+            $relationParts = explode('_as_', $relationName);
+            if(count($relationParts) > 1){
+                $relationName = $relationParts[0];
+            }
+
+            if (! in_array($relationName, $availableRelations)) {
+                $this->errors[] = 'Relation "'.$relationName.'" is not available. Did you mean "'.$this->getSuggestion($availableRelations, $relationName).'"? (Location: '.$this->address.'relations.'.$relationName.')';
             }
         }
     }

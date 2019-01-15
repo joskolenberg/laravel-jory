@@ -769,4 +769,39 @@ class SnakeCaseJoryBuilderTest extends TestCase
 
         $this->assertQueryCount(0);
     }
+
+    /** @test */
+    public function it_can_load_a_relation_with_an_alias_in_snake_case()
+    {
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => '{"fld":["name"],"rlt":{"albums_as_album_no_eight":{"flt":{"f":"id","d":8}},"albums_as_album_no_nine":{"flt":{"f":"id","d":9}}}}',
+            'case_key' => 'snake',
+        ]);
+
+        $expected = [
+            'data' => [
+                'name' => 'Beatles',
+                'album_no_eight' => [
+                    [
+                        'id' => 8,
+                        'band_id' => 3,
+                        'name' => 'Abbey road',
+                        'release_date' => '1969-09-26',
+                    ],
+                ],
+                'album_no_nine' => [
+                    [
+                        'id' => 9,
+                        'band_id' => 3,
+                        'name' => 'Let it be',
+                        'release_date' => '1970-05-08',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
+    }
 }

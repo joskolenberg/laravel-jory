@@ -767,4 +767,39 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $this->assertQueryCount(0);
     }
+
+    /** @test */
+    public function it_can_load_a_relation_with_an_alias_in_camelCase()
+    {
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => '{"fld":["name"],"rlt":{"albums_as_albumNoEight":{"flt":{"f":"id","d":8}},"albums_as_albumNoNine":{"flt":{"f":"id","d":9}}}}',
+            'case' => 'camel',
+        ]);
+
+        $expected = [
+            'data' => [
+                'name' => 'Beatles',
+                'albumNoEight' => [
+                    [
+                        'id' => 8,
+                        'bandId' => 3,
+                        'name' => 'Abbey road',
+                        'releaseDate' => '1969-09-26',
+                    ],
+                ],
+                'albumNoNine' => [
+                    [
+                        'id' => 9,
+                        'bandId' => 3,
+                        'name' => 'Let it be',
+                        'releaseDate' => '1970-05-08',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
+    }
 }
