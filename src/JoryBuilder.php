@@ -252,7 +252,7 @@ class JoryBuilder implements Responsable
      *
      * @return array|null
      * @throws LaravelJoryException
-     * @throws LaravelJoryCallException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function toArray(): ?array
     {
@@ -457,6 +457,7 @@ class JoryBuilder implements Responsable
      * @param Collection $models
      * @param array $relations
      * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelations(Collection $models, array $relations): void
     {
@@ -480,6 +481,7 @@ class JoryBuilder implements Responsable
      * @param Collection $collection
      * @param Relation $relation
      * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelation(Collection $collection, Relation $relation): void
     {
@@ -695,13 +697,9 @@ class JoryBuilder implements Responsable
      * @param $query
      * @param \JosKolenberg\Jory\Jory $jory
      * @param bool $count
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function afterQueryBuild($query, Jory $jory, $count = false): void
     {
-        if (! $count) {
-            $this->applyDefaultSortsFromConfig($query);
-        }
     }
 
     /**
@@ -730,6 +728,7 @@ class JoryBuilder implements Responsable
      *
      * @return Jory
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function getJory(): Jory
     {
@@ -787,6 +786,7 @@ class JoryBuilder implements Responsable
      *
      * @throws LaravelJoryCallException
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function validate(): void
     {
@@ -809,6 +809,7 @@ class JoryBuilder implements Responsable
      * When no fields are specified in the request, the default fields in Config will be set on the Jory.
      *
      * @return void
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function applyConfigToJory(): void
     {
@@ -829,19 +830,11 @@ class JoryBuilder implements Responsable
             $this->jory->setFields($defaultFields);
         }
 
-        $this->configHasBeenApplied = true;
-    }
-
-    /**
-     * Apply any the sorts marked as default in the config on the query.
-     *
-     * @param $query
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
-     */
-    protected function applyDefaultSortsFromConfig($query): void
-    {
-        $defaultSorts = [];
         if ($this->getConfig()->getSorts() !== null) {
+            // When default sorts are defined, add them to the Jory
+            // When no sorts are requested, the default sorts in the builder will be applied.
+            // When sorts are requested, the default sorts are applied after the requested ones.
+            $defaultSorts = [];
             foreach ($this->getConfig()->getSorts() as $sort) {
                 if ($sort->getDefaultIndex() !== null) {
                     $defaultSorts[$sort->getDefaultIndex()] = new Sort($sort->getField(), $sort->getDefaultOrder());
@@ -849,9 +842,11 @@ class JoryBuilder implements Responsable
             }
             ksort($defaultSorts);
             foreach ($defaultSorts as $sort) {
-                $this->applySort($query, $sort);
+                $this->jory->addSort($sort);
             }
         }
+
+        $this->configHasBeenApplied = true;
     }
 
     /**
@@ -880,6 +875,7 @@ class JoryBuilder implements Responsable
      * @param \Illuminate\Database\Eloquent\Model $model
      * @return array
      * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function modelToArray(Model $model): array
     {
