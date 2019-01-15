@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use JosKolenberg\LaravelJory\Helpers\CaseManager;
+
 /**
  * Class Filter.
  *
@@ -25,6 +27,11 @@ class Filter
     protected $description = null;
 
     /**
+     * @var CaseManager
+     */
+    protected $case = null;
+
+    /**
      * Field constructor.
      *
      * @param string $field
@@ -33,6 +40,8 @@ class Filter
     {
         $this->field = $field;
         $this->operators = config('jory.filters.operators');
+
+        $this->case = app(CaseManager::class);
     }
 
     /**
@@ -68,7 +77,7 @@ class Filter
      */
     public function getField(): string
     {
-        return $this->field;
+        return $this->case->isCamel() ? camel_case($this->field) : $this->field;
     }
 
     /**
@@ -89,17 +98,9 @@ class Filter
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'Filter on the '.$this->field.' field.';
+            return 'Filter on the '.$this->getField().' field.';
         }
 
         return $this->description;
-    }
-
-    /**
-     * Turn the filter into camelCase.
-     */
-    public function toCamelCase()
-    {
-        $this->field = camel_case($this->field);
     }
 }

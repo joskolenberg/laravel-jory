@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory;
 
 use Illuminate\Support\ServiceProvider;
+use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 use JosKolenberg\LaravelJory\Console\JoryBuilderMakeCommand;
 
@@ -27,6 +28,10 @@ class JoryServiceProvider extends ServiceProvider
 
         $this->app->singleton(JoryBuildersRegister::class, function () {
             return new JoryBuildersRegister();
+        });
+
+        $this->app->singleton(CaseManager::class, function ($app) {
+            return new CaseManager($app->make('request'));
         });
     }
 }

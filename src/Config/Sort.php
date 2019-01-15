@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use JosKolenberg\LaravelJory\Helpers\CaseManager;
+
 /**
  * Class Sort.
  *
@@ -30,6 +32,11 @@ class Sort
     protected $defaultOrder = 'asc';
 
     /**
+     * @var CaseManager
+     */
+    protected $case = null;
+
+    /**
      * Sort constructor.
      *
      * @param string $field
@@ -37,6 +44,8 @@ class Sort
     public function __construct(string $field)
     {
         $this->field = $field;
+
+        $this->case = app(CaseManager::class);
     }
 
     /**
@@ -59,7 +68,7 @@ class Sort
      */
     public function getField(): string
     {
-        return $this->field;
+        return $this->case->isCamel() ? camel_case($this->field) : $this->field;
     }
 
     /**
@@ -70,7 +79,7 @@ class Sort
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'Sort by the '.$this->field.' field.';
+            return 'Sort by the '.$this->getField().' field.';
         }
 
         return $this->description;
@@ -110,13 +119,5 @@ class Sort
     public function getDefaultOrder(): string
     {
         return $this->defaultOrder;
-    }
-
-    /**
-     * Turn the sort into camelCase.
-     */
-    public function toCamelCase()
-    {
-        $this->field = camel_case($this->field);
     }
 }

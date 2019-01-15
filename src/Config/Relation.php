@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 /**
@@ -27,6 +28,11 @@ class Relation
     protected $description;
 
     /**
+     * @var CaseManager
+     */
+    protected $case = null;
+
+    /**
      * Relation constructor.
      *
      * @param string $name
@@ -36,6 +42,8 @@ class Relation
     {
         $this->name = $name;
         $this->modelClass = $modelClass;
+
+        $this->case = app(CaseManager::class);
     }
 
     /**
@@ -58,7 +66,7 @@ class Relation
      */
     public function getName(): string
     {
-        return $this->name;
+        return $this->case->isCamel() ? camel_case($this->name) : $this->name;
     }
 
     /**
@@ -69,7 +77,7 @@ class Relation
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'The '.$this->name.' relation.';
+            return 'The '.$this->getName().' relation.';
         }
 
         return $this->description;
@@ -95,13 +103,5 @@ class Relation
         $registration = app()->make(JoryBuildersRegister::class)->getRegistrationByModelClass($this->modelClass);
 
         return $registration ? $registration->getUri() : 'Not defined.';
-    }
-
-    /**
-     * Turn the relation into camelCase.
-     */
-    public function toCamelCase()
-    {
-        $this->name = camel_case($this->name);
     }
 }

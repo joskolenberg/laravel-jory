@@ -103,7 +103,7 @@ class JoryController extends Controller
      */
     public function multiple(Request $request, JoryBuildersRegister $register)
     {
-        $jories = $request->all();
+        $jories = $request->except(config('jory.request.case-key'));
 
         $results = [];
         $errors = [];
@@ -135,9 +135,11 @@ class JoryController extends Controller
             foreach ($explodedJories as $single) {
                 $modelClass = $single->registration->getModelClass();
 
+                $joryBuilder = $modelClass::jory();
+
                 if ($single->type === 'count') {
                     // Return the count for a resource
-                    $response = $modelClass::jory()->applyJson($single->json)->count()->toResponse($request);
+                    $response = $joryBuilder->applyJson($single->json)->count()->toResponse($request);
                 } elseif ($single->type === 'single') {
                     // Return a single item
                     $model = $modelClass::find($single->id);
@@ -145,10 +147,10 @@ class JoryController extends Controller
                         $results[$single->alias] = null;
                         continue;
                     }
-                    $response = $modelClass::jory()->applyJson($single->json)->onModel($model)->toResponse($request);
+                    $response = $joryBuilder->applyJson($single->json)->onModel($model)->toResponse($request);
                 } else {
                     // Return an array of items
-                    $response = $modelClass::jory()->applyJson($single->json)->toResponse($request);
+                    $response = $joryBuilder->applyJson($single->json)->toResponse($request);
                 }
 
                 if ($response->getStatusCode() === 422) {

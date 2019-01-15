@@ -10,11 +10,16 @@ return [
     | This key will be looked for to get the JSON string
     | holding the jory data in the request.
     |
+    | The case key can be used by users of your API to overwrite
+    | the default casing when using the API ('snake' or 'camel').
+    |
     */
 
     'request' => [
 
         'key' => 'jory',
+
+        'case-key' => 'case',
 
     ],
 
@@ -86,5 +91,22 @@ return [
         'max' => 1000,
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Case
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set the default casing to be used
+    | for field, filter, sort and relation names.
+    |
+    | This casing will be used when calling the JoryBuilder/API.
+    | NB. All configuration in JoryBuilder::config()
+    | should always be in snake case.
+    |
+    | Possible values: 'snake', 'camel'.
+    */
+
+    'case' => 'snake',
 
 ];

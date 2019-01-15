@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use JosKolenberg\LaravelJory\Helpers\CaseManager;
+
 /**
  * Class Field.
  *
@@ -35,6 +37,11 @@ class Field
     protected $sort = null;
 
     /**
+     * @var CaseManager
+     */
+    protected $case = null;
+
+    /**
      * Field constructor.
      *
      * @param string $field
@@ -42,6 +49,8 @@ class Field
     public function __construct(string $field)
     {
         $this->field = $field;
+
+        $this->case = app(CaseManager::class);
     }
 
     /**
@@ -76,7 +85,7 @@ class Field
      */
     public function getField(): string
     {
-        return $this->field;
+        return $this->case->isCamel() ? camel_case($this->field) : $this->field;
     }
 
     /**
@@ -87,7 +96,7 @@ class Field
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'The '.$this->field.' field.';
+            return 'The '.$this->getField().' field.';
         }
 
         return $this->description;
@@ -155,13 +164,5 @@ class Field
     public function getSort(): ? Sort
     {
         return $this->sort;
-    }
-
-    /**
-     * Turn the field into camelCase.
-     */
-    public function toCamelCase(): void
-    {
-        $this->field = camel_case($this->field);
     }
 }
