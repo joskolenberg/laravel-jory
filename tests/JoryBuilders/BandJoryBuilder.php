@@ -33,6 +33,8 @@ class BandJoryBuilder extends JoryBuilder
 
         $config->field('year_end')->description('The year in which the band quitted, could be null if band still exists.')->filterable()->sortable();
 
+        $config->field('all_albums_string')->hideByDefault();
+
         $config->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
         $config->filter('number_of_albums_in_year')->operators([
             '=',

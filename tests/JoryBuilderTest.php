@@ -27,6 +27,8 @@ class JoryBuilderTest extends TestCase
             'Beatles',
             'Jimi Hendrix Experience',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -40,6 +42,8 @@ class JoryBuilderTest extends TestCase
             'Bold as Love',
             'And the Gods Made Love',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -58,6 +62,8 @@ class JoryBuilderTest extends TestCase
             'Lovely Rita',
             'Love or Confusion',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -77,6 +83,8 @@ class JoryBuilderTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -97,6 +105,8 @@ class JoryBuilderTest extends TestCase
             'Lovely Rita',
             'Love or Confusion',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -106,13 +116,6 @@ class JoryBuilderTest extends TestCase
         $this->expectExceptionMessage('No jorydata has been set on JoryBuilder.');
 
         Band::jory()->get()->pluck('name')->toArray();
-
-        $this->assertEquals([
-            'Rolling Stones',
-            'Led Zeppelin',
-            'Beatles',
-            'Jimi Hendrix Experience',
-        ], $actual);
     }
 
     /** @test */
@@ -135,6 +138,8 @@ class JoryBuilderTest extends TestCase
             'Axis: Bold as love',
             'Electric ladyland',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -169,6 +174,8 @@ class JoryBuilderTest extends TestCase
             'Axis: Bold as love',
             'Electric ladyland',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -195,6 +202,8 @@ class JoryBuilderTest extends TestCase
             'Sgt. Peppers lonely hearts club band',
             'Electric ladyland',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -213,6 +222,8 @@ class JoryBuilderTest extends TestCase
             'Bassguitar',
             // An extra custom filter is made to exclude instruments without connected people, so flute should be missing
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -224,6 +235,8 @@ class JoryBuilderTest extends TestCase
             'id' => 1,
             'name' => 'Vocals',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -237,6 +250,8 @@ class JoryBuilderTest extends TestCase
         ])->first()->toArray();
 
         $this->assertNull($actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -283,5 +298,7 @@ class JoryBuilderTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
     }
 }

@@ -22,6 +22,8 @@ class JoryBuilderFilterTest extends TestCase
         ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Bonham', 'Lennon'], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /**
@@ -47,6 +49,8 @@ class JoryBuilderFilterTest extends TestCase
         ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Lennon', 'McCartney'], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /**
@@ -72,6 +76,8 @@ class JoryBuilderFilterTest extends TestCase
         ])->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Lennon'], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /**
@@ -101,6 +107,8 @@ class JoryBuilderFilterTest extends TestCase
             'Bold as Love',
             'And the Gods Made Love',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /**
@@ -139,6 +147,8 @@ class JoryBuilderFilterTest extends TestCase
             'Little Miss Lover',
             'Bold as Love',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /**
@@ -192,6 +202,8 @@ class JoryBuilderFilterTest extends TestCase
             'Little Miss Lover',
             'Bold as Love',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /**
@@ -260,6 +272,8 @@ class JoryBuilderFilterTest extends TestCase
             'Bold as Love',
             'And the Gods Made Love',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /**
@@ -275,6 +289,8 @@ class JoryBuilderFilterTest extends TestCase
             'Beatles',
             'Jimi Hendrix Experience',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -398,6 +414,8 @@ class JoryBuilderFilterTest extends TestCase
             'Beatles',
             'Jimi Hendrix Experience',
         ], $actual);
+
+        $this->assertQueryCount(10);
     }
 
     /** @test */
@@ -412,6 +430,8 @@ class JoryBuilderFilterTest extends TestCase
         $this->assertEquals([
             'Rolling Stones',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -428,6 +448,8 @@ class JoryBuilderFilterTest extends TestCase
             'Beatles',
             'Jimi Hendrix Experience',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -444,6 +466,8 @@ class JoryBuilderFilterTest extends TestCase
             'Rolling Stones',
             'Beatles',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -460,6 +484,8 @@ class JoryBuilderFilterTest extends TestCase
             'Led Zeppelin',
             'Jimi Hendrix Experience',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -475,6 +501,8 @@ class JoryBuilderFilterTest extends TestCase
         $this->assertEquals([
             'Beatles',
         ], $actual);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -500,5 +528,7 @@ class JoryBuilderFilterTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 }

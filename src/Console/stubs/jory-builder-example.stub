@@ -1,0 +1,111 @@
+<?php
+
+namespace DummyNamespace;
+
+use JosKolenberg\Jory\Jory;
+use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Config\Config;
+use Illuminate\Database\Eloquent\Collection;
+
+class DummyClass extends JoryBuilder
+{
+    /**
+     * Configure the JoryBuilder.
+     *
+     * @param  \JosKolenberg\LaravelJory\Config\Config $config
+     */
+    protected function config(Config $config): void
+    {
+        // Register the first_name, full_name and field.
+        // The first_name field is also available for filtering and sorting.
+        $config->field('first_name')->filterable()->sortable();
+        $config->field('full_name');
+
+        // Register the filter option for filtering on related comment's title field.
+        $config->filter('has_comment_with_title');
+
+        // Register the sort option for sorting by group name.
+        $config->sort('group_name');
+
+        // Register the comments relation.
+        $config->relation('comments');
+
+        // Return 250 records when no limit is specified in the request.
+        $config->limitDefault(250);
+
+        // Allow a maximum of 1000 records in one go.
+        $config->limitMax(1000);
+    }
+
+    /**
+     * Modify the fetched collection before the output is generated.
+     * This is a good place to do some eager loading or add custom values to the model.
+     *
+     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param \JosKolenberg\Jory\Jory $jory
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    protected function afterFetch(Collection $collection, Jory $jory): Collection
+    {
+        // The total price depends on all invoice lines, eager load them when requested.
+        if ($jory->hasField('total_price')) {
+            $collection->load('invoiceLines');
+        }
+
+        // Add a custom full_name attribute to each model when requested.
+        // (this could also be done using Laravel's custom attributes on the model)
+        if ($jory->hasField('full_name')) {
+            foreach ($collection as $model) {
+                $model->full_name = $model->first_name.' '.$model->last_name;
+            }
+        }
+
+        return parent::afterFetch($collection, $jory);
+    }
+
+    /**
+     * Hook into the query after all settings in Jory object
+     * are applied and just before the query is executed.
+     *
+     * @param $query
+     * @param \JosKolenberg\Jory\Jory $jory
+     * @param bool $count
+     */
+    protected function afterQueryBuild($query, Jory $jory, $count = false): void
+    {
+        // Load the comments_count only when requested.
+        if ($jory->hasField('comments_count')) {
+            $query->withCount('comments as comments_count');
+        }
+
+        // Archived items are not available for the API.
+        $query->where('is_archived', false);
+
+        parent::beforeQueryBuild($query, $jory, $count);
+    }
+
+    /**
+     * Apply the has_comment_with_title filter using a custom function.
+     *
+     * @param $query
+     * @param string|null $operator
+     * @param mixed|null $data
+     */
+    protected function scopeHasCommentWithTitleFilter($query, string $operator = null, $data = null): void
+    {
+        $query->whereHas('comments', function ($query) use ($operator, $data) {
+            $query->where('title', $operator, $data);
+        });
+    }
+
+    /**
+     * Apply the group_name sort using a custom function.
+     *
+     * @param $query
+     * @param string $order
+     */
+    protected function scopeGroupNameSort($query, string $order): void
+    {
+        $query->join('groups', 'group_id', 'groups.id')->orderBy('groups.name', $order);
+    }
+}

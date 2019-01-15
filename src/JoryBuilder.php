@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory;
 
 use JosKolenberg\Jory\Jory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\Jory\Support\Filter;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,7 @@ use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Contracts\FilterInterface;
+use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
@@ -76,6 +78,19 @@ class JoryBuilder implements Responsable
     protected $config = null;
 
     /**
+     * @var CaseManager
+     */
+    protected $case = null;
+
+    /**
+     * We only want to apply the settings in the config once.
+     * We'll keep track of that by this flag.
+     *
+     * @var bool
+     */
+    protected $configHasBeenApplied = false;
+
+    /**
      * JoryBuilder constructor.
      *
      * @param string $modelClass
@@ -83,6 +98,8 @@ class JoryBuilder implements Responsable
     public function __construct(string $modelClass)
     {
         $this->modelClass = $modelClass;
+
+        $this->case = app(CaseManager::class);
 
         // Create the config based on the settings in config()
         $this->config = new Config($this->modelClass);
@@ -164,7 +181,7 @@ class JoryBuilder implements Responsable
      *
      * @return \Illuminate\Database\Eloquent\Collection
      * @throws LaravelJoryException
-     * @throws LaravelJoryCallException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function get(): Collection
     {
@@ -182,8 +199,8 @@ class JoryBuilder implements Responsable
      * Get the first Model based on the baseQuery and Jory data.
      *
      * @return \Illuminate\Database\Eloquent\Model|null
-     * @throws LaravelJoryCallException
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getFirst(): ?Model
     {
@@ -210,6 +227,7 @@ class JoryBuilder implements Responsable
      *
      * @return int
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getCount(): int
     {
@@ -234,27 +252,24 @@ class JoryBuilder implements Responsable
      *
      * @return array|null
      * @throws LaravelJoryException
-     * @throws LaravelJoryCallException
-     * @throws JoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function toArray(): ?array
     {
-        $jory = $this->getJory();
-
         if ($this->first) {
             $model = $this->getFirst();
             if (! $model) {
                 return null;
             }
 
-            return $model->toArrayByJory($jory);
+            return $this->modelToArray($model);
         }
 
         $models = $this->get();
 
         $result = [];
         foreach ($models as $model) {
-            $result[] = $model->toArrayByJory($jory);
+            $result[] = $this->modelToArray($model);
         }
 
         return $result;
@@ -264,8 +279,8 @@ class JoryBuilder implements Responsable
      * Build a new query based on the baseQuery and Jory data.
      *
      * @return Builder
-     * @throws LaravelJoryCallException
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function buildQuery(): Builder
     {
@@ -332,7 +347,7 @@ class JoryBuilder implements Responsable
         // Always apply the filter on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.$filter->getField();
+        $field = $query->getModel()->getTable().'.'.($this->case->isCamel() ? snake_case($filter->getField()) : $filter->getField());
         $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
     }
 
@@ -343,7 +358,7 @@ class JoryBuilder implements Responsable
      *
      * @return string
      */
-    protected function getCustomFilterMethodName(Filter $filter)
+    protected function getCustomFilterMethodName(Filter $filter): string
     {
         return 'scope'.studly_case($filter->getField()).'Filter';
     }
@@ -356,7 +371,7 @@ class JoryBuilder implements Responsable
      * @return \Illuminate\Http\Response
      * @throws LaravelJoryException
      */
-    public function toResponse($request)
+    public function toResponse($request): Response
     {
         try {
             $this->validate();
@@ -418,8 +433,8 @@ class JoryBuilder implements Responsable
      * Apply the jory data on an existing query.
      *
      * @param $query
-     * @throws LaravelJoryCallException
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function applyOnQuery($query): void
     {
@@ -441,12 +456,23 @@ class JoryBuilder implements Responsable
      *
      * @param Collection $models
      * @param array $relations
+     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelations(Collection $models, array $relations): void
     {
         foreach ($relations as $relation) {
             $this->loadRelation($models, $relation);
         }
+
+        // We clear Eloquent's relations, so any filtering on relations
+        // doesn't affect any custom attributes which rely on relations.
+        $models->each(function ($model) {
+            $model->setRelations([]);
+        });
+
+        // Hook into the afterFetch() method on the related JoryBuilder
+        $this->afterFetch($models, $this->getJory());
     }
 
     /**
@@ -454,6 +480,8 @@ class JoryBuilder implements Responsable
      *
      * @param Collection $collection
      * @param Relation $relation
+     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelation(Collection $collection, Relation $relation): void
     {
@@ -461,7 +489,16 @@ class JoryBuilder implements Responsable
             return;
         }
 
-        $relationName = camel_case($relation->getName());
+        $relationName = $relation->getName();
+
+        // Remove the alias part if the relation has one
+        $relationParts = explode('_as_', $relationName);
+        if (count($relationParts) > 1) {
+            $relationName = $relationParts[0];
+        }
+
+        // Laravel's relations are in camelCase, convert if we're not in camelCase mode
+        $relationName = ! $this->case->isCamel() ? camel_case($relationName) : $relationName;
 
         // Retrieve the model which will be queried to get the appropriate JoryBuilder
         $relatedModel = $collection->first()->{$relationName}()->getRelated();
@@ -480,6 +517,9 @@ class JoryBuilder implements Responsable
         foreach ($collection as $model) {
             $related = $model->$relationName;
 
+            // We store the related records under the full relation name including alias
+            $model->addJoryRelation($relation->getName(), $related);
+
             if ($related === null) {
                 continue;
             }
@@ -487,12 +527,11 @@ class JoryBuilder implements Responsable
             if ($related instanceof Model) {
                 $allRelated->push($related);
             } else {
-                $allRelated = $allRelated->merge($related);
+                foreach ($related as $item) {
+                    $allRelated->push($item);
+                }
             }
         }
-
-        // Hook into the afterFetch() method on the related JoryBuilder
-        $allRelated = $joryBuilder->afterFetch($allRelated, $joryBuilder->getJory());
 
         // Load the subrelations
         $this->loadRelations($allRelated, $relation->getJory()->getRelations());
@@ -536,7 +575,7 @@ class JoryBuilder implements Responsable
         // Always apply the sort on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.$sort->getField();
+        $field = $query->getModel()->getTable().'.'.($this->case->isCamel() ? snake_case($sort->getField()) : $sort->getField());
         $this->applyDefaultSort($query, $field, $sort->getOrder());
     }
 
@@ -641,12 +680,12 @@ class JoryBuilder implements Responsable
      * @param \JosKolenberg\Jory\Jory $jory
      * @param bool $count
      */
-    protected function beforeQueryBuild($query, Jory $jory, $count = false)
+    protected function beforeQueryBuild($query, Jory $jory, $count = false): void
     {
         if (! $count) {
             $this->selectOnlyRootTable($query);
-            if ($this->config->getLimitDefault() !== null) {
-                $query->limit($this->config->getLimitDefault());
+            if ($this->getConfig()->getLimitDefault() !== null) {
+                $query->limit($this->getConfig()->getLimitDefault());
             }
         }
     }
@@ -669,11 +708,8 @@ class JoryBuilder implements Responsable
      * @param \JosKolenberg\Jory\Jory $jory
      * @param bool $count
      */
-    protected function afterQueryBuild($query, Jory $jory, $count = false)
+    protected function afterQueryBuild($query, Jory $jory, $count = false): void
     {
-        if (! $count) {
-            $this->applyDefaultSortsFromConfig($query);
-        }
     }
 
     /**
@@ -702,11 +738,14 @@ class JoryBuilder implements Responsable
      *
      * @return Jory
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function getJory(): Jory
     {
         // If instance already is set return this one.
         if ($this->jory) {
+            $this->applyConfigToJory();
+
             return $this->jory;
         }
 
@@ -714,9 +753,9 @@ class JoryBuilder implements Responsable
         if ($this->joryParser) {
             $jory = $this->joryParser->getJory();
 
-            $this->applyConfigToJory($jory);
-
             $this->jory = $jory;
+
+            $this->applyConfigToJory();
 
             return $this->jory;
         }
@@ -757,10 +796,11 @@ class JoryBuilder implements Responsable
      *
      * @throws LaravelJoryCallException
      * @throws LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function validate(): void
     {
-        (new Validator($this->config, $this->getJory()))->validate();
+        (new Validator($this->getConfig(), $this->getJory()))->validate();
     }
 
     /**
@@ -778,44 +818,45 @@ class JoryBuilder implements Responsable
      *
      * When no fields are specified in the request, the default fields in Config will be set on the Jory.
      *
-     * @param \JosKolenberg\Jory\Jory $jory
+     * @return void
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
-    protected function applyConfigToJory(Jory $jory): void
+    public function applyConfigToJory(): void
     {
-        if ($jory->getFields() === null && $this->config->getFields() !== null) {
+        if ($this->configHasBeenApplied) {
+            return;
+        }
+
+        if ($this->jory->getFields() === null && $this->getConfig()->getFields() !== null) {
             // No fields set in the request, but there are fields
             // specified in the config, than we will update the fields
             // with the ones to be shown by default.
             $defaultFields = [];
-            foreach ($this->config->getFields() as $field) {
+            foreach ($this->getConfig()->getFields() as $field) {
                 if ($field->isShownByDefault()) {
                     $defaultFields[] = $field->getField();
                 }
-                $jory->setFields($defaultFields);
             }
+            $this->jory->setFields($defaultFields);
         }
-    }
 
-    /**
-     * Apply any the sorts marked as default in the config on the query.
-     *
-     * @param $query
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
-     */
-    protected function applyDefaultSortsFromConfig($query): void
-    {
-        $defaultSorts = [];
-        if ($this->config->getSorts() !== null) {
-            foreach ($this->config->getSorts() as $sort) {
+        if ($this->getConfig()->getSorts() !== null) {
+            // When default sorts are defined, add them to the Jory
+            // When no sorts are requested, the default sorts in the builder will be applied.
+            // When sorts are requested, the default sorts are applied after the requested ones.
+            $defaultSorts = [];
+            foreach ($this->getConfig()->getSorts() as $sort) {
                 if ($sort->getDefaultIndex() !== null) {
                     $defaultSorts[$sort->getDefaultIndex()] = new Sort($sort->getField(), $sort->getDefaultOrder());
                 }
             }
             ksort($defaultSorts);
             foreach ($defaultSorts as $sort) {
-                $this->applySort($query, $sort);
+                $this->jory->addSort($sort);
             }
         }
+
+        $this->configHasBeenApplied = true;
     }
 
     /**
@@ -823,7 +864,7 @@ class JoryBuilder implements Responsable
      *
      * @return null|string
      */
-    protected function getDataResponseKey()
+    protected function getDataResponseKey(): ?string
     {
         return config('jory.response.data-key');
     }
@@ -833,8 +874,77 @@ class JoryBuilder implements Responsable
      *
      * @return null|string
      */
-    protected function getErrorResponseKey()
+    protected function getErrorResponseKey(): ?string
     {
         return config('jory.response.errors-key');
+    }
+
+    /**
+     * Convert a single model to an array based on the request in the Jory object.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return array
+     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     */
+    public function modelToArray(Model $model): array
+    {
+        $jory = $this->getJory();
+
+        // When no fields are specified, we'll use all the model's fields
+        // if fields are specified, we use only these.
+        if ($jory->getFields() === null) {
+            $result = $model->toArray();
+
+            if ($this->case->isCamel()) {
+                // Laravel's toArray() method returns snake_case keys, but we want camelCase; so convert it
+                $result = $this->case->arrayKeysToCamel($result);
+            }
+        } else {
+            $result = [];
+            foreach ($jory->getFields() as $field) {
+                $result[$field] = $this->case->isCamel() ? $model->{snake_case($field)} : $model->$field;
+            }
+        }
+
+        // Add the relations to the result
+        foreach ($jory->getRelations() as $relation) {
+            $relationName = $relation->getName();
+            $relationAlias = $relationName;
+
+            // Split the relation name in Laravel's relation name and the alias, if there is one.
+            $relationParts = explode('_as_', $relationName);
+            if (count($relationParts) > 1) {
+                $relationName = $relationParts[0];
+                $relationAlias = $relationParts[1];
+            }
+
+            // Laravel's relations are in camelCase, convert if we're not in camelCase mode
+            $relationName = ! $this->case->isCamel() ? camel_case($relationName) : $relationName;
+
+            // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
+            $related = $model->getJoryRelation($relation->getName());
+
+            // Get the related JoryBuilder to convert the related records to arrays
+            $relatedModel = $model->{$relationName}()->getRelated();
+            $relatedJoryBuilder = $relatedModel::getJoryBuilder()->applyJory($relation->getJory());
+
+            if ($related === null) {
+                // No related model found
+                $result[$relationAlias] = null;
+            } elseif ($related instanceof Model) {
+                // A related model is found
+                $result[$relationAlias] = $relatedJoryBuilder->modelToArray($related);
+            } else {
+                // A related collection
+                $relationResult = [];
+                foreach ($related as $relatedModel) {
+                    $relationResult[] = $relatedJoryBuilder->modelToArray($relatedModel);
+                }
+                $result[$relationAlias] = $relationResult;
+            }
+        }
+
+        return $result;
     }
 }

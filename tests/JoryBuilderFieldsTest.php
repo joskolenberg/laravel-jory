@@ -34,6 +34,8 @@ class JoryBuilderFieldsTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -137,6 +139,8 @@ class JoryBuilderFieldsTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -174,6 +178,8 @@ class JoryBuilderFieldsTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -191,6 +197,8 @@ class JoryBuilderFieldsTest extends TestCase
                 [],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -242,6 +250,8 @@ class JoryBuilderFieldsTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -300,5 +310,7 @@ class JoryBuilderFieldsTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 }

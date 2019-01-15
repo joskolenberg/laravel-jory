@@ -44,6 +44,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Love or Confusion',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -81,6 +83,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Lovely Rita',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -119,6 +123,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Love In Vain (Robert Johnson)',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -148,6 +154,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Little Miss Lover',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -176,6 +184,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'And the Gods Made Love',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -211,6 +221,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Come On (Part I)',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -240,6 +252,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Little Miss Lover',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -268,6 +282,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'And the Gods Made Love',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -303,6 +319,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Love or Confusion',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -335,6 +353,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'You Got The Silver',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -370,6 +390,8 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'Love In Vain (Robert Johnson)',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -410,5 +432,7 @@ class JoryBuilderHookTest extends TestCase
                 'title' => 'May This Be Love',
             ],
         ], $result);
+
+        $this->assertQueryCount(1);
     }
 }

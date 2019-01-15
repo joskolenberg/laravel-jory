@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Parsers;
 use JosKolenberg\Jory\Jory;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Parsers\JsonParser;
+use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 
 /**
@@ -38,6 +39,12 @@ class RequestParser implements JoryParserInterface
      */
     public function getJory(): Jory
     {
-        return (new JsonParser($this->request->input(config('jory.request.key'), '{}')))->getJory();
+        $data = $this->request->input(config('jory.request.key'), '{}');
+
+        if (is_array($data)) {
+            return (new ArrayParser($data))->getJory();
+        }
+
+        return (new JsonParser($data))->getJory();
     }
 }

@@ -1,0 +1,19 @@
+<?php
+
+namespace DummyNamespace;
+
+use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Config\Config;
+
+class DummyClass extends JoryBuilder
+{
+    /**
+     * Configure the JoryBuilder.
+     *
+     * @param  \JosKolenberg\LaravelJory\Config\Config $config
+     */
+    protected function config(Config $config): void
+    {
+        // Configure the JoryBuilder...
+    }
+}

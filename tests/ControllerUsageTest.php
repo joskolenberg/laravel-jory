@@ -34,6 +34,8 @@ class ControllerUsageTest extends TestCase
                 ],
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -49,6 +51,8 @@ class ControllerUsageTest extends TestCase
                 'year_end' => 1980,
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -64,6 +68,8 @@ class ControllerUsageTest extends TestCase
                 'year_end' => 1970,
             ],
         ]);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -74,5 +80,7 @@ class ControllerUsageTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => 2,
         ]);
+
+        $this->assertQueryCount(1);
     }
 }

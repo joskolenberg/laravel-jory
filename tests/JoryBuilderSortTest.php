@@ -40,6 +40,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -78,6 +80,48 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_sort_a_query_descending_2()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"srt":["-year_start"]}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'id' => 2,
+                    'name' => 'Led Zeppelin',
+                    'year_start' => 1968,
+                    'year_end' => 1980,
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Jimi Hendrix Experience',
+                    'year_start' => 1966,
+                    'year_end' => 1970,
+                ],
+                [
+                    'id' => 1,
+                    'name' => 'Rolling Stones',
+                    'year_start' => 1962,
+                    'year_end' => null,
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Beatles',
+                    'year_start' => 1960,
+                    'year_end' => 1970,
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -154,6 +198,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -192,6 +238,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -230,6 +278,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -381,6 +431,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -429,6 +481,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
     }
 
     /** @test */
@@ -491,6 +545,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -553,6 +609,8 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -743,5 +801,7 @@ class JoryBuilderSortTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
     }
 }
