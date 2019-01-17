@@ -534,7 +534,7 @@ class JoryBuilder implements Responsable
         }
 
         // Load the subrelations
-        $this->loadRelations($allRelated, $relation->getJory()->getRelations());
+        $joryBuilder->loadRelations($allRelated, $relation->getJory()->getRelations());
     }
 
     /**
