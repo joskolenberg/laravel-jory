@@ -6,26 +6,25 @@ use JosKolenberg\Jory\Jory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use JosKolenberg\Jory\Support\Sort;
-use JosKolenberg\Jory\Support\Filter;
 use Illuminate\Database\Eloquent\Model;
-use JosKolenberg\Jory\Support\Relation;
 use Illuminate\Database\Eloquent\Builder;
 use JosKolenberg\Jory\Parsers\JsonParser;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\Config\Config;
 use Illuminate\Database\Eloquent\Collection;
-use JosKolenberg\Jory\Support\GroupOrFilter;
 use Illuminate\Contracts\Support\Responsable;
-use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\Jory\Exceptions\JoryException;
-use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
+use JosKolenberg\LaravelJory\Traits\HandlesJorySorts;
+use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
+use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
 use JosKolenberg\LaravelJory\Register\RegistersJoryBuilders;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Traits\ConvertsModelToArrayByJory;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
 /**
@@ -35,7 +34,12 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
  */
 class JoryBuilder implements Responsable
 {
-    use BuildsJoryRoutes, RegistersJoryBuilders;
+    use BuildsJoryRoutes,
+        RegistersJoryBuilders,
+        HandlesJoryFilters,
+        HandlesJorySorts,
+        LoadsJoryRelations,
+        ConvertsModelToArrayByJory;
 
     /**
      * @var string
@@ -292,78 +296,6 @@ class JoryBuilder implements Responsable
     }
 
     /**
-     * Apply a filter (field, groupAnd or groupOr) on a query.
-     *
-     * @param mixed $query
-     * @param FilterInterface $filter
-     */
-    protected function applyFilter($query, FilterInterface $filter): void
-    {
-        if ($filter instanceof Filter) {
-            $this->applyFieldFilter($query, $filter);
-        }
-        if ($filter instanceof GroupAndFilter) {
-            $query->where(function ($query) use ($filter) {
-                foreach ($filter as $subFilter) {
-                    $this->applyFilter($query, $subFilter);
-                }
-            });
-        }
-        if ($filter instanceof GroupOrFilter) {
-            $query->where(function ($query) use ($filter) {
-                foreach ($filter as $subFilter) {
-                    $query->orWhere(function ($query) use ($subFilter) {
-                        $this->applyFilter($query, $subFilter);
-                    });
-                }
-            });
-        }
-    }
-
-    /**
-     * Apply a filter to a field.
-     * Use custom filter method if available.
-     * If not, run the default filter method..
-     *
-     * @param Builder $query
-     * @param Filter $filter
-     */
-    protected function applyFieldFilter($query, Filter $filter): void
-    {
-        $customMethodName = $this->getCustomFilterMethodName($filter);
-        if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $filter->getOperator(), $filter->getData());
-
-            return;
-        }
-
-        $model = $query->getModel();
-        if (method_exists($model, $customMethodName)) {
-            $model->$customMethodName($query, $filter->getOperator(), $filter->getData());
-
-            return;
-        }
-
-        // Always apply the filter on the table of the model which
-        // is being queried even if a join is applied (e.g. when filtering
-        // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.($this->case->isCamel() ? snake_case($filter->getField()) : $filter->getField());
-        $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
-    }
-
-    /**
-     * Get the custom method name to look for to apply a filter.
-     *
-     * @param Filter $filter
-     *
-     * @return string
-     */
-    protected function getCustomFilterMethodName(Filter $filter): string
-    {
-        return 'scope'.studly_case($filter->getField()).'Filter';
-    }
-
-    /**
      * Create an HTTP response that represents the object.
      *
      * @param \Illuminate\Http\Request $request
@@ -396,40 +328,6 @@ class JoryBuilder implements Responsable
     }
 
     /**
-     * Do apply a filter to a field with default options.
-     *
-     * Prefixed with 'do' to prevent clashing if a custom filter named 'default_field' should exist.
-     *
-     * @param mixed $query
-     * @param $field
-     * @param $operator
-     * @param $data
-     */
-    protected function applyDefaultFieldFilter($query, $field, $operator, $data): void
-    {
-        switch ($operator) {
-            case 'is_null':
-                $query->whereNull($field);
-
-                return;
-            case 'not_null':
-                $query->whereNotNull($field);
-
-                return;
-            case 'in':
-                $query->whereIn($field, $data);
-
-                return;
-            case 'not_in':
-                $query->whereNotIn($field, $data);
-
-                return;
-            default:
-                $query->where($field, $operator ?: '=', $data);
-        }
-    }
-
-    /**
      * Apply the jory data on an existing query.
      *
      * @param $query
@@ -449,159 +347,6 @@ class JoryBuilder implements Responsable
         $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
         $this->afterQueryBuild($query, $jory);
-    }
-
-    /**
-     * Load the given relations on the given model(s).
-     *
-     * @param Collection $models
-     * @param array $relations
-     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
-     */
-    protected function loadRelations(Collection $models, array $relations): void
-    {
-        foreach ($relations as $relation) {
-            $this->loadRelation($models, $relation);
-        }
-
-        // We clear Eloquent's relations, so any filtering on relations
-        // doesn't affect any custom attributes which rely on relations.
-        $models->each(function ($model) {
-            $model->setRelations([]);
-        });
-
-        // Hook into the afterFetch() method on the related JoryBuilder
-        $this->afterFetch($models, $this->getJory());
-    }
-
-    /**
-     * Load the given relation on a collection of models.
-     *
-     * @param Collection $collection
-     * @param Relation $relation
-     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
-     */
-    protected function loadRelation(Collection $collection, Relation $relation): void
-    {
-        if ($collection->isEmpty()) {
-            return;
-        }
-
-        $relationName = $relation->getName();
-
-        // Remove the alias part if the relation has one
-        $relationParts = explode('_as_', $relationName);
-        if (count($relationParts) > 1) {
-            $relationName = $relationParts[0];
-        }
-
-        // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-        $relationName = ! $this->case->isCamel() ? camel_case($relationName) : $relationName;
-
-        // Retrieve the model which will be queried to get the appropriate JoryBuilder
-        $relatedModel = $collection->first()->{$relationName}()->getRelated();
-        $joryBuilder = $relatedModel::getJoryBuilder();
-
-        $collection->load([
-            $relationName => function ($query) use ($joryBuilder, $relation, $relatedModel) {
-                // Apply the data in the subjory (filtering/sorting/...) on the query
-                $joryBuilder->applyJory($relation->getJory());
-                $joryBuilder->applyOnQuery($query);
-            },
-        ]);
-
-        // Put all retrieved related models in single collection to load subrelations in a single call
-        $allRelated = new Collection();
-        foreach ($collection as $model) {
-            $related = $model->$relationName;
-
-            // We store the related records under the full relation name including alias
-            $model->addJoryRelation($relation->getName(), $related);
-
-            if ($related === null) {
-                continue;
-            }
-
-            if ($related instanceof Model) {
-                $allRelated->push($related);
-            } else {
-                foreach ($related as $item) {
-                    $allRelated->push($item);
-                }
-            }
-        }
-
-        // Load the subrelations
-        $joryBuilder->loadRelations($allRelated, $relation->getJory()->getRelations());
-    }
-
-    /**
-     * Apply an array of sorts on the query.
-     *
-     * @param $query
-     * @param array $sorts
-     */
-    protected function applySorts($query, array $sorts): void
-    {
-        foreach ($sorts as $sort) {
-            $this->applySort($query, $sort);
-        }
-    }
-
-    /**
-     * Apply a single sort on a query.
-     *
-     * @param $query
-     * @param Sort $sort
-     */
-    protected function applySort($query, Sort $sort): void
-    {
-        $customMethodName = $this->getCustomSortMethodName($sort);
-        if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $sort->getOrder());
-
-            return;
-        }
-
-        $model = $query->getModel();
-        if (method_exists($model, $customMethodName)) {
-            $model->$customMethodName($query, $sort->getOrder());
-
-            return;
-        }
-
-        // Always apply the sort on the table of the model which
-        // is being queried even if a join is applied (e.g. when filtering
-        // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.($this->case->isCamel() ? snake_case($sort->getField()) : $sort->getField());
-        $this->applyDefaultSort($query, $field, $sort->getOrder());
-    }
-
-    /**
-     * Do apply a sort to a field with default options.
-     *
-     * Prefixed with 'do' to prevent clashing if a custom filter named 'default_field' should exist.
-     *
-     * @param $query
-     * @param string $field
-     * @param string $order
-     */
-    protected function applyDefaultSort($query, string $field, string $order): void
-    {
-        $query->orderBy($field, $order);
-    }
-
-    /**
-     * Get the custom method name to look for to apply a sort.
-     *
-     * @param Sort $filter
-     * @return string
-     */
-    protected function getCustomSortMethodName(Sort $filter): string
-    {
-        return 'scope'.studly_case($filter->getField()).'Sort';
     }
 
     /**
@@ -889,62 +634,6 @@ class JoryBuilder implements Responsable
      */
     public function modelToArray(Model $model): array
     {
-        $jory = $this->getJory();
-
-        // When no fields are specified, we'll use all the model's fields
-        // if fields are specified, we use only these.
-        if ($jory->getFields() === null) {
-            $result = $model->toArray();
-
-            if ($this->case->isCamel()) {
-                // Laravel's toArray() method returns snake_case keys, but we want camelCase; so convert it
-                $result = $this->case->arrayKeysToCamel($result);
-            }
-        } else {
-            $result = [];
-            foreach ($jory->getFields() as $field) {
-                $result[$field] = $this->case->isCamel() ? $model->{snake_case($field)} : $model->$field;
-            }
-        }
-
-        // Add the relations to the result
-        foreach ($jory->getRelations() as $relation) {
-            $relationName = $relation->getName();
-            $relationAlias = $relationName;
-
-            // Split the relation name in Laravel's relation name and the alias, if there is one.
-            $relationParts = explode('_as_', $relationName);
-            if (count($relationParts) > 1) {
-                $relationName = $relationParts[0];
-                $relationAlias = $relationParts[1];
-            }
-
-            // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-            $relationName = ! $this->case->isCamel() ? camel_case($relationName) : $relationName;
-
-            // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
-            $related = $model->getJoryRelation($relation->getName());
-
-            // Get the related JoryBuilder to convert the related records to arrays
-            $relatedModel = $model->{$relationName}()->getRelated();
-            $relatedJoryBuilder = $relatedModel::getJoryBuilder()->applyJory($relation->getJory());
-
-            if ($related === null) {
-                // No related model found
-                $result[$relationAlias] = null;
-            } elseif ($related instanceof Model) {
-                // A related model is found
-                $result[$relationAlias] = $relatedJoryBuilder->modelToArray($related);
-            } else {
-                // A related collection
-                $relationResult = [];
-                foreach ($related as $relatedModel) {
-                    $relationResult[] = $relatedJoryBuilder->modelToArray($relatedModel);
-                }
-                $result[$relationAlias] = $relationResult;
-            }
-        }
-
-        return $result;
+        return $this->modeToArrayByJory($model, $this->getJory());
     }
 }
