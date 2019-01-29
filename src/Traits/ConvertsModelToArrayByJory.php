@@ -6,7 +6,6 @@ use JosKolenberg\Jory\Jory;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 
-
 trait ConvertsModelToArrayByJory
 {
     /**
@@ -16,7 +15,7 @@ trait ConvertsModelToArrayByJory
      * @param \JosKolenberg\Jory\Jory $jory
      * @return array
      */
-    protected function modeToArrayByJory(Model $model, Jory $jory): array
+    protected function modelToArrayByJory(Model $model, Jory $jory): array
     {
         $case = app(CaseManager::class);
 

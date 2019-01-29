@@ -634,6 +634,6 @@ class JoryBuilder implements Responsable
      */
     public function modelToArray(Model $model): array
     {
-        return $this->modeToArrayByJory($model, $this->getJory());
+        return $this->modelToArrayByJory($model, $this->getJory());
     }
 }
