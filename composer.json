@@ -12,7 +12,8 @@
   "minimum-stability": "stable",
   "require": {
     "laravel/framework": "^5.5",
-    "joskolenberg/jory": "^0.7"
+    "joskolenberg/jory": "^0.7",
+    "joskolenberg/eloquent-reflector": "^0.1"
   },
   "autoload": {
     "psr-4": {
@@ -26,7 +27,6 @@
   },
   "require-dev": {
     "orchestra/testbench": "^3.5",
-    "joskolenberg/eloquent-reflector": "^0.1"
   },
   "extra": {
     "laravel": {
