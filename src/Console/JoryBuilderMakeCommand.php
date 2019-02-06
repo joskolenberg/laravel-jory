@@ -3,9 +3,8 @@
 namespace JosKolenberg\LaravelJory\Console;
 
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use JosKolenberg\EloquentReflector\EloquentReflector;
 
 class JoryBuilderMakeCommand extends GeneratorCommand
 {
@@ -37,10 +36,6 @@ class JoryBuilderMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        if ($this->option('example')) {
-            return __DIR__.'/stubs/jory-builder-example.stub';
-        }
-
         return __DIR__.'/stubs/jory-builder.stub';
     }
 
@@ -70,7 +65,7 @@ class JoryBuilderMakeCommand extends GeneratorCommand
     }
 
     /**
-     * Replace the namespace for the given stub.
+     * Replace the auto-generated configuration for the given stub.
      *
      * @param  string  $stub
      * @param  string  $name
@@ -78,7 +73,7 @@ class JoryBuilderMakeCommand extends GeneratorCommand
      */
     protected function replaceConfig(&$stub, $name)
     {
-        $stub = str_replace('GeneratedConfig', $this->getGeneratedConfig(), $stub);
+        $stub = str_replace('DummyConfig', $this->getGeneratedConfig(), $stub);
 
         return $this;
     }
@@ -91,22 +86,47 @@ class JoryBuilderMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['example', 'e', InputOption::VALUE_NONE, 'Create a new JoryBuilder class with example data'],
-
-            ['model', 'e', InputOption::VALUE_REQUIRED, 'Generate default configuration based on a model'],
+            ['model', 'm', InputOption::VALUE_REQUIRED, 'Generate default configuration based on a model'],
         ];
     }
 
-    protected function getGeneratedConfig()
+    /**
+     * Get the replacement code for auto-generated configuration.
+     *
+     * @return string
+     */
+    protected function getGeneratedConfig(): string
     {
-        $modelClass = $this->input->getOption('model');
-
-        $modelClass = $this->qualifyClass($modelClass);
-
-        if(class_exists($modelClass)){
-            die('d');
-        }else{
-            die('44');
+        // Get model string and chek if it's supplied.
+        $modelClass = $this->option('model');
+        if(!$modelClass){
+            return "\t\t// Configure the builder...";
         }
+
+        // Create reflector to get attributes and relations from the modelClass.
+        $reflector = new EloquentReflector($modelClass);
+
+        // Generate fields configuration.
+        $generatedCode = "\t\t// Fields\n";
+        foreach ($reflector->getAttributes() as $attribute) {
+            if($attribute->custom){
+                // Custom attributes (using accessors) cannot be sorted or filtered out
+                // of the box. So don't make them sortable or filterable.
+                $generatedCode .= "\t\t\$config->field('".$attribute->name."');\n";
+            }else{
+                // Standard attributes (database columns) can be sorted and filtered
+                // out of the box. So make them sortable ande filterable.
+                $generatedCode .= "\t\t\$config->field('".$attribute->name."')->filterable()->sortable();\n";
+            }
+        }
+
+        // Generate relations configuration.
+        $generatedCode .= "\n\t\t// Relations\n";
+        foreach ($reflector->getRelationNames() as $relationName) {
+            $generatedCode .= "\t\t\$config->relation('".$relationName."');\n";
+        }
+
+        // Remove last \n and return result.
+        return substr($generatedCode, 0, -1);
     }
 }
