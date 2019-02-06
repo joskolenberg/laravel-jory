@@ -2,30 +2,29 @@
 
 namespace JosKolenberg\LaravelJory;
 
-use JosKolenberg\Jory\Jory;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use JosKolenberg\Jory\Support\Sort;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use JosKolenberg\Jory\Parsers\JsonParser;
-use JosKolenberg\Jory\Parsers\ArrayParser;
-use JosKolenberg\LaravelJory\Config\Config;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Contracts\Support\Responsable;
-use JosKolenberg\LaravelJory\Config\Validator;
+use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\Jory\Exceptions\JoryException;
+use JosKolenberg\Jory\Jory;
+use JosKolenberg\Jory\Parsers\ArrayParser;
+use JosKolenberg\Jory\Parsers\JsonParser;
+use JosKolenberg\LaravelJory\Config\Validator;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
-use JosKolenberg\Jory\Contracts\JoryParserInterface;
-use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
-use JosKolenberg\LaravelJory\Traits\HandlesJorySorts;
-use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
-use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
 use JosKolenberg\LaravelJory\Register\RegistersJoryBuilders;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
 use JosKolenberg\LaravelJory\Traits\ConvertsModelToArrayByJory;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
+use JosKolenberg\LaravelJory\Traits\HandlesJoryBuilderConfiguration;
+use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
+use JosKolenberg\LaravelJory\Traits\HandlesJorySorts;
+use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
 
 /**
  * Class to query models based on Jory data.
@@ -39,7 +38,8 @@ class JoryBuilder implements Responsable
         HandlesJoryFilters,
         HandlesJorySorts,
         LoadsJoryRelations,
-        ConvertsModelToArrayByJory;
+        ConvertsModelToArrayByJory,
+        HandlesJoryBuilderConfiguration;
 
     /**
      * @var string
@@ -77,11 +77,6 @@ class JoryBuilder implements Responsable
     protected $joryParser = null;
 
     /**
-     * @var Config|null
-     */
-    protected $config = null;
-
-    /**
      * @var CaseManager
      */
     protected $case = null;
@@ -105,9 +100,7 @@ class JoryBuilder implements Responsable
 
         $this->case = app(CaseManager::class);
 
-        // Create the config based on the settings in config()
-        $this->config = new Config($this->modelClass);
-        $this->config($this->config);
+        $this->initConfig($modelClass);
     }
 
     /**
@@ -487,25 +480,25 @@ class JoryBuilder implements Responsable
      */
     protected function getJory(): Jory
     {
-        // If instance already is set return this one.
-        if ($this->jory) {
-            $this->applyConfigToJory();
-
+        // If config is applied to Jory, the Jory object must be set and configured.
+        if($this->configHasBeenApplied){
             return $this->jory;
         }
 
-        // If a parser has been set return the one from the parser
+        // If a parser has been set use the one from the parser
         if ($this->joryParser) {
-            $jory = $this->joryParser->getJory();
-
-            $this->jory = $jory;
-
-            $this->applyConfigToJory();
-
-            return $this->jory;
+            $this->jory = $this->joryParser->getJory();
         }
 
-        throw new LaravelJoryException('No jorydata has been set on JoryBuilder.');
+        if(!$this->jory){
+            throw new LaravelJoryException('No jorydata has been set on JoryBuilder.');
+        }
+
+        $this->applyConfigToJory($this->config, $this->jory);
+        $this->configHasBeenApplied = true;
+
+        return $this->jory;
+
     }
 
     /**
@@ -521,22 +514,6 @@ class JoryBuilder implements Responsable
     }
 
     /**
-     * Create the config for this builder.
-     *
-     * This config will be used to:
-     *      - Show the options for the resource when using the OPTIONS http method
-     *      - Fields:
-     *          - Validate if the requested fields are available.
-     *          - Update the Jory's fields attribute with the ones marked to be shown by default
-     *              when no particular fields are requested.
-     *
-     * @param Config $config
-     */
-    protected function config(Config $config): void
-    {
-    }
-
-    /**
      * Validate the Jory object by the settings in the Config.
      *
      * @throws LaravelJoryCallException
@@ -546,62 +523,6 @@ class JoryBuilder implements Responsable
     protected function validate(): void
     {
         (new Validator($this->getConfig(), $this->getJory()))->validate();
-    }
-
-    /**
-     * Get the Config.
-     *
-     * @return Config
-     */
-    public function getConfig(): Config
-    {
-        return $this->config;
-    }
-
-    /**
-     * Apply the settings in the Config on the Jory.
-     *
-     * When no fields are specified in the request, the default fields in Config will be set on the Jory.
-     *
-     * @return void
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
-     */
-    public function applyConfigToJory(): void
-    {
-        if ($this->configHasBeenApplied) {
-            return;
-        }
-
-        if ($this->jory->getFields() === null && $this->getConfig()->getFields() !== null) {
-            // No fields set in the request, but there are fields
-            // specified in the config, than we will update the fields
-            // with the ones to be shown by default.
-            $defaultFields = [];
-            foreach ($this->getConfig()->getFields() as $field) {
-                if ($field->isShownByDefault()) {
-                    $defaultFields[] = $field->getField();
-                }
-            }
-            $this->jory->setFields($defaultFields);
-        }
-
-        if ($this->getConfig()->getSorts() !== null) {
-            // When default sorts are defined, add them to the Jory
-            // When no sorts are requested, the default sorts in the builder will be applied.
-            // When sorts are requested, the default sorts are applied after the requested ones.
-            $defaultSorts = [];
-            foreach ($this->getConfig()->getSorts() as $sort) {
-                if ($sort->getDefaultIndex() !== null) {
-                    $defaultSorts[$sort->getDefaultIndex()] = new Sort($sort->getField(), $sort->getDefaultOrder());
-                }
-            }
-            ksort($defaultSorts);
-            foreach ($defaultSorts as $sort) {
-                $this->jory->addSort($sort);
-            }
-        }
-
-        $this->configHasBeenApplied = true;
     }
 
     /**
