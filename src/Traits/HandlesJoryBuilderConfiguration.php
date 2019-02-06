@@ -41,14 +41,27 @@ trait HandlesJoryBuilderConfiguration
     /**
      * Apply the settings in the Config on the Jory.
      *
-     * When no fields are specified in the request, the default fields in Config will be set on the Jory.
-     *
      * @param \JosKolenberg\LaravelJory\Config\Config $config
      * @param \JosKolenberg\Jory\Jory $jory
      * @return void
      * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function applyConfigToJory(Config $config, Jory $jory): void
+    {
+        $this->applyFieldsConfigToJory($config, $jory);
+        $this->applySortsConfigToJory($config, $jory);
+        $this->applyOffsetAndLimitConfigToJory($config, $jory);
+    }
+
+    /**
+     * Apply the field settings in the Config on the Jory.
+     *
+     * When no fields are specified in the request, the default fields in Config will be set on the Jory.
+     *
+     * @param \JosKolenberg\LaravelJory\Config\Config $config
+     * @param \JosKolenberg\Jory\Jory $jory
+     */
+    protected function applyFieldsConfigToJory(Config $config, Jory $jory): void
     {
         if ($jory->getFields() === null && $config->getFields() !== null) {
             // No fields set in the request, but there are fields
@@ -62,7 +75,17 @@ trait HandlesJoryBuilderConfiguration
             }
             $jory->setFields($defaultFields);
         }
+    }
 
+    /**
+     * Apply the sort settings in the Config on the Jory.
+     *
+     * @param \JosKolenberg\LaravelJory\Config\Config $config
+     * @param \JosKolenberg\Jory\Jory $jory
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     */
+    protected function applySortsConfigToJory(Config $config, Jory $jory): void
+    {
         if ($config->getSorts() !== null) {
             // When default sorts are defined, add them to the Jory
             // When no sorts are requested, the default sorts in the builder will be applied.
@@ -78,7 +101,19 @@ trait HandlesJoryBuilderConfiguration
                 $jory->addSort($sort);
             }
         }
+    }
 
+    /**
+     * Apply the sort settings in the Config on the Jory.
+     *
+     * @param \JosKolenberg\LaravelJory\Config\Config $config
+     * @param \JosKolenberg\Jory\Jory $jory
+     */
+    protected function applyOffsetAndLimitConfigToJory(Config $config, Jory $jory): void
+    {
+        if (is_null($jory->getLimit()) && $config->getLimitDefault() !== null) {
+            $jory->setLimit($config->getLimitDefault());
+        }
     }
 
     /**
