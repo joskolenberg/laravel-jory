@@ -3,7 +3,9 @@
 namespace JosKolenberg\LaravelJory\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class JoryBuilderMakeCommand extends GeneratorCommand
 {
@@ -54,6 +56,34 @@ class JoryBuilderMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Build the class with the given name.
+     *
+     * @param  string  $name
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function buildClass($name)
+    {
+        $stub = $this->files->get($this->getStub());
+
+        return $this->replaceNamespace($stub, $name)->replaceConfig($stub, $name)->replaceClass($stub, $name);
+    }
+
+    /**
+     * Replace the namespace for the given stub.
+     *
+     * @param  string  $stub
+     * @param  string  $name
+     * @return $this
+     */
+    protected function replaceConfig(&$stub, $name)
+    {
+        $stub = str_replace('GeneratedConfig', $this->getGeneratedConfig(), $stub);
+
+        return $this;
+    }
+
+    /**
      * Get the console command options.
      *
      * @return array
@@ -62,6 +92,21 @@ class JoryBuilderMakeCommand extends GeneratorCommand
     {
         return [
             ['example', 'e', InputOption::VALUE_NONE, 'Create a new JoryBuilder class with example data'],
+
+            ['model', 'e', InputOption::VALUE_REQUIRED, 'Generate default configuration based on a model'],
         ];
+    }
+
+    protected function getGeneratedConfig()
+    {
+        $modelClass = $this->input->getOption('model');
+
+        $modelClass = $this->qualifyClass($modelClass);
+
+        if(class_exists($modelClass)){
+            die('d');
+        }else{
+            die('44');
+        }
     }
 }
