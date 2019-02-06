@@ -403,16 +403,7 @@ class JoryBuilder implements Responsable
     }
 
     /**
-     * Hook into the query before all settings in Jory object are applied.
      *
-     * Usage:
-     *  - Filtering: Any filters set will be applied on the query.
-     *  - Sorting: Any sorting applied here will have precedence over the ones requested.
-     *  - Offset/Limit: An applied offset or limit will be overruled by the requested (only when requested).
-     *  - Fields: All columns in the table will always be fetched even if not all fields are requested.
-     *      (the fields are filtered later to have all fields available for any custom attributes relying on them)
-     *      So altering the fields is discouraged unless you got a good reason to do so.
-     *  - Relations: Relations are loaded using that model's JoryBuilder, so no use altering the query for that.
      *
      * @param $query
      * @param \JosKolenberg\Jory\Jory $jory
@@ -421,10 +412,9 @@ class JoryBuilder implements Responsable
     protected function beforeQueryBuild($query, Jory $jory, $count = false): void
     {
         if (! $count) {
+            // By default select only the columns from the root table.
+            // Must be done before query build so it can easily be overridden afterwards.
             $this->selectOnlyRootTable($query);
-            if ($this->getConfig()->getLimitDefault() !== null) {
-                $query->limit($this->getConfig()->getLimitDefault());
-            }
         }
     }
 

@@ -502,25 +502,9 @@ All the returned fields are collected using the Eloquent model's ```toArray()```
 Sometimes you may want to hook into the process to do some additional tweaking.
 
 The JoryBuilder has these methods which can be overridden to do so:
-- ```beforeQueryBuild()``` Modify the query before all settings from the Jory input are applied.
 - ```afterQueryBuild()``` Modify the query after all settings from the Jory input are applied but before it is executed.
 - ```afterFetch()``` Modify the models right after they are fetched from the database.
 
-The ```beforeQueryBuild()``` and ```afterQueryBuild()``` hooks can be useful to add some global scoping or add some additional fields when they are requested.
-```php
-protected function beforeQueryBuild($query, Jory $jory, $count = false)
-{
-    parent::beforeQueryBuild($query, $jory, $count);
-    
-    // Archived items are not available for the API
-    $query->where('is_archived', false);
-
-    // Only when the song_count field is requested, execute Laravel's withCount() method.
-    if ($jory->hasField('song_count')) {
-        $query->withCount('songs as song_count');
-    }
-}
-```
 The ```afterFetch()``` hook is useful to modify the models before the data is retrieved from them. For example, if an Invoice model has a calculated 'total_price' custom attribute which loops through all attached InvoiceLines you might want to eager load the InvoiceLines on the Invoices to save on querying. (This method always receives a collection even if only one item is requested.)
 ```php
 protected function afterFetch(Collection $collection, Jory $jory): Collection
