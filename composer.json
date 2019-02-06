@@ -25,7 +25,8 @@
     }
   },
   "require-dev": {
-    "orchestra/testbench": "^3.5"
+    "orchestra/testbench": "^3.5",
+    "joskolenberg/eloquent-reflector": "^0.1"
   },
   "extra": {
     "laravel": {
