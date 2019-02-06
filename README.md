@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/joskolenberg/laravel-jory.svg?branch=master)](https://travis-ci.org/joskolenberg/laravel-jory)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/joskolenberg/laravel-jory/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/joskolenberg/laravel-jory/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/joskolenberg/laravel-jory/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/joskolenberg/laravel-jory/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/joskolenberg/laravel-jory/badges/build.png?b=master)](https://scrutinizer-ci.com/g/joskolenberg/laravel-jory/build-status/master)
 [![Total Downloads](https://poser.pugx.org/joskolenberg/laravel-jory/downloads)](https://packagist.org/packages/joskolenberg/laravel-jory)
 [![Latest Stable Version](https://poser.pugx.org/joskolenberg/laravel-jory/v/stable)](https://packagist.org/packages/joskolenberg/laravel-jory)
-[![StyleCI](https://github.styleci.io/repos/148323995/shield?branch=master)](https://github.styleci.io/repos/148323995)
-[![Code Coverage](https://codecov.io/gh/joskolenberg/laravel-jory/branch/master/graph/badge.svg)](https://codecov.io/gh/joskolenberg/laravel-jory/branch/master/graph/badge.svg)
 [![License](https://poser.pugx.org/joskolenberg/laravel-jory/license)](https://packagist.org/packages/joskolenberg/laravel-jory)
 
 # Laravel-Jory
@@ -554,4 +554,4 @@ That's it! Any suggestions or issues? Please contact me!
 
 Happy coding!
 
-Jos Kolenberg <joskolenberg@gmail.com>
+Jos Kolenberg <jos@kolenberg.net>
