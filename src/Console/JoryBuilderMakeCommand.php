@@ -97,33 +97,35 @@ class JoryBuilderMakeCommand extends GeneratorCommand
      */
     protected function getGeneratedConfig(): string
     {
+        $tab = '    ';
+
         // Get model string and chek if it's supplied.
         $modelClass = $this->option('model');
         if(!$modelClass){
-            return "\t\t// Configure the builder...";
+            return "$tab$tab// Configure the builder...";
         }
 
         // Create reflector to get attributes and relations from the modelClass.
         $reflector = new EloquentReflector($modelClass);
 
         // Generate fields configuration.
-        $generatedCode = "\t\t// Fields\n";
+        $generatedCode = "$tab$tab// Fields\n";
         foreach ($reflector->getAttributes() as $attribute) {
             if($attribute->custom){
                 // Custom attributes (using accessors) cannot be sorted or filtered out
                 // of the box. So don't make them sortable or filterable.
-                $generatedCode .= "\t\t\$config->field('".$attribute->name."');\n";
+                $generatedCode .= "$tab$tab\$config->field('".$attribute->name."')->hideByDefault();\n";
             }else{
                 // Standard attributes (database columns) can be sorted and filtered
                 // out of the box. So make them sortable ande filterable.
-                $generatedCode .= "\t\t\$config->field('".$attribute->name."')->filterable()->sortable();\n";
+                $generatedCode .= "$tab$tab\$config->field('".$attribute->name."')->filterable()->sortable();\n";
             }
         }
 
         // Generate relations configuration.
-        $generatedCode .= "\n\t\t// Relations\n";
+        $generatedCode .= "\n$tab$tab// Relations\n";
         foreach ($reflector->getRelationNames() as $relationName) {
-            $generatedCode .= "\t\t\$config->relation('".$relationName."');\n";
+            $generatedCode .= "$tab$tab\$config->relation('".$relationName."');\n";
         }
 
         // Remove last \n and return result.
