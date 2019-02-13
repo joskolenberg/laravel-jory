@@ -30,7 +30,7 @@ class Config implements Responsable
     /**
      * @var array
      */
-    protected $sorts = null;
+    protected $sorts = [];
 
     /**
      * @var null|int
@@ -108,9 +108,6 @@ class Config implements Responsable
     public function sort($field): Sort
     {
         $sort = new Sort($field);
-        if ($this->sorts === null) {
-            $this->sorts = [];
-        }
 
         $this->sorts[] = $sort;
 
@@ -204,9 +201,9 @@ class Config implements Responsable
     /**
      * Get the sorts in the config.
      *
-     * @return array|null
+     * @return array
      */
-    public function getSorts(): ?array
+    public function getSorts(): array
     {
         $sorts = $this->sorts;
 
@@ -323,14 +320,10 @@ class Config implements Responsable
     /**
      * Turn the sorts part of the config into an array.
      *
-     * @return array|string
+     * @return array
      */
-    protected function sortsToArray()
+    protected function sortsToArray(): array
     {
-        if ($this->getSorts() === null) {
-            return 'Not defined.';
-        }
-
         $result = [];
         foreach ($this->getSorts() as $sort) {
             $result[$sort->getField()] = [

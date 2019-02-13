@@ -11,7 +11,7 @@ class SongJoryBuilderWithConfigTwo extends JoryBuilder
     {
         // Fields
         $config->field('id');
-        $config->field('title')->filterable();
+        $config->field('title')->filterable()->sortable();
         $config->field('album_id');
 
         $config->limitDefault(null)->limitMax(null);

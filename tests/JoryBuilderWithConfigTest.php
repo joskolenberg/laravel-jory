@@ -179,7 +179,12 @@ class JoryBuilderWithConfigTest extends TestCase
                     ],
                 ],
             ],
-            'sorts' => 'Not defined.',
+            'sorts' => [
+                'title' => [
+                    'description' => 'Sort by the title field.',
+                    'default' => false,
+                ],
+            ],
             'limit' => [
                 'default' => 'Unlimited.',
                 'max' => 'Unlimited.',

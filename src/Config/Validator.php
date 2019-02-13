@@ -154,8 +154,8 @@ class Validator
      */
     protected function validateSorts(): void
     {
-        if ($this->config->getSorts() === null || $this->jory->getSorts() === null) {
-            // No sorts specified in config or jory, perform no validation
+        if ($this->jory->getSorts() === null) {
+            // No sorts specified, perform no validation.
             return;
         }
 
