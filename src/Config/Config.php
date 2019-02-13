@@ -18,14 +18,14 @@ class Config implements Responsable
     protected $modelClass = null;
 
     /**
-     * @var null|array
+     * @var array
      */
     protected $fields = [];
 
     /**
      * @var array
      */
-    protected $filters = null;
+    protected $filters = [];
 
     /**
      * @var array
@@ -93,9 +93,6 @@ class Config implements Responsable
     public function filter($field): Filter
     {
         $filter = new Filter($field);
-        if ($this->filters === null) {
-            $this->filters = [];
-        }
 
         $this->filters[] = $filter;
 
@@ -188,12 +185,13 @@ class Config implements Responsable
     /**
      * Get the filters in the config.
      *
-     * @return array|null
+     * @return array
      */
-    public function getFilters(): ?array
+    public function getFilters(): array
     {
         $filters = $this->filters;
 
+        // Add filterable fields to the array.
         foreach ($this->fields as $field) {
             if ($field->getFilter() !== null) {
                 $filters[] = $field->getFilter();
@@ -212,6 +210,7 @@ class Config implements Responsable
     {
         $sorts = $this->sorts;
 
+        // Add sortable fields to the array.
         foreach ($this->fields as $field) {
             if ($field->getSort() !== null) {
                 $sorts[] = $field->getSort();
@@ -288,9 +287,9 @@ class Config implements Responsable
     /**
      * Turn the fields part of the config into an array.
      *
-     * @return array|string
+     * @return array
      */
-    protected function fieldsToArray()
+    protected function fieldsToArray(): array
     {
         $result = [];
         foreach ($this->fields as $field) {
@@ -306,14 +305,10 @@ class Config implements Responsable
     /**
      * Turn the filters part of the config into an array.
      *
-     * @return array|string
+     * @return array
      */
-    protected function filtersToArray()
+    protected function filtersToArray(): array
     {
-        if ($this->getFilters() === null) {
-            return 'Not defined.';
-        }
-
         $result = [];
         foreach ($this->getFilters() as $filter) {
             $result[$filter->getField()] = [

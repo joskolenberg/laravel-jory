@@ -74,7 +74,7 @@ class Validator
     protected function validateFields(): void
     {
         if ($this->jory->getFields() === null) {
-            // No fields specified, perform no validation
+            // No fields specified, perform no validation.
             return;
         }
 
@@ -96,8 +96,8 @@ class Validator
      */
     protected function validateFilter(): void
     {
-        if ($this->config->getFilters() === null || $this->jory->getFilter() === null) {
-            // No filters specified in config or jory, perform no validation
+        if ($this->jory->getFilter() === null) {
+            // No filter specified, perform no validation.
             return;
         }
 

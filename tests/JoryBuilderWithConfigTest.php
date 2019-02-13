@@ -159,7 +159,26 @@ class JoryBuilderWithConfigTest extends TestCase
                     'show_by_default' => true,
                 ],
             ],
-            'filters' => 'Not defined.',
+            'filters' => [
+                'title' => [
+                    'description' => 'Filter on the title field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'is_null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+            ],
             'sorts' => 'Not defined.',
             'limit' => [
                 'default' => 'Unlimited.',
@@ -192,7 +211,7 @@ class JoryBuilderWithConfigTest extends TestCase
                     'show_by_default' => true,
                 ],
             ],
-            'filters' => 'Not defined.',
+            'filters' => [],
             'sorts' => [
                 'title' => [
                     'description' => 'Sort by the title field.',
