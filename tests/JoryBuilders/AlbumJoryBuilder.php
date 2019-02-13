@@ -31,8 +31,6 @@ class AlbumJoryBuilder extends JoryBuilder
 
     protected function config(Config $config): void
     {
-        parent::config($config);
-
         $config->field('id')->filterable()->sortable();
         $config->field('name')->filterable()->sortable();
         $config->field('band_id')->filterable()->sortable();

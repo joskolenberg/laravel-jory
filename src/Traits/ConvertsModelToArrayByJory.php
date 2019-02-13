@@ -19,20 +19,9 @@ trait ConvertsModelToArrayByJory
     {
         $case = app(CaseManager::class);
 
-        // When no fields are specified, we'll use all the model's fields
-        // if fields are specified, we use only these.
-        if ($jory->getFields() === null) {
-            $result = $model->toArray();
-
-            if ($case->isCamel()) {
-                // Laravel's toArray() method returns snake_case keys, but we want camelCase; so convert it
-                $result = $case->arrayKeysToCamel($result);
-            }
-        } else {
-            $result = [];
-            foreach ($jory->getFields() as $field) {
-                $result[$field] = $case->isCamel() ? $model->{snake_case($field)} : $model->$field;
-            }
+        $result = [];
+        foreach ($jory->getFields() as $field) {
+            $result[$field] = $case->isCamel() ? $model->{snake_case($field)} : $model->$field;
         }
 
         // Add the relations to the result

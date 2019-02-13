@@ -13,6 +13,7 @@ use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Parsers\JsonParser;
+use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
@@ -403,7 +404,7 @@ abstract class JoryBuilder implements Responsable
     }
 
     /**
-     *
+     * Do some tweaking before the Jory settings are applied to the query.
      *
      * @param $query
      * @param \JosKolenberg\Jory\Jory $jory
@@ -413,7 +414,7 @@ abstract class JoryBuilder implements Responsable
     {
         if (! $count) {
             // By default select only the columns from the root table.
-            // Must be done before query build so it can easily be overridden afterwards.
+            // Done before query build so it can easily be overridden afterwards.
             $this->selectOnlyRootTable($query);
         }
     }
@@ -426,11 +427,7 @@ abstract class JoryBuilder implements Responsable
      *  - Filtering: Any filters set will be applied on the query.
      *  - Sorting: Any sorting applied here will be applied as last, so the requested sorting will
      *      have precedence over this one.
-     *  - Offset/Limit: An offset or limit applied here will overrule the ones requested.
-     *  - Fields: All columns in the table will always be fetched even if not all fields are requested.
-     *      (the fields are filtered later to have all fields available for any custom attributes relying on them)
-     *      So altering the fields is discouraged unless you got a good reason to do so.
-     *  - Relations: Relations are loaded using that model's JoryBuilder, so no use altering the query for that.
+     *  - Offset/Limit: An offset or limit applied here will overrule the ones requested or configured.
      *
      * @param $query
      * @param \JosKolenberg\Jory\Jory $jory
@@ -447,10 +444,9 @@ abstract class JoryBuilder implements Responsable
      * E.g. 1. you could eager load some relations when you have some
      *      calculated values in custom attributes using relations.
      *      # if $jory->hasField('total_price') $collection->load('invoices');
-     *      (any relations requested by the client could override these)
      *
      * E.g. 2. you could sort the collection in a way which is hard using queries
-     *      but easier done using a collection. (Does not work with pagination).
+     *      but easier done using a collection.
      *
      * @param \Illuminate\Database\Eloquent\Collection $collection
      * @param \JosKolenberg\Jory\Jory $jory
@@ -547,4 +543,11 @@ abstract class JoryBuilder implements Responsable
     {
         return $this->modelToArrayByJory($model, $this->getJory());
     }
+
+    /**
+     * Configure the JoryBuilder.
+     *
+     * @param Config $config
+     */
+    abstract protected function config(Config $config): void;
 }

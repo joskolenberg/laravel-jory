@@ -63,9 +63,8 @@ trait HandlesJoryBuilderConfiguration
      */
     protected function applyFieldsConfigToJory(Config $config, Jory $jory): void
     {
-        if ($jory->getFields() === null && $config->getFields() !== null) {
-            // No fields set in the request, but there are fields
-            // specified in the config, than we will update the fields
+        if ($jory->getFields() === null) {
+            // No fields set in the request, than we will update the fields
             // with the ones to be shown by default.
             $defaultFields = [];
             foreach ($config->getFields() as $field) {
@@ -86,20 +85,18 @@ trait HandlesJoryBuilderConfiguration
      */
     protected function applySortsConfigToJory(Config $config, Jory $jory): void
     {
-        if ($config->getSorts() !== null) {
-            // When default sorts are defined, add them to the Jory
-            // When no sorts are requested, the default sorts in the builder will be applied.
-            // When sorts are requested, the default sorts are applied after the requested ones.
-            $defaultSorts = [];
-            foreach ($config->getSorts() as $sort) {
-                if ($sort->getDefaultIndex() !== null) {
-                    $defaultSorts[$sort->getDefaultIndex()] = new Sort($sort->getField(), $sort->getDefaultOrder());
-                }
+        // When default sorts are defined, add them to the Jory
+        // When no sorts are requested, the default sorts in the builder will be applied.
+        // When sorts are requested, the default sorts are applied after the requested ones.
+        $defaultSorts = [];
+        foreach ($config->getSorts() as $sort) {
+            if ($sort->getDefaultIndex() !== null) {
+                $defaultSorts[$sort->getDefaultIndex()] = new Sort($sort->getField(), $sort->getDefaultOrder());
             }
-            ksort($defaultSorts);
-            foreach ($defaultSorts as $sort) {
-                $jory->addSort($sort);
-            }
+        }
+        ksort($defaultSorts);
+        foreach ($defaultSorts as $sort) {
+            $jory->addSort($sort);
         }
     }
 
@@ -114,21 +111,5 @@ trait HandlesJoryBuilderConfiguration
         if (is_null($jory->getLimit()) && $config->getLimitDefault() !== null) {
             $jory->setLimit($config->getLimitDefault());
         }
-    }
-
-    /**
-     * Create the config for this builder.
-     *
-     * This config will be used to:
-     *      - Show the options for the resource when using the OPTIONS http method
-     *      - Fields:
-     *          - Validate if the requested fields are available.
-     *          - Update the Jory's fields attribute with the ones marked to be shown by default
-     *              when no particular fields are requested.
-     *
-     * @param Config $config
-     */
-    protected function config(Config $config): void
-    {
     }
 }
