@@ -265,8 +265,8 @@ class Config implements Responsable
             'filters' => $this->filtersToArray(),
             'sorts' => $this->sortsToArray(),
             'limit' => [
-                'default' => ($this->getLimitDefault() === null ? 'Unlimited.' : $this->getLimitDefault()),
-                'max' => ($this->getLimitMax() === null ? 'Unlimited.' : $this->getLimitMax()),
+                'default' => $this->getLimitDefault(),
+                'max' => $this->getLimitMax(),
             ],
             'relations' => $this->relationsToArray(),
         ];
@@ -283,7 +283,7 @@ class Config implements Responsable
         foreach ($this->fields as $field) {
             $result[$field->getField()] = [
                 'description' => $field->getDescription(),
-                'show_by_default' => $field->isShownByDefault(),
+                'default' => $field->isShownByDefault(),
             ];
         }
 
@@ -319,7 +319,10 @@ class Config implements Responsable
         foreach ($this->getSorts() as $sort) {
             $result[$sort->getField()] = [
                 'description' => $sort->getDescription(),
-                'default' => ($sort->getDefaultIndex() === null ? false : 'index '.$sort->getDefaultIndex().', '.$sort->getDefaultOrder()),
+                'default' => ($sort->getDefaultIndex() === null ? false : [
+                    'index' => $sort->getDefaultIndex(),
+                    'order' => $sort->getDefaultOrder(),
+                ]),
             ];
         }
 

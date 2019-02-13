@@ -435,23 +435,23 @@ class CamelCaseJoryBuilderTest extends TestCase
             'fields' => [
                 'id' => [
                     'description' => 'The id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'name' => [
                     'description' => 'The name field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'yearStart' => [
                     'description' => 'The year in which the band started.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'yearEnd' => [
                     'description' => 'The year in which the band quitted, could be null if band still exists.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'allAlbumsString' => [
                     'description' => 'The allAlbumsString field.',
-                    'show_by_default' => false,
+                    'default' => false,
                 ],
             ],
             'filters' => [

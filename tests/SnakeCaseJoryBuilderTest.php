@@ -436,23 +436,23 @@ class SnakeCaseJoryBuilderTest extends TestCase
             'fields' => [
                 'id' => [
                     'description' => 'The id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'name' => [
                     'description' => 'The name field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'year_start' => [
                     'description' => 'The year in which the band started.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'year_end' => [
                     'description' => 'The year in which the band quitted, could be null if band still exists.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'all_albums_string' => [
                     'description' => 'The all_albums_string field.',
-                    'show_by_default' => false,
+                    'default' => false,
                 ],
             ],
             'filters' => [

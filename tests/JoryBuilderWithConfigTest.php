@@ -76,15 +76,15 @@ class JoryBuilderWithConfigTest extends TestCase
             'fields' => [
                 'id' => [
                     'description' => 'The id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'title' => [
                     'description' => 'The songs title.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'album_id' => [
                     'description' => 'The album_id field.',
-                    'show_by_default' => false,
+                    'default' => false,
                 ],
             ],
             'filters' => [
@@ -148,15 +148,15 @@ class JoryBuilderWithConfigTest extends TestCase
             'fields' => [
                 'id' => [
                     'description' => 'The id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'title' => [
                     'description' => 'The title field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'album_id' => [
                     'description' => 'The album_id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
             ],
             'filters' => [
@@ -186,8 +186,8 @@ class JoryBuilderWithConfigTest extends TestCase
                 ],
             ],
             'limit' => [
-                'default' => 'Unlimited.',
-                'max' => 'Unlimited.',
+                'default' => null,
+                'max' => null,
             ],
             'relations' => [],
         ];
@@ -205,26 +205,32 @@ class JoryBuilderWithConfigTest extends TestCase
             'fields' => [
                 'id' => [
                     'description' => 'The id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'title' => [
                     'description' => 'The title field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'album_id' => [
                     'description' => 'The album_id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
             ],
             'filters' => [],
             'sorts' => [
                 'title' => [
                     'description' => 'Sort by the title field.',
-                    'default' => 'index 2, desc',
+                    'default' => [
+                        'index' => 2,
+                        'order' => 'desc'
+                    ],
                 ],
                 'album_name' => [
                     'description' => 'Sort by the album_name field.',
-                    'default' => 'index 1, asc',
+                    'default' => [
+                        'index' => 1,
+                        'order' => 'asc'
+                    ],
                 ],
             ],
             'limit' => [
@@ -247,23 +253,23 @@ class JoryBuilderWithConfigTest extends TestCase
             'fields' => [
                 'id' => [
                     'description' => 'The id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'name' => [
                     'description' => 'The name field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'year_start' => [
                     'description' => 'The year in which the band started.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'year_end' => [
                     'description' => 'The year in which the band quitted, could be null if band still exists.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'all_albums_string' => [
                     'description' => 'The all_albums_string field.',
-                    'show_by_default' => false,
+                    'default' => false,
                 ],
             ],
             'filters' => [
@@ -407,19 +413,19 @@ class JoryBuilderWithConfigTest extends TestCase
             'fields' => [
                 'id' => [
                     'description' => 'The id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'name' => [
                     'description' => 'The name field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'band_id' => [
                     'description' => 'The band_id field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
                 'release_date' => [
                     'description' => 'The release_date field.',
-                    'show_by_default' => true,
+                    'default' => true,
                 ],
             ],
             'filters' => [
