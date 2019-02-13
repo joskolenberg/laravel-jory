@@ -31,7 +31,7 @@ use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
  *
  * Class JoryBuilder
  */
-class JoryBuilder implements Responsable
+abstract class JoryBuilder implements Responsable
 {
     use BuildsJoryRoutes,
         RegistersJoryBuilders,

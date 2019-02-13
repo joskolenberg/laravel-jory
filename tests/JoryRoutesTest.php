@@ -246,28 +246,6 @@ class JoryRoutesTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_the_options_for_a_resource()
-    {
-        $response = $this->json('OPTIONS', 'jory/song');
-
-        $expected = [
-            'fields' => 'Not defined.',
-            'filters' => 'Not defined.',
-            'sorts' => 'Not defined.',
-            'limit' => [
-                'default' => 100,
-                'max' => 1000,
-            ],
-            'relations' => 'Not defined.',
-        ];
-
-        // ExactJson doesn't tell if the sort order is right so do both checks.
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(0);
-    }
-
-    /** @test */
     public function it_can_load_multiple_resources_at_once()
     {
         $response = $this->json('GET', 'jory', [

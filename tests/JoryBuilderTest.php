@@ -3,8 +3,8 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\Jory\Jory;
-use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\Jory\Parsers\ArrayParser;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
@@ -19,7 +19,7 @@ class JoryBuilderTest extends TestCase
     public function it_can_apply_on_a_querybuilder_instance()
     {
         $query = Band::query();
-        $actual = (new JoryBuilder(Band::class))->applyJory(new Jory())->onQuery($query)->get()->pluck('name')->toArray();
+        $actual = (new BandJoryBuilder(Band::class))->applyJory(new Jory())->onQuery($query)->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',

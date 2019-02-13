@@ -97,6 +97,7 @@ class JoryBuilderMakeCommand extends GeneratorCommand
      */
     protected function getGeneratedConfig(): string
     {
+        // Specify what one tab is.
         $tab = '    ';
 
         // Get model string and chek if it's supplied.

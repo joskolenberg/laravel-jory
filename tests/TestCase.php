@@ -16,8 +16,11 @@ use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\PersonJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumCoverJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\InstrumentJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
 
@@ -895,10 +898,10 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
     {
         JoryBuilder::register(Band::class)->builder(BandJoryBuilder::class);
         JoryBuilder::register(Album::class, AlbumJoryBuilder::class);
-        JoryBuilder::register(AlbumCover::class);
+        JoryBuilder::register(AlbumCover::class, AlbumCoverJoryBuilder::class);
         JoryBuilder::register(Instrument::class)->builder(InstrumentJoryBuilder::class);
-        JoryBuilder::register(Person::class);
-        JoryBuilder::register(Song::class);
+        JoryBuilder::register(Person::class, PersonJoryBuilder::class);
+        JoryBuilder::register(Song::class, SongJoryBuilder::class);
         JoryBuilder::register(SongWithCustomJoryBuilder::class)->builder(SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
     }
 
