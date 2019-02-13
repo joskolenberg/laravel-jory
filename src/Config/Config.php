@@ -20,7 +20,7 @@ class Config implements Responsable
     /**
      * @var null|array
      */
-    protected $fields = null;
+    protected $fields = [];
 
     /**
      * @var array
@@ -78,9 +78,6 @@ class Config implements Responsable
     public function field($field): Field
     {
         $field = new Field($field);
-        if ($this->fields === null) {
-            $this->fields = [];
-        }
 
         $this->fields[] = $field;
 
@@ -181,9 +178,9 @@ class Config implements Responsable
     /**
      * Get the fields in the config.
      *
-     * @return array|null
+     * @return array
      */
-    public function getFields(): ? array
+    public function getFields(): array
     {
         return $this->fields;
     }
@@ -193,15 +190,13 @@ class Config implements Responsable
      *
      * @return array|null
      */
-    public function getFilters(): ? array
+    public function getFilters(): ?array
     {
         $filters = $this->filters;
 
-        if ($this->fields !== null) {
-            foreach ($this->fields as $field) {
-                if ($field->getFilter() !== null) {
-                    $filters[] = $field->getFilter();
-                }
+        foreach ($this->fields as $field) {
+            if ($field->getFilter() !== null) {
+                $filters[] = $field->getFilter();
             }
         }
 
@@ -213,15 +208,13 @@ class Config implements Responsable
      *
      * @return array|null
      */
-    public function getSorts(): ? array
+    public function getSorts(): ?array
     {
         $sorts = $this->sorts;
 
-        if ($this->fields !== null) {
-            foreach ($this->fields as $field) {
-                if ($field->getSort() !== null) {
-                    $sorts[] = $field->getSort();
-                }
+        foreach ($this->fields as $field) {
+            if ($field->getSort() !== null) {
+                $sorts[] = $field->getSort();
             }
         }
 
@@ -233,7 +226,7 @@ class Config implements Responsable
      *
      * @return null|int
      */
-    public function getLimitDefault(): ? int
+    public function getLimitDefault(): ?int
     {
         if ($this->limitDefault !== null) {
             return $this->limitDefault;
@@ -247,7 +240,7 @@ class Config implements Responsable
      *
      * @return null|int
      */
-    public function getLimitMax(): ? int
+    public function getLimitMax(): ?int
     {
         return $this->limitMax;
     }
@@ -257,7 +250,7 @@ class Config implements Responsable
      *
      * @return array|null
      */
-    public function getRelations(): ? array
+    public function getRelations(): ?array
     {
         return $this->relations;
     }
@@ -299,10 +292,6 @@ class Config implements Responsable
      */
     protected function fieldsToArray()
     {
-        if ($this->fields === null) {
-            return 'Not defined.';
-        }
-
         $result = [];
         foreach ($this->fields as $field) {
             $result[$field->getField()] = [

@@ -145,7 +145,20 @@ class JoryBuilderWithConfigTest extends TestCase
         $response = $this->json('OPTIONS', 'song-two');
 
         $expected = [
-            'fields' => 'Not defined.',
+            'fields' => [
+                'id' => [
+                    'description' => 'The id field.',
+                    'show_by_default' => true,
+                ],
+                'title' => [
+                    'description' => 'The title field.',
+                    'show_by_default' => true,
+                ],
+                'album_id' => [
+                    'description' => 'The album_id field.',
+                    'show_by_default' => true,
+                ],
+            ],
             'filters' => 'Not defined.',
             'sorts' => 'Not defined.',
             'limit' => [
@@ -165,7 +178,20 @@ class JoryBuilderWithConfigTest extends TestCase
         $response = $this->json('OPTIONS', 'song-three');
 
         $expected = [
-            'fields' => 'Not defined.',
+            'fields' => [
+                'id' => [
+                    'description' => 'The id field.',
+                    'show_by_default' => true,
+                ],
+                'title' => [
+                    'description' => 'The title field.',
+                    'show_by_default' => true,
+                ],
+                'album_id' => [
+                    'description' => 'The album_id field.',
+                    'show_by_default' => true,
+                ],
+            ],
             'filters' => 'Not defined.',
             'sorts' => [
                 'title' => [

@@ -73,7 +73,7 @@ class Validator
      */
     protected function validateFields(): void
     {
-        if ($this->config->getFields() === null || $this->jory->getFields() === null) {
+        if ($this->jory->getFields() === null) {
             // No fields specified, perform no validation
             return;
         }
