@@ -45,7 +45,7 @@ class Config implements Responsable
     /**
      * @var array
      */
-    protected $relations = null;
+    protected $relations = [];
 
     /**
      * @var null|int
@@ -148,19 +148,13 @@ class Config implements Responsable
      */
     public function relation(string $name): Relation
     {
-        // Get the model class for the current builder
-        $registration = app()->make(JoryBuildersRegister::class)->getRegistrationByModelClass($this->modelClass);
-        $baseModelClass = $registration->getModelClass();
-
         // Get the related class for the relation
         $relationMethod = camel_case($name);
-        $relatedClass = get_class((new $baseModelClass())->{$relationMethod}()->getRelated());
+        $relatedClass = get_class((new $this->modelClass())->{$relationMethod}()->getRelated());
 
         // Add the relation
         $relation = new Relation($name, $relatedClass);
-        if ($this->relations === null) {
-            $this->relations = [];
-        }
+
         $this->relations[] = $relation;
 
         return $relation;
@@ -241,9 +235,9 @@ class Config implements Responsable
     /**
      * Get the relations in the config.
      *
-     * @return array|null
+     * @return array
      */
-    public function getRelations(): ?array
+    public function getRelations(): array
     {
         return $this->relations;
     }
@@ -337,12 +331,8 @@ class Config implements Responsable
      *
      * @return array|string
      */
-    protected function relationsToArray()
+    protected function relationsToArray(): array
     {
-        if ($this->relations === null) {
-            return 'Not defined.';
-        }
-
         $result = [];
         foreach ($this->relations as $relation) {
             $result[$relation->getName()] = [

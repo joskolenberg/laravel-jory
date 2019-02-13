@@ -189,7 +189,7 @@ class JoryBuilderWithConfigTest extends TestCase
                 'default' => 'Unlimited.',
                 'max' => 'Unlimited.',
             ],
-            'relations' => 'Not defined.',
+            'relations' => [],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
 
@@ -231,7 +231,7 @@ class JoryBuilderWithConfigTest extends TestCase
                 'default' => 10,
                 'max' => 10,
             ],
-            'relations' => 'Not defined.',
+            'relations' => [],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
 

@@ -193,11 +193,6 @@ class Validator
      */
     protected function validateRelations(): void
     {
-        if ($this->config->getRelations() === null) {
-            // No relations specified in config, perform no validation
-            return;
-        }
-
         $availableRelations = [];
         foreach ($this->config->getRelations() as $relation) {
             $availableRelations[] = $relation->getName();
