@@ -896,13 +896,13 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
 
     protected function registerJoryBuilders()
     {
-        JoryBuilder::register(Band::class)->builder(BandJoryBuilder::class);
+        JoryBuilder::register(Band::class, BandJoryBuilder::class);
         JoryBuilder::register(Album::class, AlbumJoryBuilder::class);
         JoryBuilder::register(AlbumCover::class, AlbumCoverJoryBuilder::class);
-        JoryBuilder::register(Instrument::class)->builder(InstrumentJoryBuilder::class);
+        JoryBuilder::register(Instrument::class, InstrumentJoryBuilder::class);
         JoryBuilder::register(Person::class, PersonJoryBuilder::class);
         JoryBuilder::register(Song::class, SongJoryBuilder::class);
-        JoryBuilder::register(SongWithCustomJoryBuilder::class)->builder(SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
+        JoryBuilder::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
     }
 
     public function assertQueryCount($expected)

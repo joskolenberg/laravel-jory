@@ -15,7 +15,7 @@ class JoryBuilderRegistration
     protected $modelClass = null;
 
     /**
-     * @var null|string
+     * @var string
      */
     protected $builderClass = null;
 
@@ -30,24 +30,11 @@ class JoryBuilderRegistration
      * @param string $modelClass
      * @param string|null $builderClass
      */
-    public function __construct(string $modelClass, string $builderClass = null)
+    public function __construct(string $modelClass, string $builderClass)
     {
         $this->modelClass = $modelClass;
         $this->builderClass = $builderClass;
         $this->uri = kebab_case(class_basename($modelClass));
-    }
-
-    /**
-     * Set the associated JoryBuilder class.
-     *
-     * @param string $builderClass
-     * @return JoryBuilderRegistration
-     */
-    public function builder(string $builderClass): self
-    {
-        $this->builderClass = $builderClass;
-
-        return $this;
     }
 
     /**
