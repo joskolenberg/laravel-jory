@@ -579,8 +579,8 @@ class JoryBuilderWithConfigTest extends TestCase
                     'description' => 'The album_cover relation.',
                     'type' => 'album-cover',
                 ],
-                'camel_case_album_cover' => [
-                    'description' => 'The camel_case_album_cover relation.',
+                'snake_case_album_cover' => [
+                    'description' => 'The snake_case_album_cover relation.',
                     'type' => 'album-cover',
                 ],
             ],

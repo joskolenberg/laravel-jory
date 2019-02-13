@@ -48,6 +48,6 @@ class AlbumJoryBuilder extends JoryBuilder
         $config->relation('band');
         $config->relation('cover');
         $config->relation('album_cover');
-        $config->relation('camelCaseAlbumCover');
+        $config->relation('snake_case_album_cover');
     }
 }

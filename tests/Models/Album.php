@@ -35,7 +35,7 @@ class Album extends Model
         return $this->hasOne(AlbumCover::class);
     }
 
-    public function camelCaseAlbumCover()
+    public function snakeCaseAlbumCover()
     {
         return $this->hasOne(AlbumCover::class);
     }

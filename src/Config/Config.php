@@ -148,9 +148,6 @@ class Config implements Responsable
      */
     public function relation(string $name): Relation
     {
-        // Names can be given in camel or snake case
-        $name = snake_case($name);
-
         // Get the model class for the current builder
         $registration = app()->make(JoryBuildersRegister::class)->getRegistrationByModelClass($this->modelClass);
         $baseModelClass = $registration->getModelClass();
