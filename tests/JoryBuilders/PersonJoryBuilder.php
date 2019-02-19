@@ -19,9 +19,15 @@ class PersonJoryBuilder extends JoryBuilder
         $config->field('first_name')->filterable()->sortable();
         $config->field('last_name')->filterable()->sortable();
         $config->field('date_of_birth')->filterable()->sortable();
-        $config->field('full_name');
+        $config->field('full_name')->filterable();
 
         // Relations
         $config->relation('instruments');
+    }
+
+    protected function scopeFullNameFilter($query, $operator, $data)
+    {
+        $query->where('first_name', 'like', '%'.$data.'%');
+        $query->orWhere('last_name', 'like', '%'.$data.'%');
     }
 }

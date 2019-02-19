@@ -531,4 +531,25 @@ class JoryBuilderFilterTest extends TestCase
 
         $this->assertQueryCount(1);
     }
+
+    /** @test */
+    public function it_wraps_a_closure_around_custom_orWheres_to_prevent_returning_unwanted_data()
+    {
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => '{"fields":["full_name"],"flt":{"and":[{"f":"full_name","d":"%john%"},{"f":"id","o":"in","d":[7,8]}]}}',
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'full_name' => 'John Paul Jones',
+                ],
+                [
+                    'full_name' => 'John Bonham',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
 }

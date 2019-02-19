@@ -51,14 +51,22 @@ trait HandlesJoryFilters
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
         if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $filter->getOperator(), $filter->getData());
+            // Wrap in a where closure to encapsulate any OR clauses in custom method
+            // which could lead to unexpected results.
+            $query->where(function ($query) use ($filter, $customMethodName) {
+                $this->$customMethodName($query, $filter->getOperator(), $filter->getData());
+            });
 
             return;
         }
 
         $model = $query->getModel();
         if (method_exists($model, $customMethodName)) {
-            $model->$customMethodName($query, $filter->getOperator(), $filter->getData());
+            // Wrap in a where closure to encapsulate any OR clauses in custom method
+            // which could lead to unexpected results.
+            $query->where(function ($query) use ($model, $filter, $customMethodName) {
+                $model->$customMethodName($query, $filter->getOperator(), $filter->getData());
+            });
 
             return;
         }
