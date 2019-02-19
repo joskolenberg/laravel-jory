@@ -55,7 +55,7 @@ class AlbumJoryBuilder extends JoryBuilder
     {
         if($this->hasField('custom_field')){
             $collection->each(function ($album){
-                $album->custom_field = 'custom_value';
+                $album->custom_field = 'custom value';
             });
         }
 

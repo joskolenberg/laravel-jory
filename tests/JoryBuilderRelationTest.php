@@ -1097,9 +1097,11 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 'albums' => [
                     [
                         'name' => 'Sgt. Peppers lonely hearts club band',
+                        'custom_field' => 'custom value',
                     ],
                     [
                         'name' => 'Abbey road',
+                        'custom_field' => 'custom value',
                     ],
                 ],
             ],
