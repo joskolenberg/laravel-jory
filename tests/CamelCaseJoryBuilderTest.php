@@ -30,25 +30,6 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_toarray_default_fields_in_camel_case()
-    {
-        $response = $this->json('GET', 'jory/song/2', [
-            'case' => 'camel',
-        ]);
-
-        $expected = [
-            'data' => [
-                'id' => 2,
-                'albumId' => 1,
-                'title' => 'Love In Vain (Robert Johnson)',
-            ],
-        ];
-        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
     public function it_returns_the_defined_fields_in_camel_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
