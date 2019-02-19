@@ -592,8 +592,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
-            'album_as_album_with_cover' => '{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}',
-            'album-cover_2_as_sticky_fingers_album_cover' => '{}',
+            'jory' => '{"album_as_album_with_cover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover_2_as_sticky_fingers_album_cover":{}}',
         ]);
 
         $expected = [
@@ -703,7 +702,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
-            'album_as_album_with_cover' => '{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}',
+            'jory' => '{"album_as_album_with_cover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
         ]);
 
         $expected = [

@@ -249,13 +249,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_load_multiple_resources_at_once()
     {
         $response = $this->json('GET', 'jory', [
-            'band_as_btls' => '{"flt":{"f":"id","d":3}}',
-            'band_2_as_ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}}',
-            'song_count_as_number_of_songs' => '{"flt":{"f":"title","o":"like","d":"%Love%"}}',
-            'song_as_lovesongs' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
-            'song' => '{"flt":{"f":"title","o":"like","d":"%Lovel%"},"fld":["title"],"srt":["title"]}',
-            'band_count' => '{"flt":{"f":"name","o":"like","d":"%r%"}}',
-            'person_3' => '{"fld":["first_name","last_name"]}',
+            'jory' => '{"band_as_btls":{"flt":{"f":"id","d":3}},"band_2_as_ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song_count_as_number_of_songs":{"flt":{"f":"title","o":"like","d":"%Love%"}},"song_as_lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"song":{"flt":{"f":"title","o":"like","d":"%Lovel%"},"fld":["title"],"srt":["title"]},"band_count":{"flt":{"f":"name","o":"like","d":"%r%"}},"person_3":{"fld":["first_name","last_name"]}}',
         ]);
 
         $expected = [
@@ -338,11 +332,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_resource_is_not_found()
     {
         $response = $this->json('GET', 'jory', [
-            'bandd' => '{"flt":{"f":"id","d":3}}',
-            'lbmCovrrr' => '{"flt":{"f":"id","d":3}}',
-            'band_2_as_ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}}',
-            'song_as_lovesongs' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
-            'son_as_lovesong' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
+            'jory' => '{"bandd":{"flt":{"f":"id","d":3}},"lbmCovrrr":{"flt":{"f":"id","d":3}},"band_2_as_ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song_as_lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"son_as_lovesong":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}}',
         ]);
 
         $expected = [
@@ -363,12 +353,12 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_JoryException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
-            'song' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":[title"],"srt":["title"]}',
+            'jory' => '{"song":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":[title"],"srt":["title"]}}',
         ]);
 
         $expected = [
             'errors' => [
-                'song: Jory string is no valid json.',
+                'Jory string is no valid json.',
             ],
         ];
 
@@ -382,9 +372,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_LaravelJoryCallException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
-            'band' => '{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]}',
-            'band_as_band_2' => '{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}',
-            'song' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":[title"],"srt":["title"]}',
+            'jory' => '{"band":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]},"band_as_band_2":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}}',
         ]);
 
         $expected = [
@@ -392,7 +380,6 @@ class JoryRoutesTest extends TestCase
                 'band: Field "naame" is not available for sorting, did you mean "name"? (Location: sorts.naame)',
                 'band_as_band_2: Field "naame" is not available for sorting, did you mean "name"? (Location: sorts.naame)',
                 'band_as_band_2: Relation "songgs" is not available, did you mean "songs"? (Location: relations.songgs)',
-                'song: Jory string is no valid json.',
             ],
         ];
 
@@ -446,8 +433,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_null_when_a_model_is_not_found_by_id_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'person_3' => '{"fld":["first_name","last_name"]}',
-            'song_1234' => '{}',
+            'jory' => '{"person_3":{"fld":["first_name","last_name"]},"song_1234":{}}',
         ]);
 
         $expected = [
@@ -526,10 +512,12 @@ class JoryRoutesTest extends TestCase
     public function it_can_handle_an_incoming_array_instead_of_json_with_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'person_3' => [
-                'fld' => ['first_name', 'last_name'],
+            'jory' => [
+                'person_3' => [
+                    'fld' => ['first_name', 'last_name'],
+                ],
+                'song_1234' => [],
             ],
-            'song_1234' => [],
         ]);
 
         $expected = [

@@ -571,8 +571,7 @@ class CamelCaseJoryBuilderTest extends TestCase
     public function it_can_get_apply_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'album_as_albumWithCover' => '{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}',
-            'album-cover_2_as_stickyFingersAlbumCover' => '{}',
+            'jory' => '{"album_as_albumWithCover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover_2_as_stickyFingersAlbumCover":{}}',
             'case' => 'camel',
         ]);
 
@@ -682,7 +681,7 @@ class CamelCaseJoryBuilderTest extends TestCase
     public function it_validates_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'album_as_albumWithCover' => '{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}',
+            'jory' => '{"album_as_albumWithCover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
             'case' => 'camel',
         ]);
 

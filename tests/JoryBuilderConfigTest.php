@@ -30,7 +30,7 @@ class JoryBuilderConfigTest extends TestCase
     public function it_can_return_data_in_the_root_when_data_key_is_configured_null_2()
     {
         $response = $this->json('GET', 'jory', [
-            'band_3_as_beatles' => '{"fld":["name"]}',
+            'jory' => '{"band_3_as_beatles":{"fld":["name"]}}',
         ]);
 
         $expected = [
@@ -62,7 +62,7 @@ class JoryBuilderConfigTest extends TestCase
     public function it_can_return_errors_in_the_root_when_data_key_is_configured_null_2()
     {
         $response = $this->json('GET', 'jory', [
-            'band_3_as_beatles' => '{"fld":["naame"]}',
+            'jory' => '{"band_3_as_beatles":{"fld":["naame"]}}',
         ]);
 
         $expected = [

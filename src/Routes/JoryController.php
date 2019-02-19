@@ -105,35 +105,49 @@ class JoryController extends Controller
      */
     public function multiple(Request $request, JoryBuildersRegister $register)
     {
-        $jories = $request->except(config('jory.request.case-key'));
-
         $results = [];
         $errors = [];
 
         $dataResponseKey = config('jory.response.data-key');
         $errorResponseKey = config('jory.response.errors-key');
 
+        $data = $request->input(config('jory.request.key'), '{}');
+
+        if (is_array($data)) {
+            $jories = $data;
+        }else{
+            $jories = json_decode($data, true);
+
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $errors[] = 'Jory string is no valid json.';
+            }
+        }
+
         $explodedJories = [];
 
-        foreach ($jories as $name => $data) {
-            $single = $this->explodeResourceName($name);
+        if(!$errors){
+            // Not needed when there are already errors.
+            foreach ($jories as $name => $data) {
+                $single = $this->explodeResourceName($name);
 
-            $registration = $register->getByUri($single->modelName);
+                $registration = $register->getByUri($single->modelName);
 
-            if (! $registration) {
-                $errors[] = 'Resource "'.$single->modelName.'" is not available, '.$this->getSuggestion($register->getUrisArray(), $single->modelName);
-                continue;
+                if (! $registration) {
+                    $errors[] = 'Resource "'.$single->modelName.'" is not available, '.$this->getSuggestion($register->getUrisArray(), $single->modelName);
+                    continue;
+                }
+
+                $single->registration = $registration;
+                $single->data = $data;
+                $single->name = $name;
+
+                $explodedJories[] = $single;
             }
-
-            $single->registration = $registration;
-            $single->data = $data;
-            $single->name = $name;
-
-            $explodedJories[] = $single;
         }
 
         if (! $errors) {
-            // Don't perform any queries when any of the requested resources was not found
+            // Don't perform any queries when there is already an error somewhere
             foreach ($explodedJories as $single) {
                 $modelClass = $single->registration->getModelClass();
 
