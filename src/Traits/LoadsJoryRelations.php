@@ -29,7 +29,7 @@ trait LoadsJoryRelations
             $model->setRelations([]);
         });
 
-        // Hook into the afterFetch() method on the related JoryBuilder
+        // Hook into the afterFetch() method for custom tweaking in subclasses.
         $this->afterFetch($models);
     }
 

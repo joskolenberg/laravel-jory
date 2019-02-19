@@ -427,6 +427,10 @@ class JoryBuilderWithConfigTest extends TestCase
                     'description' => 'The release_date field.',
                     'default' => true,
                 ],
+                'custom_field' => [
+                    'description' => 'The custom_field field.',
+                    'default' => false,
+                ],
             ],
             'filters' => [
                 'id' => [

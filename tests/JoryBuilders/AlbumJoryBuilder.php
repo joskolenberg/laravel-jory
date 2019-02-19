@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
+use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Config\Config;
 
@@ -35,6 +36,7 @@ class AlbumJoryBuilder extends JoryBuilder
         $config->field('name')->filterable()->sortable();
         $config->field('band_id')->filterable()->sortable();
         $config->field('release_date')->filterable()->sortable();
+        $config->field('custom_field')->hideByDefault();
 
         $config->filter('number_of_songs');
         $config->filter('has_song_with_title');
@@ -47,5 +49,16 @@ class AlbumJoryBuilder extends JoryBuilder
         $config->relation('cover');
         $config->relation('album_cover');
         $config->relation('snake_case_album_cover');
+    }
+
+    protected function afterFetch(Collection $collection): Collection
+    {
+        if($this->hasField('custom_field')){
+            $collection->each(function ($album){
+                $album->custom_field = 'custom_value';
+            });
+        }
+
+        return $collection;
     }
 }
