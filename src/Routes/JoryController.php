@@ -13,17 +13,17 @@ class JoryController extends Controller
     /**
      * Load a collection for a single resource.
      *
-     * @param $uri
+     * @param $resource
      * @param \Illuminate\Http\Request $request
      * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function index($uri, Request $request, JoryBuildersRegister $register)
+    public function index($resource, Request $request, JoryBuildersRegister $register)
     {
-        $registration = $register->getByUri($uri);
+        $registration = $register->getByUri($resource);
 
         if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
+            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -34,17 +34,17 @@ class JoryController extends Controller
     /**
      * Count the number of items in a resource.
      *
-     * @param $uri
+     * @param $resource
      * @param \Illuminate\Http\Request $request
      * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function count($uri, Request $request, JoryBuildersRegister $register)
+    public function count($resource, Request $request, JoryBuildersRegister $register)
     {
-        $registration = $register->getByUri($uri);
+        $registration = $register->getByUri($resource);
 
         if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
+            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -55,18 +55,18 @@ class JoryController extends Controller
     /**
      * Give a single record.
      *
-     * @param $uri
+     * @param $resource
      * @param $id
      * @param \Illuminate\Http\Request $request
      * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function show($uri, $id, Request $request, JoryBuildersRegister $register)
+    public function show($resource, $id, Request $request, JoryBuildersRegister $register)
     {
-        $registration = $register->getByUri($uri);
+        $registration = $register->getByUri($resource);
 
         if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
+            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -79,16 +79,16 @@ class JoryController extends Controller
     /**
      * Give the options for a resource.
      *
-     * @param $uri
+     * @param $resource
      * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
      * @return mixed
      */
-    public function options($uri, JoryBuildersRegister $register)
+    public function options($resource, JoryBuildersRegister $register)
     {
-        $registration = $register->getByUri($uri);
+        $registration = $register->getByUri($resource);
 
         if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
+            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
         }
 
         $modelClass = $registration->getModelClass();

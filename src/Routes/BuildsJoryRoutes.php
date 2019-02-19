@@ -13,9 +13,9 @@ trait BuildsJoryRoutes
         Route::options($baseUri, '\\'.JoryController::class.'@resourceList');
 
         // Routes by resource
-        Route::get($baseUri.'/{uri}/count', '\\'.JoryController::class.'@count');
-        Route::get($baseUri.'/{uri}/{id}', '\\'.JoryController::class.'@show');
-        Route::get($baseUri.'/{uri}', '\\'.JoryController::class.'@index');
-        Route::options($baseUri.'/{uri}', '\\'.JoryController::class.'@options');
+        Route::get($baseUri.'/{resource}/count', '\\'.JoryController::class.'@count');
+        Route::get($baseUri.'/{resource}/{id}', '\\'.JoryController::class.'@show');
+        Route::get($baseUri.'/{resource}', '\\'.JoryController::class.'@index');
+        Route::options($baseUri.'/{resource}', '\\'.JoryController::class.'@options');
     }
 }
