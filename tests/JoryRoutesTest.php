@@ -249,7 +249,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_load_multiple_resources_at_once()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"band_as_btls":{"flt":{"f":"id","d":3}},"band_2_as_ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song_count_as_number_of_songs":{"flt":{"f":"title","o":"like","d":"%Love%"}},"song_as_lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"song":{"flt":{"f":"title","o":"like","d":"%Lovel%"},"fld":["title"],"srt":["title"]},"band_count":{"flt":{"f":"name","o":"like","d":"%r%"}},"person_3":{"fld":["first_name","last_name"]}}',
+            'jory' => '{"band as btls":{"flt":{"f":"id","d":3}},"band:2 as ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song:count as number_of_songs":{"flt":{"f":"title","o":"like","d":"%Love%"}},"song as lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"song":{"flt":{"f":"title","o":"like","d":"%Lovel%"},"fld":["title"],"srt":["title"]},"band:count":{"flt":{"f":"name","o":"like","d":"%r%"}},"person:3":{"fld":["first_name","last_name"]}}',
         ]);
 
         $expected = [
@@ -314,8 +314,8 @@ class JoryRoutesTest extends TestCase
                         'title' => 'Lovely Rita',
                     ],
                 ],
-                'band_count' => 2,
-                'person_3' => [
+                'band:count' => 2,
+                'person:3' => [
                     'first_name' => 'Ronnie',
                     'last_name' => 'Wood',
                 ],
@@ -332,7 +332,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_resource_is_not_found()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"bandd":{"flt":{"f":"id","d":3}},"lbmCovrrr":{"flt":{"f":"id","d":3}},"band_2_as_ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song_as_lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"son_as_lovesong":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}}',
+            'jory' => '{"bandd":{"flt":{"f":"id","d":3}},"lbmCovrrr":{"flt":{"f":"id","d":3}},"band:2 as ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song as lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"son as lovesong":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}}',
         ]);
 
         $expected = [
@@ -372,14 +372,14 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_LaravelJoryCallException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"band":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]},"band_as_band_2":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}}',
+            'jory' => '{"band":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]},"band as band_2":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}}',
         ]);
 
         $expected = [
             'errors' => [
                 'band: Field "naame" is not available for sorting, did you mean "name"? (Location: sorts.naame)',
-                'band_as_band_2: Field "naame" is not available for sorting, did you mean "name"? (Location: sorts.naame)',
-                'band_as_band_2: Relation "songgs" is not available, did you mean "songs"? (Location: relations.songgs)',
+                'band as band_2: Field "naame" is not available for sorting, did you mean "name"? (Location: sorts.naame)',
+                'band as band_2: Relation "songgs" is not available, did you mean "songs"? (Location: relations.songgs)',
             ],
         ];
 
@@ -433,16 +433,16 @@ class JoryRoutesTest extends TestCase
     public function it_returns_null_when_a_model_is_not_found_by_id_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"person_3":{"fld":["first_name","last_name"]},"song_1234":{}}',
+            'jory' => '{"person:3":{"fld":["first_name","last_name"]},"song:1234":{}}',
         ]);
 
         $expected = [
             'data' => [
-                'person_3' => [
+                'person:3' => [
                     'first_name' => 'Ronnie',
                     'last_name' => 'Wood',
                 ],
-                'song_1234' => null,
+                'song:1234' => null,
             ],
         ];
 
@@ -513,20 +513,20 @@ class JoryRoutesTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'jory' => [
-                'person_3' => [
+                'person:3' => [
                     'fld' => ['first_name', 'last_name'],
                 ],
-                'song_1234' => [],
+                'song:1234' => [],
             ],
         ]);
 
         $expected = [
             'data' => [
-                'person_3' => [
+                'person:3' => [
                     'first_name' => 'Ronnie',
                     'last_name' => 'Wood',
                 ],
-                'song_1234' => null,
+                'song:1234' => null,
             ],
         ];
 
@@ -545,7 +545,64 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Resource persn is not available, did you mean "person"?',
+                'Resource persn not found, did you mean "person"?',
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(404)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
+    }
+
+    /** @test */
+    public function it_returns_404_when_an_get_call_for_an_unknown_resource_is_done()
+    {
+        $response = $this->json('GET', 'jory/persn', [
+            'jory' => '{}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Resource persn not found, did you mean "person"?',
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(404)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
+    }
+
+    /** @test */
+    public function it_returns_404_when_a_single_call_for_an_unknown_resource_is_done()
+    {
+        $response = $this->json('GET', 'jory/persn/4', [
+            'jory' => '{}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Resource persn not found, did you mean "person"?',
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(404)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
+    }
+
+    /** @test */
+    public function it_returns_404_when_a_count_call_for_an_unknown_resource_is_done()
+    {
+        $response = $this->json('GET', 'jory/persn/count', [
+            'jory' => '{}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Resource persn not found, did you mean "person"?',
             ],
         ];
 

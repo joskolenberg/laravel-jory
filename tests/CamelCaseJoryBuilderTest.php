@@ -571,7 +571,7 @@ class CamelCaseJoryBuilderTest extends TestCase
     public function it_can_get_apply_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"album_as_albumWithCover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover_2_as_stickyFingersAlbumCover":{}}',
+            'jory' => '{"album as albumWithCover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover:2 as stickyFingersAlbumCover":{}}',
             'case' => 'camel',
         ]);
 
@@ -681,13 +681,13 @@ class CamelCaseJoryBuilderTest extends TestCase
     public function it_validates_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"album_as_albumWithCover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
+            'jory' => '{"album as albumWithCover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
             'case' => 'camel',
         ]);
 
         $expected = [
             'errors' => [
-                'album_as_albumWithCover: Relation "album_cover" is not available, did you mean "albumCover"? (Location: relations.album_cover)',
+                'album as albumWithCover: Relation "album_cover" is not available, did you mean "albumCover"? (Location: relations.album_cover)',
             ],
         ];
 
@@ -752,7 +752,7 @@ class CamelCaseJoryBuilderTest extends TestCase
     public function it_can_load_a_relation_with_an_alias_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums_as_albumNoEight":{"flt":{"f":"id","d":8}},"albums_as_albumNoNine":{"flt":{"f":"id","d":9}}}}',
+            'jory' => '{"fld":["name"],"rlt":{"albums as albumNoEight":{"flt":{"f":"id","d":8}},"albums as albumNoNine":{"flt":{"f":"id","d":9}}}}',
             'case' => 'camel',
         ]);
 

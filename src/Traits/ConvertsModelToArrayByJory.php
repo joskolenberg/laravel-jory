@@ -30,7 +30,7 @@ trait ConvertsModelToArrayByJory
             $relationAlias = $relationName;
 
             // Split the relation name in Laravel's relation name and the alias, if there is one.
-            $relationParts = explode('_as_', $relationName);
+            $relationParts = explode(' as ', $relationName);
             if (count($relationParts) > 1) {
                 $relationName = $relationParts[0];
                 $relationAlias = $relationParts[1];

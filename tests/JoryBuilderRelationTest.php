@@ -1054,7 +1054,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_relation_with_an_alias()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums_as_album_no_eight":{"flt":{"f":"id","d":8}},"albums_as_album_no_nine":{"flt":{"f":"id","d":9}}}}',
+            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums as album_no_nine":{"flt":{"f":"id","d":9}}}}',
         ]);
 
         $expected = [

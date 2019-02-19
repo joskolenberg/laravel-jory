@@ -23,7 +23,7 @@ class JoryController extends Controller
         $registration = $register->getByUri($uri);
 
         if (! $registration) {
-            abort(404);
+            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -44,7 +44,7 @@ class JoryController extends Controller
         $registration = $register->getByUri($uri);
 
         if (! $registration) {
-            abort(404);
+            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -66,7 +66,7 @@ class JoryController extends Controller
         $registration = $register->getByUri($uri);
 
         if (! $registration) {
-            abort(404);
+            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -88,7 +88,7 @@ class JoryController extends Controller
         $registration = $register->getByUri($uri);
 
         if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $uri . ' is not available, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
+            return $this->abortWithErrors(['Resource ' . $uri . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -231,7 +231,7 @@ class JoryController extends Controller
      */
     protected function explodeResourceName($name): \stdClass
     {
-        $nameParts = explode('_as_', $name);
+        $nameParts = explode(' as ', $name);
 
         if (count($nameParts) === 1) {
             $modelName = $nameParts[0];
@@ -241,7 +241,7 @@ class JoryController extends Controller
             $alias = $nameParts[1];
         }
 
-        $nameParts = explode('_', $modelName);
+        $nameParts = explode(':', $modelName);
 
         if (count($nameParts) === 1) {
             $type = 'multiple';

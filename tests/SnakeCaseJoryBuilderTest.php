@@ -592,7 +592,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
-            'jory' => '{"album_as_album_with_cover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover_2_as_sticky_fingers_album_cover":{}}',
+            'jory' => '{"album as album_with_cover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover:2 as sticky_fingers_album_cover":{}}',
         ]);
 
         $expected = [
@@ -702,12 +702,12 @@ class SnakeCaseJoryBuilderTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
-            'jory' => '{"album_as_album_with_cover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
+            'jory' => '{"album as album_with_cover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
         ]);
 
         $expected = [
             'errors' => [
-                'album_as_album_with_cover: Relation "albumCover" is not available, did you mean "album_cover"? (Location: relations.albumCover)',
+                'album as album_with_cover: Relation "albumCover" is not available, did you mean "album_cover"? (Location: relations.albumCover)',
             ],
         ];
 
@@ -772,7 +772,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
     public function it_can_load_a_relation_with_an_alias_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums_as_album_no_eight":{"flt":{"f":"id","d":8}},"albums_as_album_no_nine":{"flt":{"f":"id","d":9}}}}',
+            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums as album_no_nine":{"flt":{"f":"id","d":9}}}}',
             'case_key' => 'snake',
         ]);
 
