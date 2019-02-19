@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Routes;
 
+use SimilarText\Finder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use JosKolenberg\LaravelJory\JoryBuilder;
@@ -120,7 +121,7 @@ class JoryController extends Controller
             $registration = $register->getRegistrationByUri($single->modelName);
 
             if (! $registration) {
-                $errors[] = 'Resource "'.$single->modelName.'" is not available, did you mean "'.$this->getSuggestion($register->getUrisArray(), $single->modelName).'"?';
+                $errors[] = 'Resource "'.$single->modelName.'" is not available, '.$this->getSuggestion($register->getUrisArray(), $single->modelName);
                 continue;
             }
 
@@ -198,7 +199,7 @@ class JoryController extends Controller
     }
 
     /**
-     * Get the word in an array which looks the most like $value.
+     * Get the 'Did you mean?' line for the best match in an array of strings.
      *
      * @param array $array
      * @param string $value
@@ -206,19 +207,9 @@ class JoryController extends Controller
      */
     protected function getSuggestion(array $array, string $value): string
     {
-        $bestScore = -1;
-        $bestMatch = '';
+        $bestMatch = (new Finder($value, $array))->threshold(4)->first();
 
-        foreach ($array as $item) {
-            $lev = levenshtein($value, $item);
-
-            if ($lev <= $bestScore || $bestScore < 0) {
-                $bestMatch = $item;
-                $bestScore = $lev;
-            }
-        }
-
-        return $bestMatch;
+        return $bestMatch ? 'did you mean "' . $bestMatch . '"?' : 'no suggestions found.';
     }
 
     /**

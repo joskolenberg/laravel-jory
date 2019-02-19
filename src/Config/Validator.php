@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use SimilarText\Finder;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\GroupOrFilter;
 use JosKolenberg\Jory\Support\GroupAndFilter;
@@ -86,7 +87,7 @@ class Validator
 
         foreach ($this->jory->getFields() as $joryField) {
             if (! in_array($joryField, $availableFields)) {
-                $this->errors[] = 'Field "'.$joryField.'" not available. Did you mean "'.$this->getSuggestion($availableFields, $joryField).'"? (Location: '.$this->address.'fields.'.$joryField.')';
+                $this->errors[] = 'Field "'.$joryField.'" is not available, '.$this->getSuggestion($availableFields, $joryField).' (Location: '.$this->address.'fields.'.$joryField.')';
             }
         }
     }
@@ -146,7 +147,7 @@ class Validator
         foreach ($configFilters as $bpf) {
             $availableFields[] = $bpf->getField();
         }
-        $this->errors[] = 'Field "'.$joryFilter->getField().'" is not available for filtering. Did you mean "'.$this->getSuggestion($availableFields, $joryFilter->getField()).'"? (Location: '.$address.'('.$joryFilter->getField().'))';
+        $this->errors[] = 'Field "'.$joryFilter->getField().'" is not available for filtering, '.$this->getSuggestion($availableFields, $joryFilter->getField()).' (Location: '.$address.'('.$joryFilter->getField().'))';
     }
 
     /**
@@ -167,7 +168,7 @@ class Validator
 
         foreach ($this->jory->getSorts() as $jorySort) {
             if (! in_array($jorySort->getField(), $availableFields)) {
-                $this->errors[] = 'Field "'.$jorySort->getField().'" is not available for sorting. Did you mean "'.$this->getSuggestion($availableFields, $jorySort->getField()).'"? (Location: '.$this->address.'sorts.'.$jorySort->getField().')';
+                $this->errors[] = 'Field "'.$jorySort->getField().'" is not available for sorting, '.$this->getSuggestion($availableFields, $jorySort->getField()).' (Location: '.$this->address.'sorts.'.$jorySort->getField().')';
             }
         }
     }
@@ -208,7 +209,7 @@ class Validator
             }
 
             if (! in_array($relationName, $availableRelations)) {
-                $this->errors[] = 'Relation "'.$relationName.'" is not available. Did you mean "'.$this->getSuggestion($availableRelations, $relationName).'"? (Location: '.$this->address.'relations.'.$relationName.')';
+                $this->errors[] = 'Relation "'.$relationName.'" is not available, '.$this->getSuggestion($availableRelations, $relationName).' (Location: '.$this->address.'relations.'.$relationName.')';
             }
         }
     }
@@ -241,7 +242,7 @@ class Validator
     }
 
     /**
-     * Get the word in an array which looks the most like $value.
+     * Get the 'Did you mean?' line for the best match in an array of strings.
      *
      * @param array $array
      * @param string $value
@@ -249,18 +250,8 @@ class Validator
      */
     protected function getSuggestion(array $array, string $value): string
     {
-        $bestScore = -1;
-        $bestMatch = '';
+        $bestMatch = (new Finder($value, $array))->threshold(4)->first();
 
-        foreach ($array as $item) {
-            $lev = levenshtein($value, $item);
-
-            if ($lev <= $bestScore || $bestScore < 0) {
-                $bestMatch = $item;
-                $bestScore = $lev;
-            }
-        }
-
-        return $bestMatch;
+        return $bestMatch ? 'did you mean "' . $bestMatch . '"?' : 'no suggestions found.';
     }
 }

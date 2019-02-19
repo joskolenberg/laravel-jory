@@ -59,7 +59,7 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "year_end" not available. Did you mean "yearEnd"? (Location: fields.year_end)',
+                'Field "year_end" is not available, did you mean "yearEnd"? (Location: fields.year_end)',
             ],
         ];
 
@@ -138,7 +138,7 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "number_of_songs" is not available for filtering. Did you mean "numberOfSongs"? (Location: filter(number_of_songs))',
+                'Field "number_of_songs" is not available for filtering, did you mean "numberOfSongs"? (Location: filter(number_of_songs))',
             ],
         ];
 
@@ -247,8 +247,8 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "number_of_songs" is not available for sorting. Did you mean "numberOfSongs"? (Location: sorts.number_of_songs)',
-                'Field "band_id" is not available for sorting. Did you mean "bandId"? (Location: sorts.band_id)',
+                'Field "number_of_songs" is not available for sorting, did you mean "numberOfSongs"? (Location: sorts.number_of_songs)',
+                'Field "band_id" is not available for sorting, did you mean "bandId"? (Location: sorts.band_id)',
             ],
         ];
 
@@ -330,7 +330,7 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Relation "album_cover" is not available. Did you mean "albumCover"? (Location: relations.album_cover)',
+                'Relation "album_cover" is not available, did you mean "albumCover"? (Location: relations.album_cover)',
             ],
         ];
 
@@ -688,7 +688,7 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'album_as_albumWithCover: Relation "album_cover" is not available. Did you mean "albumCover"? (Location: relations.album_cover)',
+                'album_as_albumWithCover: Relation "album_cover" is not available, did you mean "albumCover"? (Location: relations.album_cover)',
             ],
         ];
 
@@ -737,10 +737,10 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "release_ate" not available. Did you mean "releaseDate"? (Location: albums.fields.release_ate)',
-                'Field "release_ate" is not available for filtering. Did you mean "releaseDate"? (Location: albums.filter(or).0(release_ate))',
-                'Field "releaseDaate" is not available for filtering. Did you mean "releaseDate"? (Location: albums.filter(or).1(releaseDaate))',
-                'Field "releaseDates" is not available for sorting. Did you mean "releaseDate"? (Location: albums.sorts.releaseDates)',
+                'Field "release_ate" is not available, did you mean "releaseDate"? (Location: albums.fields.release_ate)',
+                'Field "release_ate" is not available for filtering, did you mean "releaseDate"? (Location: albums.filter(or).0(release_ate))',
+                'Field "releaseDaate" is not available for filtering, did you mean "releaseDate"? (Location: albums.filter(or).1(releaseDaate))',
+                'Field "releaseDates" is not available for sorting, did you mean "releaseDate"? (Location: albums.sorts.releaseDates)',
             ],
         ];
 

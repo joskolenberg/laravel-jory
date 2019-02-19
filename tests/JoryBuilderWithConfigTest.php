@@ -59,7 +59,7 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" not available. Did you mean "title"? (Location: fields.titel)',
+                'Field "titel" is not available, did you mean "title"? (Location: fields.titel)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -662,7 +662,7 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(titel))',
+                'Field "titel" is not available for filtering, did you mean "title"? (Location: filter(titel))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -679,8 +679,8 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(and).0(titel))',
-                'Field "albumm_id" is not available for filtering. Did you mean "album_id"? (Location: filter(and).2(albumm_id))',
+                'Field "titel" is not available for filtering, did you mean "title"? (Location: filter(and).0(titel))',
+                'Field "albumm_id" is not available for filtering, did you mean "album_id"? (Location: filter(and).2(albumm_id))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -697,8 +697,8 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(or).0(titel))',
-                'Field "albumm_id" is not available for filtering. Did you mean "album_id"? (Location: filter(or).2(albumm_id))',
+                'Field "titel" is not available for filtering, did you mean "title"? (Location: filter(or).0(titel))',
+                'Field "albumm_id" is not available for filtering, did you mean "album_id"? (Location: filter(or).2(albumm_id))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -715,8 +715,8 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "titel" is not available for filtering. Did you mean "title"? (Location: filter(and).0(titel))',
-                'Field "albumm_id" is not available for filtering. Did you mean "album_id"? (Location: filter(and).2(albumm_id))',
+                'Field "titel" is not available for filtering, did you mean "title"? (Location: filter(and).0(titel))',
+                'Field "albumm_id" is not available for filtering, did you mean "album_id"? (Location: filter(and).2(albumm_id))',
                 'Operator "like" is not available for field "album_id". (Location: filter(and).3(album_id))',
             ],
         ];
@@ -759,8 +759,8 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "tite" is not available for sorting. Did you mean "title"? (Location: sorts.tite)',
-                'Field "if" is not available for sorting. Did you mean "id"? (Location: sorts.if)',
+                'Field "tite" is not available for sorting, did you mean "title"? (Location: sorts.tite)',
+                'Field "if" is not available for sorting, did you mean "id"? (Location: sorts.if)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -1125,7 +1125,7 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Relation "albumm" is not available. Did you mean "album"? (Location: relations.albumm)',
+                'Relation "albumm" is not available, did you mean "album"? (Location: relations.albumm)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -1142,7 +1142,7 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
+                'Field "namee" is not available, did you mean "name"? (Location: albums.fields.namee)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -1159,8 +1159,8 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
-                'Field "ids" is not available for filtering. Did you mean "id"? (Location: albums.filter(ids))',
+                'Field "namee" is not available, did you mean "name"? (Location: albums.fields.namee)',
+                'Field "ids" is not available for filtering, did you mean "id"? (Location: albums.filter(ids))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -1177,10 +1177,10 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
-                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
-                'Field "ids" is not available for filtering. Did you mean "id"? (Location: albums.filter(and).0(ids))',
-                'Field "relese_date" is not available for filtering. Did you mean "release_date"? (Location: albums.filter(and).2(relese_date))',
+                'Field "date_start" is not available for filtering, did you mean "year_start"? (Location: filter(date_start))',
+                'Field "namee" is not available, did you mean "name"? (Location: albums.fields.namee)',
+                'Field "ids" is not available for filtering, did you mean "id"? (Location: albums.filter(and).0(ids))',
+                'Field "relese_date" is not available for filtering, did you mean "release_date"? (Location: albums.filter(and).2(relese_date))',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -1197,11 +1197,11 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
-                'Field "namee" not available. Did you mean "name"? (Location: albums.fields.namee)',
-                'Field "ids" is not available for filtering. Did you mean "id"? (Location: albums.filter(and).0(ids))',
-                'Field "relese_date" is not available for filtering. Did you mean "release_date"? (Location: albums.filter(and).2(relese_date))',
-                'Field "releese_date" is not available for sorting. Did you mean "release_date"? (Location: albums.sorts.releese_date)',
+                'Field "date_start" is not available for filtering, did you mean "year_start"? (Location: filter(date_start))',
+                'Field "namee" is not available, did you mean "name"? (Location: albums.fields.namee)',
+                'Field "ids" is not available for filtering, did you mean "id"? (Location: albums.filter(and).0(ids))',
+                'Field "relese_date" is not available for filtering, did you mean "release_date"? (Location: albums.filter(and).2(relese_date))',
+                'Field "releese_date" is not available for sorting, did you mean "release_date"? (Location: albums.sorts.releese_date)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
@@ -1218,7 +1218,7 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
+                'Field "date_start" is not available for filtering, did you mean "year_start"? (Location: filter(date_start))',
                 'The maximum limit for this resource is 1000, please lower your limit or drop the limit parameter. (Location: albums.limit)',
             ],
         ];
@@ -1236,9 +1236,30 @@ class JoryBuilderWithConfigTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "date_start" is not available for filtering. Did you mean "year_start"? (Location: filter(date_start))',
+                'Field "date_start" is not available for filtering, did you mean "year_start"? (Location: filter(date_start))',
                 'The maximum limit for this resource is 1000, please lower your limit or drop the limit parameter. (Location: albums.limit)',
-                'Relation "songgs" is not available. Did you mean "songs"? (Location: albums.relations.songgs)',
+                'Relation "songgs" is not available, did you mean "songs"? (Location: albums.relations.songgs)',
+            ],
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
+    }
+
+    /** @test */
+    public function it_suggests_only_relevant_alternatives()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => '{"fld":["releaseDate", "releaseDat", "releaseDatee", "reMeasDat", "rrrelease__dddate"],"rlt":{}}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Field "releaseDate" is not available, did you mean "release_date"? (Location: fields.releaseDate)',
+                'Field "releaseDat" is not available, did you mean "release_date"? (Location: fields.releaseDat)',
+                'Field "releaseDatee" is not available, did you mean "release_date"? (Location: fields.releaseDatee)',
+                'Field "reMeasDat" is not available, no suggestions found. (Location: fields.reMeasDat)',
+                'Field "rrrelease__dddate" is not available, no suggestions found. (Location: fields.rrrelease__dddate)',
             ],
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);

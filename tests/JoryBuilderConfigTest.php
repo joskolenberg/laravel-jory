@@ -51,7 +51,7 @@ class JoryBuilderConfigTest extends TestCase
         ]);
 
         $expected = [
-            'Field "naame" not available. Did you mean "name"? (Location: fields.naame)',
+            'Field "naame" is not available, did you mean "name"? (Location: fields.naame)',
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
 
@@ -66,7 +66,7 @@ class JoryBuilderConfigTest extends TestCase
         ]);
 
         $expected = [
-            'band_3_as_beatles: Field "naame" not available. Did you mean "name"? (Location: fields.naame)',
+            'band_3_as_beatles: Field "naame" is not available, did you mean "name"? (Location: fields.naame)',
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
 

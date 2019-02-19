@@ -339,6 +339,7 @@ class JoryRoutesTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'bandd' => '{"flt":{"f":"id","d":3}}',
+            'lbmCovrrr' => '{"flt":{"f":"id","d":3}}',
             'band_2_as_ledz' => '{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}}',
             'song_as_lovesongs' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
             'son_as_lovesong' => '{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}',
@@ -347,6 +348,7 @@ class JoryRoutesTest extends TestCase
         $expected = [
             'errors' => [
                 'Resource "bandd" is not available, did you mean "band"?',
+                'Resource "lbmCovrrr" is not available, no suggestions found.',
                 'Resource "son" is not available, did you mean "song"?',
             ],
         ];
@@ -387,9 +389,9 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'band: Field "naame" is not available for sorting. Did you mean "name"? (Location: sorts.naame)',
-                'band_as_band_2: Field "naame" is not available for sorting. Did you mean "name"? (Location: sorts.naame)',
-                'band_as_band_2: Relation "songgs" is not available. Did you mean "songs"? (Location: relations.songgs)',
+                'band: Field "naame" is not available for sorting, did you mean "name"? (Location: sorts.naame)',
+                'band_as_band_2: Field "naame" is not available for sorting, did you mean "name"? (Location: sorts.naame)',
+                'band_as_band_2: Relation "songgs" is not available, did you mean "songs"? (Location: relations.songgs)',
                 'song: Jory string is no valid json.',
             ],
         ];

@@ -79,7 +79,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "yearStart" not available. Did you mean "year_start"? (Location: fields.yearStart)',
+                'Field "yearStart" is not available, did you mean "year_start"? (Location: fields.yearStart)',
             ],
         ];
 
@@ -158,7 +158,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "numberOfSongs" is not available for filtering. Did you mean "number_of_songs"? (Location: filter(numberOfSongs))',
+                'Field "numberOfSongs" is not available for filtering, did you mean "number_of_songs"? (Location: filter(numberOfSongs))',
             ],
         ];
 
@@ -267,8 +267,8 @@ class SnakeCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "numberOfSongs" is not available for sorting. Did you mean "number_of_songs"? (Location: sorts.numberOfSongs)',
-                'Field "bandId" is not available for sorting. Did you mean "band_id"? (Location: sorts.bandId)',
+                'Field "numberOfSongs" is not available for sorting, did you mean "number_of_songs"? (Location: sorts.numberOfSongs)',
+                'Field "bandId" is not available for sorting, did you mean "band_id"? (Location: sorts.bandId)',
             ],
         ];
 
@@ -350,7 +350,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Relation "albumCover" is not available. Did you mean "album_cover"? (Location: relations.albumCover)',
+                'Relation "albumCover" is not available, did you mean "album_cover"? (Location: relations.albumCover)',
             ],
         ];
 
@@ -708,7 +708,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'album_as_album_with_cover: Relation "albumCover" is not available. Did you mean "album_cover"? (Location: relations.albumCover)',
+                'album_as_album_with_cover: Relation "albumCover" is not available, did you mean "album_cover"? (Location: relations.albumCover)',
             ],
         ];
 
@@ -757,10 +757,10 @@ class SnakeCaseJoryBuilderTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Field "release_ate" not available. Did you mean "release_date"? (Location: albums.fields.release_ate)',
-                'Field "release_ate" is not available for filtering. Did you mean "release_date"? (Location: albums.filter(or).0(release_ate))',
-                'Field "releaseDaate" is not available for filtering. Did you mean "release_date"? (Location: albums.filter(or).1(releaseDaate))',
-                'Field "release_dates" is not available for sorting. Did you mean "release_date"? (Location: albums.sorts.release_dates)',
+                'Field "release_ate" is not available, did you mean "release_date"? (Location: albums.fields.release_ate)',
+                'Field "release_ate" is not available for filtering, did you mean "release_date"? (Location: albums.filter(or).0(release_ate))',
+                'Field "releaseDaate" is not available for filtering, did you mean "release_date"? (Location: albums.filter(or).1(releaseDaate))',
+                'Field "release_dates" is not available for sorting, did you mean "release_date"? (Location: albums.sorts.release_dates)',
             ],
         ];
 
