@@ -88,7 +88,7 @@ class JoryController extends Controller
         $registration = $register->getByUri($uri);
 
         if (! $registration) {
-            abort(404);
+            return $this->abortWithErrors(['Resource ' . $uri . ' is not available, ' . $this->getSuggestion($register->getUrisArray(), $uri)], 404);
         }
 
         $modelClass = $registration->getModelClass();
@@ -281,5 +281,21 @@ class JoryController extends Controller
         }
 
         return $joryBuilder;
+    }
+
+    /**
+     * Return a response to abort the request with errors.
+     *
+     * @param array $errors
+     * @param int $statusCode
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    protected function abortWithErrors(array $errors, int $statusCode)
+    {
+        $errorResponseKey = config('jory.response.errors-key');
+
+        $response = $errorResponseKey === null ? $errors : [$errorResponseKey => $errors];
+
+        return response($response, $statusCode);
     }
 }

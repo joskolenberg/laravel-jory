@@ -535,4 +535,23 @@ class JoryRoutesTest extends TestCase
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_returns_404_when_an_option_call_for_an_unknown_resource_is_done()
+    {
+        $response = $this->json('OPTIONS', 'jory/persn', [
+            'jory' => '{}',
+        ]);
+
+        $expected = [
+            'errors' => [
+                'Resource persn is not available, did you mean "person"?',
+            ],
+        ];
+
+        // ExactJson doesn't tell if the sort order is right so do both checks.
+        $response->assertStatus(404)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(0);
+    }
 }
