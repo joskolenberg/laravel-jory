@@ -70,6 +70,6 @@ class JoryBuilderConfigTest extends TestCase
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
 
-        $this->assertQueryCount(1);
+        $this->assertQueryCount(0);
     }
 }

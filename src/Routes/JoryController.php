@@ -158,12 +158,9 @@ class JoryController extends Controller
                     $response = $this->applyArrayOrJson($joryBuilder, $single->data)->count()->toResponse($request);
                 } elseif ($single->type === 'single') {
                     // Return a single item
-                    $model = $modelClass::find($single->id);
-                    if (! $model) {
-                        $results[$single->alias] = null;
-                        continue;
-                    }
-                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->onModel($model)->toResponse($request);
+                    $query = $modelClass::whereKey($single->id);
+
+                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->onQuery($query)->first()->toResponse($request);
                 } else {
                     // Return an array of items
                     $response = $this->applyArrayOrJson($joryBuilder, $single->data)->toResponse($request);
