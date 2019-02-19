@@ -26,30 +26,35 @@ trait JoryTrait
 
     /**
      * Get a new JoryBuilder instance for the model.
-     * Override to apply a custom JoryBuilder class for the model.
      *
      * @return JoryBuilder
      */
     public static function getJoryBuilder(): JoryBuilder
     {
         $register = app()->make(JoryBuildersRegister::class);
+        $registration = $register->getByModelClass(static::class);
+        $builderClass = $registration->getBuilderClass();
 
-        $registration = $register->getRegistrationByModelClass(static::class);
-
-        if (! $registration || ! $registration->getBuilderClass()) {
-            return app()->makeWith(JoryBuilder::class, ['modelClass' => static::class]);
-        } else {
-            $builderClass = $registration->getBuilderClass();
-
-            return new $builderClass(static::class);
-        }
+        return new $builderClass();
     }
 
+    /**
+     * Add a Jory relation.
+     *
+     * @param string $name
+     * @param $data
+     */
     public function addJoryRelation(string $name, $data)
     {
         $this->joryRelations[$name] = $data;
     }
 
+    /**
+     * Get a Jory relation.
+     *
+     * @param string $name
+     * @return mixed
+     */
     public function getJoryRelation(string $name)
     {
         return $this->joryRelations[$name];

@@ -20,7 +20,7 @@ class JoryController extends Controller
      */
     public function index($uri, Request $request, JoryBuildersRegister $register)
     {
-        $registration = $register->getRegistrationByUri($uri);
+        $registration = $register->getByUri($uri);
 
         if (! $registration) {
             abort(404);
@@ -41,7 +41,7 @@ class JoryController extends Controller
      */
     public function count($uri, Request $request, JoryBuildersRegister $register)
     {
-        $registration = $register->getRegistrationByUri($uri);
+        $registration = $register->getByUri($uri);
 
         if (! $registration) {
             abort(404);
@@ -63,7 +63,7 @@ class JoryController extends Controller
      */
     public function show($uri, $id, Request $request, JoryBuildersRegister $register)
     {
-        $registration = $register->getRegistrationByUri($uri);
+        $registration = $register->getByUri($uri);
 
         if (! $registration) {
             abort(404);
@@ -85,7 +85,7 @@ class JoryController extends Controller
      */
     public function options($uri, JoryBuildersRegister $register)
     {
-        $registration = $register->getRegistrationByUri($uri);
+        $registration = $register->getByUri($uri);
 
         if (! $registration) {
             abort(404);
@@ -118,7 +118,7 @@ class JoryController extends Controller
         foreach ($jories as $name => $data) {
             $single = $this->explodeResourceName($name);
 
-            $registration = $register->getRegistrationByUri($single->modelName);
+            $registration = $register->getByUri($single->modelName);
 
             if (! $registration) {
                 $errors[] = 'Resource "'.$single->modelName.'" is not available, '.$this->getSuggestion($register->getUrisArray(), $single->modelName);

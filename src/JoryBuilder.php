@@ -35,17 +35,12 @@ use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
 abstract class JoryBuilder implements Responsable
 {
     use BuildsJoryRoutes,
-        RegistersJoryBuilders,
-        HandlesJoryFilters,
         HandlesJorySorts,
+        HandlesJoryFilters,
         LoadsJoryRelations,
+        RegistersJoryBuilders,
         ConvertsModelToArrayByJory,
         HandlesJoryBuilderConfiguration;
-
-    /**
-     * @var string
-     */
-    protected $modelClass;
 
     /**
      * @var Builder
@@ -93,15 +88,12 @@ abstract class JoryBuilder implements Responsable
     /**
      * JoryBuilder constructor.
      *
-     * @param string $modelClass
      */
-    public function __construct(string $modelClass)
+    public function __construct()
     {
-        $this->modelClass = $modelClass;
-
         $this->case = app(CaseManager::class);
 
-        $this->initConfig($modelClass);
+        $this->initConfig();
     }
 
     /**

@@ -19,7 +19,7 @@ class JoryBuilderTest extends TestCase
     public function it_can_apply_on_a_querybuilder_instance()
     {
         $query = Band::query();
-        $actual = (new BandJoryBuilder(Band::class))->applyJory(new Jory())->onQuery($query)->get()->pluck('name')->toArray();
+        $actual = (new BandJoryBuilder())->applyJory(new Jory())->onQuery($query)->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',

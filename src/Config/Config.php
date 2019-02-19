@@ -60,6 +60,9 @@ class Config implements Responsable
     /**
      * Config constructor.
      *
+     * We need to pass the related model class, so we can
+     * reflect to which class the defined relations models belong.
+     *
      * @param string $modelClass
      */
     public function __construct(string $modelClass)

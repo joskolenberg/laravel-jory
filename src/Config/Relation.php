@@ -100,7 +100,7 @@ class Relation
      */
     public function getType(): string
     {
-        $registration = app()->make(JoryBuildersRegister::class)->getRegistrationByModelClass($this->modelClass);
+        $registration = app()->make(JoryBuildersRegister::class)->getByModelClass($this->modelClass);
 
         return $registration ? $registration->getUri() : 'Not defined.';
     }

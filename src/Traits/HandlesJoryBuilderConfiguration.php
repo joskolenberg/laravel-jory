@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Traits;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\Config\Config;
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 /**
  * Trait HandlesJoryBuilderConfiguration.
@@ -19,11 +20,11 @@ trait HandlesJoryBuilderConfiguration
     /**
      * Initialize the config object.
      *
-     * @param string $modelClass
      */
-    protected function initConfig(string $modelClass): void
+    protected function initConfig(): void
     {
         // Create the config based on the settings in config()
+        $modelClass = app()->make(JoryBuildersRegister::class)->getByBuilderClass(static::class)->getModelClass();
         $this->config = new Config($modelClass);
         $this->config($this->config);
     }
