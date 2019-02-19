@@ -30,7 +30,7 @@ trait LoadsJoryRelations
         });
 
         // Hook into the afterFetch() method on the related JoryBuilder
-        $this->afterFetch($models, $this->getJory());
+        $this->afterFetch($models);
     }
 
     /**

@@ -783,4 +783,80 @@ class CamelCaseJoryBuilderTest extends TestCase
 
         $this->assertQueryCount(3);
     }
+
+    /** @test */
+    public function it_can_check_if_a_field_is_requested_in_camelCase()
+    {
+        $response = $this->json('GET', 'jory/song-with-after-fetch/101', [
+            'jory' => '{"fld":["title","customField"]}',
+            'case' => 'camel',
+        ]);
+
+        $expected = [
+            'data' => [
+                'title' => 'altered',
+                'customField' => 'custom_value',
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_check_if_a_filter_on_a_field_will_be_applied_in_camelCase()
+    {
+        $response = $this->json('GET', 'jory/song-with-after-fetch', [
+            'jory' => '{"flt":{"f":"customFilterField"},"srt":["-id"],"lmt":2}',
+            'case' => 'camel',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'id' => 147,
+                    'albumId' => 12,
+                    'title' => 'altered by filter',
+                ],
+                [
+                    'id' => 146,
+                    'albumId' => 12,
+                    'title' => 'altered by filter',
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_check_if_a_sort_on_a_field_will_be_applied_in_camelCase()
+    {
+        $response = $this->json('GET', 'jory/song-with-after-fetch', [
+            'jory' => '{"srt":["-id","customSortField"],"lmt":2}',
+            'case' => 'camel',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'id' => 147,
+                    'albumId' => 12,
+                    'title' => 'altered by sort',
+                ],
+                [
+                    'id' => 146,
+                    'albumId' => 12,
+                    'title' => 'altered by sort',
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(1);
+    }
 }

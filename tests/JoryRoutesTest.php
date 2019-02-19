@@ -414,6 +414,7 @@ class JoryRoutesTest extends TestCase
                 'person',
                 'song',
                 'song-custom',
+                'song-with-after-fetch',
             ],
         ];
 

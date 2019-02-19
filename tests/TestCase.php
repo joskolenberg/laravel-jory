@@ -18,10 +18,12 @@ use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Models\SongWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\PersonJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumCoverJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\InstrumentJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
 
 class TestCase extends Orchestra
@@ -903,6 +905,7 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         JoryBuilder::register(Person::class, PersonJoryBuilder::class);
         JoryBuilder::register(Song::class, SongJoryBuilder::class);
         JoryBuilder::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
+        JoryBuilder::register(SongWithAfterFetchHook::class, SongJoryBuilderWithAfterFetchHook::class)->uri('song-with-after-fetch');
     }
 
     public function assertQueryCount($expected)

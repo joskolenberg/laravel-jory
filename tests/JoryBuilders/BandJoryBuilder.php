@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
+use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Filter;

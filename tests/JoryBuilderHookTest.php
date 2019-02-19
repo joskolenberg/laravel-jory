@@ -320,4 +320,165 @@ class JoryBuilderHookTest extends TestCase
 
         $this->assertQueryCount(1);
     }
+
+    /** @test */
+    public function it_can_check_if_a_field_is_requested()
+    {
+        $builder = new SongJoryBuilderWithAfterFetchHook(Song::class);
+        $builder->onQuery(Song::query());
+        $builder->applyArray([
+            'fld' => [
+                'title',
+                'custom_field',
+            ],
+            'srt' => [
+                '-id',
+            ],
+            'lmt' => 2,
+        ]);
+        $result = $builder->toArray();
+
+        $this->assertEquals([
+            [
+                'title' => 'altered',
+                'custom_field' => 'custom_value',
+            ],
+            [
+                'title' => 'altered',
+                'custom_field' => 'custom_value',
+            ],
+        ], $result);
+
+        $builder = new SongJoryBuilderWithAfterFetchHook(Song::class);
+        $builder->onQuery(Song::query());
+        $builder->applyArray([
+            'fld' => [
+                'title',
+            ],
+            'srt' => [
+                '-id',
+            ],
+            'lmt' => 2,
+        ]);
+        $result = $builder->toArray();
+
+        $this->assertEquals([
+            [
+                'title' => 'Voodoo Child (Slight Return)',
+            ],
+            [
+                'title' => 'All Along the Watchtower',
+            ],
+        ], $result);
+
+        $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_check_if_a_filter_on_a_field_will_be_applied()
+    {
+        $builder = new SongJoryBuilderWithAfterFetchHook(Song::class);
+        $builder->onQuery(Song::query());
+        $builder->applyArray([
+            'flt' => [
+                'f' => 'custom_filter_field',
+            ],
+            'srt' => [
+                '-id',
+            ],
+            'lmt' => 2,
+        ]);
+        $result = $builder->toArray();
+
+        $this->assertEquals([
+            [
+                'id' => 147,
+                'album_id' => 12,
+                'title' => 'altered by filter',
+            ],
+            [
+                'id' => 146,
+                'album_id' => 12,
+                'title' => 'altered by filter',
+            ],
+        ], $result);
+
+        $builder = new SongJoryBuilderWithAfterFetchHook(Song::class);
+        $builder->onQuery(Song::query());
+        $builder->applyArray([
+            'srt' => [
+                '-id',
+            ],
+            'lmt' => 2,
+        ]);
+        $result = $builder->toArray();
+
+        $this->assertEquals([
+            [
+                'id' => 147,
+                'album_id' => 12,
+                'title' => 'Voodoo Child (Slight Return)',
+            ],
+            [
+                'id' => 146,
+                'album_id' => 12,
+                'title' => 'All Along the Watchtower',
+            ],
+        ], $result);
+
+        $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_check_if_a_sort_on_a_field_will_be_applied()
+    {
+        $builder = new SongJoryBuilderWithAfterFetchHook(Song::class);
+        $builder->onQuery(Song::query());
+        $builder->applyArray([
+            'srt' => [
+                '-id',
+                '-custom_sort_field',
+            ],
+            'lmt' => 2,
+        ]);
+        $result = $builder->toArray();
+
+        $this->assertEquals([
+            [
+                'id' => 147,
+                'album_id' => 12,
+                'title' => 'altered by sort',
+            ],
+            [
+                'id' => 146,
+                'album_id' => 12,
+                'title' => 'altered by sort',
+            ],
+        ], $result);
+
+        $builder = new SongJoryBuilderWithAfterFetchHook(Song::class);
+        $builder->onQuery(Song::query());
+        $builder->applyArray([
+            'srt' => [
+                '-id',
+            ],
+            'lmt' => 2,
+        ]);
+        $result = $builder->toArray();
+
+        $this->assertEquals([
+            [
+                'id' => 147,
+                'album_id' => 12,
+                'title' => 'Voodoo Child (Slight Return)',
+            ],
+            [
+                'id' => 146,
+                'album_id' => 12,
+                'title' => 'All Along the Watchtower',
+            ],
+        ], $result);
+
+        $this->assertQueryCount(2);
+    }
 }

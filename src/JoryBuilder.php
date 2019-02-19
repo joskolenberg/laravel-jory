@@ -186,7 +186,7 @@ abstract class JoryBuilder implements Responsable
         $collection = $this->buildQuery()->get();
 
         $jory = $this->getJory();
-        $collection = $this->afterFetch($collection, $jory);
+        $collection = $this->afterFetch($collection);
 
         $this->loadRelations($collection, $jory->getRelations());
 
@@ -212,8 +212,7 @@ abstract class JoryBuilder implements Responsable
             return null;
         }
 
-        $jory = $this->getJory();
-        $model = $this->afterFetch(new Collection([$model]), $jory)->first();
+        $model = $this->afterFetch(new Collection([$model]))->first();
 
         $this->loadRelations(new Collection([$model]), $this->getJory()->getRelations());
 
@@ -449,10 +448,9 @@ abstract class JoryBuilder implements Responsable
      *      but easier done using a collection.
      *
      * @param \Illuminate\Database\Eloquent\Collection $collection
-     * @param \JosKolenberg\Jory\Jory $jory
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    protected function afterFetch(Collection $collection, Jory $jory): Collection
+    protected function afterFetch(Collection $collection): Collection
     {
         return $collection;
     }
@@ -550,4 +548,37 @@ abstract class JoryBuilder implements Responsable
      * @param Config $config
      */
     abstract protected function config(Config $config): void;
+
+    /**
+     * Tell if the Jory requests the given field.
+     *
+     * @param $field
+     * @return bool
+     */
+    protected function hasField($field): bool
+    {
+        return $this->jory->hasField($this->case->isCamel() ? camel_case($field) : $field);
+    }
+
+    /**
+     * Tell if the Jory has a filter on the given field.
+     *
+     * @param $field
+     * @return bool
+     */
+    protected function hasFilter($field): bool
+    {
+        return $this->jory->hasFilter($this->case->isCamel() ? camel_case($field) : $field);
+    }
+
+    /**
+     * Tell if the Jory has a sort on the given field.
+     *
+     * @param $field
+     * @return bool
+     */
+    protected function hasSort($field): bool
+    {
+        return $this->jory->hasSort($this->case->isCamel() ? camel_case($field) : $field);
+    }
 }
