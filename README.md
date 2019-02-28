@@ -35,7 +35,7 @@ class JoryServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        JoryBuilder::register(\App\Band::class, \App\Http\JoryBuilders\BandJoryBuilder);
+        JoryBuilder::register(\App\Band::class, \App\Http\JoryBuilders\BandJoryBuilder::class);
     }
 }
 ```
@@ -177,7 +177,7 @@ For example, the following keys would all be valid: ```band```, ```band:2```, ``
 
 Example call fetching:
 - All bands having a name containing 'le'. ```band```: ```{"flt":{"f":"name","o":"like","d":"%le%"}}```
-- All bands without a year_end returned as active_bands. ```band_as_active_bands```: ```{"flt":{"f":"year_end","o":"is_null"}}```
+- All bands without a year_end returned as active_bands. ```band as active_bands```: ```{"flt":{"f":"year_end","o":"is_null"}}```
 ```
 GET /my-jory-api?jory={"band":{"flt":{"f":"name","o":"like","d":"%le%"}},"band as active_bands":{"flt":{"f":"year_end","o":"is_null"}}}
 ```
@@ -300,7 +300,7 @@ $config->filter('has_song_with_title');
 Alternatively you can make use of Laravel's built in model scopes. When the custom filter function is available on the model the JoryBuilder will find it as well.
 
 ### Defining custom sorts
-Applying custom sorts is the same as custom filters except for the naming convention being ```scope{CustomName}Sort()```.
+Applying custom sorts is the same as custom filters except for the naming convention being ```scope{CustomName}Sort()```. This method receives a query (```Builder``` object) and order (string 'asc' or 'desc') parameter.
 
 ### Defining custom fields
 To make custom fields available for your Jory api add them as a custom attribute on the model and make sure to add the field in the JoryBuilder's config.
