@@ -14,7 +14,6 @@ use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Parsers\JsonParser;
-use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
@@ -534,13 +533,6 @@ abstract class JoryBuilder implements Responsable
     {
         return $this->modelToArrayByJory($model, $this->getJory());
     }
-
-    /**
-     * Configure the JoryBuilder.
-     *
-     * @param Config $config
-     */
-    abstract protected function config(Config $config): void;
 
     /**
      * Tell if the Jory requests the given field.

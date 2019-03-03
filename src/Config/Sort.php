@@ -28,7 +28,7 @@ class Sort
     protected $defaultIndex = null;
 
     /**
-     * @var null|int
+     * @var string
      */
     protected $defaultOrder = 'asc';
 
