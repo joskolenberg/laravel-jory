@@ -23,7 +23,7 @@ class Field
     protected $showByDefault = true;
 
     /**
-     * @var null
+     * @var null|string
      */
     protected $description = null;
 
@@ -116,7 +116,7 @@ class Field
     /**
      * Mark this field to be filterable.
      *
-     * @param null $callback
+     * @param callable|null $callback
      * @return Field
      */
     public function filterable($callback = null): self
@@ -143,7 +143,7 @@ class Field
     /**
      * Mark this field to be sortable.
      *
-     * @param null $callback
+     * @param callable|null $callback
      * @return Field
      */
     public function sortable($callback = null): self

@@ -14,17 +14,17 @@ class JoryBuilderRegistration
     /**
      * @var string
      */
-    protected $modelClass = null;
+    protected $modelClass;
 
     /**
      * @var string
      */
-    protected $builderClass = null;
+    protected $builderClass;
 
     /**
-     * @var null|string
+     * @var string
      */
-    protected $uri = null;
+    protected $uri;
 
     /**
      * JoryBuilderRegistration constructor.
@@ -75,7 +75,7 @@ class JoryBuilderRegistration
     /**
      * Get the associated uri to be used in routing.
      *
-     * @return null|string
+     * @return string
      */
     public function getUri(): string
     {

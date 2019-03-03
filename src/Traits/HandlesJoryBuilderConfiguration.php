@@ -113,4 +113,11 @@ trait HandlesJoryBuilderConfiguration
             $jory->setLimit($config->getLimitDefault());
         }
     }
+
+    /**
+     * Configure the JoryBuilder.
+     *
+     * @param Config $config
+     */
+    abstract protected function config(Config $config): void;
 }

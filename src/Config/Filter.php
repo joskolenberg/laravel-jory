@@ -23,7 +23,7 @@ class Filter
     protected $operators = [];
 
     /**
-     * @var null
+     * @var null|string
      */
     protected $description = null;
 
