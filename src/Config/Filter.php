@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 
 /**
@@ -77,7 +78,7 @@ class Filter
      */
     public function getField(): string
     {
-        return $this->case->isCamel() ? camel_case($this->field) : $this->field;
+        return $this->case->isCamel() ? Str::camel($this->field) : $this->field;
     }
 
     /**

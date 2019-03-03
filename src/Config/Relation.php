@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
@@ -66,7 +67,7 @@ class Relation
      */
     public function getName(): string
     {
-        return $this->case->isCamel() ? camel_case($this->name) : $this->name;
+        return $this->case->isCamel() ? Str::camel($this->name) : $this->name;
     }
 
     /**

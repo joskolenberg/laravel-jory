@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Relation;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -56,7 +57,7 @@ trait LoadsJoryRelations
         }
 
         // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-        $relationName = ! $this->case->isCamel() ? camel_case($relationName) : $relationName;
+        $relationName = ! $this->case->isCamel() ? Str::camel($relationName) : $relationName;
 
         // Retrieve the model which will be queried to get the appropriate JoryBuilder
         $relatedModel = $collection->first()->{$relationName}()->getRelated();

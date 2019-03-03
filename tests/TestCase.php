@@ -28,7 +28,7 @@ use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBu
 
 class TestCase extends Orchestra
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

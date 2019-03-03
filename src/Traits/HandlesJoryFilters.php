@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Filter;
 use JosKolenberg\Jory\Support\GroupOrFilter;
 use JosKolenberg\Jory\Support\GroupAndFilter;
@@ -74,7 +75,7 @@ trait HandlesJoryFilters
         // Always apply the filter on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.(app(CaseManager::class)->isCamel() ? snake_case($filter->getField()) : $filter->getField());
+        $field = $query->getModel()->getTable().'.'.(app(CaseManager::class)->isCamel() ? Str::snake($filter->getField()) : $filter->getField());
         $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
     }
 
@@ -87,7 +88,7 @@ trait HandlesJoryFilters
      */
     protected function getCustomFilterMethodName(Filter $filter): string
     {
-        return 'scope'.studly_case($filter->getField()).'Filter';
+        return 'scope'.Str::studly($filter->getField()).'Filter';
     }
 
     /**

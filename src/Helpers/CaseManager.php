@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Helpers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CaseManager
 {
@@ -33,7 +34,7 @@ class CaseManager
     {
         $result = [];
         foreach ($array as $key => $value) {
-            $result[camel_case($key)] = $value;
+            $result[Str::camel($key)] = $value;
         }
 
         return $result;

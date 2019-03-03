@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Config;
 
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 /**
@@ -152,7 +153,7 @@ class Config implements Responsable
     public function relation(string $name): Relation
     {
         // Get the related class for the relation
-        $relationMethod = camel_case($name);
+        $relationMethod = Str::camel($name);
         $relatedClass = get_class((new $this->modelClass())->{$relationMethod}()->getRelated());
 
         // Add the relation

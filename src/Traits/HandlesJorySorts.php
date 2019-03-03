@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 
@@ -45,7 +46,7 @@ trait HandlesJorySorts
         // Always apply the sort on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.(app(CaseManager::class)->isCamel() ? snake_case($sort->getField()) : $sort->getField());
+        $field = $query->getModel()->getTable().'.'.(app(CaseManager::class)->isCamel() ? Str::snake($sort->getField()) : $sort->getField());
         $this->applyDefaultSort($query, $field, $sort->getOrder());
     }
 
@@ -69,6 +70,6 @@ trait HandlesJorySorts
      */
     protected function getCustomSortMethodName(Sort $sort): string
     {
-        return 'scope'.studly_case($sort->getField()).'Sort';
+        return 'scope'.Str::studly($sort->getField()).'Sort';
     }
 }
