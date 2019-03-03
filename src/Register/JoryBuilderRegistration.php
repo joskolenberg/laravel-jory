@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Register;
 
+use Illuminate\Support\Str;
+
 /**
  * Class JoryBuilderRegistration.
  *
@@ -34,7 +36,7 @@ class JoryBuilderRegistration
     {
         $this->modelClass = $modelClass;
         $this->builderClass = $builderClass;
-        $this->uri = kebab_case(class_basename($modelClass));
+        $this->uri = Str::kebab(class_basename($modelClass));
     }
 
     /**

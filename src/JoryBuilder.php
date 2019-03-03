@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
@@ -549,7 +550,7 @@ abstract class JoryBuilder implements Responsable
      */
     protected function hasField($field): bool
     {
-        return $this->jory->hasField($this->case->isCamel() ? camel_case($field) : $field);
+        return $this->jory->hasField($this->case->isCamel() ? Str::camel($field) : $field);
     }
 
     /**
@@ -560,7 +561,7 @@ abstract class JoryBuilder implements Responsable
      */
     protected function hasFilter($field): bool
     {
-        return $this->jory->hasFilter($this->case->isCamel() ? camel_case($field) : $field);
+        return $this->jory->hasFilter($this->case->isCamel() ? Str::camel($field) : $field);
     }
 
     /**
@@ -571,6 +572,6 @@ abstract class JoryBuilder implements Responsable
      */
     protected function hasSort($field): bool
     {
-        return $this->jory->hasSort($this->case->isCamel() ? camel_case($field) : $field);
+        return $this->jory->hasSort($this->case->isCamel() ? Str::camel($field) : $field);
     }
 }

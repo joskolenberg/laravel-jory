@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Support\Str;
 use JosKolenberg\Jory\Jory;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
@@ -21,7 +22,7 @@ trait ConvertsModelToArrayByJory
 
         $result = [];
         foreach ($jory->getFields() as $field) {
-            $result[$field] = $case->isCamel() ? $model->{snake_case($field)} : $model->$field;
+            $result[$field] = $case->isCamel() ? $model->{Str::snake($field)} : $model->$field;
         }
 
         // Add the relations to the result
@@ -37,7 +38,7 @@ trait ConvertsModelToArrayByJory
             }
 
             // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-            $relationName = ! $case->isCamel() ? camel_case($relationName) : $relationName;
+            $relationName = ! $case->isCamel() ? Str::camel($relationName) : $relationName;
 
             // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
             $related = $model->getJoryRelation($relation->getName());
