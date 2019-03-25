@@ -86,9 +86,9 @@ return [
 
     'limit' => [
 
-        'default' => 100,
+        'default' => null,
 
-        'max' => 1000,
+        'max' => null,
 
     ],
 

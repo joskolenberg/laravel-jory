@@ -569,8 +569,8 @@ class JoryBuilderWithConfigTest extends TestCase
                 ],
             ],
             'limit' => [
-                'default' => 100,
-                'max' => 1000,
+                'default' => null,
+                'max' => null,
             ],
             'relations' => [
                 'songs' => [
@@ -1212,6 +1212,8 @@ class JoryBuilderWithConfigTest extends TestCase
     /** @test */
     public function it_can_validate_if_a_limit_is_exceeded_in_a_relation()
     {
+        config()->set('jory.limit.max', 1000);
+
         $response = $this->json('GET', 'jory/band', [
             'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134}},"flt":{"f":"date_start","d":"2018-01-01"}}',
         ]);
@@ -1230,6 +1232,8 @@ class JoryBuilderWithConfigTest extends TestCase
     /** @test */
     public function it_can_validate_if_a_relation_is_available_in_a_relation()
     {
+        config()->set('jory.limit.max', 1000);
+
         $response = $this->json('GET', 'jory/band', [
             'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134,"rlt":{"band":{},"songgs":{}}}},"flt":{"f":"date_start","d":"2018-01-01"}}',
         ]);
