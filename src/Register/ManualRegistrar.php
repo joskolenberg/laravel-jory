@@ -1,24 +1,15 @@
 <?php
 
+
 namespace JosKolenberg\LaravelJory\Register;
 
-/**
- * Class JoryBuildersRegister.
- *
- * Collects the registered JoryBuilders.
- */
-class JoryBuildersRegister
-{
 
+class ManualRegistrar implements RegistrarInterface
+{
     /**
      * @var array
      */
-    protected $manualRegistrar = [];
-
-    public function __construct(ManualRegistrar $manualRegistrar)
-    {
-        $this->manualRegistrar = $manualRegistrar;
-    }
+    protected $registrations = [];
 
     /**
      * Add a registration.
@@ -28,8 +19,15 @@ class JoryBuildersRegister
      */
     public function add(JoryBuilderRegistration $registration): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
-        $this->manualRegistrar->add($registration);
+        // There can be only one registration for a model
+        // When a second one is registered for the same model remove the previous
+        foreach ($this->registrations as $key => $existingRegistration) {
+            if ($registration->getModelClass() == $existingRegistration->getModelClass()) {
+                unset($this->registrations[$key]);
+            }
+        }
+
+        $this->registrations[] = $registration;
 
         return $registration;
     }
@@ -42,8 +40,13 @@ class JoryBuildersRegister
      */
     public function getByModelClass(string $modelClass): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
-        return $this->manualRegistrar->getByModelClass($modelClass);
+        foreach ($this->registrations as $registration) {
+            if ($registration->getModelClass() === $modelClass) {
+                return $registration;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -54,8 +57,13 @@ class JoryBuildersRegister
      */
     public function getByBuilderClass(string $builderClass): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
-        return $this->manualRegistrar->getByBuilderClass($builderClass);
+        foreach ($this->registrations as $registration) {
+            if ($registration->getBuilderClass() === $builderClass) {
+                return $registration;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -66,22 +74,22 @@ class JoryBuildersRegister
      */
     public function getByUri(string $uri): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
-        return $this->manualRegistrar->getByUri($uri);
+        foreach ($this->registrations as $registration) {
+            if ($registration->getUri() == $uri) {
+                return $registration;
+            }
+        }
+
+        return null;
     }
 
     /**
-     * Get an array of all registered uri's.
+     * Get all registered registrations
      *
      * @return array
      */
-    public function getUrisArray(): array
+    public function getRegistrations(): array
     {
-        $result = [];
-        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
-            $result[] = $registration->getUri();
-        }
-
-        return $result;
+        return $this->registrations;
     }
 }

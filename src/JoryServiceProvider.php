@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 use JosKolenberg\LaravelJory\Console\JoryBuilderMakeCommand;
+use JosKolenberg\LaravelJory\Register\ManualRegistrar;
 
 class JoryServiceProvider extends ServiceProvider
 {
@@ -27,7 +28,9 @@ class JoryServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/jory.php', 'jory');
 
         $this->app->singleton(JoryBuildersRegister::class, function () {
-            return new JoryBuildersRegister();
+            $register = new JoryBuildersRegister(new ManualRegistrar());
+
+            return $register;
         });
 
         $this->app->singleton(CaseManager::class, function ($app) {
