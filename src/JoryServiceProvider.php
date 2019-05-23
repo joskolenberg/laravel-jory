@@ -30,6 +30,10 @@ class JoryServiceProvider extends ServiceProvider
         $this->app->singleton(JoryBuildersRegister::class, function () {
             $register = new JoryBuildersRegister(new ManualRegistrar());
 
+            foreach (config('jory.registrars') as $registrar){
+                $register->addRegistrar(new $registrar());
+            }
+
             return $register;
         });
 

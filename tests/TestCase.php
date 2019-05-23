@@ -898,10 +898,10 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
 
     protected function registerJoryBuilders()
     {
+        /**
+         * Register some JoryBuilders and let some of them be discovered by de autoRegistrar.
+         */
         JoryBuilder::register(Band::class, BandJoryBuilder::class);
-        JoryBuilder::register(Album::class, AlbumJoryBuilder::class);
-        JoryBuilder::register(AlbumCover::class, AlbumCoverJoryBuilder::class);
-        JoryBuilder::register(Instrument::class, InstrumentJoryBuilder::class);
         JoryBuilder::register(Person::class, PersonJoryBuilder::class);
         JoryBuilder::register(Song::class, SongJoryBuilder::class);
         JoryBuilder::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
@@ -911,5 +911,16 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
     public function assertQueryCount($expected)
     {
         $this->assertEquals($expected, count(\DB::getQueryLog()));
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+        $app['config']->set('jory.auto-registrar', [
+            'models-path' => __DIR__ . '/Models',
+            'jory-builders-path' => __DIR__ . '/JoryBuilders',
+            'root-namespace' => 'JosKolenberg\LaravelJory\Tests',
+            'root-path' => __DIR__,
+        ]);
     }
 }

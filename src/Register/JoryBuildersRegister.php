@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Register;
 
+use Illuminate\Support\Collection;
+
 /**
  * Class JoryBuildersRegister.
  *
@@ -11,24 +13,47 @@ class JoryBuildersRegister
 {
 
     /**
-     * @var array
+     * The registrar for registering JoryBuilders manually.
+     *
+     * @var ManualRegistrar
      */
-    protected $manualRegistrar = [];
+    protected $manualRegistrar = null;
 
+    /**
+     * Any additional registrars to deliver registrations
+     *
+     * @var array<RegistrarInterface>
+     */
+    protected $registrars = [];
+
+    /**
+     * JoryBuildersRegister constructor.
+     * @param ManualRegistrar $manualRegistrar
+     */
     public function __construct(ManualRegistrar $manualRegistrar)
     {
         $this->manualRegistrar = $manualRegistrar;
     }
 
     /**
-     * Add a registration.
+     * Add a registrar for delivering registrations
      *
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration $registration
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration
+     * @param RegistrarInterface $registrar
+     */
+    public function addRegistrar(RegistrarInterface $registrar)
+    {
+        $this->registrars[] = $registrar;
+    }
+
+    /**
+     * Add a registration to the manualRegistrar.
+     *
+     * @param JoryBuilderRegistration $registration
+     * @return JoryBuilderRegistration
      */
     public function add(JoryBuilderRegistration $registration): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
+        // Proxy to the manual registrar
         $this->manualRegistrar->add($registration);
 
         return $registration;
@@ -38,11 +63,11 @@ class JoryBuildersRegister
      * Get a registration by a Model's classname.
      *
      * @param string $modelClass
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration|null
+     * @return JoryBuilderRegistration|null
      */
     public function getByModelClass(string $modelClass): ? JoryBuilderRegistration
     {
-        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
+        foreach ($this->getAllRegistrations() as $registration) {
             if ($registration->getModelClass() === $modelClass) {
                 return $registration;
             }
@@ -55,11 +80,11 @@ class JoryBuildersRegister
      * Get a registration by a Model's classname.
      *
      * @param string $builderClass
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration|null
+     * @return JoryBuilderRegistration|null
      */
     public function getByBuilderClass(string $builderClass): ? JoryBuilderRegistration
     {
-        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
+        foreach ($this->getAllRegistrations() as $registration) {
             if ($registration->getBuilderClass() === $builderClass) {
                 return $registration;
             }
@@ -72,11 +97,11 @@ class JoryBuildersRegister
      * Get a registration by uri.
      *
      * @param string $uri
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration|null
+     * @return JoryBuilderRegistration|null
      */
     public function getByUri(string $uri): ? JoryBuilderRegistration
     {
-        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
+        foreach ($this->getAllRegistrations() as $registration) {
             if ($registration->getUri() == $uri) {
                 return $registration;
             }
@@ -93,10 +118,51 @@ class JoryBuildersRegister
     public function getUrisArray(): array
     {
         $result = [];
-        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
+        foreach ($this->getAllRegistrations() as $registration) {
             $result[] = $registration->getUri();
         }
 
         return $result;
+    }
+
+    /**
+     * Get all registrations registered by all the registrars.
+     *
+     * @return Collection
+     */
+    protected function getAllRegistrations(): Collection
+    {
+        // Manual registrations get precedence.
+        $registrations = $this->manualRegistrar->getRegistrations();
+
+        foreach ($this->registrars as $registrar){
+            $this->mergeRegistrations($registrations, $registrar->getRegistrations());
+        }
+
+        return $registrations;
+    }
+
+    /**
+     * Merge the additional registration collection into the
+     * subject collection and filter duplicates.
+     *
+     * @param Collection $subject
+     * @param Collection $additional
+     */
+    protected function mergeRegistrations(Collection $subject, Collection $additional)
+    {
+        foreach ($additional as $registration){
+            /**
+             * If the existing collection already has a registration for
+             * this model, don't register it again.
+             */
+            if($subject->contains(function ($existing) use ($registration) {
+                return $existing->getModelClass() === $registration->getModelClass();
+            })){
+                continue;
+            }
+
+            $subject->add($registration);
+        }
     }
 }

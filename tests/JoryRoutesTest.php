@@ -397,13 +397,13 @@ class JoryRoutesTest extends TestCase
         $expected = [
             'resources' => [
                 'band',
-                'album',
-                'album-cover',
-                'instrument',
                 'person',
                 'song',
                 'song-custom',
                 'song-with-after-fetch',
+                'album',
+                'album-cover',
+                'instrument',
             ],
         ];
 

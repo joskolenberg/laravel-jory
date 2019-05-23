@@ -109,4 +109,39 @@ return [
 
     'case' => 'snake',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Registrars
+    |--------------------------------------------------------------------------
+    |
+    | Here you can register any Registrar classes which bind the JoryBuilders
+    | to your Models. By default an auto-registrar is added which binds the
+    | JoryBuilders in the default \App\Http\JoryBuilders namespace.
+    */
+
+    'registrars' => [
+        \JosKolenberg\LaravelJory\Register\AutoRegistrar::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | AutoRegistrar settings
+    |--------------------------------------------------------------------------
+    |
+    | Here you can edit the settings for the default autoRegistrar.
+    | By default the autoRegistrar looks for models in the 'app'
+    | directory and tries to bind them to JoryBuilders in the
+    | 'app/Http/JoryBuilders' directory. The JoryBuilders
+    | should be using the <Model>JoryBuilder convention.
+    */
+
+    'auto-registrar' => [
+
+        'models-path' => app_path(),
+        'jory-builders-path' => app_path('Http\\JoryBuilders'),
+        'root-namespace' => '\App',
+        'root-path' => app_path(),
+
+    ],
+
 ];

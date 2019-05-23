@@ -6,6 +6,7 @@ class SnakeCaseJoryBuilderTest extends TestCase
 {
     protected function getEnvironmentSetUp($app)
     {
+        parent::getEnvironmentSetUp($app);
         $app['config']->set('jory.case', 'camel');
         $app['config']->set('jory.request.case-key', 'case_key');
     }

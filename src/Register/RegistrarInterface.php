@@ -4,14 +4,16 @@
 namespace JosKolenberg\LaravelJory\Register;
 
 
+use Illuminate\Support\Collection;
+
 interface RegistrarInterface
 {
 
     /**
-     * Get all registered registrations
+     * Get all registered registrations.
      *
-     * @return array
+     * @return Collection
      */
-    public function getRegistrations(): array;
+    public function getRegistrations(): Collection;
 
 }

@@ -4,18 +4,25 @@
 namespace JosKolenberg\LaravelJory\Register;
 
 
+use Illuminate\Support\Collection;
+
 class ManualRegistrar implements RegistrarInterface
 {
     /**
      * @var array
      */
-    protected $registrations = [];
+    protected $registrations;
+
+    public function __construct()
+    {
+        $this->registrations = new Collection();
+    }
 
     /**
      * Add a registration.
      *
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration $registration
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration
+     * @param JoryBuilderRegistration $registration
+     * @return JoryBuilderRegistration
      */
     public function add(JoryBuilderRegistration $registration): ? JoryBuilderRegistration
     {
@@ -27,17 +34,17 @@ class ManualRegistrar implements RegistrarInterface
             }
         }
 
-        $this->registrations[] = $registration;
+        $this->registrations->add($registration);
 
         return $registration;
     }
 
     /**
-     * Get all registered registrations
+     * Get all registered registrations.
      *
-     * @return array
+     * @return Collection
      */
-    public function getRegistrations(): array
+    public function getRegistrations(): Collection
     {
         return $this->registrations;
     }
