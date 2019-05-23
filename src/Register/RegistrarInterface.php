@@ -6,28 +6,12 @@ namespace JosKolenberg\LaravelJory\Register;
 
 interface RegistrarInterface
 {
-    /**
-     * Get a registration by a Model's classname.
-     *
-     * @param string $modelClass
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration|null
-     */
-    public function getByModelClass(string $modelClass): ? JoryBuilderRegistration;
 
     /**
-     * Get a registration by a Model's classname.
+     * Get all registered registrations
      *
-     * @param string $builderClass
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration|null
+     * @return array
      */
-    public function getByBuilderClass(string $builderClass): ? JoryBuilderRegistration;
-
-    /**
-     * Get a registration by uri.
-     *
-     * @param string $uri
-     * @return \JosKolenberg\LaravelJory\Register\JoryBuilderRegistration|null
-     */
-    public function getByUri(string $uri): ? JoryBuilderRegistration;
+    public function getRegistrations(): array;
 
 }

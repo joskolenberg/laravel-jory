@@ -42,8 +42,13 @@ class JoryBuildersRegister
      */
     public function getByModelClass(string $modelClass): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
-        return $this->manualRegistrar->getByModelClass($modelClass);
+        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
+            if ($registration->getModelClass() === $modelClass) {
+                return $registration;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -54,8 +59,13 @@ class JoryBuildersRegister
      */
     public function getByBuilderClass(string $builderClass): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
-        return $this->manualRegistrar->getByBuilderClass($builderClass);
+        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
+            if ($registration->getBuilderClass() === $builderClass) {
+                return $registration;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -66,8 +76,13 @@ class JoryBuildersRegister
      */
     public function getByUri(string $uri): ? JoryBuilderRegistration
     {
-        // Proxy to manual registrar
-        return $this->manualRegistrar->getByUri($uri);
+        foreach ($this->manualRegistrar->getRegistrations() as $registration) {
+            if ($registration->getUri() == $uri) {
+                return $registration;
+            }
+        }
+
+        return null;
     }
 
     /**
