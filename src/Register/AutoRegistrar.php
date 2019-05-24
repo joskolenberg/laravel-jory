@@ -73,7 +73,7 @@ class AutoRegistrar implements RegistrarInterface
             return;
         }
 
-        $this->registrations->add(new JoryBuilderRegistration(
+        $this->registrations->push(new JoryBuilderRegistration(
             $this->getClassNameFromFilePath($file->getRealPath()),
             $this->getClassNameFromFilePath($joryBuilderFilePath)
         ));
