@@ -118,7 +118,10 @@ class JoryBuildersRegister
     public function getUrisArray(): array
     {
         $result = [];
-        foreach ($this->getAllRegistrations() as $registration) {
+
+        foreach ($this->getAllRegistrations()->sortBy(function($registration){
+            return $registration->getUri();
+        }) as $registration) {
             $result[] = $registration->getUri();
         }
 
