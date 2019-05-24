@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Relation;
 use Illuminate\Database\Eloquent\Collection;
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 trait LoadsJoryRelations
 {
@@ -61,10 +62,13 @@ trait LoadsJoryRelations
 
         // Retrieve the model which will be queried to get the appropriate JoryBuilder
         $relatedModel = $collection->first()->{$relationName}()->getRelated();
-        $joryBuilder = $relatedModel::getJoryBuilder();
+        $relatedJoryBuilderClass = app(JoryBuildersRegister::class)
+            ->getByModelClass(get_class($relatedModel))
+            ->getBuilderClass();
+        $joryBuilder = new $relatedJoryBuilderClass();
 
         $collection->load([
-            $relationName => function ($query) use ($joryBuilder, $relation, $relatedModel) {
+            $relationName => function ($query) use ($joryBuilder, $relation) {
                 // Apply the data in the subjory (filtering/sorting/...) on the query
                 $joryBuilder->applyJory($relation->getJory());
                 $joryBuilder->applyOnQuery($query);

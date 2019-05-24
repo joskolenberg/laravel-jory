@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 use SimilarText\Finder;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\GroupOrFilter;
@@ -226,7 +227,10 @@ class Validator
             foreach ($this->config->getRelations() as $configRelation) {
                 if ($joryRelation->getName() === $configRelation->getName()) {
                     $relatedModelClass = $configRelation->getModelClass();
-                    $relatedConfig = $relatedModelClass::getJoryBuilder()->getConfig();
+                    $relatedJoryBuilderClass = app(JoryBuildersRegister::class)
+                        ->getByModelClass($relatedModelClass)
+                        ->getBuilderClass();
+                    $relatedConfig = (new $relatedJoryBuilderClass())->getConfig();
                 }
             }
             if ($relatedConfig === null) {

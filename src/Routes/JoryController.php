@@ -27,8 +27,11 @@ class JoryController extends Controller
         }
 
         $modelClass = $registration->getModelClass();
+        $joryBuilderClass = $registration->getBuilderClass();
 
-        return $modelClass::jory()->applyRequest($request);
+        return (new $joryBuilderClass())
+            ->onQuery($modelClass::query())
+            ->applyRequest($request);
     }
 
     /**
@@ -48,8 +51,12 @@ class JoryController extends Controller
         }
 
         $modelClass = $registration->getModelClass();
+        $joryBuilderClass = $registration->getBuilderClass();
 
-        return $modelClass::jory()->applyRequest($request)->count();
+        return (new $joryBuilderClass())
+            ->onQuery($modelClass::query())
+            ->applyRequest($request)
+            ->count();
     }
 
     /**
@@ -70,10 +77,12 @@ class JoryController extends Controller
         }
 
         $modelClass = $registration->getModelClass();
+        $joryBuilderClass = $registration->getBuilderClass();
 
-        $query = $modelClass::whereKey($id);
-
-        return $modelClass::jory()->applyRequest($request)->onQuery($query)->first();
+        return (new $joryBuilderClass())
+            ->onQuery($modelClass::whereKey($id))
+            ->applyRequest($request)
+            ->first();
     }
 
     /**
@@ -91,9 +100,9 @@ class JoryController extends Controller
             return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
         }
 
-        $modelClass = $registration->getModelClass();
+        $joryBuilderClass = $registration->getBuilderClass();
 
-        return $modelClass::jory()->getConfig();
+        return (new $joryBuilderClass())->getConfig();
     }
 
     /**
@@ -150,20 +159,29 @@ class JoryController extends Controller
             // Don't perform any queries when there is already an error somewhere
             foreach ($explodedJories as $single) {
                 $modelClass = $single->registration->getModelClass();
+                $joryBuilderClass = $single->registration->getBuilderClass();
 
-                $joryBuilder = $modelClass::jory();
+                $joryBuilder = new $joryBuilderClass();
 
                 if ($single->type === 'count') {
                     // Return the count for a resource
-                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->count()->toResponse($request);
+                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)
+                        ->onQuery($modelClass::query())
+                        ->count()
+                        ->toResponse($request);
                 } elseif ($single->type === 'single') {
                     // Return a single item
                     $query = $modelClass::whereKey($single->id);
 
-                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->onQuery($query)->first()->toResponse($request);
+                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)
+                        ->onQuery($query)
+                        ->first()
+                        ->toResponse($request);
                 } else {
                     // Return an array of items
-                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)->toResponse($request);
+                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)
+                        ->onQuery($modelClass::query())
+                        ->toResponse($request);
                 }
 
                 if ($response->getStatusCode() === 422) {

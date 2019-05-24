@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use JosKolenberg\Jory\Jory;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 trait ConvertsModelToArrayByJory
 {
@@ -38,14 +39,17 @@ trait ConvertsModelToArrayByJory
             }
 
             // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-            $relationName = ! $case->isCamel() ? Str::camel($relationName) : $relationName;
+            $relationName = !$case->isCamel() ? Str::camel($relationName) : $relationName;
 
             // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
             $related = $model->joryRelations[$relation->getName()];
 
             // Get the related JoryBuilder to convert the related records to arrays
             $relatedModel = $model->{$relationName}()->getRelated();
-            $relatedJoryBuilder = $relatedModel::getJoryBuilder()->applyJory($relation->getJory());
+            $relatedJoryBuilderClass = app(JoryBuildersRegister::class)
+                ->getByModelClass(get_class($relatedModel))
+                ->getBuilderClass();
+            $relatedJoryBuilder = (new $relatedJoryBuilderClass())->applyJory($relation->getJory());
 
             if ($related === null) {
                 // No related model found

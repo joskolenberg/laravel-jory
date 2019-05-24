@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\InstrumentJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
@@ -209,13 +210,15 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_override_the_basic_filter_function()
     {
-        $actual = Instrument::jory()->applyArray([
-            'filter' => [
-                'f' => 'name',
-                'o' => 'like',
-                'd' => '%t%',
-            ],
-        ])->get()->pluck('name')->toArray();
+        $actual = (new InstrumentJoryBuilder())
+            ->onQuery(Instrument::query())
+            ->applyArray([
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%t%',
+                ],
+            ])->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Guitar',
@@ -229,7 +232,11 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_return_a_single_model()
     {
-        $actual = Instrument::jory()->applyJory(new Jory())->first()->toArray();
+        $actual = (new InstrumentJoryBuilder())
+            ->onQuery(Instrument::query())
+            ->applyJory(new Jory())
+            ->first()
+            ->toArray();
 
         $this->assertEquals([
             'id' => 1,
@@ -242,12 +249,15 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_returns_null_when_a_single_model_is_not_found()
     {
-        $actual = Instrument::jory()->applyArray([
-            'flt' => [
-                'f' => 'name',
-                'd' => 'Hobo',
-            ],
-        ])->first()->toArray();
+        $actual = (new InstrumentJoryBuilder())
+            ->onQuery(Instrument::query())
+            ->applyArray([
+                'flt' => [
+                    'f' => 'name',
+                    'd' => 'Hobo',
+                ],
+            ])->first()
+            ->toArray();
 
         $this->assertNull($actual);
 
