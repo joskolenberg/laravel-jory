@@ -34,7 +34,7 @@ class ManualRegistrar implements RegistrarInterface
             }
         }
 
-        $this->registrations->add($registration);
+        $this->registrations->push($registration);
 
         return $registration;
     }

@@ -162,7 +162,7 @@ class JoryBuildersRegister
                 continue;
             }
 
-            $subject->add($registration);
+            $subject->push($registration);
         }
     }
 }
