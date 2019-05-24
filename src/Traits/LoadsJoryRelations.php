@@ -77,7 +77,7 @@ trait LoadsJoryRelations
             $related = $model->$relationName;
 
             // We store the related records under the full relation name including alias
-            $model->addJoryRelation($relation->getName(), $related);
+            $this->storeRelationOnModel($model, $relation->getName(), $related);
 
             if ($related === null) {
                 continue;
@@ -94,5 +94,25 @@ trait LoadsJoryRelations
 
         // Load the subrelations
         $joryBuilder->loadRelations($allRelated, $relation->getJory()->getRelations());
+    }
+
+    /**
+     * Store a joryrelation on the model.
+     *
+     * @param Model $model
+     * @param string $relationName
+     * @param $data
+     */
+    protected function storeRelationOnModel(Model $model, string $relationName, $data): void
+    {
+        $relations = $model->joryRelations;
+
+        if($relations){
+            $relations[$relationName] = $data;
+        }else{
+            $relations = [$relationName => $data];
+        }
+
+        $model->joryRelations = $relations;
     }
 }

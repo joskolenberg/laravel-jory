@@ -12,7 +12,6 @@ use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
  */
 trait JoryTrait
 {
-    protected $joryRelations = [];
 
     /**
      * Return the JoryBuilder to query on this model.
@@ -36,27 +35,5 @@ trait JoryTrait
         $builderClass = $registration->getBuilderClass();
 
         return new $builderClass();
-    }
-
-    /**
-     * Add a Jory relation.
-     *
-     * @param string $name
-     * @param $data
-     */
-    public function addJoryRelation(string $name, $data)
-    {
-        $this->joryRelations[$name] = $data;
-    }
-
-    /**
-     * Get a Jory relation.
-     *
-     * @param string $name
-     * @return mixed
-     */
-    public function getJoryRelation(string $name)
-    {
-        return $this->joryRelations[$name];
     }
 }

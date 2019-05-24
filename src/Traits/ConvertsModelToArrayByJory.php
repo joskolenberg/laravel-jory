@@ -41,7 +41,7 @@ trait ConvertsModelToArrayByJory
             $relationName = ! $case->isCamel() ? Str::camel($relationName) : $relationName;
 
             // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
-            $related = $model->getJoryRelation($relation->getName());
+            $related = $model->joryRelations[$relation->getName()];
 
             // Get the related JoryBuilder to convert the related records to arrays
             $relatedModel = $model->{$relationName}()->getRelated();
