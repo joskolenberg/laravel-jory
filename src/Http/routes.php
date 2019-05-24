@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('', 'JoryController@multiple');
 Route::options('', 'JoryController@resourceList');
 
