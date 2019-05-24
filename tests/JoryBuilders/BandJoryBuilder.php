@@ -2,10 +2,10 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 
-use Illuminate\Database\Eloquent\Collection;
-use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Filter;
+use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
 
 class BandJoryBuilder extends JoryBuilder
 {
@@ -47,7 +47,7 @@ class BandJoryBuilder extends JoryBuilder
 
         $config->limitDefault(30)->limitMax(120);
 
-        $config->relation('albums')->description('Get the related albums for the band.');
+        $config->relation('albums', Album::class)->description('Get the related albums for the band.');
         $config->relation('people');
         $config->relation('songs');
     }

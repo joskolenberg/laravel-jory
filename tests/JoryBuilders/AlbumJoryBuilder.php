@@ -5,6 +5,8 @@ namespace JosKolenberg\LaravelJory\Tests\JoryBuilders;
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Config\Config;
+use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class AlbumJoryBuilder extends JoryBuilder
 {
@@ -44,10 +46,10 @@ class AlbumJoryBuilder extends JoryBuilder
         $config->sort('number_of_songs');
         $config->sort('band_name');
 
-        $config->relation('songs');
+        $config->relation('songs', Song::class);
         $config->relation('band');
-        $config->relation('cover');
-        $config->relation('album_cover');
+        $config->relation('cover', AlbumCover::class);
+        $config->relation('album_cover', AlbumCover::class);
         $config->relation('snake_case_album_cover');
     }
 

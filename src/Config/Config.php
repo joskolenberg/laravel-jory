@@ -147,14 +147,21 @@ class Config implements Responsable
     /**
      * Add a relation to the config.
      *
+     * When no relatedClass is given, the method will find the relatedClass
+     * by calling the relationMethod. If you don't want this to happen
+     * you can supply the $relatedClass to prevent this.
+     *
      * @param string $name
+     * @param string|null $relatedClass
      * @return Relation
      */
-    public function relation(string $name): Relation
+    public function relation(string $name, string $relatedClass = null): Relation
     {
-        // Get the related class for the relation
-        $relationMethod = Str::camel($name);
-        $relatedClass = get_class((new $this->modelClass())->{$relationMethod}()->getRelated());
+        if(!$relatedClass){
+            // Get the related class for the relation
+            $relationMethod = Str::camel($name);
+            $relatedClass = get_class((new $this->modelClass())->{$relationMethod}()->getRelated());
+        }
 
         // Add the relation
         $relation = new Relation($name, $relatedClass);
