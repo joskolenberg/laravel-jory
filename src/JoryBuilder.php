@@ -20,7 +20,6 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\LaravelJory\Register\RegistersJoryBuilders;
-use JosKolenberg\LaravelJory\Routes\BuildsJoryRoutes;
 use JosKolenberg\LaravelJory\Traits\ConvertsModelToArrayByJory;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryBuilderConfiguration;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
@@ -34,8 +33,7 @@ use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
  */
 abstract class JoryBuilder implements Responsable
 {
-    use BuildsJoryRoutes,
-        HandlesJorySorts,
+    use HandlesJorySorts,
         HandlesJoryFilters,
         LoadsJoryRelations,
         RegistersJoryBuilders,

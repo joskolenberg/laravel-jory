@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Routes;
+namespace JosKolenberg\LaravelJory\Http\Controllers;
 
 use SimilarText\Finder;
 use Illuminate\Http\Request;

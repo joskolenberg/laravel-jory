@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
@@ -21,6 +22,8 @@ class JoryServiceProvider extends ServiceProvider
                 JoryBuilderMakeCommand::class,
             ]);
         }
+
+        $this->registerRoutes();
     }
 
     public function register()
@@ -41,4 +44,33 @@ class JoryServiceProvider extends ServiceProvider
             return new CaseManager($app->make('request'));
         });
     }
+
+    /**
+     * Register the package routes.
+     *
+     * @return void
+     */
+    private function registerRoutes()
+    {
+        if(config('jory.routes.enabled')){
+            Route::group($this->routeConfiguration(), function () {
+                $this->loadRoutesFrom(__DIR__.'/Http/routes.php');
+            });
+        }
+    }
+
+    /**
+     * Get the Jory route group configuration array.
+     *
+     * @return array
+     */
+    private function routeConfiguration()
+    {
+        return [
+            'namespace' => 'JosKolenberg\LaravelJory\Http\Controllers',
+            'prefix' => config('jory.routes.path'),
+            'middleware' => config('jory.routes.middleware'),
+        ];
+    }
+
 }

@@ -144,4 +144,26 @@ return [
 
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define if the default routes should be enabled, the
+    | uri for these routes and which middleware should be applied.
+    |
+    */
+
+    'routes' => [
+
+        'enabled' => true,
+
+        'path' => '/jory',
+
+        'middleware' => [
+            'api'
+        ],
+
+    ],
+
 ];
