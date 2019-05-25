@@ -18,6 +18,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory>src</directory>
+            <exclude>
+                <file>./src/Http/routes.php</file>
+            </exclude>
         </whitelist>
     </filter>
     <php>
