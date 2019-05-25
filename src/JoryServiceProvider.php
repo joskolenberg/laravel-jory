@@ -13,6 +13,8 @@ class JoryServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        Route::middlewareGroup('jory', config('jory.routes.middleware', []));
+
         $this->publishes([
             __DIR__.'/../config/jory.php' => config_path('jory.php'),
         ]);
@@ -69,7 +71,7 @@ class JoryServiceProvider extends ServiceProvider
         return [
             'namespace' => 'JosKolenberg\LaravelJory\Http\Controllers',
             'prefix' => config('jory.routes.path'),
-            'middleware' => config('jory.routes.middleware'),
+            'middleware' => 'jory',
         ];
     }
 

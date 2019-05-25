@@ -161,7 +161,8 @@ return [
         'path' => '/jory',
 
         'middleware' => [
-            'api'
+            'api',
+            \JosKolenberg\LaravelJory\Http\Middleware\SetJoryHandler::class
         ],
 
     ],

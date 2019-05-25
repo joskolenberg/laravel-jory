@@ -3,6 +3,8 @@
 namespace JosKolenberg\LaravelJory\Register;
 
 use Illuminate\Support\Collection;
+use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
+use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 
 /**
  * Class JoryBuildersRegister.
@@ -64,6 +66,7 @@ class JoryBuildersRegister
      *
      * @param string $modelClass
      * @return JoryBuilderRegistration|null
+     * @throws RegistrationNotFoundException
      */
     public function getByModelClass(string $modelClass): ? JoryBuilderRegistration
     {
@@ -73,7 +76,7 @@ class JoryBuildersRegister
             }
         }
 
-        return null;
+        throw new RegistrationNotFoundException('No registration found for model ' . $modelClass . '. Does ' . $modelClass . ' have an associated JoryBuilder?');
     }
 
     /**
@@ -81,6 +84,7 @@ class JoryBuildersRegister
      *
      * @param string $builderClass
      * @return JoryBuilderRegistration|null
+     * @throws RegistrationNotFoundException
      */
     public function getByBuilderClass(string $builderClass): ? JoryBuilderRegistration
     {
@@ -90,7 +94,7 @@ class JoryBuildersRegister
             }
         }
 
-        return null;
+        throw new RegistrationNotFoundException('No registration found for builderClass ' . $builderClass . '. Does ' . $builderClass . ' have an associated Model?');
     }
 
     /**
@@ -98,6 +102,7 @@ class JoryBuildersRegister
      *
      * @param string $uri
      * @return JoryBuilderRegistration|null
+     * @throws ResourceNotFoundException
      */
     public function getByUri(string $uri): ? JoryBuilderRegistration
     {
@@ -107,7 +112,7 @@ class JoryBuildersRegister
             }
         }
 
-        return null;
+        throw new ResourceNotFoundException($uri);
     }
 
     /**

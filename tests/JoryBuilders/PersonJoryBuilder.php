@@ -23,6 +23,7 @@ class PersonJoryBuilder extends JoryBuilder
 
         // Relations
         $config->relation('instruments');
+        $config->relation('groupies');
     }
 
     protected function scopeFullNameFilter($query, $operator, $data)

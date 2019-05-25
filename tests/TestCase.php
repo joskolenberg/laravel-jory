@@ -2,27 +2,27 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Application;
-use Illuminate\Database\Schema\Blueprint;
-use JosKolenberg\LaravelJory\JoryBuilder;
-use Orchestra\Testbench\TestCase as Orchestra;
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
-use JosKolenberg\LaravelJory\JoryServiceProvider;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
 use Illuminate\Database\Query\Grammars\MySqlGrammar;
-use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
-use JosKolenberg\LaravelJory\Tests\Models\Instrument;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\DB;
+use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\JoryServiceProvider;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\AlbumJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Models\SongWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\PersonJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
+use JosKolenberg\LaravelJory\Tests\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Models\Groupie;
+use JosKolenberg\LaravelJory\Tests\Models\Instrument;
+use JosKolenberg\LaravelJory\Tests\Models\Person;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\SongWithAfterFetchHook;
+use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryBuilder;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -97,6 +97,14 @@ class TestCase extends Orchestra
             $table->unsignedInteger('album_id');
             $table->foreign('album_id')->references('id')->on('album')->onDelete('restrict');
         });
+
+        $app['db']->connection()->getSchemaBuilder()->create('groupies', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->unsignedInteger('person_id');
+            $table->foreign('person_id')->references('id')->on('people')->onDelete('restrict');
+        });
+
     }
 
     private function seedDatabase()
@@ -882,6 +890,19 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
                      ],
                  ] as $data) {
             AlbumCover::create($data);
+        }
+
+        // Seed Groupies
+        foreach ([
+                     1 => ['name' => 'Bianca Perez-Mora Macias', 'person_id' => 1],
+                     2 => ['name' => 'Jerry Hall', 'person_id' => 1],
+                     3 => ['name' => 'Marsha Hunt', 'person_id' => 1],
+                     4 => ['name' => 'Marianne Faithfull', 'person_id' => 1],
+                     5 => ['name' => 'Carla Bruni', 'person_id' => 1],
+                     6 => ['name' => 'Anita Pallenberg', 'person_id' => 2],
+                     7 => ['name' => 'Patti Hansen', 'person_id' => 2],
+                 ] as $data) {
+            Groupie::create($data);
         }
     }
 

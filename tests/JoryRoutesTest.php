@@ -337,9 +337,9 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'Resource "bandd" is not available, did you mean "band"?',
-                'Resource "lbmCovrrr" is not available, no suggestions found.',
-                'Resource "son" is not available, did you mean "song"?',
+                'Resource bandd not found, did you mean "band"?',
+                'Resource lbmCovrrr not found, no suggestions found.',
+                'Resource son not found, did you mean "song"?',
             ],
         ];
 

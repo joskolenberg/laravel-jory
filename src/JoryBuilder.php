@@ -284,25 +284,14 @@ abstract class JoryBuilder implements Responsable
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
+     * @throws JoryException
+     * @throws LaravelJoryCallException
      * @throws LaravelJoryException
      */
     public function toResponse($request): Response
     {
-        try {
-            $this->validate();
-            $data = $this->count ? $this->getCount() : $this->toArray();
-        } catch (JoryException $e) {
-            return response([
-                'errors' => [
-                    $e->getMessage(),
-                ],
-            ], 422);
-        } catch (LaravelJoryCallException $e) {
-            $responseKey = $this->getErrorResponseKey();
-            $response = $responseKey === null ? $e->getErrors() : [$responseKey => $e->getErrors()];
-
-            return response($response, 422);
-        }
+        $this->validate();
+        $data = $this->count ? $this->getCount() : $this->toArray();
 
         $responseKey = $this->getDataResponseKey();
         $response = $responseKey === null ? $data : [$responseKey => $data];
@@ -507,16 +496,6 @@ abstract class JoryBuilder implements Responsable
     protected function getDataResponseKey(): ?string
     {
         return config('jory.response.data-key');
-    }
-
-    /**
-     * Get the key on which errors should be returned.
-     *
-     * @return null|string
-     */
-    protected function getErrorResponseKey(): ?string
-    {
-        return config('jory.response.errors-key');
     }
 
     /**

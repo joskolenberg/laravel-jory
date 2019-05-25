@@ -31,4 +31,9 @@ class Person extends Model
     {
         return $this->first_name.' '.$this->last_name;
     }
+
+    public function groupies()
+    {
+        return $this->hasMany(Groupie::class);
+    }
 }

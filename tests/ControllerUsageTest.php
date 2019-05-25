@@ -11,10 +11,10 @@ class ControllerUsageTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('band', BandController::class.'@index');
-        Route::get('band/first-by-filter', BandController::class.'@firstByFilter');
-        Route::get('band/count', BandController::class.'@count');
-        Route::get('band/{bandId}', BandController::class.'@show');
+        Route::get('band', BandController::class.'@index')->middleware('jory');
+        Route::get('band/first-by-filter', BandController::class.'@firstByFilter')->middleware('jory');
+        Route::get('band/count', BandController::class.'@count')->middleware('jory');
+        Route::get('band/{bandId}', BandController::class.'@show')->middleware('jory');
     }
 
     /** @test */

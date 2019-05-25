@@ -11,12 +11,12 @@ class JoryBuilderWithConfigTest extends TestCase
     {
         parent::setUp();
 
-        Route::get('song', SongWithConfigController::class.'@index');
-        Route::get('song-two', SongWithConfigController::class.'@indexTwo');
-        Route::get('song-three', SongWithConfigController::class.'@indexThree');
-        Route::options('song', SongWithConfigController::class.'@options');
-        Route::options('song-two', SongWithConfigController::class.'@optionsTwo');
-        Route::options('song-three', SongWithConfigController::class.'@optionsThree');
+        Route::get('song', SongWithConfigController::class.'@index')->middleware('jory');
+        Route::get('song-two', SongWithConfigController::class.'@indexTwo')->middleware('jory');
+        Route::get('song-three', SongWithConfigController::class.'@indexThree')->middleware('jory');
+        Route::options('song', SongWithConfigController::class.'@options')->middleware('jory');
+        Route::options('song-two', SongWithConfigController::class.'@optionsTwo')->middleware('jory');
+        Route::options('song-three', SongWithConfigController::class.'@optionsThree')->middleware('jory');
     }
 
     /** @test */

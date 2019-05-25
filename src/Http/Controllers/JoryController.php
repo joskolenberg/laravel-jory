@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Http\Controllers;
 
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
+use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use SimilarText\Finder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -13,18 +15,10 @@ class JoryController extends Controller
     /**
      * Load a collection for a single resource.
      *
-     * @param $resource
-     * @param \Illuminate\Http\Request $request
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
-     * @return mixed
      */
     public function index($resource, Request $request, JoryBuildersRegister $register)
     {
         $registration = $register->getByUri($resource);
-
-        if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
-        }
 
         $modelClass = $registration->getModelClass();
         $joryBuilderClass = $registration->getBuilderClass();
@@ -37,18 +31,10 @@ class JoryController extends Controller
     /**
      * Count the number of items in a resource.
      *
-     * @param $resource
-     * @param \Illuminate\Http\Request $request
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
-     * @return mixed
      */
     public function count($resource, Request $request, JoryBuildersRegister $register)
     {
         $registration = $register->getByUri($resource);
-
-        if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
-        }
 
         $modelClass = $registration->getModelClass();
         $joryBuilderClass = $registration->getBuilderClass();
@@ -62,19 +48,10 @@ class JoryController extends Controller
     /**
      * Give a single record.
      *
-     * @param $resource
-     * @param $id
-     * @param \Illuminate\Http\Request $request
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
-     * @return mixed
      */
     public function show($resource, $id, Request $request, JoryBuildersRegister $register)
     {
         $registration = $register->getByUri($resource);
-
-        if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
-        }
 
         $modelClass = $registration->getModelClass();
         $joryBuilderClass = $registration->getBuilderClass();
@@ -88,17 +65,10 @@ class JoryController extends Controller
     /**
      * Give the options for a resource.
      *
-     * @param $resource
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
-     * @return mixed
      */
     public function options($resource, JoryBuildersRegister $register)
     {
         $registration = $register->getByUri($resource);
-
-        if (! $registration) {
-            return $this->abortWithErrors(['Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource)], 404);
-        }
 
         $joryBuilderClass = $registration->getBuilderClass();
 
@@ -108,9 +78,6 @@ class JoryController extends Controller
     /**
      * Load multiple resources at once.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|void
      */
     public function multiple(Request $request, JoryBuildersRegister $register)
     {
@@ -118,13 +85,12 @@ class JoryController extends Controller
         $errors = [];
 
         $dataResponseKey = config('jory.response.data-key');
-        $errorResponseKey = config('jory.response.errors-key');
 
         $data = $request->input(config('jory.request.key'), '{}');
 
         if (is_array($data)) {
             $jories = $data;
-        }else{
+        } else {
             $jories = json_decode($data, true);
 
 
@@ -135,15 +101,15 @@ class JoryController extends Controller
 
         $explodedJories = [];
 
-        if(!$errors){
+        if (!$errors) {
             // Not needed when there are already errors.
             foreach ($jories as $name => $data) {
                 $single = $this->explodeResourceName($name);
 
-                $registration = $register->getByUri($single->modelName);
-
-                if (! $registration) {
-                    $errors[] = 'Resource "'.$single->modelName.'" is not available, '.$this->getSuggestion($register->getUrisArray(), $single->modelName);
+                try {
+                    $registration = $register->getByUri($single->modelName);
+                } catch (ResourceNotFoundException $e) {
+                    $errors[] = $e->getMessage();
                     continue;
                 }
 
@@ -155,7 +121,7 @@ class JoryController extends Controller
             }
         }
 
-        if (! $errors) {
+        if (!$errors) {
             // Don't perform any queries when there is already an error somewhere
             foreach ($explodedJories as $single) {
                 $modelClass = $single->registration->getModelClass();
@@ -165,33 +131,28 @@ class JoryController extends Controller
 
                 if ($single->type === 'count') {
                     // Return the count for a resource
-                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)
+                    $this->applyArrayOrJson($joryBuilder, $single->data)
                         ->onQuery($modelClass::query())
-                        ->count()
-                        ->toResponse($request);
+                        ->count();
                 } elseif ($single->type === 'single') {
                     // Return a single item
                     $query = $modelClass::whereKey($single->id);
 
-                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)
+                    $this->applyArrayOrJson($joryBuilder, $single->data)
                         ->onQuery($query)
-                        ->first()
-                        ->toResponse($request);
+                        ->first();
                 } else {
                     // Return an array of items
-                    $response = $this->applyArrayOrJson($joryBuilder, $single->data)
-                        ->onQuery($modelClass::query())
-                        ->toResponse($request);
+                    $this->applyArrayOrJson($joryBuilder, $single->data)
+                        ->onQuery($modelClass::query());
                 }
 
-                if ($response->getStatusCode() === 422) {
-                    // Errors occurred, merge all errors into one array prefixed with the resource name
-                    $currentErrors = $errorResponseKey === null ? $response->getOriginalContent() : $response->getOriginalContent()[$errorResponseKey];
-                    foreach ($currentErrors as $error) {
-                        $errors[] = $single->name.': '.$error;
+                try {
+                    $response = $joryBuilder->toResponse($request);
+                } catch (LaravelJoryCallException $e) {
+                    foreach ($e->getErrors() as $error) {
+                        $errors[] = $single->name . ': ' . $error;
                     }
-
-                    // Continue so we can display all errors for all requested resources
                     continue;
                 }
 
@@ -202,12 +163,8 @@ class JoryController extends Controller
         }
 
         if (count($errors) > 0) {
-            // If only one error occurred, return only errors
             // All data must be valid to get a 200 response
-
-            $response = $errorResponseKey === null ? $errors : [$errorResponseKey => $errors];
-
-            return response($response, 422);
+            throw new LaravelJoryCallException($errors);
         }
 
         // Everything went well, return result
@@ -219,8 +176,6 @@ class JoryController extends Controller
     /**
      * Display a list of available resources.
      *
-     * @param \JosKolenberg\LaravelJory\Register\JoryBuildersRegister $register
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function resourceList(JoryBuildersRegister $register)
     {
