@@ -23,7 +23,7 @@ class BandJoryBuilder extends JoryBuilder
     protected function config(Config $config): void
     {
         $config->field('id')->filterable(function (Filter $filter) {
-            $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=']);
+            $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=', 'in', 'not_in']);
         })->sortable();
 
         $config->field('name')->filterable()->sortable();

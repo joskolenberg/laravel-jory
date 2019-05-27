@@ -109,48 +109,6 @@ abstract class JoryBuilder implements Responsable
     }
 
     /**
-     * Apply an array with Jory data.
-     *
-     * @param array $array
-     *
-     * @return JoryBuilder
-     */
-    public function applyArray(array $array): self
-    {
-        $this->joryParser = new ArrayParser($array);
-
-        return $this;
-    }
-
-    /**
-     * Apply a Json string with Jory data.
-     *
-     * @param string $json
-     *
-     * @return JoryBuilder
-     */
-    public function applyJson(string $json): self
-    {
-        $this->joryParser = new JsonParser($json);
-
-        return $this;
-    }
-
-    /**
-     * Apply a request with Jory data.
-     *
-     * @param Request $request
-     *
-     * @return JoryBuilder
-     */
-    public function applyRequest(Request $request): self
-    {
-        $this->joryParser = new RequestParser($request);
-
-        return $this;
-    }
-
-    /**
      * Apply a Jory object.
      *
      * @param Jory $jory
@@ -167,7 +125,7 @@ abstract class JoryBuilder implements Responsable
     /**
      * Get a collection of Models based on the baseQuery and Jory data.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      * @throws LaravelJoryException
      * @throws JoryException
      */
@@ -426,8 +384,8 @@ abstract class JoryBuilder implements Responsable
      * E.g. 2. you could sort the collection in a way which is hard using queries
      *      but easier done using a collection.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $collection
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param Collection $collection
+     * @return Collection
      */
     protected function afterFetch(Collection $collection): Collection
     {

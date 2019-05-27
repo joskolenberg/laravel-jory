@@ -172,17 +172,7 @@ class JoryResponse implements Responsable
      */
     public function getResult()
     {
-        $builder = $this->getBuilder();
-
-        $builder->onQuery($this->getBaseQuery());
-
-        if($this->first){
-            $builder->first();
-        }
-
-        $builder->applyJory($this->getJory());
-
-        $builder->validate();
+        $builder = $this->getProcessedBuilder();
 
         return $this->count ? $builder->getCount() : $builder->toArray();
     }
@@ -211,6 +201,31 @@ class JoryResponse implements Responsable
         $this->parser = new ArrayParser($array);
 
         return $this;
+    }
+
+    /**
+     * Get the JoryBuilder with everything applied.
+     *
+     * @return JoryBuilder
+     * @throws Exceptions\LaravelJoryCallException
+     * @throws Exceptions\LaravelJoryException
+     * @throws JoryException
+     */
+    public function getProcessedBuilder(): JoryBuilder
+    {
+        $builder = $this->getBuilder();
+
+        $builder->onQuery($this->getBaseQuery());
+
+        if($this->first){
+            $builder->first();
+        }
+
+        $builder->applyJory($this->getJory());
+
+        $builder->validate();
+
+        return $builder;
     }
 
     /**

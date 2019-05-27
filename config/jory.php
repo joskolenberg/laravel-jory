@@ -65,6 +65,7 @@ return [
             '<=',
             '<=>',
             'like',
+            'not_like',
             'is_null',
             'not_null',
             'in',

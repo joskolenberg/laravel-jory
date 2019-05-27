@@ -3,14 +3,13 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\Jory\Jory;
-use JosKolenberg\Jory\Parsers\ArrayParser;
+use JosKolenberg\LaravelJory\Facades\Jory as Facade;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\InstrumentJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class JoryBuilderTest extends TestCase
 {
@@ -35,7 +34,10 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_json_string()
     {
-        $actual = Song::jory()->applyJson('{"filter":{"f":"title","o":"like","d":"%love"}}')->get()->pluck('title')->toArray();
+        $actual = Facade::byModel(Song::class)
+            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"}}')
+            ->getProcessedBuilder()
+            ->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Whole Lotta Love',
@@ -50,13 +52,13 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_array()
     {
-        $actual = Song::jory()->applyArray([
+        $actual = Facade::byModel(Song::class)->applyArray([
             'filter' => [
                 'f' => 'title',
                 'o' => 'like',
                 'd' => 'love%',
             ],
-        ])->get()->pluck('title')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -89,46 +91,15 @@ class JoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_a_jory_object()
-    {
-        $jory = (new ArrayParser([
-            'filter' => [
-                'f' => 'title',
-                'o' => 'like',
-                'd' => 'love%',
-            ],
-        ]))->getJory();
-
-        $actual = Song::jory()->applyJory($jory)->get()->pluck('title')->toArray();
-
-        $this->assertEquals([
-            'Love In Vain (Robert Johnson)',
-            'Lovely Rita',
-            'Love or Confusion',
-        ], $actual);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
-    public function it_throws_an_exception_when_no_jory_is_applied()
-    {
-        $this->expectException(LaravelJoryException::class);
-        $this->expectExceptionMessage('No jorydata has been set on JoryBuilder.');
-
-        Band::jory()->get()->pluck('name')->toArray();
-    }
-
-    /** @test */
     public function it_can_apply_a_custom_filter()
     {
-        $actual = Album::jory()->applyArray([
+        $actual = Facade::byModel(Album::class)->applyArray([
             'filter' => [
                 'f' => 'number_of_songs',
                 'o' => '>',
                 'd' => 10,
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Exile on main st.',
@@ -146,7 +117,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_mulitple_custom_filters()
     {
-        $actual = Album::jory()->applyArray([
+        $actual = Facade::byModel(Album::class)->applyArray([
             'filter' => [
                 'group_or' => [
                     [
@@ -161,7 +132,7 @@ class JoryBuilderTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Let it bleed',
@@ -182,7 +153,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_combine_standard_and_custom_filters()
     {
-        $actual = Album::jory()->applyArray([
+        $actual = Facade::byModel(Album::class)->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -197,7 +168,7 @@ class JoryBuilderTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Sgt. Peppers lonely hearts club band',
@@ -210,15 +181,14 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_override_the_basic_filter_function()
     {
-        $actual = (new InstrumentJoryBuilder())
-            ->onQuery(Instrument::query())
+        $actual = \JosKolenberg\LaravelJory\Facades\Jory::byModel(Instrument::class)
             ->applyArray([
                 'filter' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%t%',
                 ],
-            ])->get()->pluck('name')->toArray();
+            ])->getProcessedBuilder()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Guitar',
@@ -249,14 +219,14 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_returns_null_when_a_single_model_is_not_found()
     {
-        $actual = (new InstrumentJoryBuilder())
-            ->onQuery(Instrument::query())
+        $actual = \JosKolenberg\LaravelJory\Facades\Jory::byModel(Instrument::class)
             ->applyArray([
                 'flt' => [
                     'f' => 'name',
                     'd' => 'Hobo',
                 ],
-            ])->first()
+            ])->getProcessedBuilder()
+            ->first()
             ->toArray();
 
         $this->assertNull($actual);

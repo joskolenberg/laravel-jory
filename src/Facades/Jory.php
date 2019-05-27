@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Facades;
 
 
 use Illuminate\Support\Facades\Facade;
+use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Responses\JoryMultipleResponse;
 use JosKolenberg\LaravelJory\Responses\JoryResponse;
 
@@ -20,6 +21,7 @@ use JosKolenberg\LaravelJory\Responses\JoryResponse;
  * @method static JoryResponse applyJson(string $json)
  * @method static JoryResponse applyArray(array $array)
  * @method static JoryResponse getResult()
+ * @method static JoryBuilder getProcessedBuilder()
  * @method static toResponse($request)
  */
 class Jory extends Facade

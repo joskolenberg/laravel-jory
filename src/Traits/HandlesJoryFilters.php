@@ -118,6 +118,10 @@ trait HandlesJoryFilters
                 $query->whereNotIn($field, $data);
 
                 return;
+            case 'not_like':
+                $query->where($field, 'not like', $data);
+
+                return;
             default:
                 $query->where($field, $operator ?: '=', $data);
         }

@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
@@ -13,13 +14,13 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_a_single_filter()
     {
-        $actual = Person::jory()->applyArray([
+        $actual = Jory::byModel(Person::class)->applyArray([
             'filter' => [
                 'field' => 'first_name',
                 'operator' => 'like',
                 'data' => '%john%',
             ],
-        ])->get()->pluck('last_name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Bonham', 'Lennon'], $actual);
 
@@ -31,7 +32,7 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_an_OR_filter_group()
     {
-        $actual = Person::jory()->applyArray([
+        $actual = Jory::byModel(Person::class)->applyArray([
             'filter' => [
                 'group_or' => [
                     [
@@ -46,7 +47,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('last_name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Jones', 'Lennon', 'McCartney'], $actual);
 
@@ -58,7 +59,7 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_an_AND_filter_group()
     {
-        $actual = Person::jory()->applyArray([
+        $actual = Jory::byModel(Person::class)->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -73,7 +74,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('last_name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('last_name')->toArray();
 
         $this->assertEquals(['Lennon'], $actual);
 
@@ -85,7 +86,7 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_1()
     {
-        $actual = Song::jory()->applyArray([
+        $actual = Jory::byModel(Song::class)->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -95,7 +96,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('title')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -116,7 +117,7 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_2()
     {
-        $actual = Song::jory()->applyArray([
+        $actual = Jory::byModel(Song::class)->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -140,7 +141,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('title')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -156,7 +157,7 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_3()
     {
-        $actual = Song::jory()->applyArray([
+        $actual = Jory::byModel(Song::class)->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -194,7 +195,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('title')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -211,7 +212,7 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_can_apply_nested_filters_4()
     {
-        $actual = Song::jory()->applyArray([
+        $actual = Jory::byModel(Song::class)->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -263,7 +264,7 @@ class JoryBuilderFilterTest extends TestCase
                     ],
                 ],
             ],
-        ])->get()->pluck('title')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('title')->toArray();
 
         $this->assertEquals([
             'Love In Vain (Robert Johnson)',
@@ -281,7 +282,8 @@ class JoryBuilderFilterTest extends TestCase
      */
     public function it_doesnt_apply_any_filter_when_parameter_is_omitted()
     {
-        $actual = Band::jory()->applyArray([])->get()->pluck('name')->toArray();
+        $actual = Jory::byModel(Band::class)
+            ->applyArray([])->getProcessedBuilder()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Rolling Stones',
@@ -296,120 +298,120 @@ class JoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_filter_by_the_default_laravel_operators()
     {
-        // =, >, <, <>, !=, like, not like, <=, >=
-        $actual = Band::jory()->applyArray([
+        // =, >, <, <>, !=, like, not_like, <=, >=
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '=',
                 'd' => 'Beatles',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '>',
                 'd' => 'KISS',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '<',
                 'd' => 'Cult',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '<>',
                 'd' => 'Beatles',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
             'Jimi Hendrix Experience',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => '!=',
                 'd' => 'Beatles',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Led Zeppelin',
             'Jimi Hendrix Experience',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
                 'd' => 'Beat%',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
                 'd' => '%Stones',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'o' => 'like',
                 'd' => '%s%',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Beatles',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
-                'o' => 'not like',
+                'o' => 'not_like',
                 'd' => '%s%',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Jimi Hendrix Experience',
         ], $actual);
 
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'id',
                 'o' => '>=',
                 'd' => '3',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Beatles',
             'Jimi Hendrix Experience',
@@ -421,12 +423,12 @@ class JoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_filter_on_null_values()
     {
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'year_end',
                 'o' => 'is_null',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
         ], $actual);
@@ -437,12 +439,12 @@ class JoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_filter_on_non_null_values()
     {
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'year_end',
                 'o' => 'not_null',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Beatles',
@@ -455,13 +457,13 @@ class JoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_apply_an_IN_filter()
     {
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'id',
                 'o' => 'in',
                 'd' => [1, 3],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Rolling Stones',
             'Beatles',
@@ -473,13 +475,13 @@ class JoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_can_apply_a_NOT_IN_filter()
     {
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'id',
                 'o' => 'not_in',
                 'd' => [1, 3],
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
         $this->assertEquals([
             'Led Zeppelin',
             'Jimi Hendrix Experience',
@@ -491,12 +493,12 @@ class JoryBuilderFilterTest extends TestCase
     /** @test */
     public function it_defaults_to_an_EQUALS_check_if_no_operator_is_given()
     {
-        $actual = Band::jory()->applyArray([
+        $actual = Jory::byModel(Band::class)->applyArray([
             'filter' => [
                 'f' => 'name',
                 'd' => 'Beatles',
             ],
-        ])->get()->pluck('name')->toArray();
+        ])->getProcessedBuilder()->get()->pluck('name')->toArray();
 
         $this->assertEquals([
             'Beatles',
