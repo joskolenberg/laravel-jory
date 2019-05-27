@@ -67,7 +67,7 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Set the resource to be called base on the uri.
+     * Set the resource to be called based on the uri.
      *
      * @param string $uri
      * @return $this
@@ -76,6 +76,20 @@ class JoryResponse implements Responsable
     public function byUri(string $uri): JoryResponse
     {
         $this->registration = $this->register->getByUri($uri);
+
+        return $this;
+    }
+
+    /**
+     * Set the resource to be called based on the model class.
+     *
+     * @param string $model
+     * @return $this
+     * @throws Exceptions\RegistrationNotFoundException
+     */
+    public function byModel(string $model): JoryResponse
+    {
+        $this->registration = $this->register->getByModelClass($model);
 
         return $this;
     }
@@ -101,6 +115,18 @@ class JoryResponse implements Responsable
     public function find($modelId): JoryResponse
     {
         $this->modelId = $modelId;
+        $this->first();
+
+        return $this;
+    }
+
+    /**
+     * Set the response to return only a single model.
+     *
+     * @return $this
+     */
+    public function first(): JoryResponse
+    {
         $this->first = true;
 
         return $this;
@@ -134,6 +160,57 @@ class JoryResponse implements Responsable
         $response = $responseKey === null ? $data : [$responseKey => $data];
 
         return response($response);
+    }
+
+    /**
+     * Get the result of the request.
+     *
+     * @return mixed
+     * @throws Exceptions\LaravelJoryCallException
+     * @throws Exceptions\LaravelJoryException
+     * @throws JoryException
+     */
+    public function getResult()
+    {
+        $builder = $this->getBuilder();
+
+        $builder->onQuery($this->getBaseQuery());
+
+        if($this->first){
+            $builder->first();
+        }
+
+        $builder->applyJory($this->getJory());
+
+        $builder->validate();
+
+        return $this->count ? $builder->getCount() : $builder->toArray();
+    }
+
+    /**
+     * Manually apply a Json Jory string to the request.
+     *
+     * @param string $json
+     * @return JoryResponse
+     */
+    public function applyJson(string $json): JoryResponse
+    {
+        $this->parser = new JsonParser($json);
+
+        return $this;
+    }
+
+    /**
+     * Manually apply a Jory array to the request.
+     *
+     * @param array $array
+     * @return JoryResponse
+     */
+    public function applyArray(array $array): JoryResponse
+    {
+        $this->parser = new ArrayParser($array);
+
+        return $this;
     }
 
     /**
@@ -194,56 +271,5 @@ class JoryResponse implements Responsable
         }
 
         return (new RequestParser($this->request))->getJory();
-    }
-
-    /**
-     * Get the result of the request.
-     *
-     * @return mixed
-     * @throws Exceptions\LaravelJoryCallException
-     * @throws Exceptions\LaravelJoryException
-     * @throws JoryException
-     */
-    public function getResult()
-    {
-        $builder = $this->getBuilder();
-
-        $builder->onQuery($this->getBaseQuery());
-
-        if($this->first){
-            $builder->first();
-        }
-
-        $builder->applyJory($this->getJory());
-
-        $builder->validate();
-
-        return $this->count ? $builder->getCount() : $builder->toArray();
-    }
-
-    /**
-     * Manually apply a Json Jory string to the request.
-     *
-     * @param string $json
-     * @return JoryResponse
-     */
-    public function applyJson(string $json): JoryResponse
-    {
-        $this->parser = new JsonParser($json);
-
-        return $this;
-    }
-
-    /**
-     * Manually apply a Jory array to the request.
-     *
-     * @param array $array
-     * @return JoryResponse
-     */
-    public function applyArray(array $array): JoryResponse
-    {
-        $this->parser = new ArrayParser($array);
-
-        return $this;
     }
 }

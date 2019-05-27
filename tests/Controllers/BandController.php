@@ -2,31 +2,29 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 
 class BandController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        return Band::jory()->applyRequest($request);
+        return Jory::byModel(Band::class);
     }
 
-    public function show($bandId, Request $request)
+    public function show($bandId)
     {
-        $band = Band::findOrFail($bandId);
-
-        return Band::jory()->applyRequest($request)->onModel($band);
+        return Jory::byModel(Band::class)->find($bandId);
     }
 
-    public function firstByFilter(Request $request)
+    public function firstByFilter()
     {
-        return Band::jory()->applyRequest($request)->first();
+        return Jory::byModel(Band::class)->first();
     }
 
-    public function count(Request $request)
+    public function count()
     {
-        return Band::jory()->applyRequest($request)->count();
+        return Jory::byModel(Band::class)->count();
     }
 }
