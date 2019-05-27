@@ -8,6 +8,8 @@ use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 use JosKolenberg\LaravelJory\Console\JoryBuilderMakeCommand;
 use JosKolenberg\LaravelJory\Register\ManualRegistrar;
+use JosKolenberg\LaravelJory\Responses\JoryResponse;
+use JosKolenberg\LaravelJory\Responses\JoryResponseFactory;
 
 class JoryServiceProvider extends ServiceProvider
 {
@@ -44,6 +46,10 @@ class JoryServiceProvider extends ServiceProvider
 
         $this->app->singleton(CaseManager::class, function ($app) {
             return new CaseManager($app->make('request'));
+        });
+
+        $this->app->bind('jory', function ($app) {
+            return new JoryResponse($app->make('request'), $app->make(JoryBuildersRegister::class));
         });
     }
 

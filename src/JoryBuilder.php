@@ -169,7 +169,7 @@ abstract class JoryBuilder implements Responsable
      *
      * @return \Illuminate\Database\Eloquent\Collection
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
     public function get(): Collection
     {
@@ -186,9 +186,9 @@ abstract class JoryBuilder implements Responsable
     /**
      * Get the first Model based on the baseQuery and Jory data.
      *
-     * @return \Illuminate\Database\Eloquent\Model|null
+     * @return Model|null
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
     public function getFirst(): ?Model
     {
@@ -214,7 +214,7 @@ abstract class JoryBuilder implements Responsable
      *
      * @return int
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
     public function getCount(): int
     {
@@ -239,7 +239,7 @@ abstract class JoryBuilder implements Responsable
      *
      * @return array|null
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
     public function toArray(): ?array
     {
@@ -267,7 +267,7 @@ abstract class JoryBuilder implements Responsable
      *
      * @return Builder
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
     protected function buildQuery(): Builder
     {
@@ -304,7 +304,7 @@ abstract class JoryBuilder implements Responsable
      *
      * @param $query
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
     public function applyOnQuery($query): void
     {
@@ -358,7 +358,7 @@ abstract class JoryBuilder implements Responsable
      * This model will we the base result for this builder
      * with fields an relations as applied in the Jory.
      *
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param Model $model
      * @return \JosKolenberg\LaravelJory\JoryBuilder
      */
     public function onModel(Model $model): self
@@ -439,7 +439,7 @@ abstract class JoryBuilder implements Responsable
      *
      * @return Jory
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
     protected function getJory(): Jory
     {
@@ -481,9 +481,9 @@ abstract class JoryBuilder implements Responsable
      *
      * @throws LaravelJoryCallException
      * @throws LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws JoryException
      */
-    protected function validate(): void
+    public function validate(): void
     {
         (new Validator($this->getConfig(), $this->getJory()))->validate();
     }
@@ -501,10 +501,10 @@ abstract class JoryBuilder implements Responsable
     /**
      * Convert a single model to an array based on the request in the Jory object.
      *
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param Model $model
      * @return array
-     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws LaravelJoryException
+     * @throws JoryException
      */
     public function modelToArray(Model $model): array
     {
