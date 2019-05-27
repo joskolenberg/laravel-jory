@@ -205,8 +205,7 @@ class JoryBuilderTest extends TestCase
         $actual = (new InstrumentJoryBuilder())
             ->onQuery(Instrument::query())
             ->applyJory(new Jory())
-            ->first()
-            ->toArray();
+            ->firstToArray();
 
         $this->assertEquals([
             'id' => 1,
@@ -226,8 +225,7 @@ class JoryBuilderTest extends TestCase
                     'd' => 'Hobo',
                 ],
             ])->getProcessedBuilder()
-            ->first()
-            ->toArray();
+            ->firstToArray();
 
         $this->assertNull($actual);
 

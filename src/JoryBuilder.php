@@ -2,23 +2,16 @@
 
 namespace JosKolenberg\LaravelJory;
 
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
-use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
-use JosKolenberg\Jory\Parsers\ArrayParser;
-use JosKolenberg\Jory\Parsers\JsonParser;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\LaravelJory\Register\RegistersJoryBuilders;
 use JosKolenberg\LaravelJory\Traits\ConvertsModelToArrayByJory;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryBuilderConfiguration;
@@ -31,7 +24,7 @@ use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
  *
  * Class JoryBuilder
  */
-abstract class JoryBuilder implements Responsable
+abstract class JoryBuilder
 {
     use HandlesJorySorts,
         HandlesJoryFilters,
@@ -51,24 +44,9 @@ abstract class JoryBuilder implements Responsable
     protected $jory = null;
 
     /**
-     * @var bool
-     */
-    protected $first = false;
-
-    /**
      * @var Model|null
      */
     protected $model = null;
-
-    /**
-     * @var bool
-     */
-    protected $count = false;
-
-    /**
-     * @var null|JoryParserInterface
-     */
-    protected $joryParser = null;
 
     /**
      * @var CaseManager
@@ -193,23 +171,31 @@ abstract class JoryBuilder implements Responsable
     }
 
     /**
-     * Get the result array.
+     * Get the result array for the first result.
      *
      * @return array|null
      * @throws LaravelJoryException
      * @throws JoryException
      */
-    public function toArray(): ?array
+    public function firstToArray(): ?array
     {
-        if ($this->first) {
-            $model = $this->getFirst();
-            if (! $model) {
-                return null;
-            }
-
-            return $this->modelToArray($model);
+        $model = $this->getFirst();
+        if (! $model) {
+            return null;
         }
 
+        return $this->modelToArray($model);
+    }
+
+    /**
+     * Get the result array.
+     *
+     * @return array
+     * @throws LaravelJoryException
+     * @throws JoryException
+     */
+    public function toArray(): array
+    {
         $models = $this->get();
 
         $result = [];
@@ -234,27 +220,6 @@ abstract class JoryBuilder implements Responsable
         $this->applyOnQuery($query);
 
         return $query;
-    }
-
-    /**
-     * Create an HTTP response that represents the object.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     * @throws JoryException
-     * @throws LaravelJoryCallException
-     * @throws LaravelJoryException
-     */
-    public function toResponse($request): Response
-    {
-        $this->validate();
-        $data = $this->count ? $this->getCount() : $this->toArray();
-
-        $responseKey = $this->getDataResponseKey();
-        $response = $responseKey === null ? $data : [$responseKey => $data];
-
-        return response($response);
     }
 
     /**
@@ -300,18 +265,6 @@ abstract class JoryBuilder implements Responsable
     }
 
     /**
-     * Set this JoryBuilder to return only a single record.
-     *
-     * @return \JosKolenberg\LaravelJory\JoryBuilder
-     */
-    public function first(): self
-    {
-        $this->first = true;
-
-        return $this;
-    }
-
-    /**
      * Set the model to query on.
      * This model will we the base result for this builder
      * with fields an relations as applied in the Jory.
@@ -322,19 +275,6 @@ abstract class JoryBuilder implements Responsable
     public function onModel(Model $model): self
     {
         $this->model = $model;
-        $this->first();
-
-        return $this;
-    }
-
-    /**
-     * Set the builder to return the record count instead of the records.
-     *
-     * @return JoryBuilder
-     */
-    public function count(): self
-    {
-        $this->count = true;
 
         return $this;
     }
@@ -404,11 +344,6 @@ abstract class JoryBuilder implements Responsable
         // If config is applied to Jory, the Jory object must be set and configured.
         if($this->configHasBeenApplied){
             return $this->jory;
-        }
-
-        // If a parser has been set use the one from the parser
-        if ($this->joryParser) {
-            $this->jory = $this->joryParser->getJory();
         }
 
         if(!$this->jory){

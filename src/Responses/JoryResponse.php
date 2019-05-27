@@ -174,7 +174,15 @@ class JoryResponse implements Responsable
     {
         $builder = $this->getProcessedBuilder();
 
-        return $this->count ? $builder->getCount() : $builder->toArray();
+        if($this->count){
+            return $builder->getCount();
+        }
+
+        if($this->first){
+            return $builder->firstToArray();
+        }
+
+        return $builder->toArray();
     }
 
     /**
@@ -216,10 +224,6 @@ class JoryResponse implements Responsable
         $builder = $this->getBuilder();
 
         $builder->onQuery($this->getBaseQuery());
-
-        if($this->first){
-            $builder->first();
-        }
 
         $builder->applyJory($this->getJory());
 
