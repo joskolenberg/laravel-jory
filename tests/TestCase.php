@@ -6,7 +6,7 @@ use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
-use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\JoryServiceProvider;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\PersonJoryBuilder;
@@ -26,6 +26,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -918,11 +919,11 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         /**
          * Register some JoryBuilders and let some of them be discovered by de autoRegistrar.
          */
-        JoryBuilder::register(Band::class, BandJoryBuilder::class);
-        JoryBuilder::register(Person::class, PersonJoryBuilder::class);
-        JoryBuilder::register(Song::class, SongJoryBuilder::class);
-        JoryBuilder::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
-        JoryBuilder::register(SongWithAfterFetchHook::class, SongJoryBuilderWithAfterFetchHook::class)->uri('song-with-after-fetch');
+        Jory::register(Band::class, BandJoryBuilder::class);
+        Jory::register(Person::class, PersonJoryBuilder::class);
+        Jory::register(Song::class, SongJoryBuilder::class);
+        Jory::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
+        Jory::register(SongWithAfterFetchHook::class, SongJoryBuilderWithAfterFetchHook::class)->uri('song-with-after-fetch');
     }
 
     public function assertQueryCount($expected)

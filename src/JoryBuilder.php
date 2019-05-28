@@ -12,7 +12,6 @@ use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Register\RegistersJoryBuilders;
 use JosKolenberg\LaravelJory\Traits\ConvertsModelToArrayByJory;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryBuilderConfiguration;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
@@ -29,7 +28,6 @@ abstract class JoryBuilder
     use HandlesJorySorts,
         HandlesJoryFilters,
         LoadsJoryRelations,
-        RegistersJoryBuilders,
         ConvertsModelToArrayByJory,
         HandlesJoryBuilderConfiguration;
 

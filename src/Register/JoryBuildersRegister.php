@@ -24,7 +24,7 @@ class JoryBuildersRegister
     /**
      * Any additional registrars to deliver registrations
      *
-     * @var array<RegistrarInterface>
+     * @var array<RegistersJoryBuilders>
      */
     protected $registrars = [];
 
@@ -40,9 +40,9 @@ class JoryBuildersRegister
     /**
      * Add a registrar for delivering registrations
      *
-     * @param RegistrarInterface $registrar
+     * @param RegistersJoryBuilders $registrar
      */
-    public function addRegistrar(RegistrarInterface $registrar)
+    public function addRegistrar(RegistersJoryBuilders $registrar)
     {
         $this->registrars[] = $registrar;
     }

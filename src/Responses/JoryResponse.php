@@ -56,6 +56,11 @@ class JoryResponse implements Responsable
     protected $first = false;
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * JoryResponse constructor.
      * @param Request $request
      * @param JoryBuildersRegister $register

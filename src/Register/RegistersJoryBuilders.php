@@ -1,15 +1,19 @@
 <?php
 
+
 namespace JosKolenberg\LaravelJory\Register;
 
-trait RegistersJoryBuilders
+
+use Illuminate\Support\Collection;
+
+interface RegistersJoryBuilders
 {
-    public static function register(string $modelClass, string $builderClass)
-    {
-        $registration = new JoryBuilderRegistration($modelClass, $builderClass);
 
-        app()->make(JoryBuildersRegister::class)->add($registration);
+    /**
+     * Get all registered registrations.
+     *
+     * @return Collection
+     */
+    public function getRegistrations(): Collection;
 
-        return $registration;
-    }
 }

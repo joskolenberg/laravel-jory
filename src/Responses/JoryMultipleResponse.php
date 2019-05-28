@@ -4,12 +4,16 @@
 namespace JosKolenberg\LaravelJory\Responses;
 
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
+use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use stdClass;
 
 /**
  * Class JoryMultipleResponse
@@ -46,10 +50,11 @@ class JoryMultipleResponse implements Responsable
     /**
      * Create an HTTP response that represents the object.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
+     * @throws JoryException
      * @throws LaravelJoryCallException
-     * @throws BindingResolutionException
+     * @throws LaravelJoryException
      */
     public function toResponse($request)
     {
@@ -64,9 +69,9 @@ class JoryMultipleResponse implements Responsable
      * Cut the key into pieces when using "multiple".
      *
      * @param $name
-     * @return \stdClass
+     * @return stdClass
      */
-    protected function explodeResourceName($name): \stdClass
+    protected function explodeResourceName($name): stdClass
     {
         /**
          * First cut the alias part
@@ -100,7 +105,7 @@ class JoryMultipleResponse implements Responsable
         /**
          * Create the value object.
          */
-        $result = new \stdClass();
+        $result = new stdClass();
         $result->modelName = $modelName;
         $result->alias = $alias;
         $result->type = $type;
@@ -173,7 +178,7 @@ class JoryMultipleResponse implements Responsable
     {
         $exploded = $this->explodeResourceName($name);
 
-        $single = new \stdClass();
+        $single = new stdClass();
         $single->name = $name;
         $single->data = $data;
         $single->registration = $this->register->getByUri($exploded->modelName);
@@ -191,15 +196,13 @@ class JoryMultipleResponse implements Responsable
      *
      * @param $single
      * @return mixed
-     * @throws BindingResolutionException
+     * @throws LaravelJoryCallException
+     * @throws JoryException
+     * @throws LaravelJoryException
      */
     protected function processResource($single)
     {
-        /**
-         * We use app()->make('jory') instead of a Facade call because
-         * Laravel's Facades are designed to be singletons.
-         */
-        $singleResponse = app()->make('jory')->byUri($single->registration->getUri());
+        $singleResponse = Jory::byUri($single->registration->getUri());
 
         /**
          * Request may consist of json or array, so check this.
@@ -228,8 +231,9 @@ class JoryMultipleResponse implements Responsable
      * Collect all the data for the requested resources.
      *
      * @return array
+     * @throws JoryException
      * @throws LaravelJoryCallException
-     * @throws BindingResolutionException
+     * @throws LaravelJoryException
      */
     protected function toArray(): array
     {

@@ -3,21 +3,20 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQuerySortHook;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildSortHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQueryOffsetLimitHook;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQuerySortHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildSortHook;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class JoryBuilderHookTest extends TestCase
 {
     /** @test */
     public function it_can_hook_into_the_query_before_query_build_with_a_filter_1()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'srt' => [
@@ -47,7 +46,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_before_query_build_with_a_filter_2()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'flt' => [
@@ -76,7 +75,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_before_query_build_with_a_sort_1()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithBeforeQueryBuildSortHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildSortHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'srt' => [
@@ -112,7 +111,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_filter_1()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'srt' => [
@@ -142,7 +141,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_filter_2()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'flt' => [
@@ -171,7 +170,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_offset_and_limit_1()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterQueryOffsetLimitHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterQueryOffsetLimitHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'flt' => [
@@ -207,7 +206,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_sort_1()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'fld' => [
@@ -240,7 +239,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_sort_2()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'srt' => [
@@ -276,7 +275,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_after_fetch_on_the_collection()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'srt' => [
@@ -317,7 +316,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_check_if_a_field_is_requested()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'fld' => [
@@ -366,7 +365,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_check_if_a_filter_on_a_field_will_be_applied()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'flt' => [
@@ -417,7 +416,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_check_if_a_sort_on_a_field_will_be_applied()
     {
-        JoryBuilder::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
         $result = Jory::byModel(Song::class)->applyArray([
             'srt' => [

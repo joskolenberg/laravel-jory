@@ -14,7 +14,7 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * Automatically registers JoryBuilders which follow the standard <ModelName>JoryBuilder naming convention
  */
-class AutoRegistrar implements RegistrarInterface
+class AutoRegistrar implements RegistersJoryBuilders
 {
 
     /**

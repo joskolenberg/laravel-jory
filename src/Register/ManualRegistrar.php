@@ -6,7 +6,7 @@ namespace JosKolenberg\LaravelJory\Register;
 
 use Illuminate\Support\Collection;
 
-class ManualRegistrar implements RegistrarInterface
+class ManualRegistrar implements RegistersJoryBuilders
 {
     /**
      * @var array
