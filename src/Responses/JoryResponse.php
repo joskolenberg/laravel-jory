@@ -138,17 +138,6 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Generate a response for requesting multiple resources at once.
-     * This one is proxied to a seperate JoryMultipleResponse class.
-     *
-     * @return JoryMultipleResponse
-     */
-    public function multiple(): JoryMultipleResponse
-    {
-        return new JoryMultipleResponse($this->request, $this->register);
-    }
-
-    /**
      * Create an HTTP response that represents the object.
      *
      * @param Request $request

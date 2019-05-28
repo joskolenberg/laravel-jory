@@ -42,11 +42,6 @@ abstract class JoryBuilder
     protected $jory = null;
 
     /**
-     * @var Model|null
-     */
-    protected $model = null;
-
-    /**
      * @var CaseManager
      */
     protected $case = null;
@@ -113,14 +108,13 @@ abstract class JoryBuilder
     /**
      * Get the first Model based on the baseQuery and Jory data.
      *
+     * @param Model|null $model
      * @return Model|null
-     * @throws LaravelJoryException
      * @throws JoryException
+     * @throws LaravelJoryException
      */
-    public function getFirst(): ?Model
+    public function getFirst(Model $model = null): ?Model
     {
-        $model = $this->model;
-
         if (! $model) {
             $model = $this->buildQuery()->first();
         }
@@ -253,21 +247,6 @@ abstract class JoryBuilder
         if ($limit !== null) {
             $query->limit($limit);
         }
-    }
-
-    /**
-     * Set the model to query on.
-     * This model will we the base result for this builder
-     * with fields an relations as applied in the Jory.
-     *
-     * @param Model $model
-     * @return \JosKolenberg\LaravelJory\JoryBuilder
-     */
-    public function onModel(Model $model): self
-    {
-        $this->model = $model;
-
-        return $this;
     }
 
     /**
