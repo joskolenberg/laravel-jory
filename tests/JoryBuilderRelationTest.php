@@ -1016,12 +1016,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_nested_relations_with_as_little_queries_as_possible()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"cover":{"rlt":{"album":{"rlt":{"band":{"rlt":{"people":{"rlt":{"instruments":{}}}}}}}}}}}}}}}}}}}}}',
+            'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"cover":{"rlt":{"album":{"rlt":{"band":{}}}}}}}}}}}}}}}}}',
         ]);
 
         $response->assertStatus(200)->assertJson([]);
 
-        $this->assertQueryCount(11);
+        $this->assertQueryCount(9);
     }
 
     /** @test */
