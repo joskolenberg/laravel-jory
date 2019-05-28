@@ -108,7 +108,8 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Set the resource to be called based on the model class.
+     * Set the resource to be called based on a model instance,
+     * the builder will be set to return a single record instead of a collection.
      *
      * @param Model $model
      * @return $this
@@ -117,15 +118,22 @@ class JoryResponse implements Responsable
     public function onModel(Model $model): JoryResponse
     {
         $this->registration = $this->register->getByModelClass(get_class($model));
+
+        /**
+         * When an existing model is given, we simply set the id to filter on.
+         * The model wil be queried again from te database when executing
+         * the response, but this way we are sure to have consistent
+         * data in the model (at the cost of an extra query though).
+         */
         $this->find($model->getKey());
 
         return $this;
     }
 
     /**
-     * Set the resource to be called based on the model class.
+     * Set an existing query to build upon.
      *
-     * @param Model $model
+     * @param Builder $query
      * @return $this
      * @throws Exceptions\RegistrationNotFoundException
      */
@@ -137,7 +145,14 @@ class JoryResponse implements Responsable
         return $this;
     }
 
-    public function apply($jory)
+    /**
+     * Helper function to manually apply an array or Json string.
+     *
+     * @param mixed $jory
+     * @return $this
+     * @throws LaravelJoryException
+     */
+    public function apply($jory): JoryResponse
     {
         if(is_array($jory)){
             return $this->applyArray($jory);
@@ -154,7 +169,7 @@ class JoryResponse implements Responsable
      * Manually apply a Json Jory string to the request.
      *
      * @param string $json
-     * @return JoryResponse
+     * @return $this
      */
     public function applyJson(string $json): JoryResponse
     {
@@ -167,7 +182,7 @@ class JoryResponse implements Responsable
      * Manually apply a Jory array to the request.
      *
      * @param array $array
-     * @return JoryResponse
+     * @return $this
      */
     public function applyArray(array $array): JoryResponse
     {
@@ -235,6 +250,7 @@ class JoryResponse implements Responsable
 
     /**
      * Get the result of the request.
+     * (could also be an int instead of an array when using count())
      *
      * @return mixed
      * @throws Exceptions\LaravelJoryCallException
@@ -243,7 +259,13 @@ class JoryResponse implements Responsable
      */
     public function toArray()
     {
-        $builder = $this->getProcessedBuilder();
+        $builder = $this->getBuilder();
+
+        $builder->onQuery($this->getBaseQuery());
+
+        $builder->applyJory($this->getJory());
+
+        $builder->validate();
 
         if($this->count){
             return $builder->getCount();
@@ -254,27 +276,6 @@ class JoryResponse implements Responsable
         }
 
         return $builder->toArray();
-    }
-
-    /**
-     * Get the JoryBuilder with everything applied.
-     *
-     * @return JoryBuilder
-     * @throws Exceptions\LaravelJoryCallException
-     * @throws Exceptions\LaravelJoryException
-     * @throws JoryException
-     */
-    protected function getProcessedBuilder(): JoryBuilder
-    {
-        $builder = $this->getBuilder();
-
-        $builder->onQuery($this->getBaseQuery());
-
-        $builder->applyJory($this->getJory());
-
-        $builder->validate();
-
-        return $builder;
     }
 
     /**
@@ -296,7 +297,9 @@ class JoryResponse implements Responsable
         if(!$this->registration){
             throw new Exceptions\LaravelJoryException('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
         }
+
         $builderClass = $this->registration->getBuilderClass();
+
         return new $builderClass();
     }
 
@@ -305,16 +308,18 @@ class JoryResponse implements Responsable
      *
      * @return mixed
      */
-    protected function getBaseQuery()
+    protected function getBaseQuery(): Builder
     {
+        // If there has been given a query explicitely, use this one without further modifying it.
         if($this->query){
             return $this->query;
         }
 
+        // Else; create a query from the given model in the registration.
         $modelClass = $this->registration->getModelClass();
-
         $query = $modelClass::query();
 
+        // When a modelId is passed we add a filter to only get this record.
         if($this->modelId !== null){
             $query->whereKey($this->modelId);
         }

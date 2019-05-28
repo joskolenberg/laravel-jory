@@ -51,7 +51,15 @@ class JoryMultipleResponse implements Responsable
         $this->register = $register;
     }
 
-    public function apply($jory)
+    /**
+     * Apply an array or Json string.
+     *
+     * @param $jory
+     * @return $this
+     * @throws LaravelJoryCallException
+     * @throws LaravelJoryException
+     */
+    public function apply($jory): JoryMultipleResponse
     {
         if(is_array($jory)){
             return $this->applyArray($jory);
@@ -64,7 +72,14 @@ class JoryMultipleResponse implements Responsable
         return $this->applyJson($jory);
     }
 
-    public function applyJson(string $jory)
+    /**
+     * Apply a json string.
+     *
+     * @param string $jory
+     * @return $this
+     * @throws LaravelJoryCallException
+     */
+    public function applyJson(string $jory): JoryMultipleResponse
     {
         $array = json_decode($jory, true);
 
@@ -80,7 +95,13 @@ class JoryMultipleResponse implements Responsable
         return $this;
     }
 
-    public function applyArray(array $jory)
+    /**
+     * Apply an array.
+     *
+     * @param array $jory
+     * @return $this
+     */
+    public function applyArray(array $jory): JoryMultipleResponse
     {
         $this->data = $jory;
 
@@ -151,7 +172,7 @@ class JoryMultipleResponse implements Responsable
     }
 
     /**
-     * Cut the key into pieces when using "multiple".
+     * Cut the key into pieces.
      *
      * @param $name
      * @return stdClass
@@ -203,10 +224,12 @@ class JoryMultipleResponse implements Responsable
      * Process the raw request data into the jories array.
      *
      * @throws LaravelJoryCallException
+     * @throws LaravelJoryException
      */
-    protected function dataIntoJories()
+    protected function dataIntoJories(): void
     {
         if(!$this->data){
+            // If no explicit data is set, we default to the data in the request.
             $this->apply($this->request->input(config('jory.request.key'), '{}'));
         }
 
@@ -243,7 +266,7 @@ class JoryMultipleResponse implements Responsable
      * @param array $data
      * @throws ResourceNotFoundException
      */
-    protected function addJory(string $name, array $data)
+    protected function addJory(string $name, array $data): void
     {
         $exploded = $this->explodeResourceName($name);
 

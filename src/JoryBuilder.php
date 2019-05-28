@@ -108,18 +108,15 @@ abstract class JoryBuilder
     /**
      * Get the first Model based on the baseQuery and Jory data.
      *
-     * @param Model|null $model
      * @return Model|null
      * @throws JoryException
      * @throws LaravelJoryException
      */
-    public function getFirst(Model $model = null): ?Model
+    public function getFirst(): ?Model
     {
-        if (! $model) {
-            $model = $this->buildQuery()->first();
-        }
+        $model = $this->buildQuery()->first();
 
-        if (! $model) {
+        if (!$model) {
             return null;
         }
 
@@ -165,7 +162,7 @@ abstract class JoryBuilder
     public function firstToArray(): ?array
     {
         $model = $this->getFirst();
-        if (! $model) {
+        if (!$model) {
             return null;
         }
 
@@ -258,7 +255,7 @@ abstract class JoryBuilder
      */
     protected function beforeQueryBuild($query, Jory $jory, $count = false): void
     {
-        if (! $count) {
+        if (!$count) {
             // By default select only the columns from the root table.
             $this->selectOnlyRootTable($query);
         }
@@ -313,7 +310,7 @@ abstract class JoryBuilder
     protected function selectOnlyRootTable($query): void
     {
         $table = $query->getModel()->getTable();
-        $query->select($table.'.*');
+        $query->select($table . '.*');
     }
 
     /**

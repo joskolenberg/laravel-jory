@@ -22,7 +22,7 @@ class JoryManager
 {
 
     /**
-     * The multiple() call will resolve to a JoryMultipleResponse.
+     * The multiple() call will resolve to a clean JoryMultipleResponse.
      *
      * @return JoryMultipleResponse
      * @throws BindingResolutionException
@@ -50,11 +50,12 @@ class JoryManager
     }
 
     /**
-     * Set the resource to be called based on the uri.
+     * Create a new response based on the public uri.
      *
      * @param string $uri
      * @return JoryResponse
      * @throws Exceptions\ResourceNotFoundException
+     * @throws BindingResolutionException
      */
     public function byUri(string $uri): JoryResponse
     {
@@ -63,12 +64,14 @@ class JoryManager
 
 
     /**
-     * Set the resource to be called based on the model class.
+     * Helper method to create a new response based on
+     * a model instance, a model's class name or existing query.
      *
-     * @param string $modelClass
-     * @return $this
+     * @param mixed $resource
+     * @return JoryResponse
      * @throws Exceptions\RegistrationNotFoundException
      * @throws LaravelJoryException
+     * @throws BindingResolutionException
      */
     public function on($resource): JoryResponse
     {
@@ -89,11 +92,12 @@ class JoryManager
     }
 
     /**
-     * Set the resource to be called based on the model class.
+     * Create a new response based on a model's class name.
      *
      * @param string $modelClass
      * @return JoryResponse
      * @throws Exceptions\RegistrationNotFoundException
+     * @throws BindingResolutionException
      */
     public function onModelClass(string $modelClass): JoryResponse
     {
@@ -101,11 +105,12 @@ class JoryManager
     }
 
     /**
-     * Set the resource to be called based on the model class.
+     * Create a new response based on a model instance.
      *
      * @param Model $model
      * @return JoryResponse
      * @throws Exceptions\RegistrationNotFoundException
+     * @throws BindingResolutionException
      */
     public function onModel(Model $model): JoryResponse
     {
@@ -113,18 +118,25 @@ class JoryManager
     }
 
     /**
-     * Set the resource to be called based on the model class.
+     * Create a new response based on an existing query.
      *
      * @param Builder $query
      * @return JoryResponse
      * @throws Exceptions\RegistrationNotFoundException
+     * @throws BindingResolutionException
      */
     public function onQuery(Builder $query): JoryResponse
     {
         return $this->getJoryResponse()->onQuery($query);
     }
 
-    protected function getJoryResponse()
+    /**
+     * Get a fresh JoryResponse.
+     *
+     * @return JoryResponse
+     * @throws BindingResolutionException
+     */
+    protected function getJoryResponse(): JoryResponse
     {
         return new JoryResponse(app()->make('request'), app()->make(JoryBuildersRegister::class));
     }
