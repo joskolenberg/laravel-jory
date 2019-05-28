@@ -54,14 +54,6 @@ abstract class JoryBuilder
     protected $case = null;
 
     /**
-     * We only want to apply the settings in the config once.
-     * We'll keep track of that by this flag.
-     *
-     * @var bool
-     */
-    protected $configHasBeenApplied = false;
-
-    /**
      * JoryBuilder constructor.
      *
      */
@@ -92,10 +84,11 @@ abstract class JoryBuilder
      * @param Jory $jory
      *
      * @return JoryBuilder
+     * @throws JoryException
      */
     public function applyJory(Jory $jory): self
     {
-        $this->jory = $jory;
+        $this->jory = $this->applyConfigToJory($this->config, $jory);
 
         return $this;
     }
@@ -111,7 +104,7 @@ abstract class JoryBuilder
     {
         $collection = $this->buildQuery()->get();
 
-        $jory = $this->getJory();
+        $jory = $this->jory;
         $collection = $this->afterFetch($collection);
 
         $this->loadRelations($collection, $jory->getRelations());
@@ -140,7 +133,7 @@ abstract class JoryBuilder
 
         $model = $this->afterFetch(new Collection([$model]))->first();
 
-        $this->loadRelations(new Collection([$model]), $this->getJory()->getRelations());
+        $this->loadRelations(new Collection([$model]), $this->jory->getRelations());
 
         return $model;
     }
@@ -156,7 +149,7 @@ abstract class JoryBuilder
     {
         $query = clone $this->builder;
 
-        $jory = $this->getJory();
+        $jory = $this->jory;
 
         $this->beforeQueryBuild($query, $jory, true);
 
@@ -215,7 +208,7 @@ abstract class JoryBuilder
      */
     protected function buildQuery(): Builder
     {
-        $query = clone $this->builder;
+        $query = $this->builder;
 
         $this->applyOnQuery($query);
 
@@ -231,7 +224,7 @@ abstract class JoryBuilder
      */
     public function applyOnQuery($query): void
     {
-        $jory = $this->getJory();
+        $jory = $this->jory;
         $this->beforeQueryBuild($query, $jory);
 
         // Apply filters if there are any
@@ -290,7 +283,6 @@ abstract class JoryBuilder
     {
         if (! $count) {
             // By default select only the columns from the root table.
-            // Done before query build so it can easily be overridden afterwards.
             $this->selectOnlyRootTable($query);
         }
     }
@@ -333,33 +325,11 @@ abstract class JoryBuilder
     }
 
     /**
-     * Get the jory object which needs to be applied.
-     *
-     * @return Jory
-     * @throws LaravelJoryException
-     * @throws JoryException
-     */
-    protected function getJory(): Jory
-    {
-        // If config is applied to Jory, the Jory object must be set and configured.
-        if($this->configHasBeenApplied){
-            return $this->jory;
-        }
-
-        if(!$this->jory){
-            throw new LaravelJoryException('No jorydata has been set on JoryBuilder.');
-        }
-
-        $this->applyConfigToJory($this->config, $this->jory);
-        $this->configHasBeenApplied = true;
-
-        return $this->jory;
-
-    }
-
-    /**
      * Alter the query to select only the columns of
      * the model which is being queried.
+     *
+     * This way we prevent field conflicts when
+     * joins are applied.
      *
      * @param $query
      */
@@ -378,17 +348,7 @@ abstract class JoryBuilder
      */
     public function validate(): void
     {
-        (new Validator($this->getConfig(), $this->getJory()))->validate();
-    }
-
-    /**
-     * Get the key on which data should be returned.
-     *
-     * @return null|string
-     */
-    protected function getDataResponseKey(): ?string
-    {
-        return config('jory.response.data-key');
+        (new Validator($this->getConfig(), $this->jory))->validate();
     }
 
     /**
@@ -401,7 +361,7 @@ abstract class JoryBuilder
      */
     public function modelToArray(Model $model): array
     {
-        return $this->modelToArrayByJory($model, $this->getJory());
+        return $this->modelToArrayByJory($model, $this->jory);
     }
 
     /**

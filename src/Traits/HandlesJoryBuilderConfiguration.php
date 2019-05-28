@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\Config\Config;
@@ -42,16 +43,18 @@ trait HandlesJoryBuilderConfiguration
     /**
      * Apply the settings in the Config on the Jory.
      *
-     * @param \JosKolenberg\LaravelJory\Config\Config $config
-     * @param \JosKolenberg\Jory\Jory $jory
-     * @return void
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @param Config $config
+     * @param Jory $jory
+     * @return Jory
+     * @throws JoryException
      */
-    public function applyConfigToJory(Config $config, Jory $jory): void
+    public function applyConfigToJory(Config $config, Jory $jory): Jory
     {
         $this->applyFieldsConfigToJory($config, $jory);
         $this->applySortsConfigToJory($config, $jory);
         $this->applyOffsetAndLimitConfigToJory($config, $jory);
+
+        return $jory;
     }
 
     /**
@@ -59,8 +62,8 @@ trait HandlesJoryBuilderConfiguration
      *
      * When no fields are specified in the request, the default fields in Config will be set on the Jory.
      *
-     * @param \JosKolenberg\LaravelJory\Config\Config $config
-     * @param \JosKolenberg\Jory\Jory $jory
+     * @param Config $config
+     * @param Jory $jory
      */
     protected function applyFieldsConfigToJory(Config $config, Jory $jory): void
     {
@@ -80,9 +83,9 @@ trait HandlesJoryBuilderConfiguration
     /**
      * Apply the sort settings in the Config on the Jory.
      *
-     * @param \JosKolenberg\LaravelJory\Config\Config $config
-     * @param \JosKolenberg\Jory\Jory $jory
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @param Config $config
+     * @param Jory $jory
+     * @throws JoryException
      */
     protected function applySortsConfigToJory(Config $config, Jory $jory): void
     {
@@ -104,8 +107,8 @@ trait HandlesJoryBuilderConfiguration
     /**
      * Apply the sort settings in the Config on the Jory.
      *
-     * @param \JosKolenberg\LaravelJory\Config\Config $config
-     * @param \JosKolenberg\Jory\Jory $jory
+     * @param Config $config
+     * @param Jory $jory
      */
     protected function applyOffsetAndLimitConfigToJory(Config $config, Jory $jory): void
     {
