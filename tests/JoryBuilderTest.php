@@ -34,7 +34,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_json_string()
     {
-        $actual = Facade::byModel(Song::class)
+        $actual = Facade::onModelClass(Song::class)
             ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"}}')
             ->getProcessedBuilder()
             ->get()->pluck('title')->toArray();
@@ -52,7 +52,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_jory_array()
     {
-        $actual = Facade::byModel(Song::class)->applyArray([
+        $actual = Facade::onModelClass(Song::class)->applyArray([
             'filter' => [
                 'f' => 'title',
                 'o' => 'like',
@@ -93,7 +93,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_a_custom_filter()
     {
-        $actual = Facade::byModel(Album::class)->applyArray([
+        $actual = Facade::onModelClass(Album::class)->applyArray([
             'filter' => [
                 'f' => 'number_of_songs',
                 'o' => '>',
@@ -117,7 +117,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_apply_mulitple_custom_filters()
     {
-        $actual = Facade::byModel(Album::class)->applyArray([
+        $actual = Facade::onModelClass(Album::class)->applyArray([
             'filter' => [
                 'group_or' => [
                     [
@@ -153,7 +153,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_combine_standard_and_custom_filters()
     {
-        $actual = Facade::byModel(Album::class)->applyArray([
+        $actual = Facade::onModelClass(Album::class)->applyArray([
             'filter' => [
                 'group_and' => [
                     [
@@ -181,7 +181,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_can_override_the_basic_filter_function()
     {
-        $actual = \JosKolenberg\LaravelJory\Facades\Jory::byModel(Instrument::class)
+        $actual = \JosKolenberg\LaravelJory\Facades\Jory::onModelClass(Instrument::class)
             ->applyArray([
                 'filter' => [
                     'f' => 'name',
@@ -218,7 +218,7 @@ class JoryBuilderTest extends TestCase
     /** @test */
     public function it_returns_null_when_a_single_model_is_not_found()
     {
-        $actual = \JosKolenberg\LaravelJory\Facades\Jory::byModel(Instrument::class)
+        $actual = \JosKolenberg\LaravelJory\Facades\Jory::onModelClass(Instrument::class)
             ->applyArray([
                 'flt' => [
                     'f' => 'name',

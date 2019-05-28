@@ -15,7 +15,7 @@ use JosKolenberg\LaravelJory\Responses\JoryResponse;
  * @package JosKolenberg\LaravelJory\Facades
  *
  * @method static JoryResponse byUri(string $uri)
- * @method static JoryResponse byModel(string $model)
+ * @method static JoryResponse onModelClass(string $modelClass)
  * @method static JoryMultipleResponse multiple()
  * @method static JoryResponse count()
  * @method static JoryResponse find($modelId)

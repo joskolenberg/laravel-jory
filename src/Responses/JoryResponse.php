@@ -88,13 +88,13 @@ class JoryResponse implements Responsable
     /**
      * Set the resource to be called based on the model class.
      *
-     * @param string $model
+     * @param string $modelClass
      * @return $this
      * @throws Exceptions\RegistrationNotFoundException
      */
-    public function byModel(string $model): JoryResponse
+    public function onModelClass(string $modelClass): JoryResponse
     {
-        $this->registration = $this->register->getByModelClass($model);
+        $this->registration = $this->register->getByModelClass($modelClass);
 
         return $this;
     }
@@ -243,7 +243,7 @@ class JoryResponse implements Responsable
     protected function getBuilder(): JoryBuilder
     {
         if(!$this->registration){
-            throw new Exceptions\LaravelJoryException('No resource has been set on the JoryResponse. Use the byUri or byModel method to set the resource.');
+            throw new Exceptions\LaravelJoryException('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
         }
         $builderClass = $this->registration->getBuilderClass();
         return new $builderClass();

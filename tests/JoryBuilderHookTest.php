@@ -18,7 +18,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 'title',
             ],
@@ -48,7 +48,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
@@ -77,7 +77,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildSortHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 'title',
             ],
@@ -113,7 +113,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 'title',
             ],
@@ -143,7 +143,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
@@ -172,7 +172,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterQueryOffsetLimitHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
                 'f' => 'title',
                 'o' => 'like',
@@ -208,7 +208,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'fld' => [
                 'title',
             ],
@@ -241,7 +241,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 'album_id',
             ],
@@ -277,7 +277,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 '-album_id',
                 'title',
@@ -318,7 +318,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'fld' => [
                 'title',
                 'custom_field',
@@ -340,7 +340,7 @@ class JoryBuilderHookTest extends TestCase
             ],
         ], $result);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'fld' => [
                 'title',
             ],
@@ -367,7 +367,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
                 'f' => 'custom_filter_field',
             ],
@@ -390,7 +390,7 @@ class JoryBuilderHookTest extends TestCase
             ],
         ], $result);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 '-id',
             ],
@@ -418,7 +418,7 @@ class JoryBuilderHookTest extends TestCase
     {
         Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 '-id',
                 '-custom_sort_field',
@@ -439,7 +439,7 @@ class JoryBuilderHookTest extends TestCase
             ],
         ], $result);
 
-        $result = Jory::byModel(Song::class)->applyArray([
+        $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
                 '-id',
             ],

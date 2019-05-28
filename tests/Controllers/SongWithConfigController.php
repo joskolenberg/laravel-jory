@@ -15,21 +15,21 @@ class SongWithConfigController extends Controller
     {
         Jory::register(Song::class, SongJoryBuilderWithConfig::class);
 
-        return Jory::byModel(Song::class);
+        return Jory::onModelClass(Song::class);
     }
 
     public function indexTwo()
     {
         Jory::register(Song::class, SongJoryBuilderWithConfigTwo::class);
 
-        return Jory::byModel(Song::class);
+        return Jory::onModelClass(Song::class);
     }
 
     public function indexThree()
     {
         Jory::register(Song::class, SongJoryBuilderWithConfigThree::class);
 
-        return Jory::byModel(Song::class);
+        return Jory::onModelClass(Song::class);
     }
 
     public function options()

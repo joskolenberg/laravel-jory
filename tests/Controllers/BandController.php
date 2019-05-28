@@ -10,21 +10,21 @@ class BandController extends Controller
 {
     public function index()
     {
-        return Jory::byModel(Band::class);
+        return Jory::onModelClass(Band::class);
     }
 
     public function show($bandId)
     {
-        return Jory::byModel(Band::class)->find($bandId);
+        return Jory::onModelClass(Band::class)->find($bandId);
     }
 
     public function firstByFilter()
     {
-        return Jory::byModel(Band::class)->first();
+        return Jory::onModelClass(Band::class)->first();
     }
 
     public function count()
     {
-        return Jory::byModel(Band::class)->count();
+        return Jory::onModelClass(Band::class)->count();
     }
 }
