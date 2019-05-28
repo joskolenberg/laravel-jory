@@ -213,7 +213,7 @@ class JoryResponse implements Responsable
      * @throws Exceptions\LaravelJoryException
      * @throws JoryException
      */
-    public function getProcessedBuilder(): JoryBuilder
+    protected function getProcessedBuilder(): JoryBuilder
     {
         $builder = $this->getBuilder();
 

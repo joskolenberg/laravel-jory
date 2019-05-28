@@ -4,10 +4,6 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 class CamelCaseJoryBuilderTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
 
     /** @test */
     public function it_returns_the_configs_default_fields_in_camel_case()

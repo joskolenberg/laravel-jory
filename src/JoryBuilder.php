@@ -93,7 +93,7 @@ abstract class JoryBuilder
      * @throws LaravelJoryException
      * @throws JoryException
      */
-    public function get(): Collection
+    protected function get(): Collection
     {
         $collection = $this->buildQuery()->get();
 
