@@ -72,9 +72,21 @@ trait HandlesJoryFilters
             return;
         }
 
-        // Always apply the filter on the table of the model which
-        // is being queried even if a join is applied (e.g. when filtering
-        // a belongsToMany relation), so we prefix the field with the table name.
+        /**
+         * When the field contains dots, we want to query on a relation
+         * with the last part of the string being the field to filter on.
+         */
+        if(Str::contains($filter->getField(), '.')){
+            $this->applyRelationFilter($query, $filter);
+
+            return;
+        }
+
+        /**
+         * Always apply the filter on the table of the model which
+         * is being queried even if a join is applied (e.g. when filtering
+         * a belongsToMany relation), so we prefix the field with the table name.
+         */
         $field = $query->getModel()->getTable().'.'.(app(CaseManager::class)->isCamel() ? Str::snake($filter->getField()) : $filter->getField());
         $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
     }
@@ -126,4 +138,25 @@ trait HandlesJoryFilters
                 $query->where($field, $operator ?: '=', $data);
         }
     }
+
+    /**
+     * Apply a filter on a field in a relation
+     * using relation1.relation2.etc.field notation.
+     *
+     * @param mixed $query
+     * @param Filter $filter
+     */
+    protected function applyRelationFilter($query, Filter $filter)
+    {
+        $relations = explode('.', $filter->getField());
+
+        $field = array_pop($relations);
+
+        $relation = implode('.', $relations);
+
+        $query->whereHas($relation, function ($query) use ($filter, $field) {
+            $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
+        });
+    }
+
 }

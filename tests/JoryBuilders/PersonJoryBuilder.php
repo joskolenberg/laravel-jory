@@ -21,6 +21,9 @@ class PersonJoryBuilder extends JoryBuilder
         $config->field('date_of_birth')->filterable()->sortable();
         $config->field('full_name')->filterable();
 
+        $config->filter('band.albums.songs.title');
+        $config->filter('instruments.name');
+
         // Relations
         $config->relation('instruments');
         $config->relation('groupies');

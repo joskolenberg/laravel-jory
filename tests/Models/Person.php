@@ -32,4 +32,9 @@ class Person extends Model
     {
         return $this->hasMany(Groupie::class);
     }
+
+    public function band()
+    {
+        return $this->belongsToMany(Band::class, 'band_members');
+    }
 }

@@ -586,4 +586,42 @@ class JoryBuilderFilterTest extends TestCase
 
         $this->assertQueryCount(1);
     }
+
+    /** @test */
+    public function it_can_filter_on_a_related_models_field()
+    {
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'flt' => [
+                    'and' => [
+                        [
+                            'f' => 'band.albums.songs.title',
+                            'd' => 'Tangerine',
+                        ],
+                        [
+                            'f' => 'instruments.name',
+                            'o' => 'like',
+                            'd' => '%guitar%',
+                        ]
+                    ]
+                ],
+                'fld' => [
+                    'full_name'
+                ]
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'full_name' => 'John Paul Jones',
+                ],
+                [
+                    'full_name' => 'Jimmy Page',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
 }
