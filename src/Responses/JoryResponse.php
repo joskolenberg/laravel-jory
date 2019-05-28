@@ -112,7 +112,7 @@ class JoryResponse implements Responsable
      * the builder will be set to return a single record instead of a collection.
      *
      * @param Model $model
-     * @return $this
+     * @return JoryResponse
      * @throws Exceptions\RegistrationNotFoundException
      */
     public function onModel(Model $model): JoryResponse
@@ -134,7 +134,7 @@ class JoryResponse implements Responsable
      * Set an existing query to build upon.
      *
      * @param Builder $query
-     * @return $this
+     * @return JoryResponse
      * @throws Exceptions\RegistrationNotFoundException
      */
     public function onQuery(Builder $query): JoryResponse
@@ -149,7 +149,7 @@ class JoryResponse implements Responsable
      * Helper function to manually apply an array or Json string.
      *
      * @param mixed $jory
-     * @return $this
+     * @return JoryResponse
      * @throws LaravelJoryException
      */
     public function apply($jory): JoryResponse

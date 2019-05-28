@@ -3,7 +3,6 @@
 namespace JosKolenberg\LaravelJory\Helpers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class CaseManager
 {
@@ -24,19 +23,4 @@ class CaseManager
         return $this->case === 'camel';
     }
 
-    /**
-     * Convert all keys in the array to camelCase.
-     *
-     * @param array $array
-     * @return array
-     */
-    public function arrayKeysToCamel(array $array): array
-    {
-        $result = [];
-        foreach ($array as $key => $value) {
-            $result[Str::camel($key)] = $value;
-        }
-
-        return $result;
-    }
 }
