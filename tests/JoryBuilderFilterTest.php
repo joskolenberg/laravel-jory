@@ -21,7 +21,7 @@ class JoryBuilderFilterTest extends TestCase
                 'data' => '%john%',
             ],
             'fld' => ['last_name'],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['last_name' => 'Jones'],
@@ -53,7 +53,7 @@ class JoryBuilderFilterTest extends TestCase
                 ],
             ],
             'fld' => ['last_name'],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['last_name' => 'Jones'],
@@ -85,7 +85,7 @@ class JoryBuilderFilterTest extends TestCase
                 ],
             ],
             'fld' => ['last_name'],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['last_name' => 'Lennon'],
@@ -110,7 +110,7 @@ class JoryBuilderFilterTest extends TestCase
                 ],
             ],
             'fld' => ['title']
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['title' => 'Love In Vain (Robert Johnson)'],
@@ -156,7 +156,7 @@ class JoryBuilderFilterTest extends TestCase
                 ],
             ],
             'fld' => ['title'],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['title' => 'Love In Vain (Robert Johnson)'],
@@ -211,7 +211,7 @@ class JoryBuilderFilterTest extends TestCase
                 ],
             ],
             'fld' => ['title']
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['title' => 'Love In Vain (Robert Johnson)'],
@@ -281,7 +281,7 @@ class JoryBuilderFilterTest extends TestCase
                 ],
             ],
             'fld' => ['title'],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['title' => 'Love In Vain (Robert Johnson)'],
@@ -300,7 +300,7 @@ class JoryBuilderFilterTest extends TestCase
     public function it_doesnt_apply_any_filter_when_parameter_is_omitted()
     {
         $actual = Jory::onModelClass(Band::class)
-            ->applyArray(['fld' =>['name']])->getResult();
+            ->applyArray(['fld' =>['name']])->toArray();
 
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
@@ -323,7 +323,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => 'Beatles',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Beatles'],
         ], $actual);
@@ -335,7 +335,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => 'KISS',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
             ['name' => 'Led Zeppelin'],
@@ -348,7 +348,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => 'Cult',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Beatles'],
         ], $actual);
@@ -360,7 +360,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => 'Beatles',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
             ['name' => 'Led Zeppelin'],
@@ -374,7 +374,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => 'Beatles',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
             ['name' => 'Led Zeppelin'],
@@ -388,7 +388,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => 'Beat%',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Beatles'],
         ], $actual);
@@ -400,7 +400,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => '%Stones',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
         ], $actual);
@@ -412,7 +412,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => '%s%',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
             ['name' => 'Beatles'],
@@ -425,7 +425,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => '%s%',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Led Zeppelin'],
             ['name' => 'Jimi Hendrix Experience'],
@@ -438,7 +438,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => '3',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Beatles'],
             ['name' => 'Jimi Hendrix Experience'],
@@ -456,7 +456,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'is_null',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
         ], $actual);
@@ -473,7 +473,7 @@ class JoryBuilderFilterTest extends TestCase
                 'o' => 'not_null',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Led Zeppelin'],
             ['name' => 'Beatles'],
@@ -493,7 +493,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => [1, 3],
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
             ['name' => 'Beatles'],
@@ -512,7 +512,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => [1, 3],
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
         $this->assertEquals([
             ['name' => 'Led Zeppelin'],
             ['name' => 'Jimi Hendrix Experience'],
@@ -530,7 +530,7 @@ class JoryBuilderFilterTest extends TestCase
                 'd' => 'Beatles',
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['name' => 'Beatles'],

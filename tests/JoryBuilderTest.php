@@ -15,7 +15,7 @@ class JoryBuilderTest extends TestCase
     {
         $actual = Facade::onModelClass(Song::class)
             ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
-            ->getResult();
+            ->toArray();
 
         $this->assertEquals([
             ['title' => 'Whole Lotta Love'],
@@ -37,7 +37,7 @@ class JoryBuilderTest extends TestCase
                 'd' => 'love%',
             ],
             'fld' => ['title']
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['title' => 'Love In Vain (Robert Johnson)'],
@@ -79,7 +79,7 @@ class JoryBuilderTest extends TestCase
                 'd' => 10,
             ],
             'fld' => ['name'],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['name' => 'Exile on main st.'],
@@ -113,7 +113,7 @@ class JoryBuilderTest extends TestCase
                 ],
             ],
             'fld' => ['name']
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['name' => 'Let it bleed'],
@@ -150,7 +150,7 @@ class JoryBuilderTest extends TestCase
                 ],
             ],
             'fld' => ['name']
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             ['name' => 'Sgt. Peppers lonely hearts club band'],
@@ -171,7 +171,7 @@ class JoryBuilderTest extends TestCase
                     'd' => '%t%',
                 ],
                 'fld' => ['name']
-            ])->getResult();
+            ])->toArray();
 
         $this->assertEquals([
             ['name' => 'Guitar'],
@@ -188,7 +188,7 @@ class JoryBuilderTest extends TestCase
         $actual = Facade::onModelClass(Instrument::class)
             ->applyArray([])
             ->first()
-            ->getResult();
+            ->toArray();
 
         $this->assertEquals([
             'id' => 1,
@@ -208,7 +208,7 @@ class JoryBuilderTest extends TestCase
                     'd' => 'Hobo',
                 ],
             ])->first()
-            ->getResult();
+            ->toArray();
 
         $this->assertNull($actual);
 

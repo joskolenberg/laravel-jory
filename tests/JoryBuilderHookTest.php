@@ -26,7 +26,7 @@ class JoryBuilderHookTest extends TestCase
                 'title',
             ],
             'lmt' => 3,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -61,7 +61,7 @@ class JoryBuilderHookTest extends TestCase
                 'title',
             ],
             'lmt' => 3,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -85,7 +85,7 @@ class JoryBuilderHookTest extends TestCase
                 'title',
             ],
             'lmt' => 5,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -121,7 +121,7 @@ class JoryBuilderHookTest extends TestCase
                 'title',
             ],
             'lmt' => 3,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -156,7 +156,7 @@ class JoryBuilderHookTest extends TestCase
                 'title',
             ],
             'lmt' => 3,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -186,7 +186,7 @@ class JoryBuilderHookTest extends TestCase
             ],
             'ofs' => 0,
             'lmt' => 4,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -213,7 +213,7 @@ class JoryBuilderHookTest extends TestCase
                 'title',
             ],
             'lmt' => 5,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -249,7 +249,7 @@ class JoryBuilderHookTest extends TestCase
                 'title',
             ],
             'lmt' => 5,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -290,7 +290,7 @@ class JoryBuilderHookTest extends TestCase
             'fld' => [
                 'title',
             ],
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -327,7 +327,7 @@ class JoryBuilderHookTest extends TestCase
                 '-id',
             ],
             'lmt' => 2,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -348,7 +348,7 @@ class JoryBuilderHookTest extends TestCase
                 '-id',
             ],
             'lmt' => 2,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -375,7 +375,7 @@ class JoryBuilderHookTest extends TestCase
                 '-id',
             ],
             'lmt' => 2,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -395,7 +395,7 @@ class JoryBuilderHookTest extends TestCase
                 '-id',
             ],
             'lmt' => 2,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -424,7 +424,7 @@ class JoryBuilderHookTest extends TestCase
                 '-custom_sort_field',
             ],
             'lmt' => 2,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [
@@ -444,7 +444,7 @@ class JoryBuilderHookTest extends TestCase
                 '-id',
             ],
             'lmt' => 2,
-        ])->getResult();
+        ])->toArray();
 
         $this->assertEquals([
             [

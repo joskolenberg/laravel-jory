@@ -4,6 +4,9 @@
 namespace JosKolenberg\LaravelJory;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Register\JoryBuilderRegistration;
 use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 use JosKolenberg\LaravelJory\Responses\JoryMultipleResponse;
@@ -47,18 +50,83 @@ class JoryManager
     }
 
     /**
-     * Proxy all other calls to a new JoryResponse.
+     * Set the resource to be called based on the uri.
      *
-     * @param $method
-     * @param $args
-     * @return mixed
-     * @throws BindingResolutionException
+     * @param string $uri
+     * @return JoryResponse
+     * @throws Exceptions\ResourceNotFoundException
      */
-    public function __call($method, $args)
+    public function byUri(string $uri): JoryResponse
     {
-        $response = new JoryResponse(app()->make('request'), app()->make(JoryBuildersRegister::class));
+        return $this->getJoryResponse()->byUri($uri);
+    }
 
-        return $response->{$method}(...$args);
+
+    /**
+     * Set the resource to be called based on the model class.
+     *
+     * @param string $modelClass
+     * @return $this
+     * @throws Exceptions\RegistrationNotFoundException
+     * @throws LaravelJoryException
+     */
+    public function on($resource): JoryResponse
+    {
+        $response = $this->getJoryResponse();
+        if($resource instanceof Model){
+            return $response->onModel($resource);
+        }
+
+        if($resource instanceof Builder){
+            return $response->onQuery($resource);
+        }
+
+        if(!is_string($resource)){
+            throw new LaravelJoryException('Unexpected type given. Please provide a model instance, Eloquent builder instance or a model\'s class name.');
+        }
+
+        return $response->onModelClass($resource);
+    }
+
+    /**
+     * Set the resource to be called based on the model class.
+     *
+     * @param string $modelClass
+     * @return JoryResponse
+     * @throws Exceptions\RegistrationNotFoundException
+     */
+    public function onModelClass(string $modelClass): JoryResponse
+    {
+        return $this->getJoryResponse()->onModelClass($modelClass);
+    }
+
+    /**
+     * Set the resource to be called based on the model class.
+     *
+     * @param Model $model
+     * @return JoryResponse
+     * @throws Exceptions\RegistrationNotFoundException
+     */
+    public function onModel(Model $model): JoryResponse
+    {
+        return $this->getJoryResponse()->onModel($model);
+    }
+
+    /**
+     * Set the resource to be called based on the model class.
+     *
+     * @param Builder $query
+     * @return JoryResponse
+     * @throws Exceptions\RegistrationNotFoundException
+     */
+    public function onQuery(Builder $query): JoryResponse
+    {
+        return $this->getJoryResponse()->onQuery($query);
+    }
+
+    protected function getJoryResponse()
+    {
+        return new JoryResponse(app()->make('request'), app()->make(JoryBuildersRegister::class));
     }
 
 }

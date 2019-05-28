@@ -28,6 +28,10 @@ class JoryMultipleResponse implements Responsable
      */
     protected $request;
     /**
+     * @var null|array
+     */
+    protected $data;
+    /**
      * @var JoryBuildersRegister
      */
     protected $register;
@@ -47,6 +51,42 @@ class JoryMultipleResponse implements Responsable
         $this->register = $register;
     }
 
+    public function apply($jory)
+    {
+        if(is_array($jory)){
+            return $this->applyArray($jory);
+        }
+
+        if(!is_string($jory)){
+            throw new LaravelJoryException('Unexpected type given. Please provide an array or Json string.');
+        }
+
+        return $this->applyJson($jory);
+    }
+
+    public function applyJson(string $jory)
+    {
+        $array = json_decode($jory, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            /**
+             * No use for further processing when json is not valid, abort.
+             */
+            throw new LaravelJoryCallException(['Jory string is no valid json.']);
+        }
+
+        $this->data = $array;
+
+        return $this;
+    }
+
+    public function applyArray(array $jory)
+    {
+        $this->data = $jory;
+
+        return $this;
+    }
+
     /**
      * Create an HTTP response that represents the object.
      *
@@ -63,6 +103,51 @@ class JoryMultipleResponse implements Responsable
         $dataResponseKey = config('jory.response.data-key');
 
         return response($dataResponseKey === null ? $data : [$dataResponseKey => $data]);
+    }
+
+    /**
+     * Collect all the data for the requested resources.
+     *
+     * @return array
+     * @throws JoryException
+     * @throws LaravelJoryCallException
+     * @throws LaravelJoryException
+     */
+    public function toArray(): array
+    {
+        /**
+         * If no Jories were manually added before, use the data from the request.
+         */
+        if (empty($this->jories)) {
+            $this->dataIntoJories();
+        }
+
+        /**
+         * Process all Jories.
+         */
+        $results = [];
+        $errors = [];
+        foreach ($this->jories as $single) {
+            try {
+                $results[$single->alias] = $this->processResource($single);
+            } catch (LaravelJoryCallException $e) {
+                foreach ($e->getErrors() as $error) {
+                    /**
+                     * When multiple requests result in errors, we'd like
+                     * to show all the errors that occurred to the user.
+                     * So collect them here and throw them all
+                     * at once later on.
+                     */
+                    $errors[] = $single->name . ': ' . $error;
+                }
+            }
+        }
+
+        if (count($errors) > 0) {
+            throw new LaravelJoryCallException($errors);
+        }
+
+        return $results;
     }
 
     /**
@@ -119,26 +204,10 @@ class JoryMultipleResponse implements Responsable
      *
      * @throws LaravelJoryCallException
      */
-    protected function requestIntoJories()
+    protected function dataIntoJories()
     {
-        $data = $this->request->input(config('jory.request.key'), '{}');
-
-        /**
-         * First check if there is any data and
-         * if it's valid json or array.
-         */
-        if (is_array($data)) {
-            $jories = $data;
-        } else {
-            $jories = json_decode($data, true);
-
-
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                /**
-                 * No use for further processing when json is not valid, abort.
-                 */
-                throw new LaravelJoryCallException(['Jory string is no valid json.']);
-            }
+        if(!$this->data){
+            $this->apply($this->request->input(config('jory.request.key'), '{}'));
         }
 
         /**
@@ -147,7 +216,7 @@ class JoryMultipleResponse implements Responsable
          * Add the individual requested resources to the jories array.
          */
         $errors = [];
-        foreach ($jories as $name => $data) {
+        foreach ($this->data as $name => $data) {
             try {
                 $this->addJory($name, $data);
             } catch (ResourceNotFoundException $e) {
@@ -191,7 +260,7 @@ class JoryMultipleResponse implements Responsable
 
     /**
      * Process a single resource call.
-     * We'll just use a normal single JoryResponse and use the getResult()
+     * We'll just use a normal single JoryResponse and use the toArray()
      * method instead of toResponse() to collect the data.
      *
      * @param $single
@@ -224,51 +293,6 @@ class JoryMultipleResponse implements Responsable
             $singleResponse->find($single->id);
         }
 
-        return $singleResponse->getResult();
-    }
-
-    /**
-     * Collect all the data for the requested resources.
-     *
-     * @return array
-     * @throws JoryException
-     * @throws LaravelJoryCallException
-     * @throws LaravelJoryException
-     */
-    protected function toArray(): array
-    {
-        /**
-         * If no Jories were manually added before, use the data from the request.
-         */
-        if (empty($this->jories)) {
-            $this->requestIntoJories();
-        }
-
-        /**
-         * Process all Jories.
-         */
-        $results = [];
-        $errors = [];
-        foreach ($this->jories as $single) {
-            try {
-                $results[$single->alias] = $this->processResource($single);
-            } catch (LaravelJoryCallException $e) {
-                foreach ($e->getErrors() as $error) {
-                    /**
-                     * When multiple requests result in errors, we'd like
-                     * to show all the errors that occurred to the user.
-                     * So collect them here and throw them all
-                     * at once later on.
-                     */
-                    $errors[] = $single->name . ': ' . $error;
-                }
-            }
-        }
-
-        if (count($errors) > 0) {
-            throw new LaravelJoryCallException($errors);
-        }
-
-        return $results;
+        return $singleResponse->toArray();
     }
 }

@@ -5,6 +5,8 @@ namespace JosKolenberg\LaravelJory\Responses;
 
 
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\Jory\Exceptions\JoryException;
@@ -12,6 +14,7 @@ use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Parsers\JsonParser;
 use JosKolenberg\LaravelJory\Exceptions;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\LaravelJory\Register\JoryBuilderRegistration;
@@ -61,6 +64,11 @@ class JoryResponse implements Responsable
     protected $request;
 
     /**
+     * @var Builder
+     */
+    protected $query;
+
+    /**
      * JoryResponse constructor.
      * @param Request $request
      * @param JoryBuildersRegister $register
@@ -95,6 +103,75 @@ class JoryResponse implements Responsable
     public function onModelClass(string $modelClass): JoryResponse
     {
         $this->registration = $this->register->getByModelClass($modelClass);
+
+        return $this;
+    }
+
+    /**
+     * Set the resource to be called based on the model class.
+     *
+     * @param Model $model
+     * @return $this
+     * @throws Exceptions\RegistrationNotFoundException
+     */
+    public function onModel(Model $model): JoryResponse
+    {
+        $this->registration = $this->register->getByModelClass(get_class($model));
+        $this->find($model->getKey());
+
+        return $this;
+    }
+
+    /**
+     * Set the resource to be called based on the model class.
+     *
+     * @param Model $model
+     * @return $this
+     * @throws Exceptions\RegistrationNotFoundException
+     */
+    public function onQuery(Builder $query): JoryResponse
+    {
+        $this->registration = $this->register->getByModelClass(get_class($query->getModel()));
+        $this->query = $query;
+
+        return $this;
+    }
+
+    public function apply($jory)
+    {
+        if(is_array($jory)){
+            return $this->applyArray($jory);
+        }
+
+        if(!is_string($jory)){
+            throw new LaravelJoryException('Unexpected type given. Please provide an array or Json string.');
+        }
+
+        return $this->applyJson($jory);
+    }
+
+    /**
+     * Manually apply a Json Jory string to the request.
+     *
+     * @param string $json
+     * @return JoryResponse
+     */
+    public function applyJson(string $json): JoryResponse
+    {
+        $this->parser = new JsonParser($json);
+
+        return $this;
+    }
+
+    /**
+     * Manually apply a Jory array to the request.
+     *
+     * @param array $array
+     * @return JoryResponse
+     */
+    public function applyArray(array $array): JoryResponse
+    {
+        $this->parser = new ArrayParser($array);
 
         return $this;
     }
@@ -148,7 +225,7 @@ class JoryResponse implements Responsable
      */
     public function toResponse($request)
     {
-        $data = $this->getResult();
+        $data = $this->toArray();
 
         $responseKey = $this->getDataResponseKey();
         $response = $responseKey === null ? $data : [$responseKey => $data];
@@ -164,7 +241,7 @@ class JoryResponse implements Responsable
      * @throws Exceptions\LaravelJoryException
      * @throws JoryException
      */
-    public function getResult()
+    public function toArray()
     {
         $builder = $this->getProcessedBuilder();
 
@@ -177,32 +254,6 @@ class JoryResponse implements Responsable
         }
 
         return $builder->toArray();
-    }
-
-    /**
-     * Manually apply a Json Jory string to the request.
-     *
-     * @param string $json
-     * @return JoryResponse
-     */
-    public function applyJson(string $json): JoryResponse
-    {
-        $this->parser = new JsonParser($json);
-
-        return $this;
-    }
-
-    /**
-     * Manually apply a Jory array to the request.
-     *
-     * @param array $array
-     * @return JoryResponse
-     */
-    public function applyArray(array $array): JoryResponse
-    {
-        $this->parser = new ArrayParser($array);
-
-        return $this;
     }
 
     /**
@@ -256,6 +307,10 @@ class JoryResponse implements Responsable
      */
     protected function getBaseQuery()
     {
+        if($this->query){
+            return $this->query;
+        }
+
         $modelClass = $this->registration->getModelClass();
 
         $query = $modelClass::query();
