@@ -2,16 +2,14 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Str;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
 
 /**
  * Class Config.
  *
  * Holds the configuration for a JoryBuilder.
  */
-class Config implements Responsable
+class Config
 {
     /**
      * @var string
@@ -254,22 +252,11 @@ class Config implements Responsable
     }
 
     /**
-     * Create an HTTP response that represents the object.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function toResponse($request)
-    {
-        return response($this->toArray());
-    }
-
-    /**
      * Convert the config to an array to be shown when using OPTIONS.
      *
      * @return array
      */
-    protected function toArray(): array
+    public function toArray(): array
     {
         return [
             'fields' => $this->fieldsToArray(),

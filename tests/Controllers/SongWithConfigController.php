@@ -35,18 +35,18 @@ class SongWithConfigController extends Controller
     public function options()
     {
         Jory::register(Song::class, SongJoryBuilderWithConfig::class);
-        return (new SongJoryBuilderWithConfig())->getConfig();
+        return response((new SongJoryBuilderWithConfig())->getConfig()->toArray());
     }
 
     public function optionsTwo()
     {
         Jory::register(Song::class, SongJoryBuilderWithConfigTwo::class);
-        return (new SongJoryBuilderWithConfigTwo())->getConfig();
+        return response((new SongJoryBuilderWithConfigTwo())->getConfig()->toArray());
     }
 
     public function optionsThree()
     {
         Jory::register(Song::class, SongJoryBuilderWithConfigThree::class);
-        return (new SongJoryBuilderWithConfigThree())->getConfig();
+        return response((new SongJoryBuilderWithConfigThree())->getConfig()->toArray());
     }
 }

@@ -50,7 +50,7 @@ class JoryController extends Controller
 
         $joryBuilderClass = $registration->getBuilderClass();
 
-        return (new $joryBuilderClass())->getConfig();
+        return response((new $joryBuilderClass())->getConfig()->toArray());
     }
 
     /**
