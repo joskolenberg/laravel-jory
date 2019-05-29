@@ -3,7 +3,7 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\GrrrroupieJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\Models\Groupie;
 
@@ -19,22 +19,11 @@ class JoryRegisterTest extends TestCase
         $response->assertStatus(500);
 
         $this->expectException(RegistrationNotFoundException::class);
-        $this->expectExceptionMessage('No registration found for model JosKolenberg\LaravelJory\Tests\Models\Groupie. Does JosKolenberg\LaravelJory\Tests\Models\Groupie have an associated JoryBuilder?');
+        $this->expectExceptionMessage('No joryResource found for model JosKolenberg\LaravelJory\Tests\Models\Groupie. Does JosKolenberg\LaravelJory\Tests\Models\Groupie have an associated JoryResource?');
 
-        $register = app(JoryBuildersRegister::class);
+        $register = app(JoryResourcesRegister::class);
 
         $register->getByModelClass(Groupie::class);
-    }
-
-    /** @test */
-    public function it_throws_an_exception_when_no_assiociated_model_is_found()
-    {
-        $this->expectException(RegistrationNotFoundException::class);
-        $this->expectExceptionMessage('No registration found for builderClass JosKolenberg\LaravelJory\Tests\JoryBuilders\GrrrroupieJoryBuilder. Does JosKolenberg\LaravelJory\Tests\JoryBuilders\GrrrroupieJoryBuilder have an associated Model?');
-
-        $register = app(JoryBuildersRegister::class);
-
-        $register->getByBuilderClass(GrrrroupieJoryBuilder::class);
     }
 
 }

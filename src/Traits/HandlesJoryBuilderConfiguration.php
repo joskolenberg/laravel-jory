@@ -6,7 +6,7 @@ use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\Config\Config;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 /**
  * Trait HandlesJoryBuilderConfiguration.
@@ -25,7 +25,7 @@ trait HandlesJoryBuilderConfiguration
     protected function initConfig(): void
     {
         // Create the config based on the settings in config()
-        $modelClass = app()->make(JoryBuildersRegister::class)->getByBuilderClass(static::class)->getModelClass();
+        $modelClass = app()->make(JoryResourcesRegister::class)->getByBuilderClass(static::class)->getModelClass();
         $this->config = new Config($modelClass);
         $this->config($this->config);
     }

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use JosKolenberg\LaravelJory\Console\JoryBuilderMakeCommand;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Register\ManualRegistrar;
 use JosKolenberg\LaravelJory\Responses\JoryResponseFactory;
 
@@ -33,8 +33,8 @@ class JoryServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/jory.php', 'jory');
 
-        $this->app->singleton(JoryBuildersRegister::class, function () {
-            $register = new JoryBuildersRegister(new ManualRegistrar());
+        $this->app->singleton(JoryResourcesRegister::class, function () {
+            $register = new JoryResourcesRegister();
 
             foreach (config('jory.registrars') as $registrar){
                 $register->addRegistrar(new $registrar());
@@ -49,6 +49,10 @@ class JoryServiceProvider extends ServiceProvider
 
         $this->app->singleton('jory', function ($app) {
             return new JoryManager();
+        });
+
+        $this->app->bind(JoryBuilder::class, function ($app, $params){
+            return new JoryBuilder($params['joryResource']);
         });
     }
 

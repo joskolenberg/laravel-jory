@@ -954,7 +954,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
             'jory' => '{"filter":{"f":"name","o":"=","d":"Abbey road"},"rlt":{"album_cover":{}}}',
         ]);
 
-        $response->assertStatus(200)->assertExactJson([
+        $response->assertExactJson([
             'data' => [
                 [
                     'id' => 8,

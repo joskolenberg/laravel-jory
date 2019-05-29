@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Relation;
 use Illuminate\Database\Eloquent\Collection;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 trait LoadsJoryRelations
 {
@@ -32,7 +34,7 @@ trait LoadsJoryRelations
         });
 
         // Hook into the afterFetch() method for custom tweaking in subclasses.
-        $this->afterFetch($models);
+        $this->joryResource->afterFetch($models);
     }
 
     /**
@@ -54,23 +56,26 @@ trait LoadsJoryRelations
         // Remove the alias part if the relation has one
         $relationParts = explode(' as ', $relationName);
         if (count($relationParts) > 1) {
-            $relationName = $relationParts[0];
+            $relationName = Str::snake($relationParts[0]);
         }
 
-        // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-        $relationName = ! $this->case->isCamel() ? Str::camel($relationName) : $relationName;
-
         // Retrieve the model which will be queried to get the appropriate JoryBuilder
-        $relatedModel = $collection->first()->{$relationName}()->getRelated();
-        $relatedJoryBuilderClass = app(JoryBuildersRegister::class)
-            ->getByModelClass(get_class($relatedModel))
-            ->getBuilderClass();
-        $joryBuilder = new $relatedJoryBuilderClass();
+        $relatedModelClass = $this->joryResource
+            ->getConfig()
+            ->getRelation($relationName)
+            ->getModelClass();
+        $relatedJoryResource = app(JoryResourcesRegister::class)
+            ->getByModelClass($relatedModelClass)
+            ->fresh();
+        $relatedJoryResource->setJory($relation->getJory());
+        $joryBuilder = app()->makeWith(JoryBuilder::class, ['joryResource' => $relatedJoryResource]);
+
+        // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
+        $relationName = $this->case->toCamel($relationName);
 
         $collection->load([
             $relationName => function ($query) use ($joryBuilder, $relation) {
                 // Apply the data in the subjory (filtering/sorting/...) on the query
-                $joryBuilder->applyJory($relation->getJory());
                 $joryBuilder->applyOnQuery($query);
             },
         ]);

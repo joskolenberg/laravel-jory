@@ -51,11 +51,11 @@ trait HandlesJoryFilters
     protected function applyFieldFilter($query, Filter $filter): void
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
-        if (method_exists($this, $customMethodName)) {
+        if (method_exists($this->joryResource, $customMethodName)) {
             // Wrap in a where closure to encapsulate any OR clauses in custom method
             // which could lead to unexpected results.
             $query->where(function ($query) use ($filter, $customMethodName) {
-                $this->$customMethodName($query, $filter->getOperator(), $filter->getData());
+                $this->joryResource->$customMethodName($query, $filter->getOperator(), $filter->getData());
             });
 
             return;

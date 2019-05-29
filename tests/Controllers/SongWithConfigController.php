@@ -7,46 +7,49 @@ use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithConfig;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithConfigThree;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithConfigTwo;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithConfig;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithConfigThree;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithConfigTwo;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class SongWithConfigController extends Controller
 {
     public function index()
     {
-        Jory::register(Song::class, SongJoryBuilderWithConfig::class);
+        Jory::register(SongJoryResourceWithConfig::class);
 
         return Jory::onModelClass(Song::class);
     }
 
     public function indexTwo()
     {
-        Jory::register(Song::class, SongJoryBuilderWithConfigTwo::class);
+        Jory::register(SongJoryResourceWithConfigTwo::class);
 
         return Jory::onModelClass(Song::class);
     }
 
     public function indexThree()
     {
-        Jory::register(Song::class, SongJoryBuilderWithConfigThree::class);
+        Jory::register(SongJoryResourceWithConfigThree::class);
 
         return Jory::onModelClass(Song::class);
     }
 
     public function options()
     {
-        Jory::register(Song::class, SongJoryBuilderWithConfig::class);
-        return response((new SongJoryBuilderWithConfig())->getConfig()->toArray());
+        Jory::register(SongJoryResourceWithConfig::class);
+        return response((new SongJoryResourceWithConfig())->getConfig()->toArray());
     }
 
     public function optionsTwo()
     {
-        Jory::register(Song::class, SongJoryBuilderWithConfigTwo::class);
-        return response((new SongJoryBuilderWithConfigTwo())->getConfig()->toArray());
+        Jory::register(SongJoryResourceWithConfigTwo::class);
+        return response((new SongJoryResourceWithConfigTwo())->getConfig()->toArray());
     }
 
     public function optionsThree()
     {
-        Jory::register(Song::class, SongJoryBuilderWithConfigThree::class);
-        return response((new SongJoryBuilderWithConfigThree())->getConfig()->toArray());
+        Jory::register(SongJoryResourceWithConfigThree::class);
+        return response((new SongJoryResourceWithConfigThree())->getConfig()->toArray());
     }
 }

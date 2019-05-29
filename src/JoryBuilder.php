@@ -23,18 +23,17 @@ use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
  *
  * Class JoryBuilder
  */
-abstract class JoryBuilder
+class JoryBuilder
 {
     use HandlesJorySorts,
         HandlesJoryFilters,
         LoadsJoryRelations,
-        ConvertsModelToArrayByJory,
-        HandlesJoryBuilderConfiguration;
+        ConvertsModelToArrayByJory;
 
     /**
      * @var Builder
      */
-    protected $builder;
+    protected $joryResource;
 
     /**
      * @var null|Jory
@@ -46,15 +45,12 @@ abstract class JoryBuilder
      */
     protected $case = null;
 
-    /**
-     * JoryBuilder constructor.
-     *
-     */
-    public function __construct()
+    public function __construct(JoryResource $joryResource)
     {
-        $this->case = app(CaseManager::class);
+        $this->joryResource = $joryResource;
+        $this->jory = $joryResource->getJory();
 
-        $this->initConfig();
+        $this->case = app(CaseManager::class);
     }
 
     /**
@@ -72,21 +68,6 @@ abstract class JoryBuilder
     }
 
     /**
-     * Apply a Jory object.
-     *
-     * @param Jory $jory
-     *
-     * @return JoryBuilder
-     * @throws JoryException
-     */
-    public function applyJory(Jory $jory): self
-    {
-        $this->jory = $this->applyConfigToJory($this->config, $jory);
-
-        return $this;
-    }
-
-    /**
      * Get a collection of Models based on the baseQuery and Jory data.
      *
      * @return Collection
@@ -98,7 +79,7 @@ abstract class JoryBuilder
         $collection = $this->buildQuery()->get();
 
         $jory = $this->jory;
-        $collection = $this->afterFetch($collection);
+        $collection = $this->joryResource->afterFetch($collection);
 
         $this->loadRelations($collection, $jory->getRelations());
 
@@ -120,7 +101,7 @@ abstract class JoryBuilder
             return null;
         }
 
-        $model = $this->afterFetch(new Collection([$model]))->first();
+        $model = $this->joryResource->afterFetch(new Collection([$model]))->first();
 
         $this->loadRelations(new Collection([$model]), $this->jory->getRelations());
 
@@ -140,14 +121,14 @@ abstract class JoryBuilder
 
         $jory = $this->jory;
 
-        $this->beforeQueryBuild($query, $jory, true);
+        $this->joryResource->beforeQueryBuild($query, $jory, true);
 
         // Apply filters if there are any
         if ($jory->getFilter()) {
             $this->applyFilter($query, $jory->getFilter());
         }
 
-        $this->afterQueryBuild($query, $jory, true);
+        $this->joryResource->afterQueryBuild($query, $jory, true);
 
         return $query->count();
     }
@@ -214,16 +195,17 @@ abstract class JoryBuilder
     public function applyOnQuery($query): void
     {
         $jory = $this->jory;
-        $this->beforeQueryBuild($query, $jory);
+        $this->joryResource->beforeQueryBuild($query, $jory);
 
         // Apply filters if there are any
         if ($jory->getFilter()) {
             $this->applyFilter($query, $jory->getFilter());
         }
+
         $this->applySorts($query, $jory->getSorts());
         $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
-        $this->afterQueryBuild($query, $jory);
+        $this->joryResource->afterQueryBuild($query, $jory);
     }
 
     /**
@@ -247,85 +229,6 @@ abstract class JoryBuilder
     }
 
     /**
-     * Do some tweaking before the Jory settings are applied to the query.
-     *
-     * @param $query
-     * @param \JosKolenberg\Jory\Jory $jory
-     * @param bool $count
-     */
-    protected function beforeQueryBuild($query, Jory $jory, $count = false): void
-    {
-        if (!$count) {
-            // By default select only the columns from the root table.
-            $this->selectOnlyRootTable($query);
-        }
-    }
-
-    /**
-     * Hook into the query after all settings in Jory object
-     * are applied and just before the query is executed.
-     *
-     * Usage:
-     *  - Filtering: Any filters set will be applied on the query.
-     *  - Sorting: Any sorting applied here will be applied as last, so the requested sorting will
-     *      have precedence over this one.
-     *  - Offset/Limit: An offset or limit applied here will overrule the ones requested or configured.
-     *
-     * @param $query
-     * @param \JosKolenberg\Jory\Jory $jory
-     * @param bool $count
-     */
-    protected function afterQueryBuild($query, Jory $jory, $count = false): void
-    {
-    }
-
-    /**
-     * Hook into the collection right after it is fetched.
-     *
-     * Here you can modify the collection before it is turned into an array.
-     * E.g. 1. you could eager load some relations when you have some
-     *      calculated values in custom attributes using relations.
-     *      # if $jory->hasField('total_price') $collection->load('invoices');
-     *
-     * E.g. 2. you could sort the collection in a way which is hard using queries
-     *      but easier done using a collection.
-     *
-     * @param Collection $collection
-     * @return Collection
-     */
-    protected function afterFetch(Collection $collection): Collection
-    {
-        return $collection;
-    }
-
-    /**
-     * Alter the query to select only the columns of
-     * the model which is being queried.
-     *
-     * This way we prevent field conflicts when
-     * joins are applied.
-     *
-     * @param $query
-     */
-    protected function selectOnlyRootTable($query): void
-    {
-        $table = $query->getModel()->getTable();
-        $query->select($table . '.*');
-    }
-
-    /**
-     * Validate the Jory object by the settings in the Config.
-     *
-     * @throws LaravelJoryCallException
-     * @throws LaravelJoryException
-     * @throws JoryException
-     */
-    public function validate(): void
-    {
-        (new Validator($this->getConfig(), $this->jory))->validate();
-    }
-
-    /**
      * Convert a single model to an array based on the request in the Jory object.
      *
      * @param Model $model
@@ -335,39 +238,6 @@ abstract class JoryBuilder
      */
     public function modelToArray(Model $model): array
     {
-        return $this->modelToArrayByJory($model, $this->jory);
-    }
-
-    /**
-     * Tell if the Jory requests the given field.
-     *
-     * @param $field
-     * @return bool
-     */
-    protected function hasField($field): bool
-    {
-        return $this->jory->hasField($this->case->isCamel() ? Str::camel($field) : $field);
-    }
-
-    /**
-     * Tell if the Jory has a filter on the given field.
-     *
-     * @param $field
-     * @return bool
-     */
-    protected function hasFilter($field): bool
-    {
-        return $this->jory->hasFilter($this->case->isCamel() ? Str::camel($field) : $field);
-    }
-
-    /**
-     * Tell if the Jory has a sort on the given field.
-     *
-     * @param $field
-     * @return bool
-     */
-    protected function hasSort($field): bool
-    {
-        return $this->jory->hasSort($this->case->isCamel() ? Str::camel($field) : $field);
+        return $this->modelToArrayByJory($model, $this->joryResource);
     }
 }

@@ -51,7 +51,7 @@ class JoryBuilderWithConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_can_validate_if_a_requested_field_is_not_available()
+    public function it_can_validate_if_a_requested_field_is_not_available_2()
     {
         $response = $this->json('GET', 'song', [
             'jory' => '{"fld":["titel"],"lmt":5}',

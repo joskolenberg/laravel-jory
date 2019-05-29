@@ -2,7 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use SimilarText\Finder;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\GroupOrFilter;
@@ -223,22 +224,30 @@ class Validator
         }
 
         foreach ($this->jory->getRelations() as $joryRelation) {
-            $relatedConfig = null;
-            foreach ($this->config->getRelations() as $configRelation) {
-                if ($joryRelation->getName() === $configRelation->getName()) {
-                    $relatedModelClass = $configRelation->getModelClass();
-                    $relatedJoryBuilderClass = app(JoryBuildersRegister::class)
-                        ->getByModelClass($relatedModelClass)
-                        ->getBuilderClass();
-                    $relatedConfig = (new $relatedJoryBuilderClass())->getConfig();
-                }
-            }
-            if ($relatedConfig === null) {
+            $relation = $relatedModelClass = $this->config
+                ->getRelation($joryRelation->getName());
+
+            /**
+             * If the relation could not be found, there will already be
+             * an error by validateRelations, no need to check further here.
+             */
+            if ($relatedModelClass === null) {
                 break;
             }
 
+            $relatedJoryResource = app(JoryResourcesRegister::class)
+                ->getByModelClass($relation->getModelClass());
+//
+//            foreach ($this->config->getRelations() as $configRelation) {
+//                if ($joryRelation->getName() === $configRelation->getName()) {
+//                    $relatedModelClass = $configRelation->getModelClass();
+//                    $relatedJoryResource = app(JoryResourcesRegister::class)
+//                        ->getByModelClass($relatedModelClass);
+//                }
+//            }
+
             try {
-                (new self($relatedConfig, $joryRelation->getJory(), ($this->address ? $this->address.'.' : '').$joryRelation->getName().'.'))->validate();
+                (new self($relatedJoryResource->getConfig(), $joryRelation->getJory(), ($this->address ? $this->address.'.' : '').$joryRelation->getName().'.'))->validate();
             } catch (LaravelJoryCallException $e) {
                 $this->errors = array_merge($this->errors, $e->getErrors());
             }

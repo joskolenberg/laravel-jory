@@ -30,8 +30,8 @@ trait HandlesJorySorts
     protected function applySort($query, Sort $sort): void
     {
         $customMethodName = $this->getCustomSortMethodName($sort);
-        if (method_exists($this, $customMethodName)) {
-            $this->$customMethodName($query, $sort->getOrder());
+        if (method_exists($this->joryResource, $customMethodName)) {
+            $this->joryResource->$customMethodName($query, $sort->getOrder());
 
             return;
         }

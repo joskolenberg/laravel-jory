@@ -7,8 +7,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
-use JosKolenberg\LaravelJory\Register\JoryBuilderRegistration;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourceRegistration;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Responses\JoryMultipleResponse;
 use JosKolenberg\LaravelJory\Responses\JoryResponse;
 
@@ -29,24 +29,12 @@ class JoryManager
      */
     public function multiple(): JoryMultipleResponse
     {
-        return new JoryMultipleResponse(app()->make('request'), app()->make(JoryBuildersRegister::class));
+        return new JoryMultipleResponse(app()->make('request'), app()->make(JoryResourcesRegister::class));
     }
 
-    /**
-     * The register() call will be sent to the JoryBuildersRegister.
-     *
-     * @param string $modelClass
-     * @param string $builderClass
-     * @return JoryBuilderRegistration
-     * @throws BindingResolutionException
-     */
-    public function register(string $modelClass, string $builderClass): JoryBuilderRegistration
+    public function register(string $joryResourceClass): JoryResourcesRegister
     {
-        $registration = new JoryBuilderRegistration($modelClass, $builderClass);
-
-        app()->make(JoryBuildersRegister::class)->add($registration);
-
-        return $registration;
+        return app()->make(JoryResourcesRegister::class)->add(new $joryResourceClass());
     }
 
     /**
@@ -138,7 +126,7 @@ class JoryManager
      */
     protected function getJoryResponse(): JoryResponse
     {
-        return new JoryResponse(app()->make('request'), app()->make(JoryBuildersRegister::class));
+        return new JoryResponse(app()->make('request'), app()->make(JoryResourcesRegister::class));
     }
 
 }

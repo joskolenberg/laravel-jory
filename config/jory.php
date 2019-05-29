@@ -130,18 +130,14 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you can edit the settings for the default autoRegistrar.
-    | By default the autoRegistrar looks for models in the 'app'
-    | directory and tries to bind them to JoryBuilders in the
-    | 'app/Http/JoryBuilders' directory. The JoryBuilders
-    | should be using the <Model>JoryBuilder convention.
+    | By default the autoRegistrar looks for JoryResources
+    | in the Http/JoryResources folder.
     */
 
     'auto-registrar' => [
 
-        'models-path' => app_path(),
-        'jory-builders-path' => app_path('Http\\JoryBuilders'),
-        'root-namespace' => '\App',
-        'root-path' => app_path(),
+        'path' => app_path('Http/JoryResources'),
+        'namespace' => 'App\Http\JoryResources',
 
     ],
 

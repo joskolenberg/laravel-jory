@@ -6,32 +6,33 @@ namespace JosKolenberg\LaravelJory\Register;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use JosKolenberg\LaravelJory\JoryResource;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class AutoRegistrar
  *
- * Automatically registers JoryBuilders which follow the standard <ModelName>JoryBuilder naming convention
+ * Automatically registers JoryResources which follow the standard <ModelName>JoryResource naming convention
  */
-class AutoRegistrar implements RegistersJoryBuilders
+class AutoRegistrar implements RegistersJoryResources
 {
 
     /**
-     * The discovered JoryBuilders
+     * The discovered JoryResources
      *
      * @var Collection
      */
-    protected $registrations;
+    protected $joryResources;
 
     /**
      * AutoRegistrar constructor.
      */
     public function __construct()
     {
-        $this->registrations = new Collection();
+        $this->joryResources = new Collection();
 
-        $this->discoverJoryBuilders();
+        $this->discoverJoryResources();
     }
 
     /**
@@ -39,44 +40,41 @@ class AutoRegistrar implements RegistersJoryBuilders
      *
      * @return Collection
      */
-    public function getRegistrations(): Collection
+    public function getJoryResources(): Collection
     {
-        return $this->registrations;
+        return $this->joryResources;
     }
 
     /**
-     * Try to find the and register all the JoryBuilders
+     * Try to find the and register all the JoryResources
      */
-    protected function discoverJoryBuilders(): void
+    protected function discoverJoryResources(): void
     {
-        $files = (new Finder())->files()->in(config('jory.auto-registrar.models-path'));
+        $files = (new Finder())->files()->in(config('jory.auto-registrar.path'));
 
         foreach ($files as $file) {
             if ($file->getExtension() !== 'php') {
                 continue;
             }
 
-            $this->discoverJoryBuilderForModelFile($file);
+            $this->discoverJoryResourceForFile($file);
         }
     }
 
     /**
-     * If we can find a JoryBuilder for the given file, we'll register it.
+     * If we can find a JoryResource for the given file, we'll register it.
      *
      * @param SplFileInfo $file
      */
-    protected function discoverJoryBuilderForModelFile(SplFileInfo $file): void
+    protected function discoverJoryResourceForFile(SplFileInfo $file): void
     {
-        $joryBuilderFilePath = config('jory.auto-registrar.jory-builders-path') . DIRECTORY_SEPARATOR . $file->getBasename('.php') . 'JoryBuilder.php';
+        $className = $this->getClassNameFromFilePath($file->getRealPath());
 
-        if (!file_exists($joryBuilderFilePath)) {
-            return;
+        $joryResource = new $className();
+
+        if($joryResource instanceof JoryResource){
+            $this->joryResources->push($joryResource);
         }
-
-        $this->registrations->push(new JoryBuilderRegistration(
-            $this->getClassNameFromFilePath($file->getRealPath()),
-            $this->getClassNameFromFilePath($joryBuilderFilePath)
-        ));
     }
 
     /**
@@ -87,22 +85,22 @@ class AutoRegistrar implements RegistersJoryBuilders
      */
     protected function getClassNameFromFilePath($path): string
     {
-        // Example; $path = /home/vagrant/code/project/app/Http/JoryBuilders/UserJoryBuilder.php
+        // Example; $path = /home/vagrant/code/project/app/Http/JoryResources/UserJoryResource.php
 
-        $rootPath = config('jory.auto-registrar.root-path');
-        $rootNameSpace = config('jory.auto-registrar.root-namespace');
+        $rootPath = config('jory.auto-registrar.path');
+        $rootNameSpace = config('jory.auto-registrar.namespace');
 
-        // Get filename relative to rootPath without extension, e.g. /Http/JoryBuilders/UserJoryBuilder
+        // Get filename relative to rootPath without extension, e.g. /Http/JoryResources/UserJoryResource
         $className = str_replace($rootPath, '', substr($path, 0, -4));
 
-        // Convert to backslashes and make all namespaces StudlyCased, e.g. \Http\JoryBuilders\UserJoryBuilder
+        // Convert to backslashes and make all namespaces StudlyCased, e.g. \Http\JoryResources\UserJoryResource
         $className = collect(explode(DIRECTORY_SEPARATOR, $className))
             ->map(function($namespace){
                 return Str::studly($namespace);
             })
             ->implode('\\');
 
-        // Return the classname prefixed with the rootPath's namespace, e.g. \App\Http\JoryBuilders\UserJoryBuilder
+        // Return the classname prefixed with the rootPath's namespace, e.g. \App\Http\JoryResources\UserJoryResource
         return $rootNameSpace . $className;
     }
 }

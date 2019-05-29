@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Helpers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CaseManager
 {
@@ -23,4 +24,22 @@ class CaseManager
         return $this->case === 'camel';
     }
 
+    public function toCurrent($string)
+    {
+        if($this->isCamel()){
+            return Str::camel($string);
+        }
+
+        return Str::snake($string);
+    }
+
+    public function toCamel($string)
+    {
+        return Str::camel($string);
+    }
+
+    public function toSnake($string)
+    {
+        return Str::snake($string);
+    }
 }

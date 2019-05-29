@@ -4,7 +4,7 @@ namespace JosKolenberg\LaravelJory\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 class JoryController extends Controller
 {
@@ -44,19 +44,17 @@ class JoryController extends Controller
     /**
      * Give the options for a resource.
      */
-    public function options(string $resource, JoryBuildersRegister $register)
+    public function options(string $resource, JoryResourcesRegister $register)
     {
-        $registration = $register->getByUri($resource);
+        $joryResource = $register->getByUri($resource);
 
-        $joryBuilderClass = $registration->getBuilderClass();
-
-        return response((new $joryBuilderClass())->getConfig()->toArray());
+        return response($joryResource->getConfig()->toArray());
     }
 
     /**
      * Display a list of available resources.
      */
-    public function resourceList(JoryBuildersRegister $register)
+    public function resourceList(JoryResourcesRegister $register)
     {
         return response(['resources' => $register->getUrisArray()]);
     }

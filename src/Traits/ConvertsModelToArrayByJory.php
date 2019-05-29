@@ -6,7 +6,9 @@ use Illuminate\Support\Str;
 use JosKolenberg\Jory\Jory;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 trait ConvertsModelToArrayByJory
 {
@@ -17,8 +19,10 @@ trait ConvertsModelToArrayByJory
      * @param \JosKolenberg\Jory\Jory $jory
      * @return array
      */
-    protected function modelToArrayByJory(Model $model, Jory $jory): array
+    protected function modelToArrayByJory(Model $model, JoryResource $joryResource): array
     {
+        $jory = $joryResource->getJory();
+
         $case = app(CaseManager::class);
 
         $result = [];
@@ -38,18 +42,16 @@ trait ConvertsModelToArrayByJory
                 $relationAlias = $relationParts[1];
             }
 
-            // Laravel's relations are in camelCase, convert if we're not in camelCase mode
-            $relationName = !$case->isCamel() ? Str::camel($relationName) : $relationName;
-
             // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
             $related = $model->joryRelations[$relation->getName()];
 
             // Get the related JoryBuilder to convert the related records to arrays
-            $relatedModel = $model->{$relationName}()->getRelated();
-            $relatedJoryBuilderClass = app(JoryBuildersRegister::class)
-                ->getByModelClass(get_class($relatedModel))
-                ->getBuilderClass();
-            $relatedJoryBuilder = (new $relatedJoryBuilderClass())->applyJory($relation->getJory());
+            $relatedModelClass = $joryResource->getConfig()->getRelation($relationName)->getModelClass();
+            $relatedJoryResource = app(JoryResourcesRegister::class)
+                ->getByModelClass($relatedModelClass)
+                ->fresh();
+            $relatedJoryResource->setJory($relation->getJory());
+            $relatedJoryBuilder = app()->makeWith(JoryBuilder::class, ['joryResource' => $relatedJoryResource]);
 
             if ($related === null) {
                 // No related model found

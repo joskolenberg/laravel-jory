@@ -6,7 +6,7 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class FacadeTest extends TestCase
@@ -65,7 +65,7 @@ class FacadeTest extends TestCase
     public function it_throws_an_exception_when_no_valid_resource_is_given_1()
     {
         $this->expectException(RegistrationNotFoundException::class);
-        $this->expectExceptionMessage('No registration found for model JosKolenberg\LaravelJory\Http\Controllers\JoryController. Does JosKolenberg\LaravelJory\Http\Controllers\JoryController have an associated JoryBuilder?');
+        $this->expectExceptionMessage('No joryResource found for model JosKolenberg\LaravelJory\Http\Controllers\JoryController. Does JosKolenberg\LaravelJory\Http\Controllers\JoryController have an associated JoryResource?');
         Jory::on(JoryController::class);
     }
 

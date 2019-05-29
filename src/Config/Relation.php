@@ -4,7 +4,7 @@ namespace JosKolenberg\LaravelJory\Config;
 
 use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 /**
  * Class Relation.
@@ -101,7 +101,7 @@ class Relation
      */
     public function getType(): string
     {
-        $registration = app()->make(JoryBuildersRegister::class)->getByModelClass($this->modelClass);
+        $registration = app()->make(JoryResourcesRegister::class)->getByModelClass($this->modelClass);
 
         return $registration ? $registration->getUri() : 'Not defined.';
     }

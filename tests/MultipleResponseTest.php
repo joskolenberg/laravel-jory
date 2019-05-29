@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class MultipleResponseTest extends TestCase

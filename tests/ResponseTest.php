@@ -5,7 +5,8 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAlternateUri;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class ResponseTest extends TestCase
@@ -63,7 +64,7 @@ class ResponseTest extends TestCase
     /** @test */
     public function it_can_apply_on_a_resource_by_uri()
     {
-        Jory::register(Song::class, SongJoryBuilder::class)->uri('ssoonngg');
+        Jory::register(SongJoryResourceWithAlternateUri::class);
 
         $actual = Jory::byUri('ssoonngg')
             ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')

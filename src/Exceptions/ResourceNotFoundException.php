@@ -3,7 +3,7 @@
 
 namespace JosKolenberg\LaravelJory\Exceptions;
 
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use SimilarText\Finder;
 
 /**
@@ -15,7 +15,7 @@ class ResourceNotFoundException extends \Exception
 {
     public function __construct(string $resource)
     {
-        $register = app()->make(JoryBuildersRegister::class);
+        $register = app()->make(JoryResourcesRegister::class);
 
         $message = 'Resource ' . $resource . ' not found, ' . $this->getSuggestion($register->getUrisArray(), $resource);
 

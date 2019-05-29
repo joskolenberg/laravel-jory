@@ -6,7 +6,7 @@ namespace JosKolenberg\LaravelJory\Register;
 
 use Illuminate\Support\Collection;
 
-interface RegistersJoryBuilders
+interface RegistersJoryResources
 {
 
     /**
@@ -14,6 +14,6 @@ interface RegistersJoryBuilders
      *
      * @return Collection
      */
-    public function getRegistrations(): Collection;
+    public function getJoryResources(): Collection;
 
 }

@@ -10,9 +10,16 @@ use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\JoryServiceProvider;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\PersonJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilder;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AlbumCoverJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AlbumJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\BandJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\InstrumentJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\PersonJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAfterFetchHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithBeforeQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
@@ -919,11 +926,19 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         /**
          * Register some JoryBuilders and let some of them be discovered by de autoRegistrar.
          */
-        Jory::register(Band::class, BandJoryBuilder::class);
-        Jory::register(Person::class, PersonJoryBuilder::class);
-        Jory::register(Song::class, SongJoryBuilder::class);
-        Jory::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
-        Jory::register(SongWithAfterFetchHook::class, SongJoryBuilderWithAfterFetchHook::class)->uri('song-with-after-fetch');
+//        Jory::register(BandJoryResource::class);
+//        Jory::register(PersonJoryResource::class);
+//        Jory::register(SongJoryResourceWithBeforeQueryBuildFilterHook::class);
+//        Jory::register(SongJoryResourceWithAfterFetchHook::class);
+//        Jory::register(SongJoryResource::class);
+//        Jory::register(AlbumJoryResource::class);
+//        Jory::register(AlbumCoverJoryResource::class);
+//        Jory::register(InstrumentJoryResource::class);
+//        Jory::register(Band::class, BandJoryBuilder::class);
+//        Jory::register(Person::class, PersonJoryBuilder::class);
+//        Jory::register(Song::class, SongJoryBuilder::class);
+//        Jory::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
+//        Jory::register(SongWithAfterFetchHook::class, SongJoryBuilderWithAfterFetchHook::class)->uri('song-with-after-fetch');
     }
 
     public function assertQueryCount($expected)
@@ -939,6 +954,8 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
             'jory-builders-path' => __DIR__ . '/JoryBuilders',
             'root-namespace' => 'JosKolenberg\LaravelJory\Tests',
             'root-path' => __DIR__,
+            'path' => __DIR__ . '/JoryResources',
+            'namespace' => 'JosKolenberg\LaravelJory\Tests\JoryResources',
         ]);
     }
 }

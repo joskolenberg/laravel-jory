@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Config;
 
 use Illuminate\Support\Str;
+use JosKolenberg\Jory\Jory;
 
 /**
  * Class Config.
@@ -343,5 +344,62 @@ class Config
         }
 
         return $result;
+    }
+
+    public function applyToJory(Jory $jory): Jory
+    {
+        $this->applyFieldsToJory($jory);
+        $this->applySortsToJory($jory);
+        $this->applyOffsetAndLimitToJory($jory);
+
+        return $jory;
+    }
+
+    protected function applyFieldsToJory(Jory $jory): void
+    {
+        if ($jory->getFields() === null) {
+            // No fields set in the request, than we will update the fields
+            // with the ones to be shown by default.
+            $defaultFields = [];
+            foreach ($this->getFields() as $field) {
+                if ($field->isShownByDefault()) {
+                    $defaultFields[] = $field->getField();
+                }
+            }
+            $jory->setFields($defaultFields);
+        }
+    }
+
+    protected function applySortsToJory(Jory $jory): void
+    {
+        // When default sorts are defined, add them to the Jory
+        // When no sorts are requested, the default sorts in the builder will be applied.
+        // When sorts are requested, the default sorts are applied after the requested ones.
+        $defaultSorts = [];
+        foreach ($this->getSorts() as $sort) {
+            if ($sort->getDefaultIndex() !== null) {
+                $defaultSorts[$sort->getDefaultIndex()] = new \JosKolenberg\Jory\Support\Sort($sort->getField(), $sort->getDefaultOrder());
+            }
+        }
+        ksort($defaultSorts);
+        foreach ($defaultSorts as $sort) {
+            $jory->addSort($sort);
+        }
+    }
+
+    protected function applyOffsetAndLimitToJory(Jory $jory): void
+    {
+        if (is_null($jory->getLimit()) && $this->getLimitDefault() !== null) {
+            $jory->setLimit($this->getLimitDefault());
+        }
+    }
+
+    public function getRelation($relationName)
+    {
+        foreach ($this->relations as $relation){
+            if($relation->getName() === $relationName){
+                return $relation;
+            }
+        }
     }
 }

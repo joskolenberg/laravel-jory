@@ -13,12 +13,13 @@ use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Parsers\JsonParser;
+use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Exceptions;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
-use JosKolenberg\LaravelJory\Register\JoryBuilderRegistration;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourceRegistration;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 /**
  * Class JoryResponse
@@ -29,14 +30,11 @@ class JoryResponse implements Responsable
 {
 
     /**
-     * @var JoryBuildersRegister
+     * @var JoryResourcesRegister
      */
     protected $register;
 
-    /**
-     * @var JoryBuilderRegistration
-     */
-    protected $registration;
+    protected $joryResource;
 
     /**
      * @var JoryParserInterface
@@ -71,9 +69,9 @@ class JoryResponse implements Responsable
     /**
      * JoryResponse constructor.
      * @param Request $request
-     * @param JoryBuildersRegister $register
+     * @param JoryResourcesRegister $register
      */
-    public function __construct(Request $request, JoryBuildersRegister $register)
+    public function __construct(Request $request, JoryResourcesRegister $register)
     {
         $this->register = $register;
         $this->request = $request;
@@ -88,7 +86,7 @@ class JoryResponse implements Responsable
      */
     public function byUri(string $uri): JoryResponse
     {
-        $this->registration = $this->register->getByUri($uri);
+        $this->joryResource = $this->register->getByUri($uri)->fresh();
 
         return $this;
     }
@@ -102,7 +100,7 @@ class JoryResponse implements Responsable
      */
     public function onModelClass(string $modelClass): JoryResponse
     {
-        $this->registration = $this->register->getByModelClass($modelClass);
+        $this->joryResource = $this->register->getByModelClass($modelClass)->fresh();
 
         return $this;
     }
@@ -117,7 +115,7 @@ class JoryResponse implements Responsable
      */
     public function onModel(Model $model): JoryResponse
     {
-        $this->registration = $this->register->getByModelClass(get_class($model));
+        $this->joryResource = $this->register->getByModelClass(get_class($model))->fresh();
 
         /**
          * When an existing model is given, we simply set the id to filter on.
@@ -139,7 +137,7 @@ class JoryResponse implements Responsable
      */
     public function onQuery(Builder $query): JoryResponse
     {
-        $this->registration = $this->register->getByModelClass(get_class($query->getModel()));
+        $this->joryResource = $this->register->getByModelClass(get_class($query->getModel()))->fresh();
         $this->query = $query;
 
         return $this;
@@ -263,10 +261,6 @@ class JoryResponse implements Responsable
 
         $builder->onQuery($this->getBaseQuery());
 
-        $builder->applyJory($this->getJory());
-
-        $builder->validate();
-
         if($this->count){
             return $builder->getCount();
         }
@@ -294,13 +288,15 @@ class JoryResponse implements Responsable
      */
     protected function getBuilder(): JoryBuilder
     {
-        if(!$this->registration){
+        if(!$this->joryResource){
             throw new Exceptions\LaravelJoryException('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
         }
 
-        $builderClass = $this->registration->getBuilderClass();
+        $this->joryResource->setJory($this->getJory());
 
-        return new $builderClass();
+        $this->joryResource->validate();
+
+        return app()->makeWith(JoryBuilder::class, ['joryResource' => $this->joryResource]);
     }
 
     /**
@@ -316,7 +312,7 @@ class JoryResponse implements Responsable
         }
 
         // Else; create a query from the given model in the registration.
-        $modelClass = $this->registration->getModelClass();
+        $modelClass = $this->joryResource->getModelClass();
         $query = $modelClass::query();
 
         // When a modelId is passed we add a filter to only get this record.

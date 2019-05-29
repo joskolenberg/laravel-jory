@@ -9,6 +9,12 @@ use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQueryOff
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterQuerySortHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildSortHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAfterFetchHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAfterQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAfterQueryOffsetLimitHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAfterQuerySortHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithBeforeQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithBeforeQueryBuildSortHook;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class JoryBuilderHookTest extends TestCase
@@ -16,7 +22,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_before_query_build_with_a_filter_1()
     {
-        Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
+        Jory::register(SongJoryResourceWithBeforeQueryBuildFilterHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
@@ -46,7 +52,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_before_query_build_with_a_filter_2()
     {
-        Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class);
+        Jory::register(SongJoryResourceWithBeforeQueryBuildFilterHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
@@ -75,7 +81,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_before_query_build_with_a_sort_1()
     {
-        Jory::register(Song::class, SongJoryBuilderWithBeforeQueryBuildSortHook::class);
+        Jory::register(SongJoryResourceWithBeforeQueryBuildSortHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
@@ -111,7 +117,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_filter_1()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
+        Jory::register(SongJoryResourceWithAfterQueryBuildFilterHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
@@ -141,7 +147,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_filter_2()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterQueryBuildFilterHook::class);
+        Jory::register(SongJoryResourceWithAfterQueryBuildFilterHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
@@ -170,7 +176,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_offset_and_limit_1()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterQueryOffsetLimitHook::class);
+        Jory::register(SongJoryResourceWithAfterQueryOffsetLimitHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
@@ -206,7 +212,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_sort_1()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
+        Jory::register(SongJoryResourceWithAfterQuerySortHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'fld' => [
@@ -239,7 +245,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_query_after_query_build_with_a_sort_2()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterQuerySortHook::class);
+        Jory::register(SongJoryResourceWithAfterQuerySortHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
@@ -275,7 +281,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_hook_into_the_after_fetch_on_the_collection()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(SongJoryResourceWithAfterFetchHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [
@@ -316,7 +322,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_check_if_a_field_is_requested()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(SongJoryResourceWithAfterFetchHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'fld' => [
@@ -365,7 +371,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_check_if_a_filter_on_a_field_will_be_applied()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(SongJoryResourceWithAfterFetchHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'flt' => [
@@ -416,7 +422,7 @@ class JoryBuilderHookTest extends TestCase
     /** @test */
     public function it_can_check_if_a_sort_on_a_field_will_be_applied()
     {
-        Jory::register(Song::class, SongJoryBuilderWithAfterFetchHook::class);
+        Jory::register(SongJoryResourceWithAfterFetchHook::class);
 
         $result = Jory::onModelClass(Song::class)->applyArray([
             'srt' => [

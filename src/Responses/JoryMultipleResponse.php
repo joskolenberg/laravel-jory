@@ -12,7 +12,7 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Register\JoryBuildersRegister;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use stdClass;
 
 /**
@@ -32,7 +32,7 @@ class JoryMultipleResponse implements Responsable
      */
     protected $data;
     /**
-     * @var JoryBuildersRegister
+     * @var JoryResourcesRegister
      */
     protected $register;
     /**
@@ -43,9 +43,9 @@ class JoryMultipleResponse implements Responsable
     /**
      * JoryMultipleResponse constructor.
      * @param Request $request
-     * @param JoryBuildersRegister $register
+     * @param JoryResourcesRegister $register
      */
-    public function __construct(Request $request, JoryBuildersRegister $register)
+    public function __construct(Request $request, JoryResourcesRegister $register)
     {
         $this->request = $request;
         $this->register = $register;
