@@ -64,8 +64,6 @@ class ResponseTest extends TestCase
     /** @test */
     public function it_can_apply_on_a_resource_by_uri()
     {
-        Jory::register(SongJoryResourceWithAlternateUri::class);
-
         $actual = Jory::byUri('ssoonngg')
             ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
             ->toArray();

@@ -404,6 +404,7 @@ class JoryRoutesTest extends TestCase
                 'song',
                 'song-custom',
                 'song-with-after-fetch',
+                'ssoonngg',
             ],
         ];
 

@@ -5,17 +5,19 @@ namespace JosKolenberg\LaravelJory;
 
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 abstract class JoryResource
 {
 
     protected $modelClass;
-    
+
     protected $uri;
 
     protected $config;
@@ -24,11 +26,18 @@ abstract class JoryResource
 
     protected $case;
 
+    protected $relationJoryResources;
+
     abstract protected function configure();
+
+    public function __construct()
+    {
+//        dump(static::class);
+    }
 
     public function getUri()
     {
-        if(!$this->uri){
+        if (!$this->uri) {
             return Str::kebab(class_basename($this->modelClass));
         }
 
@@ -47,7 +56,7 @@ abstract class JoryResource
 
     public function getConfig()
     {
-        if(!$this->config){
+        if (!$this->config) {
             $this->config = new Config($this->modelClass);
             $this->configure();
         }
@@ -214,5 +223,81 @@ abstract class JoryResource
             default:
                 $query->where($field, $operator ?: '=', $data);
         }
+    }
+
+    public function getRelatedJoryResources()
+    {
+        if (!$this->relationJoryResources) {
+            $this->relationJoryResources = [];
+
+            foreach ($this->jory->getRelations() as $relation) {
+                $relationName = $relation->getName();
+
+                // Split the relation name in Laravel's relation name and the alias, if there is one.
+                $relationParts = explode(' as ', $relationName);
+                if (count($relationParts) > 1) {
+                    $relationName = $relationParts[0];
+                }
+
+                $relatedModelClass = $this->getConfig()->getRelation($relationName)->getModelClass();
+                $relatedJoryResource = app(JoryResourcesRegister::class)
+                    ->getByModelClass($relatedModelClass)
+                    ->fresh();
+                $relatedJoryResource->setJory($relation->getJory());
+                $this->relationJoryResources[$relation->getName()] = $relatedJoryResource;
+            }
+        }
+
+        return $this->relationJoryResources;
+    }
+
+    /**
+     * Convert a single model to an array based on the request in the Jory object.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param \JosKolenberg\Jory\Jory $jory
+     * @return array
+     */
+    public function modelToArray(Model $model): array
+    {
+        $jory = $this->getJory();
+
+        $case = app(CaseManager::class);
+
+        $result = [];
+        foreach ($jory->getFields() as $field) {
+            $result[$field] = $case->isCamel() ? $model->{Str::snake($field)} : $model->$field;
+        }
+
+        // Add the relations to the result
+        foreach ($this->getRelatedJoryResources() as $relationName => $relatedJoryResource) {
+            $relationAlias = $relationName;
+
+            // Split the relation name in Laravel's relation name and the alias, if there is one.
+            $relationParts = explode(' as ', $relationName);
+            if (count($relationParts) > 1) {
+                $relationAlias = $relationParts[1];
+            }
+
+            // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
+            $related = $model->joryRelations[$relationName];
+
+            if ($related === null) {
+                // No related model found
+                $result[$relationAlias] = null;
+            } elseif ($related instanceof Model) {
+                // A related model is found
+                $result[$relationAlias] = $relatedJoryResource->modelToArray($related);
+            } else {
+                // A related collection
+                $relationResult = [];
+                foreach ($related as $relatedModel) {
+                    $relationResult[] = $relatedJoryResource->modelToArray($relatedModel);
+                }
+                $result[$relationAlias] = $relationResult;
+            }
+        }
+
+        return $result;
     }
 }

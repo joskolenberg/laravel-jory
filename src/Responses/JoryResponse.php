@@ -266,10 +266,22 @@ class JoryResponse implements Responsable
         }
 
         if($this->first){
-            return $builder->firstToArray();
+            $model = $builder->getFirst();
+            if (!$model) {
+                return null;
+            }
+
+            return $this->joryResource->modelToArray($model);
         }
 
-        return $builder->toArray();
+        $models = $builder->get();
+
+        $result = [];
+        foreach ($models as $model) {
+            $result[] = $this->joryResource->modelToArray($model);
+        }
+
+        return $result;
     }
 
     /**

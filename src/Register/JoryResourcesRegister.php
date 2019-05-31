@@ -117,11 +117,11 @@ class JoryResourcesRegister
              * If the existing collection already has a joryResource for
              * this model, don't register it again.
              */
-//            if($subject->contains(function ($existing) use ($joryResource) {
-//                return $existing->getModelClass() === $joryResource->getModelClass();
-//            })){
-//                continue;
-//            }
+            if($subject->contains(function ($existing) use ($joryResource) {
+                return $existing->getUri() === $joryResource->getUri();
+            })){
+                continue;
+            }
 
             $subject->push($joryResource);
         }

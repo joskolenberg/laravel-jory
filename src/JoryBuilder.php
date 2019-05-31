@@ -5,15 +5,10 @@ namespace JosKolenberg\LaravelJory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
-use JosKolenberg\LaravelJory\Config\Validator;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Traits\ConvertsModelToArrayByJory;
-use JosKolenberg\LaravelJory\Traits\HandlesJoryBuilderConfiguration;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
 use JosKolenberg\LaravelJory\Traits\HandlesJorySorts;
 use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
@@ -27,8 +22,7 @@ class JoryBuilder
 {
     use HandlesJorySorts,
         HandlesJoryFilters,
-        LoadsJoryRelations,
-        ConvertsModelToArrayByJory;
+        LoadsJoryRelations;
 
     /**
      * @var Builder
@@ -47,6 +41,7 @@ class JoryBuilder
 
     public function __construct(JoryResource $joryResource)
     {
+//        dump(static::class);
         $this->joryResource = $joryResource;
         $this->jory = $joryResource->getJory();
 
@@ -74,7 +69,7 @@ class JoryBuilder
      * @throws LaravelJoryException
      * @throws JoryException
      */
-    protected function get(): Collection
+    public function get(): Collection
     {
         $collection = $this->buildQuery()->get();
 
@@ -131,42 +126,6 @@ class JoryBuilder
         $this->joryResource->afterQueryBuild($query, $jory, true);
 
         return $query->count();
-    }
-
-    /**
-     * Get the result array for the first result.
-     *
-     * @return array|null
-     * @throws LaravelJoryException
-     * @throws JoryException
-     */
-    public function firstToArray(): ?array
-    {
-        $model = $this->getFirst();
-        if (!$model) {
-            return null;
-        }
-
-        return $this->modelToArray($model);
-    }
-
-    /**
-     * Get the result array.
-     *
-     * @return array
-     * @throws LaravelJoryException
-     * @throws JoryException
-     */
-    public function toArray(): array
-    {
-        $models = $this->get();
-
-        $result = [];
-        foreach ($models as $model) {
-            $result[] = $this->modelToArray($model);
-        }
-
-        return $result;
     }
 
     /**
@@ -228,16 +187,8 @@ class JoryBuilder
         }
     }
 
-    /**
-     * Convert a single model to an array based on the request in the Jory object.
-     *
-     * @param Model $model
-     * @return array
-     * @throws LaravelJoryException
-     * @throws JoryException
-     */
-    public function modelToArray(Model $model): array
+    public function getJoryResource()
     {
-        return $this->modelToArrayByJory($model, $this->joryResource);
+        return $this->joryResource;
     }
 }

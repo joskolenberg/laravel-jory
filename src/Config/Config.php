@@ -67,6 +67,7 @@ class Config
      */
     public function __construct(string $modelClass)
     {
+//        dump(static::class);
         $this->modelClass = $modelClass;
         $this->limitDefault = config('jory.limit.default');
         $this->limitMax = config('jory.limit.max');

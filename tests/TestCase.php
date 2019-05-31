@@ -926,19 +926,11 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         /**
          * Register some JoryBuilders and let some of them be discovered by de autoRegistrar.
          */
-//        Jory::register(BandJoryResource::class);
-//        Jory::register(PersonJoryResource::class);
-//        Jory::register(SongJoryResourceWithBeforeQueryBuildFilterHook::class);
-//        Jory::register(SongJoryResourceWithAfterFetchHook::class);
-//        Jory::register(SongJoryResource::class);
-//        Jory::register(AlbumJoryResource::class);
-//        Jory::register(AlbumCoverJoryResource::class);
-//        Jory::register(InstrumentJoryResource::class);
-//        Jory::register(Band::class, BandJoryBuilder::class);
-//        Jory::register(Person::class, PersonJoryBuilder::class);
-//        Jory::register(Song::class, SongJoryBuilder::class);
-//        Jory::register(SongWithCustomJoryBuilder::class, SongJoryBuilderWithBeforeQueryBuildFilterHook::class)->uri('song-custom');
-//        Jory::register(SongWithAfterFetchHook::class, SongJoryBuilderWithAfterFetchHook::class)->uri('song-with-after-fetch');
+        Jory::register(BandJoryResource::class);
+        Jory::register(PersonJoryResource::class);
+        Jory::register(SongJoryResourceWithBeforeQueryBuildFilterHook::class);
+        Jory::register(SongJoryResourceWithAfterFetchHook::class);
+        Jory::register(SongJoryResource::class);
     }
 
     public function assertQueryCount($expected)
