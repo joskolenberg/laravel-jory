@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Config;
 
 use Illuminate\Support\Str;
+use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 
 /**
@@ -60,14 +61,14 @@ class Config
     /**
      * Config constructor.
      *
-     * We need to pass the related model class, so we can
-     * reflect to which class the defined relations models belong.
+     * We need to pass in the related model class, so we can
+     * reflect to which class the defined relations models
+     * belong when they are not explicitly specified.
      *
      * @param string $modelClass
      */
     public function __construct(string $modelClass)
     {
-//        dump(static::class);
         $this->modelClass = $modelClass;
         $this->limitDefault = config('jory.limit.default');
         $this->limitMax = config('jory.limit.max');
@@ -157,7 +158,7 @@ class Config
      */
     public function relation(string $name, string $relatedClass = null): Relation
     {
-        if(!$relatedClass){
+        if (!$relatedClass) {
             // Get the related class for the relation
             $relationMethod = Str::camel($name);
             $relatedClass = get_class((new $this->modelClass())->{$relationMethod}()->getRelated());
@@ -254,7 +255,7 @@ class Config
     }
 
     /**
-     * Convert the config to an array to be shown when using OPTIONS.
+     * Convert the config to an array.
      *
      * @return array
      */
@@ -347,6 +348,13 @@ class Config
         return $result;
     }
 
+    /**
+     * Update a Jory query object with the defaults from this Config.
+     *
+     * @param Jory $jory
+     * @return Jory
+     * @throws JoryException
+     */
     public function applyToJory(Jory $jory): Jory
     {
         $this->applyFieldsToJory($jory);
@@ -356,6 +364,13 @@ class Config
         return $jory;
     }
 
+    /**
+     * Apply the field settings in this Config on the Jory query.
+     *
+     * When no fields are specified in the request, the default fields in will be set on the Jory query.
+     *
+     * @param Jory $jory
+     */
     protected function applyFieldsToJory(Jory $jory): void
     {
         if ($jory->getFields() === null) {
@@ -371,11 +386,19 @@ class Config
         }
     }
 
+    /**
+     * Apply the sort settings in this Config on the Jory query.
+     *
+     * @param Jory $jory
+     * @throws JoryException
+     */
     protected function applySortsToJory(Jory $jory): void
     {
-        // When default sorts are defined, add them to the Jory
-        // When no sorts are requested, the default sorts in the builder will be applied.
-        // When sorts are requested, the default sorts are applied after the requested ones.
+        /**
+         * When default sorts are defined, add them to the Jory query.
+         * When no sorts are requested, the default sorts in this Config will be applied.
+         * When sorts are requested, the default sorts are applied after the requested ones.
+         */
         $defaultSorts = [];
         foreach ($this->getSorts() as $sort) {
             if ($sort->getDefaultIndex() !== null) {
@@ -388,6 +411,13 @@ class Config
         }
     }
 
+    /**
+     * Apply the offset and limit settings in this Config on the Jory query.
+     *
+     * When no offset or limit is set, the defaults will be used.
+     *
+     * @param Jory $jory
+     */
     protected function applyOffsetAndLimitToJory(Jory $jory): void
     {
         if (is_null($jory->getLimit()) && $this->getLimitDefault() !== null) {
@@ -395,12 +425,20 @@ class Config
         }
     }
 
-    public function getRelation($relationName)
+    /**
+     * Get a relation by it's name.
+     *
+     * @param $relationName
+     * @return Relation
+     */
+    public function getRelation($relationName): ?Relation
     {
-        foreach ($this->relations as $relation){
-            if($relation->getName() === $relationName){
+        foreach ($this->relations as $relation) {
+            if ($relation->getName() === $relationName) {
                 return $relation;
             }
         }
+
+        return null;
     }
 }

@@ -51,9 +51,9 @@ class Relation
      * Set the relation's description.
      *
      * @param string $description
-     * @return Relation
+     * @return $this
      */
-    public function description(string $description): self
+    public function description(string $description): Relation
     {
         $this->description = $description;
 
@@ -67,7 +67,7 @@ class Relation
      */
     public function getName(): string
     {
-        return $this->case->isCamel() ? Str::camel($this->name) : $this->name;
+        return $this->case->toCurrent($this->name);
     }
 
     /**
@@ -78,7 +78,7 @@ class Relation
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'The '.$this->getName().' relation.';
+            return 'The ' . $this->getName() . ' relation.';
         }
 
         return $this->description;
@@ -97,12 +97,12 @@ class Relation
     /**
      * Get the related model type.
      *
-     * @return string
+     * @return null|string
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         $registration = app()->make(JoryResourcesRegister::class)->getByModelClass($this->modelClass);
 
-        return $registration ? $registration->getUri() : 'Not defined.';
+        return $registration ? $registration->getUri() : null;
     }
 }

@@ -25,9 +25,9 @@ class SongJoryResourceWithAfterQuerySortHook extends JoryResource
         $this->field('album_id')->filterable()->sortable();
     }
 
-    public function afterQueryBuild($query, Jory $jory, $count = false): void
+    public function afterQueryBuild($query, $count = false): void
     {
-        parent::afterQueryBuild($query, $jory);
+        parent::afterQueryBuild($query);
 
         $query->orderBy('title', 'desc');
     }

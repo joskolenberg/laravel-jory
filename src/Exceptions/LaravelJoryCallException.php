@@ -4,8 +4,10 @@ namespace JosKolenberg\LaravelJory\Exceptions;
 
 /**
  * Exception class to be thrown when an error occurs
- * because of invalid data passed in the jory.
- * These exceptions will be used to show in the errors return array.
+ * because of invalid data passed in the jory query.
+ *
+ * These exceptions will be used to show the errors in the return data
+ * and will result into a 404 to the user by the JoryHandler.
  *
  * Class LaravelJoryCallException
  */

@@ -8,6 +8,7 @@ use JosKolenberg\Jory\Support\GroupOrFilter;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Contracts\FilterInterface;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Helpers\FilterHelper;
 
 trait HandlesJoryFilters
 {
@@ -87,8 +88,8 @@ trait HandlesJoryFilters
          * is being queried even if a join is applied (e.g. when filtering
          * a belongsToMany relation), so we prefix the field with the table name.
          */
-        $field = $query->getModel()->getTable().'.'.(app(CaseManager::class)->isCamel() ? Str::snake($filter->getField()) : $filter->getField());
-        $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
+        $field = $query->getModel()->getTable().'.'.Str::snake($filter->getField());
+        FilterHelper::applyWhere($query, $field, $filter->getOperator(), $filter->getData());
     }
 
     /**
@@ -101,42 +102,6 @@ trait HandlesJoryFilters
     protected function getCustomFilterMethodName(Filter $filter): string
     {
         return 'scope'.Str::studly($filter->getField()).'Filter';
-    }
-
-    /**
-     * Apply a filter to a field with default options.
-     *
-     * @param mixed $query
-     * @param $field
-     * @param $operator
-     * @param $data
-     */
-    protected function applyDefaultFieldFilter($query, $field, $operator, $data): void
-    {
-        switch ($operator) {
-            case 'is_null':
-                $query->whereNull($field);
-
-                return;
-            case 'not_null':
-                $query->whereNotNull($field);
-
-                return;
-            case 'in':
-                $query->whereIn($field, $data);
-
-                return;
-            case 'not_in':
-                $query->whereNotIn($field, $data);
-
-                return;
-            case 'not_like':
-                $query->where($field, 'not like', $data);
-
-                return;
-            default:
-                $query->where($field, $operator ?: '=', $data);
-        }
     }
 
     /**
@@ -155,7 +120,7 @@ trait HandlesJoryFilters
         $relation = implode('.', $relations);
 
         $query->whereHas($relation, function ($query) use ($filter, $field) {
-            $this->applyDefaultFieldFilter($query, $field, $filter->getOperator(), $filter->getData());
+            FilterHelper::applyWhere($query, $field, $filter->getOperator(), $filter->getData());
         });
     }
 

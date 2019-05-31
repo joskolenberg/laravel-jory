@@ -10,8 +10,8 @@ return [
     | This key will be looked for to get the JSON string
     | holding the jory data in the request.
     |
-    | The case key can be used by users of your API to overwrite
-    | the default casing when using the API ('snake' or 'camel').
+    | The case key can be used by users of your API to override the
+    | default casing when using the API ('snake' or 'camel').
     |
     */
 
@@ -83,6 +83,8 @@ return [
     | The max parameter is the maximum value a client can set
     | for the limit parameter in the request.
     |
+    | These defaults can be overridden for
+    | specific resources when needed.
     */
 
     'limit' => [
@@ -101,9 +103,10 @@ return [
     | Here you can set the default casing to be used
     | for field, filter, sort and relation names.
     |
-    | This casing will be used when calling the JoryBuilder/API.
-    | NB. All configuration in JoryBuilder::config()
-    | should always be in snake case.
+    | This casing will be used when calling the JoryResource or API.
+    |
+    | NB. All configuration in the JoryResource
+    | classes should always be in snake case.
     |
     | Possible values: 'snake', 'camel'.
     */
@@ -115,9 +118,11 @@ return [
     | Registrars
     |--------------------------------------------------------------------------
     |
-    | Here you can register any Registrar classes which bind the JoryBuilders
-    | to your Models. By default an auto-registrar is added which binds the
-    | JoryBuilders in the default \App\Http\JoryBuilders namespace.
+    | Here you can register any Registrar classes which bind the JoryResources
+    | to your Models. By default an auto-registrar is added which binds all
+    | JoryResources in the default \App\Http\JoryResources namespace.
+    |
+    | All registrars should implement the RegistersJoryResources interface.
     */
 
     'registrars' => [
@@ -129,15 +134,15 @@ return [
     | AutoRegistrar settings
     |--------------------------------------------------------------------------
     |
-    | Here you can edit the settings for the default autoRegistrar.
+    | Here you can edit the settings for the basic autoRegistrar.
     | By default the autoRegistrar looks for JoryResources
-    | in the Http/JoryResources folder.
+    | in the App\Http\JoryResources namespace.
     */
 
     'auto-registrar' => [
 
-        'path' => app_path('Http/JoryResources'),
         'namespace' => 'App\Http\JoryResources',
+        'path' => app_path('Http/JoryResources'),
 
     ],
 
@@ -146,8 +151,8 @@ return [
     | Routes
     |--------------------------------------------------------------------------
     |
-    | Here you can define if the default routes should be enabled, the
-    | uri for these routes and which middleware should be applied.
+    | Here you can define if the default jory api routes should be enabled,
+    | the uri for these routes and which middleware should be applied.
     |
     */
 

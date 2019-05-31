@@ -5,10 +5,24 @@ namespace JosKolenberg\LaravelJory\Helpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+/**
+ * Class CaseManager
+ *
+ * Class to define in which case mode
+ * we are, camel or snake case.
+ */
 class CaseManager
 {
+
+    /**
+     * @var string
+     */
     private $case = 'snake';
 
+    /**
+     * CaseManager constructor.
+     * @param Request $request
+     */
     public function __construct(Request $request)
     {
         $this->case = config('jory.case');
@@ -19,27 +33,19 @@ class CaseManager
         }
     }
 
-    public function isCamel()
+    /**
+     * Update a string to the current case mode.
+     *
+     * @param $string
+     * @return string
+     */
+    public function toCurrent($string): string
     {
-        return $this->case === 'camel';
-    }
-
-    public function toCurrent($string)
-    {
-        if($this->isCamel()){
+        if($this->case === 'camel'){
             return Str::camel($string);
         }
 
         return Str::snake($string);
     }
 
-    public function toCamel($string)
-    {
-        return Str::camel($string);
-    }
-
-    public function toSnake($string)
-    {
-        return Str::snake($string);
-    }
 }

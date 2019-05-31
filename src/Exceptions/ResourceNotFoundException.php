@@ -10,6 +10,8 @@ use SimilarText\Finder;
  * Class ResourceNotFoundException
  *
  * Exception to be thrown when a resource is not found by a resource's uri.
+ *
+ * This exception will result into a 404 to the user by the JoryHandler.
  */
 class ResourceNotFoundException extends \Exception
 {

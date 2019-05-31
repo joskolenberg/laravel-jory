@@ -13,12 +13,13 @@ use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Parsers\JsonParser;
-use JosKolenberg\LaravelJory\Config\Validator;
-use JosKolenberg\LaravelJory\Exceptions;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
+use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
-use JosKolenberg\LaravelJory\Register\JoryResourceRegistration;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 /**
@@ -34,6 +35,9 @@ class JoryResponse implements Responsable
      */
     protected $register;
 
+    /**
+     * @var JoryResource
+     */
     protected $joryResource;
 
     /**
@@ -82,7 +86,7 @@ class JoryResponse implements Responsable
      *
      * @param string $uri
      * @return $this
-     * @throws Exceptions\ResourceNotFoundException
+     * @throws ResourceNotFoundException
      */
     public function byUri(string $uri): JoryResponse
     {
@@ -96,7 +100,7 @@ class JoryResponse implements Responsable
      *
      * @param string $modelClass
      * @return $this
-     * @throws Exceptions\RegistrationNotFoundException
+     * @throws RegistrationNotFoundException
      */
     public function onModelClass(string $modelClass): JoryResponse
     {
@@ -111,7 +115,7 @@ class JoryResponse implements Responsable
      *
      * @param Model $model
      * @return JoryResponse
-     * @throws Exceptions\RegistrationNotFoundException
+     * @throws RegistrationNotFoundException
      */
     public function onModel(Model $model): JoryResponse
     {
@@ -133,7 +137,7 @@ class JoryResponse implements Responsable
      *
      * @param Builder $query
      * @return JoryResponse
-     * @throws Exceptions\RegistrationNotFoundException
+     * @throws RegistrationNotFoundException
      */
     public function onQuery(Builder $query): JoryResponse
     {
@@ -144,7 +148,7 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Helper function to manually apply an array or Json string.
+     * Helper function to apply an array or Json string.
      *
      * @param mixed $jory
      * @return JoryResponse
@@ -152,11 +156,11 @@ class JoryResponse implements Responsable
      */
     public function apply($jory): JoryResponse
     {
-        if(is_array($jory)){
+        if (is_array($jory)) {
             return $this->applyArray($jory);
         }
 
-        if(!is_string($jory)){
+        if (!is_string($jory)) {
             throw new LaravelJoryException('Unexpected type given. Please provide an array or Json string.');
         }
 
@@ -164,7 +168,7 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Manually apply a Json Jory string to the request.
+     * Apply a Json Jory query string to the response.
      *
      * @param string $json
      * @return $this
@@ -177,7 +181,7 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Manually apply a Jory array to the request.
+     * Apply a Jory query array to the response.
      *
      * @param array $array
      * @return $this
@@ -232,8 +236,7 @@ class JoryResponse implements Responsable
      *
      * @param Request $request
      * @return void
-     * @throws Exceptions\LaravelJoryCallException
-     * @throws Exceptions\LaravelJoryException
+     * @throws LaravelJoryException
      * @throws JoryException
      */
     public function toResponse($request)
@@ -247,25 +250,24 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Get the result of the request.
+     * Get the result for the response.
      * (could also be an int instead of an array when using count())
      *
      * @return mixed
-     * @throws Exceptions\LaravelJoryCallException
-     * @throws Exceptions\LaravelJoryException
+     * @throws LaravelJoryException
      * @throws JoryException
      */
     public function toArray()
     {
-        $builder = $this->getBuilder();
+        $builder = $this->getJoryBuilder();
 
         $builder->onQuery($this->getBaseQuery());
 
-        if($this->count){
+        if ($this->count) {
             return $builder->getCount();
         }
 
-        if($this->first){
+        if ($this->first) {
             $model = $builder->getFirst();
             if (!$model) {
                 return null;
@@ -295,13 +297,17 @@ class JoryResponse implements Responsable
     }
 
     /**
+     * Create and put together a JoryBuilder based
+     * on the current settings in the response.
+     *
      * @return JoryBuilder
-     * @throws Exceptions\LaravelJoryException
+     * @throws LaravelJoryException
+     * @throws JoryException
      */
-    protected function getBuilder(): JoryBuilder
+    protected function getJoryBuilder(): JoryBuilder
     {
-        if(!$this->joryResource){
-            throw new Exceptions\LaravelJoryException('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
+        if (!$this->joryResource) {
+            throw new LaravelJoryException('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
         }
 
         $this->joryResource->setJory($this->getJory());
@@ -318,8 +324,8 @@ class JoryResponse implements Responsable
      */
     protected function getBaseQuery(): Builder
     {
-        // If there has been given a query explicitely, use this one without further modifying it.
-        if($this->query){
+        // If there has been given a query explicitly, use this one without further modifying it.
+        if ($this->query) {
             return $this->query;
         }
 
@@ -328,7 +334,7 @@ class JoryResponse implements Responsable
         $query = $modelClass::query();
 
         // When a modelId is passed we add a filter to only get this record.
-        if($this->modelId !== null){
+        if ($this->modelId !== null) {
             $query->whereKey($this->modelId);
         }
 
@@ -336,7 +342,7 @@ class JoryResponse implements Responsable
     }
 
     /**
-     * Get the Jory object to be applied
+     * Get the Jory query object to be applied.
      *
      * @return Jory
      * @throws JoryException
@@ -347,7 +353,7 @@ class JoryResponse implements Responsable
          * If a parser is set return the Jory from this parser,
          * otherwise default to the data in the request.
          */
-        if($this->parser){
+        if ($this->parser) {
             return $this->parser->getJory();
         }
 

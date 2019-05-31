@@ -3,14 +3,15 @@
 namespace JosKolenberg\LaravelJory\Register;
 
 use Illuminate\Support\Collection;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\JoryResource;
 
 /**
- * Class JoryBuildersRegister.
+ * Class JoryRecourcesRegister.
  *
- * Collects the registered JoryBuilders.
+ * Collects the registered JoryResources.
  */
 class JoryResourcesRegister
 {
@@ -24,13 +25,38 @@ class JoryResourcesRegister
      */
     protected $registrars = [];
 
+    /**
+     * JoryResourcesRegister constructor.
+     */
     public function __construct()
     {
         $this->joryResources = new Collection();
     }
 
-    public function add(JoryResource $joryResource): ? JoryResourcesRegister
+    /**
+     * Manually register a JoryResource.
+     *
+     * @param JoryResource $joryResource
+     * @return JoryResourcesRegister
+     * @throws LaravelJoryException
+     */
+    public function add(JoryResource $joryResource): JoryResourcesRegister
     {
+        /**
+         * Every resource has got to have a unique uri.
+         * To be sure we filter out any previous
+         * joryResources with the same uri.
+         */
+        $this->joryResources = $this->joryResources->filter(function ($existing) use ($joryResource) {
+            return $existing->getUri() !== $joryResource->getUri();
+        });
+
+        /**
+         * If we have multiple resources for the same related model, we want
+         * the last one to be applied. This way any standard registered
+         * resources can be overridden later. So prepend to the
+         * front of the resource collection.
+         */
         $this->joryResources->prepend($joryResource);
 
         return $this;
@@ -41,12 +67,22 @@ class JoryResourcesRegister
      *
      * @param RegistersJoryResources $registrar
      */
-    public function addRegistrar(RegistersJoryResources $registrar)
+    public function addRegistrar(RegistersJoryResources $registrar): void
     {
         $this->registrars[] = $registrar;
     }
 
-    public function getByModelClass(string $modelClass): ? JoryResource
+    /**
+     * Get a JoryResource by a model's class name.
+     *
+     * When multiple resources exist for the same model,
+     * the last one will be used.
+     *
+     * @param string $modelClass
+     * @return JoryResource
+     * @throws RegistrationNotFoundException
+     */
+    public function getByModelClass(string $modelClass): JoryResource
     {
         foreach ($this->getAllJoryResources() as $joryResource) {
             if ($joryResource->getModelClass() === $modelClass) {
@@ -57,7 +93,12 @@ class JoryResourcesRegister
         throw new RegistrationNotFoundException('No joryResource found for model ' . $modelClass . '. Does ' . $modelClass . ' have an associated JoryResource?');
     }
 
-    public function getByUri(string $uri): ? JoryResource
+    /**
+     * @param string $uri
+     * @return JoryResource
+     * @throws ResourceNotFoundException
+     */
+    public function getByUri(string $uri): JoryResource
     {
         foreach ($this->getAllJoryResources() as $registration) {
             if ($registration->getUri() == $uri) {
@@ -69,7 +110,7 @@ class JoryResourcesRegister
     }
 
     /**
-     * Get an array of all registered uri's.
+     * Get an sorted array of all registered uri's.
      *
      * @return array
      */
@@ -105,7 +146,7 @@ class JoryResourcesRegister
 
     /**
      * Merge the additional registration collection into the
-     * subject collection and filter duplicates.
+     * subject collection and filter duplicates by uri.
      *
      * @param Collection $subject
      * @param Collection $additional
@@ -115,7 +156,7 @@ class JoryResourcesRegister
         foreach ($additional as $joryResource){
             /**
              * If the existing collection already has a joryResource for
-             * this model, don't register it again.
+             * this uri, don't register it again.
              */
             if($subject->contains(function ($existing) use ($joryResource) {
                 return $existing->getUri() === $joryResource->getUri();

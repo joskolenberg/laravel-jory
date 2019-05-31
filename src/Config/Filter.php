@@ -49,9 +49,9 @@ class Filter
      * Set the filter's description.
      *
      * @param string $description
-     * @return Filter
+     * @return $this
      */
-    public function description(string $description): self
+    public function description(string $description): Filter
     {
         $this->description = $description;
 
@@ -62,9 +62,9 @@ class Filter
      * Set the filter's available operators.
      *
      * @param array $operators
-     * @return Filter
+     * @return $this
      */
-    public function operators(array $operators): self
+    public function operators(array $operators): Filter
     {
         $this->operators = $operators;
 
@@ -72,13 +72,13 @@ class Filter
     }
 
     /**
-     * Get the filet's field.
+     * Get the filter's field.
      *
      * @return string
      */
     public function getField(): string
     {
-        return $this->case->isCamel() ? Str::camel($this->field) : $this->field;
+        return $this->case->toCurrent($this->field);
     }
 
     /**
@@ -99,7 +99,7 @@ class Filter
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'Filter on the '.$this->getField().' field.';
+            return 'Filter on the ' . $this->getField() . ' field.';
         }
 
         return $this->description;

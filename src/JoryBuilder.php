@@ -25,25 +25,22 @@ class JoryBuilder
         LoadsJoryRelations;
 
     /**
-     * @var Builder
+     * @var JoryResource
      */
     protected $joryResource;
-
-    /**
-     * @var null|Jory
-     */
-    protected $jory = null;
 
     /**
      * @var CaseManager
      */
     protected $case = null;
 
+    /**
+     * JoryBuilder constructor.
+     * @param JoryResource $joryResource
+     */
     public function __construct(JoryResource $joryResource)
     {
-//        dump(static::class);
         $this->joryResource = $joryResource;
-        $this->jory = $joryResource->getJory();
 
         $this->case = app(CaseManager::class);
     }
@@ -63,7 +60,7 @@ class JoryBuilder
     }
 
     /**
-     * Get a collection of Models based on the baseQuery and Jory data.
+     * Get a collection of Models based on the baseQuery and Jory query.
      *
      * @return Collection
      * @throws LaravelJoryException
@@ -73,10 +70,9 @@ class JoryBuilder
     {
         $collection = $this->buildQuery()->get();
 
-        $jory = $this->jory;
         $collection = $this->joryResource->afterFetch($collection);
 
-        $this->loadRelations($collection, $jory->getRelations());
+        $this->loadRelations($collection, $this->joryResource->getJory()->getRelations());
 
         return $collection;
     }
@@ -98,7 +94,7 @@ class JoryBuilder
 
         $model = $this->joryResource->afterFetch(new Collection([$model]))->first();
 
-        $this->loadRelations(new Collection([$model]), $this->jory->getRelations());
+        $this->loadRelations(new Collection([$model]), $this->joryResource->getJory()->getRelations());
 
         return $model;
     }
@@ -107,23 +103,19 @@ class JoryBuilder
      * Count the records based on the filters in the Jory object.
      *
      * @return int
-     * @throws LaravelJoryException
-     * @throws JoryException
      */
     public function getCount(): int
     {
-        $query = clone $this->builder;
+        $query = $this->builder;
 
-        $jory = $this->jory;
-
-        $this->joryResource->beforeQueryBuild($query, $jory, true);
+        $this->joryResource->beforeQueryBuild($query, true);
 
         // Apply filters if there are any
-        if ($jory->getFilter()) {
-            $this->applyFilter($query, $jory->getFilter());
+        if ($this->joryResource->getJory()->getFilter()) {
+            $this->applyFilter($query, $this->joryResource->getJory()->getFilter());
         }
 
-        $this->joryResource->afterQueryBuild($query, $jory, true);
+        $this->joryResource->afterQueryBuild($query, true);
 
         return $query->count();
     }
@@ -132,8 +124,6 @@ class JoryBuilder
      * Build a new query based on the baseQuery and Jory data.
      *
      * @return Builder
-     * @throws LaravelJoryException
-     * @throws JoryException
      */
     protected function buildQuery(): Builder
     {
@@ -148,13 +138,12 @@ class JoryBuilder
      * Apply the jory data on an existing query.
      *
      * @param $query
-     * @throws LaravelJoryException
-     * @throws JoryException
      */
     public function applyOnQuery($query): void
     {
-        $jory = $this->jory;
-        $this->joryResource->beforeQueryBuild($query, $jory);
+        $jory = $this->joryResource->getJory();
+
+        $this->joryResource->beforeQueryBuild($query);
 
         // Apply filters if there are any
         if ($jory->getFilter()) {
@@ -164,7 +153,7 @@ class JoryBuilder
         $this->applySorts($query, $jory->getSorts());
         $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
-        $this->joryResource->afterQueryBuild($query, $jory);
+        $this->joryResource->afterQueryBuild($query);
     }
 
     /**
@@ -187,8 +176,4 @@ class JoryBuilder
         }
     }
 
-    public function getJoryResource()
-    {
-        return $this->joryResource;
-    }
 }

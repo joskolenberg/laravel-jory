@@ -13,7 +13,7 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * Class AutoRegistrar
  *
- * Automatically registers JoryResources which follow the standard <ModelName>JoryResource naming convention
+ * Automatically registers JoryResources which follow the <ModelName>JoryResource naming convention
  */
 class AutoRegistrar implements RegistersJoryResources
 {

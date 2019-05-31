@@ -16,7 +16,7 @@ class InstrumentJoryBuilder extends JoryBuilder
 
     protected function scopeNameFilter($query, $operator, $data)
     {
-        $this->applyDefaultFieldFilter($query, 'name', $operator, $data);
+        $this->applyWhere($query, 'name', $operator, $data);
         $query->has('people');
     }
 }

@@ -46,7 +46,7 @@ trait HandlesJorySorts
         // Always apply the sort on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.(app(CaseManager::class)->isCamel() ? Str::snake($sort->getField()) : $sort->getField());
+        $field = $query->getModel()->getTable().'.'.Str::snake($sort->getField());
         $this->applyDefaultSort($query, $field, $sort->getOrder());
     }
 

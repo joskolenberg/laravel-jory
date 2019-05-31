@@ -57,9 +57,9 @@ class Field
     /**
      * Set the field to be hidden by default.
      *
-     * @return Field
+     * @return $this
      */
-    public function hideByDefault(): self
+    public function hideByDefault(): Field
     {
         $this->showByDefault = false;
 
@@ -70,9 +70,9 @@ class Field
      * Set the fields description.
      *
      * @param string $description
-     * @return \JosKolenberg\LaravelJory\Config\Field
+     * @return $this
      */
-    public function description(string $description): self
+    public function description(string $description): Field
     {
         $this->description = $description;
 
@@ -86,7 +86,7 @@ class Field
      */
     public function getField(): string
     {
-        return $this->case->isCamel() ? Str::camel($this->field) : $this->field;
+        return $this->case->toCurrent($this->field);
     }
 
     /**
@@ -97,7 +97,7 @@ class Field
     public function getDescription(): string
     {
         if ($this->description === null) {
-            return 'The '.$this->getField().' field.';
+            return 'The ' . $this->getField() . ' field.';
         }
 
         return $this->description;
@@ -117,9 +117,9 @@ class Field
      * Mark this field to be filterable.
      *
      * @param callable|null $callback
-     * @return Field
+     * @return $this
      */
-    public function filterable($callback = null): self
+    public function filterable($callback = null): Field
     {
         $this->filter = new Filter($this->field);
 
@@ -135,7 +135,7 @@ class Field
      *
      * @return Filter|null
      */
-    public function getFilter(): ? Filter
+    public function getFilter(): ?Filter
     {
         return $this->filter;
     }
@@ -144,9 +144,9 @@ class Field
      * Mark this field to be sortable.
      *
      * @param callable|null $callback
-     * @return Field
+     * @return $this
      */
-    public function sortable($callback = null): self
+    public function sortable($callback = null): Field
     {
         $this->sort = new Sort($this->field);
 
@@ -162,7 +162,7 @@ class Field
      *
      * @return Sort|null
      */
-    public function getSort(): ? Sort
+    public function getSort(): ?Sort
     {
         return $this->sort;
     }

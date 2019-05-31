@@ -9,7 +9,7 @@ use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 
 /**
- * Class to parse an Laravel request to a Jory Object.
+ * Class to parse an Laravel request to a Jory query Object.
  * Uses the "jory" parameter which must hold the jory data in json format.
  *
  * Class RequestParser
@@ -32,7 +32,7 @@ class RequestParser implements JoryParserInterface
     }
 
     /**
-     * Get the jory object based on the given Request.
+     * Get the jory query object based on the given Request.
      *
      * @return Jory
      * @throws \JosKolenberg\Jory\Exceptions\JoryException

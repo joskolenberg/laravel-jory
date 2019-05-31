@@ -53,9 +53,9 @@ class Sort
      * Set the sort's description.
      *
      * @param string $description
-     * @return Sort
+     * @return $this
      */
-    public function description(string $description): self
+    public function description(string $description): Sort
     {
         $this->description = $description;
 
@@ -69,7 +69,7 @@ class Sort
      */
     public function getField(): string
     {
-        return $this->case->isCamel() ? Str::camel($this->field) : $this->field;
+        return $this->case->toCurrent($this->field);
     }
 
     /**
@@ -91,9 +91,9 @@ class Sort
      *
      * @param int $index
      * @param string $order
-     * @return Sort
+     * @return $this
      */
-    public function default(int $index = 0, string $order = 'asc'): self
+    public function default(int $index = 0, string $order = 'asc'): Sort
     {
         $this->defaultIndex = $index;
         $this->defaultOrder = $order;

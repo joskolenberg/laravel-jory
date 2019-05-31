@@ -16,7 +16,7 @@ use JosKolenberg\LaravelJory\Responses\JoryResponse;
 /**
  * Class JoryManager.
  *
- * The baseclass for the facade.
+ * The base class for the facade.
  */
 class JoryManager
 {
@@ -25,13 +25,18 @@ class JoryManager
      * The multiple() call will resolve to a clean JoryMultipleResponse.
      *
      * @return JoryMultipleResponse
-     * @throws BindingResolutionException
      */
     public function multiple(): JoryMultipleResponse
     {
         return new JoryMultipleResponse(app()->make('request'), app()->make(JoryResourcesRegister::class));
     }
 
+    /**
+     * Register a JoryResource using the facade.
+     *
+     * @param string $joryResourceClass
+     * @return JoryResourcesRegister
+     */
     public function register(string $joryResourceClass): JoryResourcesRegister
     {
         return app()->make(JoryResourcesRegister::class)->add(new $joryResourceClass());

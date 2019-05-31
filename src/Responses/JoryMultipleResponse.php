@@ -12,6 +12,7 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use stdClass;
 
@@ -61,11 +62,11 @@ class JoryMultipleResponse implements Responsable
      */
     public function apply($jory): JoryMultipleResponse
     {
-        if(is_array($jory)){
+        if (is_array($jory)) {
             return $this->applyArray($jory);
         }
 
-        if(!is_string($jory)){
+        if (!is_string($jory)) {
             throw new LaravelJoryException('Unexpected type given. Please provide an array or Json string.');
         }
 
@@ -136,21 +137,17 @@ class JoryMultipleResponse implements Responsable
      */
     public function toArray(): array
     {
-        /**
-         * If no Jories were manually added before, use the data from the request.
-         */
+        // Convert the raw data into jory queries.
         if (empty($this->jories)) {
             $this->dataIntoJories();
         }
 
-        /**
-         * Process all Jories.
-         */
+        //Process all Jorie queries.
         $results = [];
         $errors = [];
         foreach ($this->jories as $single) {
             try {
-                $results[$single->alias] = $this->processResource($single);
+                $results[$single->alias] = $this->processSingle($single);
             } catch (LaravelJoryCallException $e) {
                 foreach ($e->getErrors() as $error) {
                     /**
@@ -172,7 +169,7 @@ class JoryMultipleResponse implements Responsable
     }
 
     /**
-     * Cut the key into pieces.
+     * Cut the jory's key into pieces.
      *
      * @param $name
      * @return stdClass
@@ -228,14 +225,14 @@ class JoryMultipleResponse implements Responsable
      */
     protected function dataIntoJories(): void
     {
-        if(!$this->data){
+        if (!$this->data) {
             // If no explicit data is set, we default to the data in the request.
             $this->apply($this->request->input(config('jory.request.key'), '{}'));
         }
 
         /**
          * Each item in the array should hold a key as the resource name
-         * and value with a jory string.
+         * and value with a jory query array or json string.
          * Add the individual requested resources to the jories array.
          */
         $errors = [];
@@ -254,7 +251,7 @@ class JoryMultipleResponse implements Responsable
             }
         }
 
-        if(!empty($errors)){
+        if (!empty($errors)) {
             throw new LaravelJoryCallException($errors);
         }
     }
@@ -268,7 +265,7 @@ class JoryMultipleResponse implements Responsable
      */
     protected function addJory(string $name, array $data): void
     {
-        $exploded = $this->explodeResourceName($name);
+        $exploded = ResourceNameHelper::explode($name);
 
         $single = new stdClass();
         $single->name = $name;
@@ -282,9 +279,8 @@ class JoryMultipleResponse implements Responsable
     }
 
     /**
-     * Process a single resource call.
-     * We'll just use a normal single JoryResponse and use the toArray()
-     * method instead of toResponse() to collect the data.
+     * Process a single resource call. We'll just use a normal single
+     * JoryResponse and use the toArray() method to collect the data.
      *
      * @param $single
      * @return mixed
@@ -292,18 +288,11 @@ class JoryMultipleResponse implements Responsable
      * @throws JoryException
      * @throws LaravelJoryException
      */
-    protected function processResource($single)
+    protected function processSingle($single)
     {
         $singleResponse = Jory::byUri($single->registration->getUri());
 
-        /**
-         * Request may consist of json or array, so check this.
-         */
-        if (is_array($single->data)) {
-            $singleResponse->applyArray($single->data);
-        } else {
-            $singleResponse->applyJson($single->data);
-        }
+        $singleResponse->apply($single->data);
 
         /**
          * Call appropriate methods for specific types.

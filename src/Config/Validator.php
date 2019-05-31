@@ -2,14 +2,13 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\Jory\Contracts\FilterInterface;
+use JosKolenberg\Jory\Jory;
+use JosKolenberg\Jory\Support\GroupAndFilter;
+use JosKolenberg\Jory\Support\GroupOrFilter;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use SimilarText\Finder;
-use JosKolenberg\Jory\Jory;
-use JosKolenberg\Jory\Support\GroupOrFilter;
-use JosKolenberg\Jory\Support\GroupAndFilter;
-use JosKolenberg\Jory\Contracts\FilterInterface;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 
 /**
  * Class Validator.
@@ -19,12 +18,12 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 class Validator
 {
     /**
-     * @var \JosKolenberg\LaravelJory\Config\Config
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \JosKolenberg\Jory\Jory
+     * @var Jory
      */
     protected $jory;
 
@@ -53,7 +52,7 @@ class Validator
     }
 
     /**
-     * Validate and update the Jory object by the settings in the Config.
+     * Validate and update the Jory query object by the settings in the Config.
      *
      * @throws LaravelJoryCallException
      */
@@ -72,7 +71,7 @@ class Validator
     }
 
     /**
-     * Validate the fields in the Jory object by the settings in the Config.
+     * Validate the fields in the Jory query object by the settings in the Config.
      */
     protected function validateFields(): void
     {
@@ -88,14 +87,14 @@ class Validator
         }
 
         foreach ($this->jory->getFields() as $joryField) {
-            if (! in_array($joryField, $availableFields)) {
-                $this->errors[] = 'Field "'.$joryField.'" is not available, '.$this->getSuggestion($availableFields, $joryField).' (Location: '.$this->address.'fields.'.$joryField.')';
+            if (!in_array($joryField, $availableFields)) {
+                $this->errors[] = 'Field "' . $joryField . '" is not available, ' . $this->getSuggestion($availableFields, $joryField) . ' (Location: ' . $this->address . 'fields.' . $joryField . ')';
             }
         }
     }
 
     /**
-     * Validate filter in the Jory object by the settings in the Config.
+     * Validate filter in the Jory query object by the settings in the Config.
      */
     protected function validateFilter(): void
     {
@@ -104,14 +103,14 @@ class Validator
             return;
         }
 
-        $this->doValidateFilter($this->config->getFilters(), $this->jory->getFilter(), $this->address.'filter');
+        $this->doValidateFilter($this->config->getFilters(), $this->jory->getFilter(), $this->address . 'filter');
     }
 
     /**
      * Validate Jory Filter object by the settings in the Config.
      *
      * @param array $configFilters
-     * @param \JosKolenberg\Jory\Contracts\FilterInterface $joryFilter
+     * @param FilterInterface $joryFilter
      * @param string $address
      */
     protected function doValidateFilter(array $configFilters, FilterInterface $joryFilter, string $address): void
@@ -119,7 +118,7 @@ class Validator
         // If it is a grouped OR filter, check subfilters recursive
         if ($joryFilter instanceof GroupOrFilter) {
             foreach ($joryFilter as $key => $subFilter) {
-                $this->doValidateFilter($configFilters, $subFilter, $address.'(or).'.$key);
+                $this->doValidateFilter($configFilters, $subFilter, $address . '(or).' . $key);
             }
 
             return;
@@ -127,7 +126,7 @@ class Validator
         // If it is a grouped AND filter, check subfilters recursive
         if ($joryFilter instanceof GroupAndFilter) {
             foreach ($joryFilter as $key => $subFilter) {
-                $this->doValidateFilter($configFilters, $subFilter, $address.'(and).'.$key);
+                $this->doValidateFilter($configFilters, $subFilter, $address . '(and).' . $key);
             }
 
             return;
@@ -136,8 +135,8 @@ class Validator
         // It is a filter on a field, do validation on field an operator
         foreach ($configFilters as $configFilter) {
             if ($configFilter->getField() === $joryFilter->getField()) {
-                if ($joryFilter->getOperator() !== null && ! in_array($joryFilter->getOperator(), $configFilter->getOperators())) {
-                    $this->errors[] = 'Operator "'.$joryFilter->getOperator().'" is not available for field "'.$joryFilter->getField().'". (Location: '.$address.'('.$joryFilter->getField().'))';
+                if ($joryFilter->getOperator() !== null && !in_array($joryFilter->getOperator(), $configFilter->getOperators())) {
+                    $this->errors[] = 'Operator "' . $joryFilter->getOperator() . '" is not available for field "' . $joryFilter->getField() . '". (Location: ' . $address . '(' . $joryFilter->getField() . '))';
                 }
 
                 return;
@@ -149,11 +148,11 @@ class Validator
         foreach ($configFilters as $bpf) {
             $availableFields[] = $bpf->getField();
         }
-        $this->errors[] = 'Field "'.$joryFilter->getField().'" is not available for filtering, '.$this->getSuggestion($availableFields, $joryFilter->getField()).' (Location: '.$address.'('.$joryFilter->getField().'))';
+        $this->errors[] = 'Field "' . $joryFilter->getField() . '" is not available for filtering, ' . $this->getSuggestion($availableFields, $joryFilter->getField()) . ' (Location: ' . $address . '(' . $joryFilter->getField() . '))';
     }
 
     /**
-     * Validate the sorts in the Jory object by the settings in the Config.
+     * Validate the sorts in the Jory query object by the settings in the Config.
      */
     protected function validateSorts(): void
     {
@@ -169,30 +168,30 @@ class Validator
         }
 
         foreach ($this->jory->getSorts() as $jorySort) {
-            if (! in_array($jorySort->getField(), $availableFields)) {
-                $this->errors[] = 'Field "'.$jorySort->getField().'" is not available for sorting, '.$this->getSuggestion($availableFields, $jorySort->getField()).' (Location: '.$this->address.'sorts.'.$jorySort->getField().')';
+            if (!in_array($jorySort->getField(), $availableFields)) {
+                $this->errors[] = 'Field "' . $jorySort->getField() . '" is not available for sorting, ' . $this->getSuggestion($availableFields, $jorySort->getField()) . ' (Location: ' . $this->address . 'sorts.' . $jorySort->getField() . ')';
             }
         }
     }
 
     /**
-     * Validate the offset and limit in the Jory object by the settings in the Config.
+     * Validate the offset and limit in the Jory query object by the settings in the Config.
      */
     protected function validateOffsetLimit(): void
     {
         // When setting an offset a limit is required in SQL
         if ($this->jory->getOffset() !== null && $this->jory->getLimit() === null && $this->config->getLimitDefault() === null) {
-            $this->errors[] = 'An offset cannot be set without a limit. (Location: '.$this->address.'offset)';
+            $this->errors[] = 'An offset cannot be set without a limit. (Location: ' . $this->address . 'offset)';
         }
         if ($this->config->getLimitMax() !== null) {
             if ($this->jory->getLimit() > $this->config->getLimitMax()) {
-                $this->errors[] = 'The maximum limit for this resource is '.$this->config->getLimitMax().', please lower your limit or drop the limit parameter. (Location: '.$this->address.'limit)';
+                $this->errors[] = 'The maximum limit for this resource is ' . $this->config->getLimitMax() . ', please lower your limit or drop the limit parameter. (Location: ' . $this->address . 'limit)';
             }
         }
     }
 
     /**
-     * Validate the relations in the Jory object by the settings in the Config.
+     * Validate the relations in the Jory query object by the settings in the Config.
      */
     protected function validateRelations(): void
     {
@@ -210,12 +209,15 @@ class Validator
                 $relationName = $relationParts[0];
             }
 
-            if (! in_array($relationName, $availableRelations)) {
-                $this->errors[] = 'Relation "'.$relationName.'" is not available, '.$this->getSuggestion($availableRelations, $relationName).' (Location: '.$this->address.'relations.'.$relationName.')';
+            if (!in_array($relationName, $availableRelations)) {
+                $this->errors[] = 'Relation "' . $relationName . '" is not available, ' . $this->getSuggestion($availableRelations, $relationName) . ' (Location: ' . $this->address . 'relations.' . $relationName . ')';
             }
         }
     }
 
+    /**
+     * Validate the "subJories" in the relations of th eJory query.
+     */
     protected function validateSubJories(): void
     {
         if ($this->config->getRelations() === null) {
@@ -237,17 +239,9 @@ class Validator
 
             $relatedJoryResource = app(JoryResourcesRegister::class)
                 ->getByModelClass($relation->getModelClass());
-//
-//            foreach ($this->config->getRelations() as $configRelation) {
-//                if ($joryRelation->getName() === $configRelation->getName()) {
-//                    $relatedModelClass = $configRelation->getModelClass();
-//                    $relatedJoryResource = app(JoryResourcesRegister::class)
-//                        ->getByModelClass($relatedModelClass);
-//                }
-//            }
 
             try {
-                (new self($relatedJoryResource->getConfig(), $joryRelation->getJory(), ($this->address ? $this->address.'.' : '').$joryRelation->getName().'.'))->validate();
+                (new self($relatedJoryResource->getConfig(), $joryRelation->getJory(), ($this->address ? $this->address . '.' : '') . $joryRelation->getName() . '.'))->validate();
             } catch (LaravelJoryCallException $e) {
                 $this->errors = array_merge($this->errors, $e->getErrors());
             }

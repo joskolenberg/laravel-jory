@@ -4,8 +4,11 @@ namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Support\Relation;
 use Illuminate\Database\Eloquent\Collection;
+use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
+use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
@@ -18,8 +21,8 @@ trait LoadsJoryRelations
      *
      * @param Collection $models
      * @param array $relations
-     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     * @throws LaravelJoryException
+     * @throws JoryException
      */
     protected function loadRelations(Collection $models, array $relations): void
     {
@@ -42,8 +45,6 @@ trait LoadsJoryRelations
      *
      * @param Collection $collection
      * @param Relation $relation
-     * @throws \JosKolenberg\LaravelJory\Exceptions\LaravelJoryException
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelation(Collection $collection, Relation $relation): void
     {
@@ -51,27 +52,25 @@ trait LoadsJoryRelations
             return;
         }
 
-        $relationName = $relation->getName();
+        $relationName = ResourceNameHelper::explode($relation->getName())->modelName;
 
-        // Remove the alias part if the relation has one
-        $relationParts = explode(' as ', $relationName);
-        if (count($relationParts) > 1) {
-            $relationName = Str::snake($relationParts[0]);
-        }
-
-        // Retrieve the model which will be queried to get the appropriate JoryBuilder
+        // Retrieve the model which will be queried to get the appropriate JoryResource
         $relatedModelClass = $this->joryResource
             ->getConfig()
             ->getRelation($relationName)
             ->getModelClass();
+
+        // Build the JoryResource to be applied ont the relation query.
         $relatedJoryResource = app(JoryResourcesRegister::class)
             ->getByModelClass($relatedModelClass)
             ->fresh();
         $relatedJoryResource->setJory($relation->getJory());
+
+        // Create a JoryBuilder which can alter the relation query with the data in the Jory query and JoryResource
         $joryBuilder = app()->makeWith(JoryBuilder::class, ['joryResource' => $relatedJoryResource]);
 
         // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
-        $relationName = $this->case->toCamel($relationName);
+        $relationName = Str::camel($relationName);
 
         $collection->load([
             $relationName => function ($query) use ($joryBuilder, $relation) {

@@ -13,7 +13,7 @@ class BandJoryResource extends JoryResource
 {
     protected $modelClass = Band::class;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->field('id')->filterable(function (Filter $filter) {
             $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=', 'in', 'not_in']);

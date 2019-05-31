@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Http\Middleware;
 
 use Closure;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use JosKolenberg\LaravelJory\Exceptions\JoryHandler;
 
 class SetJoryHandler
@@ -17,8 +18,8 @@ class SetJoryHandler
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        \App::singleton(
-            \Illuminate\Contracts\Debug\ExceptionHandler::class,
+        app()->singleton(
+            ExceptionHandler::class,
             JoryHandler::class
         );
 
