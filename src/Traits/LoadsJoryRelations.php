@@ -10,23 +10,21 @@ use JosKolenberg\Jory\Support\Relation;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryBuilder;
+use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 trait LoadsJoryRelations
 {
-
     /**
      * Load the given relations on the given model(s).
      *
      * @param Collection $models
-     * @param array $relations
-     * @throws LaravelJoryException
-     * @throws JoryException
+     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      */
-    protected function loadRelations(Collection $models, array $relations): void
+    protected function loadRelations(Collection $models, JoryResource $joryResource): void
     {
-        foreach ($relations as $relation) {
-            $this->loadRelation($models, $relation);
+        foreach ($joryResource->getJory()->getRelations() as $relation) {
+            $this->loadRelation($models, $relation, $joryResource);
         }
 
         // We clear Eloquent's relations, so any filtering on relations
@@ -36,7 +34,7 @@ trait LoadsJoryRelations
         });
 
         // Hook into the afterFetch() method for custom tweaking in subclasses.
-        $this->joryResource->afterFetch($models);
+        $joryResource->afterFetch($models);
     }
 
     /**
@@ -44,8 +42,9 @@ trait LoadsJoryRelations
      *
      * @param Collection $collection
      * @param Relation $relation
+     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      */
-    protected function loadRelation(Collection $collection, Relation $relation): void
+    protected function loadRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
     {
         if ($collection->isEmpty()) {
             return;
@@ -54,7 +53,7 @@ trait LoadsJoryRelations
         $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
 
         // Retrieve the model which will be queried to get the appropriate JoryResource
-        $relatedModelClass = $this->joryResource
+        $relatedModelClass = $joryResource
             ->getConfig()
             ->getRelation($relationName)
             ->getModelClass();
@@ -100,7 +99,7 @@ trait LoadsJoryRelations
         }
 
         // Load the subrelations
-        $joryBuilder->loadRelations($allRelated, $relation->getJory()->getRelations());
+        $joryBuilder->loadRelations($allRelated, $relatedJoryResource);
     }
 
     /**

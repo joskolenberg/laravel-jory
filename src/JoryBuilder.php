@@ -62,8 +62,6 @@ class JoryBuilder
      * Get a collection of Models based on the baseQuery and Jory query.
      *
      * @return Collection
-     * @throws LaravelJoryException
-     * @throws JoryException
      */
     public function get(): Collection
     {
@@ -71,7 +69,7 @@ class JoryBuilder
 
         $collection = $this->joryResource->afterFetch($collection);
 
-        $this->loadRelations($collection, $this->joryResource->getJory()->getRelations());
+        $this->loadRelations($collection, $this->joryResource);
 
         return $collection;
     }
@@ -80,8 +78,6 @@ class JoryBuilder
      * Get the first Model based on the baseQuery and Jory data.
      *
      * @return Model|null
-     * @throws JoryException
-     * @throws LaravelJoryException
      */
     public function getFirst(): ?Model
     {
@@ -93,7 +89,7 @@ class JoryBuilder
 
         $model = $this->joryResource->afterFetch(new Collection([$model]))->first();
 
-        $this->loadRelations(new Collection([$model]), $this->joryResource->getJory()->getRelations());
+        $this->loadRelations(new Collection([$model]), $this->joryResource);
 
         return $model;
     }
@@ -111,7 +107,7 @@ class JoryBuilder
 
         // Apply filters if there are any
         if ($this->joryResource->getJory()->getFilter()) {
-            $this->applyFilter($query, $this->joryResource->getJory()->getFilter(), $this->joryResource);
+            $this->applyFilter($query, $this->joryResource);
         }
 
         $this->joryResource->afterQueryBuild($query, true);
@@ -146,10 +142,10 @@ class JoryBuilder
 
         // Apply filters if there are any
         if ($jory->getFilter()) {
-            $this->applyFilter($query, $jory->getFilter(), $this->joryResource);
+            $this->applyFilter($query, $this->joryResource);
         }
 
-        $this->applySorts($query, $jory->getSorts());
+        $this->applySorts($query, $this->joryResource);
         $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
         $this->joryResource->afterQueryBuild($query);

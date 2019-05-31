@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Traits;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\JoryResource;
 
 trait HandlesJorySorts
 {
@@ -12,12 +13,12 @@ trait HandlesJorySorts
      * Apply an array of sorts on the query.
      *
      * @param $query
-     * @param array $sorts
+     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      */
-    protected function applySorts($query, array $sorts): void
+    protected function applySorts($query, JoryResource $joryResource): void
     {
-        foreach ($sorts as $sort) {
-            $this->applySort($query, $sort);
+        foreach ($joryResource->getJory()->getSorts() as $sort) {
+            $this->applySort($query, $sort, $joryResource);
         }
     }
 
@@ -26,12 +27,13 @@ trait HandlesJorySorts
      *
      * @param $query
      * @param Sort $sort
+     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      */
-    protected function applySort($query, Sort $sort): void
+    protected function applySort($query, Sort $sort, JoryResource $joryResource): void
     {
         $customMethodName = $this->getCustomSortMethodName($sort);
-        if (method_exists($this->joryResource, $customMethodName)) {
-            $this->joryResource->$customMethodName($query, $sort->getOrder());
+        if (method_exists($joryResource, $customMethodName)) {
+            $joryResource->$customMethodName($query, $sort->getOrder());
 
             return;
         }

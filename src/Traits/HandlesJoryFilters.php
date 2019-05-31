@@ -13,6 +13,20 @@ use JosKolenberg\LaravelJory\JoryResource;
 trait HandlesJoryFilters
 {
     /**
+     * Apply the main filter in the Jory query (in the joryResource).
+     *
+     * This methods starts at the top layer of the filter and uses
+     * doApplyFilter to go through any sublayers recursively.
+     *
+     * @param mixed $query
+     * @param JoryResource $joryResource
+     */
+    protected function applyFilter($query, JoryResource $joryResource): void
+    {
+        $this->doApplyFilter($query, $joryResource->getJory()->getFilter(), $joryResource);
+    }
+
+    /**
      * Apply a filter (field, groupAnd or groupOr) on a query.
      *
      * Although it seems like we can retrieve the filter from the JoryResource
@@ -24,7 +38,7 @@ trait HandlesJoryFilters
      * @param FilterInterface $filter
      * @param JoryResource $joryResource
      */
-    protected function applyFilter($query, FilterInterface $filter, JoryResource $joryResource): void
+    protected function doApplyFilter($query, FilterInterface $filter, JoryResource $joryResource): void
     {
         if ($filter instanceof Filter) {
             $this->applyFieldFilter($query, $filter, $joryResource);
@@ -32,7 +46,7 @@ trait HandlesJoryFilters
         if ($filter instanceof GroupAndFilter) {
             $query->where(function ($query) use ($joryResource, $filter) {
                 foreach ($filter as $subFilter) {
-                    $this->applyFilter($query, $subFilter, $joryResource);
+                    $this->doApplyFilter($query, $subFilter, $joryResource);
                 }
             });
         }
@@ -40,7 +54,7 @@ trait HandlesJoryFilters
             $query->where(function ($query) use ($joryResource, $filter) {
                 foreach ($filter as $subFilter) {
                     $query->orWhere(function ($query) use ($joryResource, $subFilter) {
-                        $this->applyFilter($query, $subFilter, $joryResource);
+                        $this->doApplyFilter($query, $subFilter, $joryResource);
                     });
                 }
             });
