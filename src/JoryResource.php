@@ -4,7 +4,6 @@
 namespace JosKolenberg\LaravelJory;
 
 
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -16,8 +15,8 @@ use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\Config\Relation;
 use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\Config\Validator;
-use JosKolenberg\LaravelJory\Helpers\CaseManager as CaseManagerAlias;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Helpers\CaseManager as CaseManagerAlias;
 use JosKolenberg\LaravelJory\Helpers\FilterHelper;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
@@ -367,7 +366,7 @@ abstract class JoryResource
             $this->relatedJoryResources = [];
 
             foreach ($this->jory->getRelations() as $relation) {
-                $relationName = ResourceNameHelper::explode($relation->getName())->modelName;
+                $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
 
                 $relatedModelClass = $this->getConfig()->getRelation($relationName)->getModelClass();
                 $relatedJoryResource = app(JoryResourcesRegister::class)

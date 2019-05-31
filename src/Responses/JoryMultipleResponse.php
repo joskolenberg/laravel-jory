@@ -169,55 +169,6 @@ class JoryMultipleResponse implements Responsable
     }
 
     /**
-     * Cut the jory's key into pieces.
-     *
-     * @param $name
-     * @return stdClass
-     */
-    protected function explodeResourceName($name): stdClass
-    {
-        /**
-         * First cut the alias part
-         */
-        $nameParts = explode(' as ', $name);
-        if (count($nameParts) === 1) {
-            $modelName = $nameParts[0];
-            $alias = $nameParts[0];
-        } else {
-            $modelName = $nameParts[0];
-            $alias = $nameParts[1];
-        }
-
-        /**
-         * Next, check the type of request.
-         */
-        $nameParts = explode(':', $modelName);
-        if (count($nameParts) === 1) {
-            $type = 'multiple';
-            $id = null;
-        } elseif ($nameParts[1] === 'count') {
-            $type = 'count';
-            $modelName = $nameParts[0];
-            $id = null;
-        } else {
-            $type = 'single';
-            $modelName = $nameParts[0];
-            $id = $nameParts[1];
-        }
-
-        /**
-         * Create the value object.
-         */
-        $result = new stdClass();
-        $result->modelName = $modelName;
-        $result->alias = $alias;
-        $result->type = $type;
-        $result->id = $id;
-
-        return $result;
-    }
-
-    /**
      * Process the raw request data into the jories array.
      *
      * @throws LaravelJoryCallException
@@ -270,7 +221,7 @@ class JoryMultipleResponse implements Responsable
         $single = new stdClass();
         $single->name = $name;
         $single->data = $data;
-        $single->registration = $this->register->getByUri($exploded->modelName);
+        $single->resource = $this->register->getByUri($exploded->baseName);
         $single->alias = $exploded->alias;
         $single->type = $exploded->type;
         $single->id = $exploded->id;
@@ -290,7 +241,7 @@ class JoryMultipleResponse implements Responsable
      */
     protected function processSingle($single)
     {
-        $singleResponse = Jory::byUri($single->registration->getUri());
+        $singleResponse = Jory::byUri($single->resource->getUri());
 
         $singleResponse->apply($single->data);
 

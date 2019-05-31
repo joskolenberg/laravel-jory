@@ -2,15 +2,14 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Support\Relation;
-use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 trait LoadsJoryRelations
@@ -52,7 +51,7 @@ trait LoadsJoryRelations
             return;
         }
 
-        $relationName = ResourceNameHelper::explode($relation->getName())->modelName;
+        $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
 
         // Retrieve the model which will be queried to get the appropriate JoryResource
         $relatedModelClass = $this->joryResource

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\Jory\Exceptions\JoryException;
-use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
@@ -112,7 +111,7 @@ class JoryBuilder
 
         // Apply filters if there are any
         if ($this->joryResource->getJory()->getFilter()) {
-            $this->applyFilter($query, $this->joryResource->getJory()->getFilter());
+            $this->applyFilter($query, $this->joryResource->getJory()->getFilter(), $this->joryResource);
         }
 
         $this->joryResource->afterQueryBuild($query, true);
@@ -147,7 +146,7 @@ class JoryBuilder
 
         // Apply filters if there are any
         if ($jory->getFilter()) {
-            $this->applyFilter($query, $jory->getFilter());
+            $this->applyFilter($query, $jory->getFilter(), $this->joryResource);
         }
 
         $this->applySorts($query, $jory->getSorts());

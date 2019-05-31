@@ -41,7 +41,7 @@ class CaseManager
      */
     public function toCurrent($string): string
     {
-        if($this->case === 'camel'){
+        if ($this->case === 'camel') {
             return Str::camel($string);
         }
 

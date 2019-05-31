@@ -3,38 +3,44 @@
 namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Support\Str;
-use JosKolenberg\Jory\Support\Filter;
-use JosKolenberg\Jory\Support\GroupOrFilter;
-use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Contracts\FilterInterface;
-use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\Jory\Support\Filter;
+use JosKolenberg\Jory\Support\GroupAndFilter;
+use JosKolenberg\Jory\Support\GroupOrFilter;
 use JosKolenberg\LaravelJory\Helpers\FilterHelper;
+use JosKolenberg\LaravelJory\JoryResource;
 
 trait HandlesJoryFilters
 {
     /**
      * Apply a filter (field, groupAnd or groupOr) on a query.
      *
+     * Although it seems like we can retrieve the filter from the JoryResource
+     * using joryResource->getJory()->getFilter(), this won't work. We
+     * will be using the same joryResource for the subfilters as well
+     * so we do have to supply them as two different parameters.
+     *
      * @param mixed $query
      * @param FilterInterface $filter
+     * @param JoryResource $joryResource
      */
-    protected function applyFilter($query, FilterInterface $filter): void
+    protected function applyFilter($query, FilterInterface $filter, JoryResource $joryResource): void
     {
         if ($filter instanceof Filter) {
-            $this->applyFieldFilter($query, $filter);
+            $this->applyFieldFilter($query, $filter, $joryResource);
         }
         if ($filter instanceof GroupAndFilter) {
-            $query->where(function ($query) use ($filter) {
+            $query->where(function ($query) use ($joryResource, $filter) {
                 foreach ($filter as $subFilter) {
-                    $this->applyFilter($query, $subFilter);
+                    $this->applyFilter($query, $subFilter, $joryResource);
                 }
             });
         }
         if ($filter instanceof GroupOrFilter) {
-            $query->where(function ($query) use ($filter) {
+            $query->where(function ($query) use ($joryResource, $filter) {
                 foreach ($filter as $subFilter) {
-                    $query->orWhere(function ($query) use ($subFilter) {
-                        $this->applyFilter($query, $subFilter);
+                    $query->orWhere(function ($query) use ($joryResource, $subFilter) {
+                        $this->applyFilter($query, $subFilter, $joryResource);
                     });
                 }
             });
@@ -48,21 +54,24 @@ trait HandlesJoryFilters
      *
      * @param mixed $query
      * @param Filter $filter
+     * @param JoryResource $joryResource
      */
-    protected function applyFieldFilter($query, Filter $filter): void
+    protected function applyFieldFilter($query, Filter $filter, JoryResource $joryResource): void
     {
         $customMethodName = $this->getCustomFilterMethodName($filter);
-        if (method_exists($this->joryResource, $customMethodName)) {
+        // Check if the JoryResource has a custom scope method for this filter
+        if (method_exists($joryResource, $customMethodName)) {
             // Wrap in a where closure to encapsulate any OR clauses in custom method
             // which could lead to unexpected results.
-            $query->where(function ($query) use ($filter, $customMethodName) {
-                $this->joryResource->$customMethodName($query, $filter->getOperator(), $filter->getData());
+            $query->where(function ($query) use ($joryResource, $filter, $customMethodName) {
+                $joryResource->$customMethodName($query, $filter->getOperator(), $filter->getData());
             });
 
             return;
         }
 
         $model = $query->getModel();
+        // Check if the Model has a custom method for this filter
         if (method_exists($model, $customMethodName)) {
             // Wrap in a where closure to encapsulate any OR clauses in custom method
             // which could lead to unexpected results.

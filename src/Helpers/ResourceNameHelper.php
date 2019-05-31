@@ -28,27 +28,27 @@ class ResourceNameHelper
          */
         $nameParts = explode(' as ', $resourceName);
         if (count($nameParts) === 1) {
-            $modelName = $nameParts[0];
+            $baseName = $nameParts[0];
             $alias = $nameParts[0];
         } else {
-            $modelName = $nameParts[0];
+            $baseName = $nameParts[0];
             $alias = $nameParts[1];
         }
 
         /**
          * Next, check the type of request.
          */
-        $nameParts = explode(':', $modelName);
+        $nameParts = explode(':', $baseName);
         if (count($nameParts) === 1) {
             $type = 'multiple';
             $id = null;
         } elseif ($nameParts[1] === 'count') {
             $type = 'count';
-            $modelName = $nameParts[0];
+            $baseName = $nameParts[0];
             $id = null;
         } else {
             $type = 'single';
-            $modelName = $nameParts[0];
+            $baseName = $nameParts[0];
             $id = $nameParts[1];
         }
 
@@ -56,7 +56,7 @@ class ResourceNameHelper
          * Create the value object.
          */
         $result = new stdClass();
-        $result->modelName = $modelName;
+        $result->baseName = $baseName;
         $result->alias = $alias;
         $result->type = $type;
         $result->id = $id;
