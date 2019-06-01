@@ -14,7 +14,6 @@ class SongJoryResource extends JoryResource
     /**
      * Configure the JoryBuilder.
      *
-     * @param  \JosKolenberg\LaravelJory\Config\Config $config
      */
     protected function configure(): void
     {

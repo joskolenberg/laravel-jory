@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Config;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 /**
  * Class Config.
@@ -148,24 +149,32 @@ class Config
     /**
      * Add a relation to the config.
      *
-     * When no relatedClass is given, the method will find the relatedClass
-     * by calling the relationMethod. If you don't want this to happen
-     * you can supply the $relatedClass to prevent this.
+     * When no joryResource is given, the method will find the related model
+     * and joryResource by calling the relationMethod. If you don't want
+     * this to happen you can supply the joryResource to prevent this.
      *
      * @param string $name
-     * @param string|null $relatedClass
+     * @param string $joryResource
      * @return Relation
      */
-    public function relation(string $name, string $relatedClass = null): Relation
+    public function relation(string $name, string $joryResource = null): Relation
     {
-        if (!$relatedClass) {
-            // Get the related class for the relation
+        if (!$joryResource) {
+            /**
+             * When no explicit joryResource is given,
+             * we will search for the joryResource for the related model.
+             */
             $relationMethod = Str::camel($name);
             $relatedClass = get_class((new $this->modelClass())->{$relationMethod}()->getRelated());
+
+            $joryResource = app()->make(JoryResourcesRegister::class)->getByModelClass($relatedClass);
+        } else{
+            // Class name given, new it up.
+            $joryResource = new $joryResource();
         }
 
         // Add the relation
-        $relation = new Relation($name, $relatedClass);
+        $relation = new Relation($name, $joryResource);
 
         $this->relations[] = $relation;
 

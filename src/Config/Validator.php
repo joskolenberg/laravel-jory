@@ -7,6 +7,7 @@ use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Support\GroupOrFilter;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
+use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use SimilarText\Finder;
 
@@ -216,7 +217,7 @@ class Validator
     }
 
     /**
-     * Validate the "subJories" in the relations of th eJory query.
+     * Validate the "subJories" in the relations of the Jory query.
      */
     protected function validateSubJories(): void
     {
@@ -226,8 +227,10 @@ class Validator
         }
 
         foreach ($this->jory->getRelations() as $joryRelation) {
+            $relationName = ResourceNameHelper::explode($joryRelation->getName())->baseName;
+
             $relation = $relatedModelClass = $this->config
-                ->getRelation($joryRelation->getName());
+                ->getRelation($relationName);
 
             /**
              * If the relation could not be found, there will already be
@@ -237,8 +240,7 @@ class Validator
                 break;
             }
 
-            $relatedJoryResource = app(JoryResourcesRegister::class)
-                ->getByModelClass($relation->getModelClass());
+            $relatedJoryResource = $relation->getJoryResource();
 
             try {
                 (new self($relatedJoryResource->getConfig(), $joryRelation->getJory(), ($this->address ? $this->address . '.' : '') . $joryRelation->getName() . '.'))->validate();

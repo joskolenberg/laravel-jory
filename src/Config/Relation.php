@@ -2,9 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\JoryResource;
 
 /**
  * Class Relation.
@@ -19,9 +18,9 @@ class Relation
     protected $name;
 
     /**
-     * @var string
+     * @var JoryResource
      */
-    protected $modelClass;
+    protected $joryResource;
 
     /**
      * @var string
@@ -37,12 +36,12 @@ class Relation
      * Relation constructor.
      *
      * @param string $name
-     * @param string $modelClass
+     * @param JoryResource $joryResource
      */
-    public function __construct(string $name, string $modelClass)
+    public function __construct(string $name, JoryResource $joryResource)
     {
         $this->name = $name;
-        $this->modelClass = $modelClass;
+        $this->joryResource = $joryResource;
 
         $this->case = app(CaseManager::class);
     }
@@ -85,13 +84,13 @@ class Relation
     }
 
     /**
-     * Get the related model class.
+     * Get the related joryResource.
      *
-     * @return string
+     * @return JoryResource
      */
-    public function getModelClass(): string
+    public function getJoryResource(): JoryResource
     {
-        return $this->modelClass;
+        return $this->joryResource;
     }
 
     /**
@@ -101,8 +100,6 @@ class Relation
      */
     public function getType(): ?string
     {
-        $registration = app()->make(JoryResourcesRegister::class)->getByModelClass($this->modelClass);
-
-        return $registration ? $registration->getUri() : null;
+        return $this->joryResource->getUri();
     }
 }

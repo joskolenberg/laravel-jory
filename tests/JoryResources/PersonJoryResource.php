@@ -2,8 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
-use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
@@ -14,7 +12,6 @@ class PersonJoryResource extends JoryResource
     /**
      * Configure the JoryBuilder.
      *
-     * @param  \JosKolenberg\LaravelJory\Config\Config $config
      */
     protected function configure(): void
     {
@@ -30,7 +27,6 @@ class PersonJoryResource extends JoryResource
 
         // Relations
         $this->relation('instruments');
-        $this->relation('groupies');
     }
 
     public function scopeFullNameFilter($query, $operator, $data)

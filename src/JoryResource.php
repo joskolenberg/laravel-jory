@@ -152,17 +152,17 @@ abstract class JoryResource
     /**
      * Add a relation option which can be requested by the API users.
      *
-     * When no relatedClass is given, the method will find the relatedClass
-     * by calling the relationMethod. If you don't want this to happen
-     * you can supply the $relatedClass to prevent this.
+     * When no joryResource is given, the method will find the related model
+     * and joryResource by calling the relationMethod. If you don't want
+     * this to happen you can supply the joryResource to prevent this.
      *
      * @param string $name
-     * @param string|null $relatedClass
+     * @param string $joryResource
      * @return Relation
      */
-    public function relation(string $name, string $relatedClass = null): Relation
+    public function relation(string $name, string $joryResource = null): Relation
     {
-        return $this->config->relation($name, $relatedClass);
+        return $this->config->relation($name, $joryResource);
     }
 
     /**
@@ -348,7 +348,7 @@ abstract class JoryResource
     }
 
     /**
-     * Get associative an array of all relations requested in the Jory query.
+     * Get an associative array of all relations requested in the Jory query.
      *
      * The key of the array holds the name of the relation (including any
      * aliases) The values of the array are JoryResource objects which
@@ -359,6 +359,7 @@ abstract class JoryResource
      * an array leading into bad performance.
      *
      * @return array
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getRelatedJoryResources(): array
     {
@@ -368,10 +369,7 @@ abstract class JoryResource
             foreach ($this->jory->getRelations() as $relation) {
                 $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
 
-                $relatedModelClass = $this->getConfig()->getRelation($relationName)->getModelClass();
-                $relatedJoryResource = app(JoryResourcesRegister::class)
-                    ->getByModelClass($relatedModelClass)
-                    ->fresh();
+                $relatedJoryResource = $this->getConfig()->getRelation($relationName)->getJoryResource()->fresh();
 
                 $relatedJoryResource->setJory($relation->getJory());
 
@@ -388,6 +386,7 @@ abstract class JoryResource
      *
      * @param Model $model
      * @return array
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function modelToArray(Model $model): array
     {

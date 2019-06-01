@@ -2,11 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
-use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Filter;
-use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 
 class BandJoryResource extends JoryResource
@@ -40,7 +37,7 @@ class BandJoryResource extends JoryResource
 
         $this->limitDefault(30)->limitMax(120);
 
-        $this->relation('albums', Album::class)->description('Get the related albums for the band.');
+        $this->relation('albums', AlbumJoryResource::class)->description('Get the related albums for the band.');
         $this->relation('people');
         $this->relation('songs');
     }

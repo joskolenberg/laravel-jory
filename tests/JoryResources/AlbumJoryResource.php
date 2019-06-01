@@ -3,13 +3,8 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
 use Illuminate\Database\Eloquent\Collection;
-use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
-use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class AlbumJoryResource extends JoryResource
 {
@@ -51,11 +46,14 @@ class AlbumJoryResource extends JoryResource
         $this->sort('number_of_songs');
         $this->sort('band_name');
 
-        $this->relation('songs', Song::class);
+        $this->relation('songs', SongJoryResource::class);
         $this->relation('band');
-        $this->relation('cover', AlbumCover::class);
-        $this->relation('album_cover', AlbumCover::class);
+        $this->relation('cover', AlbumCoverJoryResource::class);
+        $this->relation('album_cover', AlbumCoverJoryResource::class);
         $this->relation('snake_case_album_cover');
+        $this->relation('custom_songs_1', SongJoryResourceWithAfterFetchHook::class);
+        $this->relation('custom_songs_2', SongJoryResourceWithAfterQueryBuildFilterHook::class);
+        $this->relation('custom_songs_3', SongJoryResource::class);
     }
 
     public function afterFetch(Collection $collection): Collection

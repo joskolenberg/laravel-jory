@@ -76,7 +76,7 @@ class JoryResourcesRegister
      * Get a JoryResource by a model's class name.
      *
      * When multiple resources exist for the same model,
-     * the last one will be used.
+     * the last one registered will be used.
      *
      * @param string $modelClass
      * @return JoryResource

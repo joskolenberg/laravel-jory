@@ -5,13 +5,10 @@ namespace JosKolenberg\LaravelJory\Traits;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Support\Relation;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 trait LoadsJoryRelations
 {
@@ -20,6 +17,7 @@ trait LoadsJoryRelations
      *
      * @param Collection $models
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelations(Collection $models, JoryResource $joryResource): void
     {
@@ -43,6 +41,7 @@ trait LoadsJoryRelations
      * @param Collection $collection
      * @param Relation $relation
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
     {
@@ -52,16 +51,13 @@ trait LoadsJoryRelations
 
         $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
 
-        // Retrieve the model which will be queried to get the appropriate JoryResource
-        $relatedModelClass = $joryResource
+        // Build the JoryResource to be applied on the relation query.
+        $relatedJoryResource = $joryResource
             ->getConfig()
             ->getRelation($relationName)
-            ->getModelClass();
-
-        // Build the JoryResource to be applied ont the relation query.
-        $relatedJoryResource = app(JoryResourcesRegister::class)
-            ->getByModelClass($relatedModelClass)
+            ->getJoryResource()
             ->fresh();
+
         $relatedJoryResource->setJory($relation->getJory());
 
         // Create a JoryBuilder which can alter the relation query with the data in the Jory query and JoryResource

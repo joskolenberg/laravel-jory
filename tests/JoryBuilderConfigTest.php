@@ -72,4 +72,103 @@ class JoryBuilderConfigTest extends TestCase
 
         $this->assertQueryCount(0);
     }
+
+    /** @test */
+    public function a_relation_can_be_defined_with_a_custom_jory_resource_1()
+    {
+        $response = $this->json('GET', 'jory/album/5', [
+            'jory' => [
+                'fld' => ['name'],
+                'rlt' => [
+                    'customSongs1 as songs' => [
+                        'flt' => [
+                            'f' => 'title',
+                            'o' => 'like',
+                            'd' => '%love%',
+                        ],
+                        'fld' => [
+                            'title',
+                            'customField',
+                        ],
+                    ],
+                ],
+            ],
+            'case' => 'camel',
+        ]);
+
+        $expected = [
+            'name' => 'Led Zeppelin II',
+            'songs' => [
+                [
+                    'title' => 'altered',
+                    'customField' => 'custom_value',
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function a_relation_can_be_defined_with_a_custom_jory_resource_2()
+    {
+        $response = $this->json('GET', 'jory/album/5', [
+            'jory' => [
+                'fld' => ['name'],
+                'rlt' => [
+                    'customSongs2 as songs' => [
+                        'flt' => [
+                            'f' => 'title',
+                            'o' => 'like',
+                            'd' => '%love%',
+                        ],
+                        'fld' => [
+                            'title',
+                            'customField',
+                        ],
+                    ],
+                ],
+            ],
+            'case' => 'camel',
+        ]);
+
+        $expected = [
+            'Field "customField" is not available, no suggestions found. (Location: customSongs2 as songs.fields.customField)',
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
+    }
+
+    /** @test */
+    public function a_relation_can_be_defined_with_a_custom_jory_resource_3()
+    {
+        $response = $this->json('GET', 'jory/album/5', [
+            'jory' => [
+                'fld' => ['name'],
+                'rlt' => [
+                    'customSongs3' => [
+                        'flt' => [
+                            'f' => 'title',
+                            'o' => 'like',
+                            'd' => '%love%',
+                        ],
+                        'fld' => [
+                            'title',
+                            'customField',
+                        ],
+                    ],
+                ],
+            ],
+            'case' => 'camel',
+        ]);
+
+        $expected = [
+            'Field "customField" is not available, no suggestions found. (Location: customSongs3.fields.customField)',
+        ];
+        $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(0);
+    }
 }

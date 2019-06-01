@@ -399,6 +399,7 @@ class JoryRoutesTest extends TestCase
                 'album',
                 'album-cover',
                 'band',
+                'error-person',
                 'instrument',
                 'person',
                 'song',

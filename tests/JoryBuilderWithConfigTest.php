@@ -607,6 +607,18 @@ class JoryBuilderWithConfigTest extends TestCase
                     'description' => 'The snake_case_album_cover relation.',
                     'type' => 'album-cover',
                 ],
+                'custom_songs_1' => [
+                    'description' => 'The custom_songs_1 relation.',
+                    'type' => 'song-with-after-fetch',
+                ],
+                'custom_songs_2' => [
+                    'description' => 'The custom_songs_2 relation.',
+                    'type' => 'song',
+                ],
+                'custom_songs_3' => [
+                    'description' => 'The custom_songs_3 relation.',
+                    'type' => 'song',
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
