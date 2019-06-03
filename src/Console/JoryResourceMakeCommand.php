@@ -55,6 +55,7 @@ class JoryResourceMakeCommand extends GeneratorCommand
             return $this->call('jory:generate-for', [
                 'model' => $this->option('model'),
                 '--name' => $this->argument('name'),
+                '--force' => $this->option('force')
             ]);
         }
 
