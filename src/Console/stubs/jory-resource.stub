@@ -1,0 +1,21 @@
+<?php
+
+namespace DummyNamespace;
+
+use JosKolenberg\LaravelJory\JoryResource;
+UseClass
+
+class DummyClass extends JoryResource
+{
+    protected $modelClass = DummyModelBaseClass;
+
+    /**
+     * Configure the JoryResource.
+     *
+     * @return void
+     */
+    protected function configure(): void
+    {
+DummyConfig
+    }
+}

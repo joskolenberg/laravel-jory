@@ -6,7 +6,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 
-class JoryBuilderRelationTest extends TestCase
+class RelationTest extends TestCase
 {
     /** @test */
     public function it_can_load_a_many_to_many_relation()

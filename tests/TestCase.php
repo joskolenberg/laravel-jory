@@ -28,7 +28,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\SongWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryBuilder;
+use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryResource;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -942,12 +942,12 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
     {
         parent::getEnvironmentSetUp($app);
         $app['config']->set('jory.auto-registrar', [
-            'models-path' => __DIR__ . '/Models',
-            'jory-builders-path' => __DIR__ . '/JoryBuilders',
-            'root-namespace' => 'JosKolenberg\LaravelJory\Tests',
-            'root-path' => __DIR__,
-            'path' => __DIR__ . '/JoryResources',
             'namespace' => 'JosKolenberg\LaravelJory\Tests\JoryResources',
+            'path' => __DIR__ . '/JoryResources',
+        ]);
+        $app['config']->set('jory.generator', [
+            'namespace' => 'JosKolenberg\LaravelJory\Tests\Models',
+            'path' => __DIR__ . '/Models',
         ]);
     }
 }

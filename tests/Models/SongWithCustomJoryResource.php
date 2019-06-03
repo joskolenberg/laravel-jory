@@ -2,6 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
-class SongWithCustomJoryBuilder extends Song
+class SongWithCustomJoryResource extends Song
 {
 }

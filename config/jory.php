@@ -169,4 +169,21 @@ return [
 
     ],
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Generator
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define where your models are stored, so
+    | the jory:generate-all command can find them.
+    */
+
+    'generator' => [
+
+        'namespace' => 'App',
+        'path' => app_path(),
+
+    ],
+
 ];

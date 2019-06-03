@@ -2,7 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-class JoryBuilderOffsetLimitTest extends TestCase
+class OffsetLimitTest extends TestCase
 {
     /** @test */
     public function it_can_apply_an_offset_and_limit()

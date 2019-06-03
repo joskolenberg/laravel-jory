@@ -17,7 +17,7 @@ use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithBeforeQuery
 use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithBeforeQueryBuildSortHook;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
-class JoryBuilderHookTest extends TestCase
+class HookTest extends TestCase
 {
     /** @test */
     public function it_can_hook_into_the_query_before_query_build_with_a_filter_1()

@@ -2,8 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
-use JosKolenberg\LaravelJory\Config\Config;
-use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 

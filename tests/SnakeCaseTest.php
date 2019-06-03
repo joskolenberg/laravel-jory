@@ -2,22 +2,28 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-class CamelCaseJoryBuilderTest extends TestCase
+class SnakeCaseTest extends TestCase
 {
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+        $app['config']->set('jory.case', 'camel');
+        $app['config']->set('jory.request.case-key', 'case_key');
+    }
 
     /** @test */
-    public function it_returns_the_configs_default_fields_in_camel_case()
+    public function it_returns_the_configs_default_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'camel',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
             'data' => [
                 'id' => 2,
                 'name' => 'Led Zeppelin',
-                'yearStart' => 1968,
-                'yearEnd' => 1980,
+                'year_start' => 1968,
+                'year_end' => 1980,
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
@@ -26,18 +32,17 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_defined_fields_in_camel_case()
+    public function it_returns_the_toarray_default_fields_in_snake_case()
     {
-        $response = $this->json('GET', 'jory/band/2', [
-            'jory' => '{"fld":["yearStart","id","yearEnd"]}',
-            'case' => 'camel',
+        $response = $this->json('GET', 'jory/song/2', [
+            'case_key' => 'snake',
         ]);
 
         $expected = [
             'data' => [
                 'id' => 2,
-                'yearStart' => 1968,
-                'yearEnd' => 1980,
+                'album_id' => 1,
+                'title' => 'Love In Vain (Robert Johnson)',
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
@@ -46,16 +51,36 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_the_fields_in_camelCase()
+    public function it_returns_the_defined_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
+            'case_key' => 'snake',
+            'jory' => '{"fld":["year_start","id","year_end"]}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'id' => 2,
+                'year_start' => 1968,
+                'year_end' => 1980,
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_validates_the_fields_in_snake_case()
+    {
+        $response = $this->json('GET', 'jory/band/2', [
+            'case_key' => 'snake',
             'jory' => '{"fld":["yearStart","id","year_end"]}',
-            'case' => 'camel',
         ]);
 
         $expected = [
             'errors' => [
-                'Field "year_end" is not available, did you mean "yearEnd"? (Location: fields.year_end)',
+                'Field "yearStart" is not available, did you mean "year_start"? (Location: fields.yearStart)',
             ],
         ];
 
@@ -65,11 +90,11 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_default_filters_in_camelcase()
+    public function it_can_apply_default_filters_in_snakecase()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"yearStart","d":1968}}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"flt":{"f":"year_start","d":1968}}',
         ]);
 
         $expected = [
@@ -77,8 +102,8 @@ class CamelCaseJoryBuilderTest extends TestCase
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'yearStart' => 1968,
-                    'yearEnd' => 1980,
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -89,32 +114,32 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_custom_filters_in_camelcase()
+    public function it_can_apply_custom_filters_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"flt":{"f":"numberOfSongs","o":">=","d":15},"srt":["id"]}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"flt":{"f":"number_of_songs","o":">=","d":15},"srt":["id"]}',
         ]);
 
         $expected = [
             'data' => [
                 [
                     'id' => 3,
-                    'bandId' => 1,
+                    'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'releaseDate' => '1972-05-12',
+                    'release_date' => '1972-05-12',
                 ],
                 [
                     'id' => 8,
-                    'bandId' => 3,
+                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'releaseDate' => '1969-09-26',
+                    'release_date' => '1969-09-26',
                 ],
                 [
                     'id' => 12,
-                    'bandId' => 4,
+                    'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'releaseDate' => '1968-10-16',
+                    'release_date' => '1968-10-16',
                 ],
             ],
         ];
@@ -125,16 +150,16 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_the_filters_in_camelCase()
+    public function it_validates_the_filters_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"flt":{"f":"number_of_songs","o":">=","d":15}}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"flt":{"f":"numberOfSongs","o":">=","d":15}}',
         ]);
 
         $expected = [
             'errors' => [
-                'Field "number_of_songs" is not available for filtering, did you mean "numberOfSongs"? (Location: filter(number_of_songs))',
+                'Field "numberOfSongs" is not available for filtering, did you mean "number_of_songs"? (Location: filter(numberOfSongs))',
             ],
         ];
 
@@ -144,11 +169,11 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_default_sorts_in_camelcase()
+    public function it_can_apply_default_sorts_in_snakecase()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["yearEnd","-yearStart"]}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"srt":["year_end","-year_start"]}',
         ]);
 
         $expected = [
@@ -156,26 +181,26 @@ class CamelCaseJoryBuilderTest extends TestCase
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
-                    'yearStart' => 1962,
-                    'yearEnd' => null,
+                    'year_start' => 1962,
+                    'year_end' => null,
                 ],
                 [
                     'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'yearStart' => 1966,
-                    'yearEnd' => 1970,
+                    'year_start' => 1966,
+                    'year_end' => 1970,
                 ],
                 [
                     'id' => 3,
                     'name' => 'Beatles',
-                    'yearStart' => 1960,
-                    'yearEnd' => 1970,
+                    'year_start' => 1960,
+                    'year_end' => 1970,
                 ],
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'yearStart' => 1968,
-                    'yearEnd' => 1980,
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -186,44 +211,44 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_custom_sorts_in_camelcase()
+    public function it_can_apply_custom_sorts_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":["numberOfSongs","-bandId"],"lmt":5,"offset":7}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"srt":["number_of_songs","-band_id"],"lmt":5,"offset":7}',
         ]);
 
         $expected = [
             'data' => [
                 [
                     'id' => 11,
-                    'bandId' => 4,
+                    'band_id' => 4,
                     'name' => 'Axis: Bold as love',
-                    'releaseDate' => '1967-12-01',
+                    'release_date' => '1967-12-01',
                 ],
                 [
                     'id' => 7,
-                    'bandId' => 3,
+                    'band_id' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
-                    'releaseDate' => '1967-06-01',
+                    'release_date' => '1967-06-01',
                 ],
                 [
                     'id' => 12,
-                    'bandId' => 4,
+                    'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'releaseDate' => '1968-10-16',
+                    'release_date' => '1968-10-16',
                 ],
                 [
                     'id' => 8,
-                    'bandId' => 3,
+                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'releaseDate' => '1969-09-26',
+                    'release_date' => '1969-09-26',
                 ],
                 [
                     'id' => 3,
-                    'bandId' => 1,
+                    'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'releaseDate' => '1972-05-12',
+                    'release_date' => '1972-05-12',
                 ],
             ],
         ];
@@ -234,17 +259,17 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_the_sorts_in_camelCase()
+    public function it_validates_the_sorts_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":["number_of_songs","-band_id"],"lmt":5,"offset":7}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"srt":["numberOfSongs","-bandId"],"lmt":5,"offset":7}',
         ]);
 
         $expected = [
             'errors' => [
-                'Field "number_of_songs" is not available for sorting, did you mean "numberOfSongs"? (Location: sorts.number_of_songs)',
-                'Field "band_id" is not available for sorting, did you mean "bandId"? (Location: sorts.band_id)',
+                'Field "numberOfSongs" is not available for sorting, did you mean "number_of_songs"? (Location: sorts.numberOfSongs)',
+                'Field "bandId" is not available for sorting, did you mean "band_id"? (Location: sorts.bandId)',
             ],
         ];
 
@@ -254,19 +279,19 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_relations_in_camelcase()
+    public function it_can_return_relations_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album/2', [
-            'jory' => '{"rlt":{"albumCover":{}},"fld":["name"]}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"rlt":{"album_cover":{}},"fld":["name"]}',
         ]);
 
         $expected = [
             'data' => [
                 'name' => 'Sticky Fingers',
-                'albumCover' => [
+                'album_cover' => [
                     'id' => 2,
-                    'albumId' => 2,
+                    'album_id' => 2,
                     'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -317,16 +342,16 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_the_relations_in_camelCase()
+    public function it_validates_the_relations_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"rlt":{"album_cover":{}},"fld":["name"]}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"rlt":{"albumCover":{}},"fld":["name"]}',
         ]);
 
         $expected = [
             'errors' => [
-                'Relation "album_cover" is not available, did you mean "albumCover"? (Location: relations.album_cover)',
+                'Relation "albumCover" is not available, did you mean "album_cover"? (Location: relations.albumCover)',
             ],
         ];
 
@@ -336,11 +361,11 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_multiple_records_in_camelCase()
+    public function it_can_return_multiple_records_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band', [
+            'case_key' => 'snake',
             'jory' => '{"lmt":2}',
-            'case' => 'camel',
         ]);
 
         $expected = [
@@ -348,14 +373,14 @@ class CamelCaseJoryBuilderTest extends TestCase
                 [
                     'id' => 1,
                     'name' => 'Rolling Stones',
-                    'yearStart' => 1962,
-                    'yearEnd' => null,
+                    'year_start' => 1962,
+                    'year_end' => null,
                 ],
                 [
                     'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'yearStart' => 1968,
-                    'yearEnd' => 1980,
+                    'year_start' => 1968,
+                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -365,11 +390,11 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_do_a_count_in_camelCase()
+    public function it_can_do_a_count_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/count', [
-            'jory' => '{"flt":{"f":"yearEnd","d":1970}}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"flt":{"f":"year_end","d":1970}}',
         ]);
 
         $expected = [
@@ -382,18 +407,18 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_a_single_record_in_camelCase()
+    public function it_can_get_a_single_record_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'camel',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
             'data' => [
                 'id' => 2,
                 'name' => 'Led Zeppelin',
-                'yearStart' => 1968,
-                'yearEnd' => 1980,
+                'year_start' => 1968,
+                'year_end' => 1980,
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
@@ -402,10 +427,10 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_the_options_for_the_resource_in_camelCase()
+    public function it_can_show_the_options_for_the_resource_in_snake_case()
     {
         $response = $this->json('OPTIONS', 'jory/band', [
-            'case' => 'camel',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
@@ -418,16 +443,16 @@ class CamelCaseJoryBuilderTest extends TestCase
                     'description' => 'The name field.',
                     'default' => true,
                 ],
-                'yearStart' => [
+                'year_start' => [
                     'description' => 'The year in which the band started.',
                     'default' => true,
                 ],
-                'yearEnd' => [
+                'year_end' => [
                     'description' => 'The year in which the band quitted, could be null if band still exists.',
                     'default' => true,
                 ],
-                'allAlbumsString' => [
-                    'description' => 'The allAlbumsString field.',
+                'all_albums_string' => [
+                    'description' => 'The all_albums_string field.',
                     'default' => false,
                 ],
             ],
@@ -465,8 +490,8 @@ class CamelCaseJoryBuilderTest extends TestCase
                         'not_in',
                     ],
                 ],
-                'yearStart' => [
-                    'description' => 'Filter on the yearStart field.',
+                'year_start' => [
+                    'description' => 'Filter on the year_start field.',
                     'operators' => [
                         '=',
                         '!=',
@@ -484,8 +509,8 @@ class CamelCaseJoryBuilderTest extends TestCase
                         'not_in',
                     ],
                 ],
-                'yearEnd' => [
-                    'description' => 'Filter on the yearEnd field.',
+                'year_end' => [
+                    'description' => 'Filter on the year_end field.',
                     'operators' => [
                         '=',
                         '!=',
@@ -503,7 +528,7 @@ class CamelCaseJoryBuilderTest extends TestCase
                         'not_in',
                     ],
                 ],
-                'hasAlbumWithName' => [
+                'has_album_with_name' => [
                     'description' => 'Filter bands that have an album with a given name.',
                     'operators' => [
                         '=',
@@ -522,7 +547,7 @@ class CamelCaseJoryBuilderTest extends TestCase
                         'not_in',
                     ],
                 ],
-                'numberOfAlbumsInYear' => [
+                'number_of_albums_in_year' => [
                     'description' => 'Filter the bands that released a given number of albums in a year, pass value and year parameter.',
                     'operators' => ['=', '>', '<', '<=', '>=', '<>', '!='],
                 ],
@@ -536,12 +561,12 @@ class CamelCaseJoryBuilderTest extends TestCase
                     'description' => 'Sort by the name field.',
                     'default' => false,
                 ],
-                'yearStart' => [
-                    'description' => 'Sort by the yearStart field.',
+                'year_start' => [
+                    'description' => 'Sort by the year_start field.',
                     'default' => false,
                 ],
-                'yearEnd' => [
-                    'description' => 'Sort by the yearEnd field.',
+                'year_end' => [
+                    'description' => 'Sort by the year_end field.',
                     'default' => false,
                 ],
             ],
@@ -570,21 +595,21 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_apply_camelCase_when_loading_multiple_resources()
+    public function it_can_get_apply_snake_case_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"album as albumWithCover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover:2 as stickyFingersAlbumCover":{}}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"album as album_with_cover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover:2 as sticky_fingers_album_cover":{}}',
         ]);
 
         $expected = [
             'data' => [
-                'albumWithCover' => [
+                'album_with_cover' => [
                     [
                         'name' => 'Sticky Fingers',
-                        'albumCover' => [
+                        'album_cover' => [
                             'id' => 2,
-                            'albumId' => 2,
+                            'album_id' => 2,
                             'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -628,9 +653,9 @@ class CamelCaseJoryBuilderTest extends TestCase
                         ],
                     ],
                 ],
-                'stickyFingersAlbumCover' => [
+                'sticky_fingers_album_cover' => [
                     'id' => 2,
-                    'albumId' => 2,
+                    'album_id' => 2,
                     'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -680,16 +705,16 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_camelCase_when_loading_multiple_resources()
+    public function it_validates_snake_case_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"album as albumWithCover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"album as album_with_cover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
         ]);
 
         $expected = [
             'errors' => [
-                'album as albumWithCover: Relation "album_cover" is not available, did you mean "albumCover"? (Location: relations.album_cover)',
+                'album as album_with_cover: Relation "albumCover" is not available, did you mean "album_cover"? (Location: relations.albumCover)',
             ],
         ];
 
@@ -699,26 +724,26 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_camel_case_in_relations()
+    public function it_handles_snake_case_in_relations()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'jory' => '{"fld":["yearStart","id","yearEnd"],"rlt":{"albums":{"fld":["releaseDate","bandId"],"srt":["-releaseDate"],"flt":{"or":[{"f":"releaseDate","d":"1969-01-12"},{"f":"releaseDate","d":"1970-10-05"}]}}}}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"fld":["year_start","id","year_end"],"rlt":{"albums":{"fld":["release_date","band_id"],"srt":["-release_date"],"flt":{"or":[{"f":"release_date","d":"1969-01-12"},{"f":"release_date","d":"1970-10-05"}]}}}}',
         ]);
 
         $expected = [
             'data' => [
                 'id' => 2,
-                'yearStart' => 1968,
-                'yearEnd' => 1980,
+                'year_start' => 1968,
+                'year_end' => 1980,
                 'albums' => [
                     [
-                        'bandId' => 2,
-                        'releaseDate' => '1970-10-05',
+                        'band_id' => 2,
+                        'release_date' => '1970-10-05',
                     ],
                     [
-                        'bandId' => 2,
-                        'releaseDate' => '1969-01-12',
+                        'band_id' => 2,
+                        'release_date' => '1969-01-12',
                     ],
                 ],
             ],
@@ -729,19 +754,19 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_camelCase_in_relations()
+    public function it_validates_snake_case_in_relations()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'jory' => '{"fld":["yearStart","id","yearEnd"],"rlt":{"albums":{"fld":["release_ate","bandId"],"srt":["-releaseDates"],"flt":{"or":[{"f":"release_ate","d":"1969-01-12"},{"f":"releaseDaate","d":"1970-10-05"}]}}}}',
-            'case' => 'camel',
+            'case_key' => 'snake',
+            'jory' => '{"fld":["year_start","id","year_end"],"rlt":{"albums":{"fld":["release_ate","band_id"],"srt":["-release_dates"],"flt":{"or":[{"f":"release_ate","d":"1969-01-12"},{"f":"releaseDaate","d":"1970-10-05"}]}}}}',
         ]);
 
         $expected = [
             'errors' => [
-                'Field "release_ate" is not available, did you mean "releaseDate"? (Location: albums.fields.release_ate)',
-                'Field "release_ate" is not available for filtering, did you mean "releaseDate"? (Location: albums.filter(or).0(release_ate))',
-                'Field "releaseDaate" is not available for filtering, did you mean "releaseDate"? (Location: albums.filter(or).1(releaseDaate))',
-                'Field "releaseDates" is not available for sorting, did you mean "releaseDate"? (Location: albums.sorts.releaseDates)',
+                'Field "release_ate" is not available, did you mean "release_date"? (Location: albums.fields.release_ate)',
+                'Field "release_ate" is not available for filtering, did you mean "release_date"? (Location: albums.filter(or).0(release_ate))',
+                'Field "releaseDaate" is not available for filtering, did you mean "release_date"? (Location: albums.filter(or).1(releaseDaate))',
+                'Field "release_dates" is not available for sorting, did you mean "release_date"? (Location: albums.sorts.release_dates)',
             ],
         ];
 
@@ -751,30 +776,30 @@ class CamelCaseJoryBuilderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_load_a_relation_with_an_alias_in_camelCase()
+    public function it_can_load_a_relation_with_an_alias_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums as albumNoEight":{"flt":{"f":"id","d":8}},"albums as albumNoNine":{"flt":{"f":"id","d":9}}}}',
-            'case' => 'camel',
+            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums as album_no_nine":{"flt":{"f":"id","d":9}}}}',
+            'case_key' => 'snake',
         ]);
 
         $expected = [
             'data' => [
                 'name' => 'Beatles',
-                'albumNoEight' => [
+                'album_no_eight' => [
                     [
                         'id' => 8,
-                        'bandId' => 3,
+                        'band_id' => 3,
                         'name' => 'Abbey road',
-                        'releaseDate' => '1969-09-26',
+                        'release_date' => '1969-09-26',
                     ],
                 ],
-                'albumNoNine' => [
+                'album_no_nine' => [
                     [
                         'id' => 9,
-                        'bandId' => 3,
+                        'band_id' => 3,
                         'name' => 'Let it be',
-                        'releaseDate' => '1970-05-08',
+                        'release_date' => '1970-05-08',
                     ],
                 ],
             ],
@@ -783,81 +808,5 @@ class CamelCaseJoryBuilderTest extends TestCase
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
 
         $this->assertQueryCount(3);
-    }
-
-    /** @test */
-    public function it_can_check_if_a_field_is_requested_in_camelCase()
-    {
-        $response = $this->json('GET', 'jory/song-with-after-fetch/101', [
-            'jory' => '{"fld":["title","customField"]}',
-            'case' => 'camel',
-        ]);
-
-        $expected = [
-            'data' => [
-                'title' => 'altered',
-                'customField' => 'custom_value',
-            ],
-        ];
-
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
-    public function it_can_check_if_a_filter_on_a_field_will_be_applied_in_camelCase()
-    {
-        $response = $this->json('GET', 'jory/song-with-after-fetch', [
-            'jory' => '{"flt":{"f":"customFilterField"},"srt":["-id"],"lmt":2}',
-            'case' => 'camel',
-        ]);
-
-        $expected = [
-            'data' => [
-                [
-                    'id' => 147,
-                    'albumId' => 12,
-                    'title' => 'altered by filter',
-                ],
-                [
-                    'id' => 146,
-                    'albumId' => 12,
-                    'title' => 'altered by filter',
-                ],
-            ],
-        ];
-
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
-    public function it_can_check_if_a_sort_on_a_field_will_be_applied_in_camelCase()
-    {
-        $response = $this->json('GET', 'jory/song-with-after-fetch', [
-            'jory' => '{"srt":["-id","customSortField"],"lmt":2}',
-            'case' => 'camel',
-        ]);
-
-        $expected = [
-            'data' => [
-                [
-                    'id' => 147,
-                    'albumId' => 12,
-                    'title' => 'altered by sort',
-                ],
-                [
-                    'id' => 146,
-                    'albumId' => 12,
-                    'title' => 'altered by sort',
-                ],
-            ],
-        ];
-
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(1);
     }
 }

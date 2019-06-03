@@ -2,7 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-class JoryBuilderSortTest extends TestCase
+class SortTest extends TestCase
 {
     /** @test */
     public function it_can_sort_a_query_ascending()

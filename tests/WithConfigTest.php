@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Tests\Controllers\SongWithConfigController;
 
-class JoryBuilderWithConfigTest extends TestCase
+class WithConfigTest extends TestCase
 {
     protected function setUp(): void
     {

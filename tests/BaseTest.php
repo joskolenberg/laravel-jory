@@ -7,7 +7,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
-class JoryBuilderTest extends TestCase
+class BaseTest extends TestCase
 {
 
     /** @test */

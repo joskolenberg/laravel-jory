@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
-class JoryBuilderFieldsTest extends TestCase
+class FieldsTest extends TestCase
 {
     /** @test */
     public function it_can_specify_the_fields_to_return()

@@ -2,7 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-class JoryBuilderConfigTest extends TestCase
+class ConfigTest extends TestCase
 {
     protected function getEnvironmentSetUp($app)
     {
