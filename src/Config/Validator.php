@@ -157,12 +157,6 @@ class Validator
      */
     protected function validateSorts(): void
     {
-        if ($this->jory->getSorts() === null) {
-            // No sorts specified, perform no validation.
-            return;
-        }
-
-        // There are fields in the Jory object and Config, validate them.
         $availableFields = [];
         foreach ($this->config->getSorts() as $sort) {
             $availableFields[] = $sort->getField();
