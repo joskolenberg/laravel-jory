@@ -163,5 +163,14 @@ class MultipleResponseTest extends TestCase
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_throws_an_exception_when_invalid_data_is_applied()
+    {
+        $this->expectException(LaravelJoryException::class);
+        $this->expectExceptionMessage('Unexpected type given. Please provide an array or Json string.');
+
+        Jory::multiple()->apply(new \stdClass());
+    }
 }
 

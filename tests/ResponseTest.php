@@ -5,6 +5,8 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Responses\JoryResponse;
 use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAlternateUri;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
@@ -277,5 +279,14 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
+    /** @test */
+    public function it_throws_an_exception_when_no_resource_has_been_set_on_the_response()
+    {
+        $this->expectException(LaravelJoryException::class);
+        $this->expectExceptionMessage('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
+
+        $response = new JoryResponse(app()->make('request'), app()->make(JoryResourcesRegister::class));
+        $response->toArray();
+    }
 }
 
