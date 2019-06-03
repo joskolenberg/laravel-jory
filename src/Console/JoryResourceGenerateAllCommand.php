@@ -35,7 +35,7 @@ class JoryResourceGenerateAllCommand extends Command
 
     protected function getModelClasses()
     {
-        $files = (new Finder())->files()->in($this->getModelsPath());
+        $files = (new Finder())->files()->in($this->getModelsPath())->depth('== 0');
 
         $modelClasses = [];
         foreach ($files as $file) {
@@ -77,8 +77,8 @@ class JoryResourceGenerateAllCommand extends Command
 
         // Convert to backslashes and make all namespaces StudlyCased, e.g. \User
         $className = collect(explode(DIRECTORY_SEPARATOR, $className))->map(function ($namespace) {
-                return Str::studly($namespace);
-            })->implode('\\');
+            return Str::studly($namespace);
+        })->implode('\\');
 
         // Return the classname prefixed with the rootPath's namespace, e.g. \App\User
         return $rootNameSpace.$className;

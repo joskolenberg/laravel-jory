@@ -50,7 +50,7 @@ class AutoRegistrar implements RegistersJoryResources
      */
     protected function discoverJoryResources(): void
     {
-        $files = (new Finder())->files()->in(config('jory.auto-registrar.path'));
+        $files = (new Finder())->files()->in(config('jory.auto-registrar.path'))->depth('== 0');
 
         foreach ($files as $file) {
             if ($file->getExtension() !== 'php') {
