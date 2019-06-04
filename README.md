@@ -186,7 +186,7 @@ Possible result:
 }
 ```
 
-##JoryResources
+## JoryResources
 Use the JoryResource classes to configure your Jory api.
 
 ### Registering
