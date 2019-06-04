@@ -108,10 +108,8 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
     {
         $stub = $this->files->get($this->getStub());
 
-        return $this->replaceNamespace($stub, $name)
-            ->replaceConfig($stub)
-            ->replaceModelClass($stub)
-            ->replaceClass($stub, $name);
+        return $this->replaceNamespace($stub,
+            $name)->replaceConfig($stub)->replaceModelClass($stub)->replaceClass($stub, $name);
     }
 
     /**
@@ -179,13 +177,21 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
         // Get model string and chek if it's supplied.
         $modelClass = $this->argument('model');
 
-        // Create reflector to get attributes and relations from the modelClass.
-        $reflector = new EloquentReflector($modelClass);
-
         // Generate fields configuration.
         $generatedCode = "$tab$tab// Fields\n";
-        foreach ($reflector->getAttributes() as $attribute) {
-            if ($attribute->custom) {
+        foreach ($this->getModelFields($modelClass) as $attribute) {
+            /**
+             * Standard attributes (database columns) can be sorted and filtered
+             * out of the box. So make them sortable and filterable.
+             */
+            $generatedCode .= "$tab$tab\$this->field('".$attribute->name."')->filterable()->sortable();\n";
+        }
+
+        // Generate custom attributes configuration.
+        $customAttributes = $this->getModelCustomAttributes($modelClass);
+        if($customAttributes->isNotEmpty()){
+            $generatedCode .= "\n$tab$tab// Custom attributes\n";
+            foreach ($customAttributes as $attribute) {
                 /**
                  * Custom attributes (using accessors) cannot be sorted or filtered
                  * out of the box. So don't make them sortable or filterable.
@@ -193,18 +199,12 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
                  * at custom attributes, don't return them by default.
                  */
                 $generatedCode .= "$tab$tab\$this->field('".$attribute->name."')->hideByDefault();\n";
-            } else {
-                /**
-                 * Standard attributes (database columns) can be sorted and filtered
-                 * out of the box. So make them sortable and filterable.
-                 */
-                $generatedCode .= "$tab$tab\$this->field('".$attribute->name."')->filterable()->sortable();\n";
             }
         }
 
         // Generate relations configuration.
         $generatedCode .= "\n$tab$tab// Relations\n";
-        foreach ($reflector->getRelationNames() as $relationName) {
+        foreach ($this->getModelRelationNames($modelClass) as $relationName) {
             $generatedCode .= "$tab$tab\$this->relation('".$relationName."');\n";
         }
 
@@ -212,10 +212,49 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
         return substr($generatedCode, 0, -1);
     }
 
+    protected function getModelFields($modelClass)
+    {
+        // Create reflector to get attributes and relations from the modelClass.
+        $reflector = new EloquentReflector($modelClass);
+
+        $attributes = $reflector->getAttributes()->filter(function ($attribute) {
+                return ! $attribute->custom;
+            })->sortBy(function ($attribute) {
+                return $attribute->name;
+            });
+
+        return $attributes;
+    }
+
+    protected function getModelCustomAttributes($modelClass)
+    {
+        // Create reflector to get attributes and relations from the modelClass.
+        $reflector = new EloquentReflector($modelClass);
+
+        $attributes = $reflector->getAttributes()->filter(function ($attribute) {
+            return $attribute->custom;
+        })->sortBy(function ($attribute) {
+            return $attribute->name;
+        });
+
+        return $attributes;
+    }
+
+    protected function getModelRelationNames($modelClass)
+    {
+        // Create reflector to get attributes and relations from the modelClass.
+        $reflector = new EloquentReflector($modelClass);
+
+        $relationNames = $reflector->getRelationNames();
+        asort($relationNames);
+
+        return $relationNames;
+    }
+
     /**
      * Get the full namespace for a given class, without the class name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     protected function getNamespace($name)
@@ -226,7 +265,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
     /**
      * Get the destination class path.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     protected function getPath($name)

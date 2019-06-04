@@ -25,15 +25,12 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_generate_for_command_1()
     {
-        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
-            ->expectsOutput('BandJoryResource created successfully.');
+        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band']);
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Original');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContents = $filesystem->read('BandJoryResource.php');
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Generated');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('BandJoryResource.php');
 
         $this->assertEquals($expectedContents, $realContents);
@@ -42,15 +39,12 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_generate_for_command_with_name_option()
     {
-        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band', '--name' => 'AlternateBandJoryResource'])
-            ->expectsOutput('AlternateBandJoryResource created successfully.');
+        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band', '--name' => 'AlternateBandJoryResource']);
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Original');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContents = $filesystem->read('AlternateBandJoryResource.php');
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Generated');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('AlternateBandJoryResource.php');
 
         $this->assertEquals($expectedContents, $realContents);
@@ -59,15 +53,12 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_make_jory_resource_command()
     {
-        $this->artisan('make:jory-resource', ['name' => 'EmptyJoryResource'])
-            ->expectsOutput('JoryResource created successfully.');
+        $this->artisan('make:jory-resource', ['name' => 'EmptyJoryResource']);
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Original');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContents = $filesystem->read('EmptyJoryResource.php');
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Generated');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('EmptyJoryResource.php');
 
         $this->assertEquals($expectedContents, $realContents);
@@ -76,15 +67,12 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_make_jory_resource_command_with_related_model()
     {
-        $this->artisan('make:jory-resource', ['name' => 'AlternateBandJoryResource', '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
-            ->expectsOutput('AlternateBandJoryResource created successfully.');
+        $this->artisan('make:jory-resource', ['name' => 'AlternateBandJoryResource', '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band']);
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Original');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContents = $filesystem->read('AlternateBandJoryResource.php');
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Generated');
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('AlternateBandJoryResource.php');
 
         $this->assertEquals($expectedContents, $realContents);
@@ -96,12 +84,12 @@ class ConsoleTest extends TestCase
         $this->artisan('jory:generate-all');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
-        $expectedContents = $filesystem->read('BandJoryResource.php');
 
         $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
-        $realContents = $generatedFilesystem->read('BandJoryResource.php');
 
-        $this->assertEquals($expectedContents, $realContents);
+        $this->assertEquals($filesystem->read('AlbumJoryResource.php'), $generatedFilesystem->read('AlbumJoryResource.php'));
+        $this->assertEquals($filesystem->read('BandJoryResource.php'), $generatedFilesystem->read('BandJoryResource.php'));
+        $this->assertEquals($filesystem->read('PersonJoryResource.php'), $generatedFilesystem->read('PersonJoryResource.php'));
 
         $this->assertTrue($generatedFilesystem->has('AlbumCoverJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('AlbumJoryResource.php'));
