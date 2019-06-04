@@ -1,12 +1,12 @@
 {
   "name": "joskolenberg/laravel-jory",
-  "description": "Laravel package for creating Jory endpoints.",
+  "description": "Create a flexible API for your Laravel application using json based queries.",
   "license": "MIT",
-  "keywords": ["query", "laravel", "jory", "json"],
+  "keywords": ["query", "laravel", "api", "jory", "json", "filter", "sort", "relation", "model", "resource"],
   "authors": [
     {
       "name": "Jos Kolenberg",
-      "email": "joskolenberg@gmail.com"
+      "email": "jos@kolenberg.net"
     }
   ],
   "minimum-stability": "stable",
