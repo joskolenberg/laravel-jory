@@ -3,10 +3,8 @@
 namespace JosKolenberg\LaravelJory\Console;
 
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\Facades\Artisan;
-use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
-use JosKolenberg\EloquentReflector\EloquentReflector;
 
 class JoryResourceMakeCommand extends GeneratorCommand
 {
@@ -84,8 +82,10 @@ class JoryResourceMakeCommand extends GeneratorCommand
     {
         $stub = $this->files->get($this->getStub());
 
-        return $this->replaceNamespace($stub,
-            $name)->replaceConfig($stub)->replaceModelClass($stub)->replaceClass($stub, $name);
+        return $this->replaceNamespace($stub, $name)
+            ->replaceConfig($stub)
+            ->replaceModelClass($stub)
+            ->replaceClass($stub, $name);
     }
 
     /**
@@ -126,5 +126,29 @@ class JoryResourceMakeCommand extends GeneratorCommand
             ['model', 'm', InputOption::VALUE_OPTIONAL, 'Give the generated JoryResource another name when you don\'t want to use the default [model]JoryResource convention'],
             ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the JoryResource already exists'],
         ];
+    }
+
+    /**
+     * Get the full namespace for a given class, without the class name.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getNamespace($name)
+    {
+        return config('jory.generator.jory-resources.namespace');
+    }
+
+    /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->getNamespace($name), '', $name);
+
+        return config('jory.generator.jory-resources.path').str_replace('\\', '/', $name).'.php';
     }
 }

@@ -215,11 +215,6 @@ class Validator
      */
     protected function validateSubJories(): void
     {
-        if ($this->config->getRelations() === null) {
-            // No relations specified in config, perform no validation
-            return;
-        }
-
         foreach ($this->jory->getRelations() as $joryRelation) {
             $relationName = ResourceNameHelper::explode($joryRelation->getName())->baseName;
 

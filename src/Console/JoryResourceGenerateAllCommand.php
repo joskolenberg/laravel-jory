@@ -51,12 +51,12 @@ class JoryResourceGenerateAllCommand extends Command
 
     protected function getModelsPath()
     {
-        return config('jory.generator.path');
+        return config('jory.generator.models.path');
     }
 
     protected function getModelsNamespace()
     {
-        return config('jory.generator.namespace');
+        return config('jory.generator.models.namespace');
     }
 
     /**

@@ -175,14 +175,47 @@ return [
     | Generator
     |--------------------------------------------------------------------------
     |
-    | Here you can define where your models are stored, so
-    | the jory:generate-all command can find them.
+    | Define some settings for the artisan commands.
+    | - jory:generate-for
+    | - jory:generate-all
+    | - make:jory-resource
+
     */
 
     'generator' => [
 
-        'namespace' => 'App',
-        'path' => app_path(),
+        /*
+        |--------------------------------------------------------------------------
+        | Jory Resources location
+        |--------------------------------------------------------------------------
+        |
+        | Tell the generator commands where you want your jory-resources
+        | to be stored. You probably want to match this setting with
+        | the path and namespace for the auto-registrar, don't
+        | forget to manually register them if you store
+        | your jory-resources somewhere else.
+        |
+        */
+
+        'jory-resources' => [
+            'namespace' => 'App\Http\JoryResources',
+            'path' => app_path('Http/JoryResources'),
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Models location
+        |--------------------------------------------------------------------------
+        |
+        | Tell the generate:all command where your models are stored so he
+        | can find them en generate a jory-resource for all of them.
+        |
+        */
+
+        'models' => [
+            'namespace' => 'App',
+            'path' => app_path(),
+        ],
 
     ],
 

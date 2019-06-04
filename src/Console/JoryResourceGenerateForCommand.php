@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use JosKolenberg\EloquentReflector\EloquentReflector;
@@ -107,8 +108,10 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
     {
         $stub = $this->files->get($this->getStub());
 
-        return $this->replaceNamespace($stub,
-            $name)->replaceConfig($stub)->replaceModelClass($stub)->replaceClass($stub, $name);
+        return $this->replaceNamespace($stub, $name)
+            ->replaceConfig($stub)
+            ->replaceModelClass($stub)
+            ->replaceClass($stub, $name);
     }
 
     /**
@@ -207,5 +210,29 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
 
         // Remove last \n and return result.
         return substr($generatedCode, 0, -1);
+    }
+
+    /**
+     * Get the full namespace for a given class, without the class name.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getNamespace($name)
+    {
+        return config('jory.generator.jory-resources.namespace');
+    }
+
+    /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $name = Str::replaceFirst($this->getNamespace($name), '', $name);
+
+        return config('jory.generator.jory-resources.path').str_replace('\\', '/', $name).'.php';
     }
 }

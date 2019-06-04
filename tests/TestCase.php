@@ -945,9 +945,13 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
             'namespace' => 'JosKolenberg\LaravelJory\Tests\JoryResources',
             'path' => __DIR__ . '/JoryResources',
         ]);
-        $app['config']->set('jory.generator', [
+        $app['config']->set('jory.generator.models', [
             'namespace' => 'JosKolenberg\LaravelJory\Tests\Models',
             'path' => __DIR__ . '/Models',
+        ]);
+        $app['config']->set('jory.generator.jory-resources', [
+            'namespace' => 'App\Http\JoryResources',
+            'path' => __DIR__ . '/ConsoleOutput/Generated',
         ]);
     }
 }
