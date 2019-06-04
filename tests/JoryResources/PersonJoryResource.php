@@ -9,10 +9,6 @@ class PersonJoryResource extends JoryResource
 {
     protected $modelClass = Person::class;
 
-    /**
-     * Configure the JoryBuilder.
-     *
-     */
     protected function configure(): void
     {
         // Fields

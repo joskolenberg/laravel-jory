@@ -2,9 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
-
 class FieldsTest extends TestCase
 {
     /** @test */

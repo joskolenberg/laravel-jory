@@ -106,7 +106,7 @@ class ConsoleTest extends TestCase
 
     protected function cleanup()
     {
-        // Remove all previously built JoryBuilders
+        // Remove all previously built JoryResources
         $adapter = new Local(__DIR__ . '/ConsoleOutput');
         $filesystem = new Filesystem($adapter);
         $filesystem->deleteDir('Generated');

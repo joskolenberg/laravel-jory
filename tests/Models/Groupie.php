@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests\Models;
 /**
  * Class Groupie
  *
- * This is a Model without a JoryBuilder associated.
+ * This is a Model without a JoryResource associated.
  *
  * @package JosKolenberg\LaravelJory\Tests\Models
  */

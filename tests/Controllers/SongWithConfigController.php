@@ -4,9 +4,6 @@ namespace JosKolenberg\LaravelJory\Tests\Controllers;
 
 use Illuminate\Routing\Controller;
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithConfig;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithConfigThree;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithConfigTwo;
 use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithConfig;
 use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithConfigThree;
 use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithConfigTwo;

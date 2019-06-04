@@ -3,8 +3,6 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
 use JosKolenberg\LaravelJory\Config\Sort;
-use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;

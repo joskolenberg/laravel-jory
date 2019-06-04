@@ -2,8 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
-use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 
@@ -12,10 +10,6 @@ class AlbumCoverJoryResource extends JoryResource
 
     protected $modelClass = AlbumCover::class;
 
-    /**
-     * Configure the JoryBuilder.
-     *
-     */
     protected function configure(): void
     {
         // Fields

@@ -2,8 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
-use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
@@ -11,10 +9,6 @@ class SongJoryResource extends JoryResource
 {
     protected $modelClass = Song::class;
 
-    /**
-     * Configure the JoryBuilder.
-     *
-     */
     protected function configure(): void
     {
         // Fields

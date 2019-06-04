@@ -7,8 +7,6 @@ use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Responses\JoryResponse;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAlternateUri;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class ResponseTest extends TestCase

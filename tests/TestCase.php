@@ -8,14 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\JoryServiceProvider;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\BandJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\PersonJoryBuilder;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\JoryBuilders\SongJoryBuilderWithBeforeQueryBuildFilterHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AlbumCoverJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AlbumJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\BandJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\InstrumentJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\PersonJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAfterFetchHook;
@@ -27,8 +20,6 @@ use JosKolenberg\LaravelJory\Tests\Models\Groupie;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
-use JosKolenberg\LaravelJory\Tests\Models\SongWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\Models\SongWithCustomJoryResource;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -40,7 +31,7 @@ class TestCase extends Orchestra
 
         $this->setUpDatabase($this->app);
         $this->seedDatabase();
-        $this->registerJoryBuilders();
+        $this->registerJoryResources();
 
         \DB::enableQueryLog();
     }
@@ -921,10 +912,10 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         ];
     }
 
-    protected function registerJoryBuilders()
+    protected function registerJoryResources()
     {
         /**
-         * Register some JoryBuilders and let some of them be discovered by de autoRegistrar.
+         * Register some JoryResources and let some of them be discovered by de autoRegistrar.
          */
         Jory::register(BandJoryResource::class);
         Jory::register(PersonJoryResource::class);

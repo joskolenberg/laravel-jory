@@ -2,9 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
-use JosKolenberg\Jory\Jory;
-use JosKolenberg\LaravelJory\Config\Config;
-use JosKolenberg\LaravelJory\JoryBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
@@ -15,10 +12,6 @@ class SongJoryResourceWithAfterFetchHook extends JoryResource
 
     protected $uri = 'song-with-after-fetch';
 
-    /**
-     * Configure the JoryBuilder.
-     *
-     */
     protected function configure(): void
     {
         // Fields

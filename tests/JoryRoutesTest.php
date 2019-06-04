@@ -455,7 +455,7 @@ class JoryRoutesTest extends TestCase
     }
 
     /** @test */
-    public function it_applies_scopes_defined_in_a_custom_jory_builder_when_requesting_a_single_record_1()
+    public function it_applies_scopes_defined_in_a_custom_jory_resource_when_requesting_a_single_record_1()
     {
         $response = $this->json('GET', 'jory/song-custom/74', [
             'jory' => '{"fld":["title"]}',
@@ -472,7 +472,7 @@ class JoryRoutesTest extends TestCase
     }
 
     /** @test */
-    public function it_applies_scopes_defined_in_a_custom_jory_builder_when_requesting_a_single_record_2()
+    public function it_applies_scopes_defined_in_a_custom_jory_resource_when_requesting_a_single_record_2()
     {
         $response = $this->json('GET', 'jory/song-custom/75', [
             'jory' => '{"fld":["title"]}',

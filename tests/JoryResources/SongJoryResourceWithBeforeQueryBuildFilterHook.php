@@ -2,9 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources;
 
-use JosKolenberg\Jory\Jory;
-use JosKolenberg\LaravelJory\Config\Config;
-use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
@@ -14,10 +11,6 @@ class SongJoryResourceWithBeforeQueryBuildFilterHook extends JoryResource
 
     protected $uri = 'song-custom';
 
-    /**
-     * Configure the JoryBuilder.
-     *
-     */
     protected function configure(): void
     {
         // Fields
