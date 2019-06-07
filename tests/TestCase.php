@@ -87,14 +87,14 @@ class TestCase extends Orchestra
             $table->increments('id');
             $table->string('title');
             $table->unsignedInteger('album_id');
-            $table->foreign('album_id')->references('id')->on('album')->onDelete('restrict');
+            $table->foreign('album_id')->references('id')->on('albums')->onDelete('restrict');
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('album_covers', function (Blueprint $table) {
             $table->increments('id');
             $table->text('image');
             $table->unsignedInteger('album_id');
-            $table->foreign('album_id')->references('id')->on('album')->onDelete('restrict');
+            $table->foreign('album_id')->references('id')->on('albums')->onDelete('restrict');
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('groupies', function (Blueprint $table) {
