@@ -934,15 +934,15 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         parent::getEnvironmentSetUp($app);
         $app['config']->set('jory.auto-registrar', [
             'namespace' => 'JosKolenberg\LaravelJory\Tests\JoryResources',
-            'path' => __DIR__ . '/JoryResources',
+            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'JoryResources',
         ]);
         $app['config']->set('jory.generator.models', [
             'namespace' => 'JosKolenberg\LaravelJory\Tests\Models',
-            'path' => __DIR__ . '/Models',
+            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'Models',
         ]);
         $app['config']->set('jory.generator.jory-resources', [
             'namespace' => 'App\Http\JoryResources',
-            'path' => __DIR__ . '/ConsoleOutput/Generated',
+            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'ConsoleOutput' . DIRECTORY_SEPARATOR . 'Generated',
         ]);
     }
 }

@@ -142,7 +142,7 @@ return [
     'auto-registrar' => [
 
         'namespace' => 'App\Http\JoryResources',
-        'path' => app_path('Http/JoryResources'),
+        'path' => app_path('Http' . DIRECTORY_SEPARATOR . 'JoryResources'),
 
     ],
 
@@ -199,7 +199,7 @@ return [
 
         'jory-resources' => [
             'namespace' => 'App\Http\JoryResources',
-            'path' => app_path('Http/JoryResources'),
+            'path' => app_path('Http' . DIRECTORY_SEPARATOR . 'JoryResources'),
         ],
 
         /*
