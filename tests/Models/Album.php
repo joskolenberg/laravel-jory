@@ -11,6 +11,10 @@ class Album extends Model
         'band_id' => 'integer',
     ];
 
+    protected $dates = [
+        'release_date'
+    ];
+
     public function songs()
     {
         return $this->hasMany(Song::class);

@@ -12,10 +12,15 @@ class Person extends Model
 
     protected $casts = [
         'id' => 'integer',
+        'date_of_birth' => 'date:Y/m/d'
     ];
 
     protected $appends = [
         'full_name',
+    ];
+
+    protected $dates = [
+        'date_of_birth'
     ];
 
     public function instruments()

@@ -102,19 +102,19 @@ class CamelCaseTest extends TestCase
                     'id' => 3,
                     'bandId' => 1,
                     'name' => 'Exile on main st.',
-                    'releaseDate' => '1972-05-12',
+                    'releaseDate' => '1972-05-12 00:00:00',
                 ],
                 [
                     'id' => 8,
                     'bandId' => 3,
                     'name' => 'Abbey road',
-                    'releaseDate' => '1969-09-26',
+                    'releaseDate' => '1969-09-26 00:00:00',
                 ],
                 [
                     'id' => 12,
                     'bandId' => 4,
                     'name' => 'Electric ladyland',
-                    'releaseDate' => '1968-10-16',
+                    'releaseDate' => '1968-10-16 00:00:00',
                 ],
             ],
         ];
@@ -199,31 +199,31 @@ class CamelCaseTest extends TestCase
                     'id' => 11,
                     'bandId' => 4,
                     'name' => 'Axis: Bold as love',
-                    'releaseDate' => '1967-12-01',
+                    'releaseDate' => '1967-12-01 00:00:00',
                 ],
                 [
                     'id' => 7,
                     'bandId' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
-                    'releaseDate' => '1967-06-01',
+                    'releaseDate' => '1967-06-01 00:00:00',
                 ],
                 [
                     'id' => 12,
                     'bandId' => 4,
                     'name' => 'Electric ladyland',
-                    'releaseDate' => '1968-10-16',
+                    'releaseDate' => '1968-10-16 00:00:00',
                 ],
                 [
                     'id' => 8,
                     'bandId' => 3,
                     'name' => 'Abbey road',
-                    'releaseDate' => '1969-09-26',
+                    'releaseDate' => '1969-09-26 00:00:00',
                 ],
                 [
                     'id' => 3,
                     'bandId' => 1,
                     'name' => 'Exile on main st.',
-                    'releaseDate' => '1972-05-12',
+                    'releaseDate' => '1972-05-12 00:00:00',
                 ],
             ],
         ];
@@ -701,24 +701,51 @@ class CamelCaseTest extends TestCase
     /** @test */
     public function it_handles_camel_case_in_relations()
     {
-        $response = $this->json('GET', 'jory/band/2', [
-            'jory' => '{"fld":["yearStart","id","yearEnd"],"rlt":{"albums":{"fld":["releaseDate","bandId"],"srt":["-releaseDate"],"flt":{"or":[{"f":"releaseDate","d":"1969-01-12"},{"f":"releaseDate","d":"1970-10-05"}]}}}}',
+        $response = $this->json('GET', 'jory/person/10', [
+            'jory' => [
+                "fld" => ["dateOfBirth", "id"],
+                "rlt" => [
+                    "instruments" => [
+                        "fld" => ["name", "typeName"],
+                        "srt" => ["typeName", "-name"],
+                        "flt" => [
+                            "or" => [
+                                [
+                                    "f" => "typeName",
+                                    "d" => "voice",
+                                ],
+                                [
+                                    "f" => "typeName",
+                                    "d" => "stringed",
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'case' => 'camel',
         ]);
 
         $expected = [
             'data' => [
-                'id' => 2,
-                'yearStart' => 1968,
-                'yearEnd' => 1980,
-                'albums' => [
+                'id' => 10,
+                'dateOfBirth' => '1942/06/18',
+                'instruments' => [
                     [
-                        'bandId' => 2,
-                        'releaseDate' => '1970-10-05',
+                        'name' => 'Piano/Keys',
+                        'typeName' => 'stringed',
                     ],
                     [
-                        'bandId' => 2,
-                        'releaseDate' => '1969-01-12',
+                        'name' => 'Guitar',
+                        'typeName' => 'stringed',
+                    ],
+                    [
+                        'name' => 'Bassguitar',
+                        'typeName' => 'stringed',
+                    ],
+                    [
+                        'name' => 'Vocals',
+                        'typeName' => 'voice',
                     ],
                 ],
             ],
@@ -766,7 +793,7 @@ class CamelCaseTest extends TestCase
                         'id' => 8,
                         'bandId' => 3,
                         'name' => 'Abbey road',
-                        'releaseDate' => '1969-09-26',
+                        'releaseDate' => '1969-09-26 00:00:00',
                     ],
                 ],
                 'albumNoNine' => [
@@ -774,7 +801,7 @@ class CamelCaseTest extends TestCase
                         'id' => 9,
                         'bandId' => 3,
                         'name' => 'Let it be',
-                        'releaseDate' => '1970-05-08',
+                        'releaseDate' => '1970-05-08 00:00:00',
                     ],
                 ],
             ],

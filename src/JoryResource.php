@@ -393,8 +393,17 @@ abstract class JoryResource
         $jory = $this->getJory();
 
         $result = [];
+
+        /**
+         * Export this model's attributes to an array. We will use Eloquent's
+         * attributesToArray() method so we get the casting which is set
+         * in the model's casts array. When the value is not present
+         * (because it's not visible for the serialisation)
+         * we will call for the property directly.
+         */
+        $raw = $model->attributesToArray();
         foreach ($jory->getFields() as $field) {
-            $result[$field] = $model->{Str::snake($field)};
+            $result[$field] = array_key_exists(Str::snake($field), $raw) ? $raw[Str::snake($field)] : $model->{Str::snake($field)};
         }
 
         // Add the relations to the result
