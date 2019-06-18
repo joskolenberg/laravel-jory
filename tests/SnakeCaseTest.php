@@ -127,19 +127,19 @@ class SnakeCaseTest extends TestCase
                     'id' => 3,
                     'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'release_date' => '1972-05-12',
+                    'release_date' => '1972-05-12 00:00:00',
                 ],
                 [
                     'id' => 8,
                     'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26',
+                    'release_date' => '1969-09-26 00:00:00',
                 ],
                 [
                     'id' => 12,
                     'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'release_date' => '1968-10-16',
+                    'release_date' => '1968-10-16 00:00:00',
                 ],
             ],
         ];
@@ -224,31 +224,31 @@ class SnakeCaseTest extends TestCase
                     'id' => 11,
                     'band_id' => 4,
                     'name' => 'Axis: Bold as love',
-                    'release_date' => '1967-12-01',
+                    'release_date' => '1967-12-01 00:00:00',
                 ],
                 [
                     'id' => 7,
                     'band_id' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
-                    'release_date' => '1967-06-01',
+                    'release_date' => '1967-06-01 00:00:00',
                 ],
                 [
                     'id' => 12,
                     'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'release_date' => '1968-10-16',
+                    'release_date' => '1968-10-16 00:00:00',
                 ],
                 [
                     'id' => 8,
                     'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26',
+                    'release_date' => '1969-09-26 00:00:00',
                 ],
                 [
                     'id' => 3,
                     'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'release_date' => '1972-05-12',
+                    'release_date' => '1972-05-12 00:00:00',
                 ],
             ],
         ];
@@ -726,24 +726,51 @@ class SnakeCaseTest extends TestCase
     /** @test */
     public function it_handles_snake_case_in_relations()
     {
-        $response = $this->json('GET', 'jory/band/2', [
+        $response = $this->json('GET', 'jory/person/10', [
+            'jory' => [
+                "fld" => ["date_of_birth", "id"],
+                "rlt" => [
+                    "instruments" => [
+                        "fld" => ["name", "type_name"],
+                        "srt" => ["type_name", "-name"],
+                        "flt" => [
+                            "or" => [
+                                [
+                                    "f" => "type_name",
+                                    "d" => "voice",
+                                ],
+                                [
+                                    "f" => "type_name",
+                                    "d" => "stringed",
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'case_key' => 'snake',
-            'jory' => '{"fld":["year_start","id","year_end"],"rlt":{"albums":{"fld":["release_date","band_id"],"srt":["-release_date"],"flt":{"or":[{"f":"release_date","d":"1969-01-12"},{"f":"release_date","d":"1970-10-05"}]}}}}',
         ]);
 
         $expected = [
             'data' => [
-                'id' => 2,
-                'year_start' => 1968,
-                'year_end' => 1980,
-                'albums' => [
+                'id' => 10,
+                'date_of_birth' => '1942/06/18',
+                'instruments' => [
                     [
-                        'band_id' => 2,
-                        'release_date' => '1970-10-05',
+                        'name' => 'Piano/Keys',
+                        'type_name' => 'stringed',
                     ],
                     [
-                        'band_id' => 2,
-                        'release_date' => '1969-01-12',
+                        'name' => 'Guitar',
+                        'type_name' => 'stringed',
+                    ],
+                    [
+                        'name' => 'Bassguitar',
+                        'type_name' => 'stringed',
+                    ],
+                    [
+                        'name' => 'Vocals',
+                        'type_name' => 'voice',
                     ],
                 ],
             ],
@@ -791,7 +818,7 @@ class SnakeCaseTest extends TestCase
                         'id' => 8,
                         'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26',
+                        'release_date' => '1969-09-26 00:00:00',
                     ],
                 ],
                 'album_no_nine' => [
@@ -799,7 +826,7 @@ class SnakeCaseTest extends TestCase
                         'id' => 9,
                         'band_id' => 3,
                         'name' => 'Let it be',
-                        'release_date' => '1970-05-08',
+                        'release_date' => '1970-05-08 00:00:00',
                     ],
                 ],
             ],

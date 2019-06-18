@@ -65,6 +65,7 @@ class TestCase extends Orchestra
         $app['db']->connection()->getSchemaBuilder()->create('instruments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('type_name');
         });
 
         $app['db']->connection()->getSchemaBuilder()->create('instrument_person', function (Blueprint $table) {
@@ -156,15 +157,16 @@ class TestCase extends Orchestra
 
         // Seed Instruments
         foreach ([
-                     1 => 'Vocals',
-                     2 => 'Guitar',
-                     3 => 'Bassguitar',
-                     4 => 'Drums',
-                     5 => 'Piano/Keys',
-                     6 => 'Flute',
-                 ] as $name) {
+                     'Vocals' => 'voice', // 1
+                     'Guitar' => 'stringed', // 2
+                     'Bassguitar' => 'stringed', // 3
+                     'Drums' => 'percussion', // 4
+                     'Piano/Keys' => 'stringed', // 5
+                     'Flute' => 'woodwind', // 6
+                 ] as $name => $type) {
             Instrument::create([
                 'name' => $name,
+                'type_name' => $type,
             ]);
         }
 

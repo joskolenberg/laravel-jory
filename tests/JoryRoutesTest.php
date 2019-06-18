@@ -41,7 +41,7 @@ class JoryRoutesTest extends TestCase
                         [
                             'id' => 6,
                             'name' => 'Led Zeppelin III',
-                            'release_date' => '1970-10-05',
+                            'release_date' => '1970-10-05 00:00:00',
                         ],
 
                     ],
@@ -68,21 +68,21 @@ class JoryRoutesTest extends TestCase
                         'id' => 9,
                         'band_id' => 3,
                         'name' => 'Let it be',
-                        'release_date' => '1970-05-08',
+                        'release_date' => '1970-05-08 00:00:00',
                         'songs' => [],
                     ],
                     [
                         'id' => 8,
                         'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26',
+                        'release_date' => '1969-09-26 00:00:00',
                         'songs' => [],
                     ],
                     [
                         'id' => 7,
                         'band_id' => 3,
                         'name' => 'Sgt. Peppers lonely hearts club band',
-                        'release_date' => '1967-06-01',
+                        'release_date' => '1967-06-01 00:00:00',
                         'songs' => [
                             [
                                 'id' => 75,
@@ -272,13 +272,13 @@ class JoryRoutesTest extends TestCase
                             'id' => 5,
                             'band_id' => 2,
                             'name' => 'Led Zeppelin II',
-                            'release_date' => '1969-10-22',
+                            'release_date' => '1969-10-22 00:00:00',
                         ],
                         [
                             'id' => 6,
                             'band_id' => 2,
                             'name' => 'Led Zeppelin III',
-                            'release_date' => '1970-10-05',
+                            'release_date' => '1970-10-05 00:00:00',
                         ],
                     ],
                 ],
