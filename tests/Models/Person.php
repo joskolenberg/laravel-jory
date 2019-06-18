@@ -6,13 +6,14 @@ class Person extends Model
 {
     protected $table = 'people';
 
+    protected $dateFormat = 'Y/m/d';
+
     protected $hidden = [
         'pivot',
     ];
 
     protected $casts = [
         'id' => 'integer',
-        'date_of_birth' => 'date:Y/m/d'
     ];
 
     protected $appends = [
