@@ -190,7 +190,7 @@ Possible result:
 Use the JoryResource classes to configure your Jory api.
 
 ### Registering
-JoryResources our automatically discovered as long as they are in the default App\Http\JoryResources namespace.
+JoryResources are automatically discovered as long as they are in the default App\Http\JoryResources namespace.
 Alter the jory [config](#config) file or use the Register() method on the Jory facade to change this behaviour.
 
 ### Linked model
@@ -263,7 +263,7 @@ You can pass an JoryResource class as a second parameter if you don't want to us
 ```php
 $this->relation('albums');
 
-$this->relation('songs', AlternateSongJoryRequest::class);
+$this->relation('songs', AlternateSongJoryResource::class);
 ```
 
 #### Setting pagination defaults
@@ -305,6 +305,8 @@ The JoryResource has these methods which can be overridden to do so:
 - ```afterFetch()``` Modify the models right after they are fetched from the database.
 
 The ```afterFetch()``` hook is useful to modify the models before the data is retrieved from them. For example, if an Invoice model has a calculated 'total_price' custom attribute which loops through all attached InvoiceLines you might want to eager load the InvoiceLines on the Invoices to save on querying. (This method always receives a collection even if only one item is requested.)
+
+The ```hasField()```, ```hasFilter()``` and ```hasSort()``` helper methods are there to help you write conditionals based on the requested data.
 ```php
 protected function afterFetch(Collection $collection): Collection
 {
@@ -332,7 +334,7 @@ public function store(Request $request)
 	return Jory::on($user);
 }
 ```
-The example above will use the (optional) [Jory query](https://packagist.org/packages/joskolenberg/jory) in the request, but if you don't want to be dynamic you could also set the [Jory query](https://packagist.org/packages/joskolenberg/jory) manually using the ```apply()``` method.
+The example above will use the (optional) [Jory query](https://packagist.org/packages/joskolenberg/jory) from the 'jory' parameter in the request, but if you don't want to be dynamic you could also set the [Jory query](https://packagist.org/packages/joskolenberg/jory) manually using the ```apply()``` method.
 
 ```php
 return Jory::on($user)->apply([
