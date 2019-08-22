@@ -42,6 +42,7 @@ class AlbumJoryResource extends JoryResource
 
         $this->filter('number_of_songs');
         $this->filter('has_song_with_title');
+        $this->filter('album_cover.album_id');
 
         $this->sort('number_of_songs');
         $this->sort('band_name');

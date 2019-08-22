@@ -555,6 +555,25 @@ class WithConfigTest extends TestCase
                         'not_in',
                     ],
                 ],
+                'album_cover.album_id' => [
+                    'description' => 'Filter on the album_cover.album_id field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'not_like',
+                        'is_null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
             ],
             'sorts' => [
                 'id' => [

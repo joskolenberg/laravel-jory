@@ -136,11 +136,11 @@ trait HandlesJoryFilters
      */
     protected function applyRelationFilter($query, Filter $filter)
     {
-        $relations = explode('.', $filter->getField());
+        $relations = explode('.', Str::snake($filter->getField()));
 
         $field = array_pop($relations);
 
-        $relation = implode('.', $relations);
+        $relation = Str::camel(implode('.', $relations));
 
         $query->whereHas($relation, function ($query) use ($filter, $field) {
             FilterHelper::applyWhere($query, $field, $filter->getOperator(), $filter->getData());

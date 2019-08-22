@@ -624,4 +624,83 @@ class FilterTest extends TestCase
 
         $this->assertQueryCount(1);
     }
+
+    /** @test */
+    public function it_can_filter_on_a_related_models_field_in_snake_case()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => [
+                'flt' => [
+                    'or' => [
+                        [
+                            'f' => 'album_cover.album_id',
+                            'o' => '=',
+                            'd' => 6,
+                        ],
+                        [
+                            'f' => 'album_cover.album_id',
+                            'o' => '=',
+                            'd' => 1,
+                        ]
+                    ]
+                ],
+                'fld' => [
+                    'name'
+                ]
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'name' => 'Let it bleed',
+                ],
+                [
+                    'name' => 'Led Zeppelin III',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_filter_on_a_related_models_field_in_camel_case()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => [
+                'flt' => [
+                    'or' => [
+                        [
+                            'f' => 'albumCover.albumId',
+                            'o' => '=',
+                            'd' => 6,
+                        ],
+                        [
+                            'f' => 'albumCover.albumId',
+                            'o' => '=',
+                            'd' => 1,
+                        ]
+                    ]
+                ],
+                'fld' => [
+                    'name'
+                ]
+            ],
+            'case' => 'camel'
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'name' => 'Let it bleed',
+                ],
+                [
+                    'name' => 'Led Zeppelin III',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
 }
