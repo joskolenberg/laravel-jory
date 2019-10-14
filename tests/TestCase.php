@@ -18,6 +18,7 @@ use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Groupie;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
+use JosKolenberg\LaravelJory\Tests\Models\Model;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\User;
@@ -959,6 +960,10 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
         $app['config']->set('jory.generator.models', [
             'namespace' => 'JosKolenberg\LaravelJory\Tests\Models',
             'path' => __DIR__ . DIRECTORY_SEPARATOR . 'Models',
+            'exclude' => [
+                Model::class,
+                \JosKolenberg\LaravelJory\Tests\Models\Instrument::class,
+            ]
         ]);
         $app['config']->set('jory.generator.jory-resources', [
             'namespace' => 'App\Http\JoryResources',

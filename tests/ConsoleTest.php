@@ -96,8 +96,8 @@ class ConsoleTest extends TestCase
         $this->assertTrue($generatedFilesystem->has('BandJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('ErrorPersonJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('GroupieJoryResource.php'));
-        $this->assertTrue($generatedFilesystem->has('InstrumentJoryResource.php'));
-        $this->assertTrue($generatedFilesystem->has('ModelJoryResource.php'));
+        $this->assertFalse($generatedFilesystem->has('InstrumentJoryResource.php')); // Excluded in config
+        $this->assertFalse($generatedFilesystem->has('ModelJoryResource.php')); // Excluded in config
         $this->assertTrue($generatedFilesystem->has('PersonJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('SongJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('SongWithAfterFetchHookJoryResource.php'));

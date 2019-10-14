@@ -37,13 +37,21 @@ class JoryResourceGenerateAllCommand extends Command
     {
         $files = (new Finder())->files()->in($this->getModelsPath())->depth('== 0');
 
+        $exludedModelClasses = config('jory.generator.models.exclude');
+
         $modelClasses = [];
         foreach ($files as $file) {
             if ($file->getExtension() !== 'php') {
                 continue;
             }
 
-            $modelClasses[] = $this->getClassNameFromFilePath($file);
+            $className = $this->getClassNameFromFilePath($file);
+
+            if(in_array($className, $exludedModelClasses)){
+                continue;
+            }
+
+            $modelClasses[] = $className;
         }
 
         return $modelClasses;

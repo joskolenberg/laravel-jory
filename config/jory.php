@@ -215,6 +215,9 @@ return [
         'models' => [
             'namespace' => 'App',
             'path' => app_path(),
+            'exclude' => [
+                // \App\BaseModel::class;
+            ],
         ],
 
     ],
