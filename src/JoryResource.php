@@ -50,22 +50,6 @@ abstract class JoryResource
     protected $case;
 
     /**
-     * @var bool
-     *
-     * Define if the query should select all fields or only the requested fields.
-     *
-     * When set to false the query will always be executed selecting all fields using an asterisk.
-     *
-     * When set to true the query will select only the requested fields. By default this will
-     * be the name of the field. To alter this behaviour you should use the select()
-     * method when defining the field. A common use case for this would be a custom attribute
-     * which relies on different fields. E.g. $this->field('full_name')->select(['first_name', 'last_name']);
-     *
-     * @var bool
-     */
-    protected $explicitSelect = false;
-
-    /**
      * @var array
      */
     protected $relatedJoryResources;
@@ -182,6 +166,24 @@ abstract class JoryResource
     }
 
     /**
+     * Set this resource to use explicitSelect.
+     *
+     * By default a query will be executed selecting all fields using table name and asterisk. (e.g. users.*)
+     *
+     * With explicitSelect enabled the query will select fields explicitly based on the requested fields.
+     * By default the selected database field will be equal to a field's name. Use the select() method
+     * when defining the field to alter this behaviour, this could be useful for custom attributes
+     * which rely on other database fields.
+     * E.g. $this->field('full_name')->select(['first_name', 'last_name']);
+     *
+     * @return void
+     */
+    public function explicitSelect(): void
+    {
+        $this->config->explicitSelect(true);
+    }
+
+    /**
      * Get the Configuration.
      *
      * @return Config
@@ -223,21 +225,11 @@ abstract class JoryResource
      */
     public function beforeQueryBuild($query, $count = false): void
     {
-        if (!$count) {
-            // By default select only the columns from the root table.
-            $this->selectOnlyRootTable($query);
-        }
     }
 
     /**
      * Hook into the query after all settings in Jory object
      * are applied and just before the query is executed.
-     *
-     * Usage:
-     *  - Filtering: Any filters set will be applied on the query.
-     *  - Sorting: Any sorting applied here will be applied as last, so the requested sorting will
-     *      have precedence over this one.
-     *  - Offset/Limit: An offset or limit applied here will overrule the ones requested or configured.
      *
      * @param $query
      * @param bool $count
@@ -308,21 +300,6 @@ abstract class JoryResource
     public function validate(): void
     {
         (new Validator($this->getConfig(), $this->jory))->validate();
-    }
-
-    /**
-     * Alter the query to select only the columns of
-     * the model which is being queried.
-     *
-     * This way we prevent field conflicts when
-     * joins are applied.
-     *
-     * @param $query
-     */
-    protected function selectOnlyRootTable($query): void
-    {
-        $table = $query->getModel()->getTable();
-        $query->select($table . '.*');
     }
 
     /**

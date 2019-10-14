@@ -5,10 +5,9 @@ namespace JosKolenberg\LaravelJory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use JosKolenberg\Jory\Exceptions\JoryException;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
+use JosKolenberg\LaravelJory\Traits\HandlesJorySelects;
 use JosKolenberg\LaravelJory\Traits\HandlesJorySorts;
 use JosKolenberg\LaravelJory\Traits\LoadsJoryRelations;
 
@@ -21,6 +20,7 @@ class JoryBuilder
 {
     use HandlesJorySorts,
         HandlesJoryFilters,
+        HandlesJorySelects,
         LoadsJoryRelations;
 
     /**
@@ -139,6 +139,8 @@ class JoryBuilder
         $jory = $this->joryResource->getJory();
 
         $this->joryResource->beforeQueryBuild($query);
+
+        $this->applySelects($query, $this->joryResource);
 
         // Apply filters if there are any
         if ($jory->getFilter()) {

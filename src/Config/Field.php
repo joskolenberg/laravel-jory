@@ -43,9 +43,9 @@ class Field
     protected $case = null;
 
     /**
-     * @var array
+     * @var null|array
      */
-    protected $select = [];
+    protected $select = null;
 
     /**
      * Field constructor.
@@ -55,8 +55,6 @@ class Field
     public function __construct(string $field)
     {
         $this->field = $field;
-
-        $this->select($field);
 
         $this->case = app(CaseManager::class);
     }
@@ -130,9 +128,9 @@ class Field
     /**
      * Get the fields to be selected in the query.
      *
-     * @return array
+     * @return null|array
      */
-    public function getSelect(): array
+    public function getSelect():? array
     {
         return $this->select;
     }

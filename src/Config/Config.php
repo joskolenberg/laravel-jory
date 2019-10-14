@@ -60,6 +60,11 @@ class Config
     protected $limitMax = null;
 
     /**
+     * @var bool
+     */
+    protected $explicitSelect = false;
+
+    /**
      * Config constructor.
      *
      * We need to pass in the related model class, so we can
@@ -182,6 +187,16 @@ class Config
     }
 
     /**
+     * Set the config to use explicitSelect.
+     *
+     * @param bool $enabled
+     */
+    public function explicitSelect(bool $enabled): void
+    {
+        $this->explicitSelect = $enabled;
+    }
+
+    /**
      * Get the fields in the config.
      *
      * @return array
@@ -261,6 +276,16 @@ class Config
     public function getRelations(): array
     {
         return $this->relations;
+    }
+
+    /**
+     * Does this config use explicitSelect?
+     *
+     * @return bool
+     */
+    public function hasExplicitSelect(): bool
+    {
+        return $this->explicitSelect;
     }
 
     /**

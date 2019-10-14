@@ -11,12 +11,14 @@ class PersonJoryResource extends JoryResource
 
     protected function configure(): void
     {
+        $this->explicitSelect();
+
         // Fields
         $this->field('id')->filterable()->sortable();
-        $this->field('first_name')->filterable()->sortable();
-        $this->field('last_name')->filterable()->sortable();
+        $this->field('first_name')->select('people.first_name')->filterable()->sortable();
+        $this->field('last_name')->select(['people.last_name'])->filterable()->sortable();
         $this->field('date_of_birth')->filterable()->sortable();
-        $this->field('full_name')->filterable();
+        $this->field('full_name')->select(['first_name', 'last_name'])->filterable();
 
         $this->filter('band.albums.songs.title');
         $this->filter('instruments.name');
