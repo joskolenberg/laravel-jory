@@ -4,13 +4,12 @@ namespace JosKolenberg\LaravelJory;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use JosKolenberg\LaravelJory\Console\JoryPublishCommand;
 use JosKolenberg\LaravelJory\Console\JoryResourceGenerateAllCommand;
 use JosKolenberg\LaravelJory\Console\JoryResourceGenerateForCommand;
 use JosKolenberg\LaravelJory\Console\JoryResourceMakeCommand;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
-use JosKolenberg\LaravelJory\Register\ManualRegistrar;
-use JosKolenberg\LaravelJory\Responses\JoryResponseFactory;
 
 class JoryServiceProvider extends ServiceProvider
 {
@@ -27,6 +26,7 @@ class JoryServiceProvider extends ServiceProvider
                 JoryResourceMakeCommand::class,
                 JoryResourceGenerateForCommand::class,
                 JoryResourceGenerateAllCommand::class,
+                JoryPublishCommand::class,
             ]);
         }
 

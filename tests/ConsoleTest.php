@@ -111,4 +111,18 @@ class ConsoleTest extends TestCase
         $filesystem = new Filesystem($adapter);
         $filesystem->deleteDir('Generated');
     }
+
+    /** @test */
+    public function it_can_run_a_generate_jory_publish()
+    {
+        $filesystem = new Filesystem(new Local(config_path()));
+
+        if($filesystem->has('jory.php')){
+            $filesystem->delete('jory.php');
+        }
+
+        $this->artisan('jory:publish');
+
+        $this->assertTrue($filesystem->has('jory.php'));
+    }
 }
