@@ -20,6 +20,7 @@ use JosKolenberg\LaravelJory\Tests\Models\Groupie;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\User;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -39,6 +40,14 @@ class TestCase extends Orchestra
     protected function setUpDatabase(Application $app)
     {
         DB::connection()->setQueryGrammar(new MySqlGrammar());
+
+        $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->timestamps();
+        });
 
         $app['db']->connection()->getSchemaBuilder()->create('people', function (Blueprint $table) {
             $table->increments('id');
@@ -109,6 +118,15 @@ class TestCase extends Orchestra
 
     private function seedDatabase()
     {
+        // Seed Users
+        foreach ([
+                     1 => ['name' => 'mick', 'email' => 'mick@rollingstones.com', 'password' => bcrypt('pass')],
+                     2 => ['name' => 'keith', 'email' => 'keith@rollingstones.com', 'password' => bcrypt('pass')],
+                     3 => ['name' => 'ronnie', 'email' => 'ronnie@rollingstones.com', 'password' => bcrypt('pass')],
+                 ] as $data) {
+            User::create($data);
+        }
+
         // Seed Persons
         foreach ([
                      1 => ['first_name' => 'Mick', 'last_name' => 'Jagger', 'date_of_birth' => '1943-07-26'],
@@ -946,5 +964,6 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
             'namespace' => 'App\Http\JoryResources',
             'path' => __DIR__ . DIRECTORY_SEPARATOR . 'ConsoleOutput' . DIRECTORY_SEPARATOR . 'Generated',
         ]);
+        $app['config']->set('auth.providers.users.model', User::class);
     }
 }

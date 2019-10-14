@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
 use JosKolenberg\LaravelJory\Traits\HandlesJorySelects;
@@ -110,6 +111,8 @@ class JoryBuilder
             $this->applyFilter($query, $this->joryResource);
         }
 
+        $this->authorizeQuery($query);
+
         $this->joryResource->afterQueryBuild($query, true);
 
         return $query->count();
@@ -147,6 +150,8 @@ class JoryBuilder
             $this->applyFilter($query, $this->joryResource);
         }
 
+        $this->authorizeQuery($query);
+
         $this->applySorts($query, $this->joryResource);
         $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
@@ -173,4 +178,11 @@ class JoryBuilder
         }
     }
 
+    /**
+     * @param $query
+     */
+    protected function authorizeQuery($query)
+    {
+        $this->joryResource->authorize($query, Auth::user());
+    }
 }

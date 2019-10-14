@@ -199,15 +199,7 @@ abstract class JoryResource
     }
 
     /**
-     * Hook into the collection right after it is fetched.
-     *
-     * Here you can modify the collection before it is turned into an array.
-     * E.g. 1. you could eager load some relations when you have some
-     *      calculated values in custom attributes using relations.
-     *      # if $jory->hasField('total_price') $collection->load('invoices');
-     *
-     * E.g. 2. you could sort the collection in a way which is hard using queries
-     *      but easier done using a collection.
+     * Hook into the collection right after it is fetched and before it is turned into an array.
      *
      * @param Collection $collection
      * @return Collection
@@ -429,5 +421,15 @@ abstract class JoryResource
         }
 
         return $result;
+    }
+
+    /**
+     * Apply any user specific actions on the query.
+     *
+     * @param $query
+     * @param null $user
+     */
+    public function authorize($query, $user = null)
+    {
     }
 }

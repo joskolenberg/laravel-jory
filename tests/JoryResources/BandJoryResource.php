@@ -53,4 +53,10 @@ class BandJoryResource extends JoryResource
         }, $operator, $value);
     }
 
+    public function authorize($query, $user = null)
+    {
+        if($user && $user->id == 1){
+            $query->where('id', '>=', 3);
+        }
+    }
 }
