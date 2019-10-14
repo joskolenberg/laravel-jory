@@ -22,7 +22,7 @@ class BandJoryResource extends JoryResource
 
         $this->field('year_end')->description('The year in which the band quitted, could be null if band still exists.')->filterable()->sortable();
 
-        $this->field('all_albums_string')->hideByDefault();
+        $this->field('all_albums_string')->load('albums')->hideByDefault();
 
         $this->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
         $this->filter('number_of_albums_in_year')->operators([

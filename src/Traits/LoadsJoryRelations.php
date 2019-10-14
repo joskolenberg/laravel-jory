@@ -4,8 +4,10 @@ namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Relation;
+use JosKolenberg\LaravelJory\Config\Field;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
@@ -30,6 +32,9 @@ trait LoadsJoryRelations
         $models->each(function ($model) {
             $model->setRelations([]);
         });
+
+        // Load any relations which need to be eager loaded
+        $this->applyEagerLoads($models, $this->joryResource);
 
         // Hook into the afterFetch() method for custom tweaking in subclasses.
         $joryResource->afterFetch($models);
@@ -116,5 +121,30 @@ trait LoadsJoryRelations
         }
 
         $model->joryRelations = $relations;
+    }
+
+    /**
+     * Load any relations to be eager loaded.
+     *
+     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     */
+    protected function applyEagerLoads(Collection $collection, JoryResource $joryResource): void
+    {
+        $eagerLoads = [];
+
+        $configuredFields = $joryResource->getConfig()->getFields();
+
+        foreach ($joryResource->getJory()->getFields() as $fieldName) {
+            $configuredField = Arr::first($configuredFields, function (Field $configuredField) use ($fieldName) {
+                return $configuredField->getField() === $fieldName;
+            });
+
+            if ($configuredField->getEagerLoads() !== null) {
+                $eagerLoads = array_merge($eagerLoads, $configuredField->getEagerLoads());
+            }
+        }
+
+        $collection->load($eagerLoads);
     }
 }

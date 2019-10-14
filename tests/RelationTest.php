@@ -1048,6 +1048,67 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     }
 
     /** @test */
+    public function it_can_eager_load_relations_using_load_on_the_field_config_1()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"flt":{"f":"id","o":">=","d":3},"fld":["all_albums_string"],"rlt":{"albums":{"flt":{"f":"id","d":8}}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'all_albums_string' => 'Sgt. Peppers lonely hearts club band, Abbey road, Let it be',
+                    'albums' => [
+                        [
+                            'id' => 8,
+                            'band_id' => 3,
+                            'name' => 'Abbey road',
+                            'release_date' => '1969-09-26 00:00:00',
+                        ],
+                    ],
+                ],
+                [
+                    'all_albums_string' => 'Are you experienced, Axis: Bold as love, Electric ladyland',
+                    'albums' => [],
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
+    }
+
+    /** @test */
+    public function it_can_eager_load_relations_using_load_on_the_field_config_2()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => '{"flt":{"f":"id","o":"in","d":[3,8]},"fld":["id"],"rlt":{"band":{"fld":["all_albums_string"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'id' => 3,
+                    'band' => [
+                        'all_albums_string' => 'Let it bleed, Sticky Fingers, Exile on main st.',
+                    ],
+                ],
+                [
+                    'id' => 8,
+                    'band' => [
+                        'all_albums_string' => 'Sgt. Peppers lonely hearts club band, Abbey road, Let it be',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
+    }
+
+    /** @test */
     public function it_can_load_a_relation_with_an_alias()
     {
         $response = $this->json('GET', 'jory/band/3', [

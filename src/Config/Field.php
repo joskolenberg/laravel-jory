@@ -48,6 +48,11 @@ class Field
     protected $select = null;
 
     /**
+     * @var null|array
+     */
+    protected $load = null;
+
+    /**
      * Field constructor.
      *
      * @param string $field
@@ -102,6 +107,23 @@ class Field
     }
 
     /**
+     * Set the relations to be loaded for this field.
+     *
+     * @param mixed $relations
+     * @return Field
+     */
+    public function load($relations): Field
+    {
+        if(!is_array($relations)){
+            $relations = [$relations];
+        }
+
+        $this->load = $relations;
+
+        return $this;
+    }
+
+    /**
      * Get the field (name).
      *
      * @return string
@@ -133,6 +155,16 @@ class Field
     public function getSelect():? array
     {
         return $this->select;
+    }
+
+    /**
+     * Get the relations to be loaded for this field.
+     *
+     * @return null|array
+     */
+    public function getEagerLoads():? array
+    {
+        return $this->load;
     }
 
     /**
