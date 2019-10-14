@@ -17,9 +17,9 @@ class AlbumJoryResource extends JoryResource
     protected function configure(): void
     {
         // Fields
-        $this->field('band_id')->filterable()->sortable();
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();
+        $this->field('band_id')->filterable()->sortable();
         $this->field('release_date')->filterable()->sortable();
 
         // Relations

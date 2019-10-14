@@ -17,10 +17,10 @@ class PersonJoryResource extends JoryResource
     protected function configure(): void
     {
         // Fields
-        $this->field('date_of_birth')->filterable()->sortable();
-        $this->field('first_name')->filterable()->sortable();
         $this->field('id')->filterable()->sortable();
+        $this->field('first_name')->filterable()->sortable();
         $this->field('last_name')->filterable()->sortable();
+        $this->field('date_of_birth')->filterable()->sortable();
 
         // Custom attributes
         $this->field('full_name')->hideByDefault();

@@ -189,7 +189,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
 
         // Generate custom attributes configuration.
         $customAttributes = $this->getModelCustomAttributes($modelClass);
-        if($customAttributes->isNotEmpty()){
+        if ($customAttributes->isNotEmpty()) {
             $generatedCode .= "\n$tab$tab// Custom attributes\n";
             foreach ($customAttributes as $attribute) {
                 /**
@@ -218,10 +218,8 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
         $reflector = new EloquentReflector($modelClass);
 
         $attributes = $reflector->getAttributes()->filter(function ($attribute) {
-                return ! $attribute->custom;
-            })->sortBy(function ($attribute) {
-                return $attribute->name;
-            });
+            return ! $attribute->custom;
+        });
 
         return $attributes;
     }

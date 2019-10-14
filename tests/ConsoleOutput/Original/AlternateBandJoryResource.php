@@ -19,8 +19,8 @@ class AlternateBandJoryResource extends JoryResource
         // Fields
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();
-        $this->field('year_end')->filterable()->sortable();
         $this->field('year_start')->filterable()->sortable();
+        $this->field('year_end')->filterable()->sortable();
 
         // Custom attributes
         $this->field('all_albums_string')->hideByDefault();
