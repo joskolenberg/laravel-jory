@@ -50,6 +50,22 @@ abstract class JoryResource
     protected $case;
 
     /**
+     * @var bool
+     *
+     * Define if the query should select all fields or only the requested fields.
+     *
+     * When set to false the query will always be executed selecting all fields using an asterisk.
+     *
+     * When set to true the query will select only the requested fields. By default this will
+     * be the name of the field. To alter this behaviour you should use the select()
+     * method when defining the field. A common use case for this would be a custom attribute
+     * which relies on different fields. E.g. $this->field('full_name')->select(['first_name', 'last_name']);
+     *
+     * @var bool
+     */
+    protected $explicitSelect = false;
+
+    /**
      * @var array
      */
     protected $relatedJoryResources;

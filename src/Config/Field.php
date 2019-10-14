@@ -43,6 +43,11 @@ class Field
     protected $case = null;
 
     /**
+     * @var array
+     */
+    protected $select = [];
+
+    /**
      * Field constructor.
      *
      * @param string $field
@@ -50,6 +55,8 @@ class Field
     public function __construct(string $field)
     {
         $this->field = $field;
+
+        $this->select($field);
 
         $this->case = app(CaseManager::class);
     }
@@ -80,6 +87,23 @@ class Field
     }
 
     /**
+     * Set the fields to be selected in the query.
+     *
+     * @param mixed $fields
+     * @return Field
+     */
+    public function select($fields): Field
+    {
+        if(!is_array($fields)){
+            $fields = [$fields];
+        }
+
+        $this->select = $fields;
+
+        return $this;
+    }
+
+    /**
      * Get the field (name).
      *
      * @return string
@@ -101,6 +125,16 @@ class Field
         }
 
         return $this->description;
+    }
+
+    /**
+     * Get the fields to be selected in the query.
+     *
+     * @return array
+     */
+    public function getSelect(): array
+    {
+        return $this->select;
     }
 
     /**
