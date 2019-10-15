@@ -5,10 +5,9 @@
 [![Latest Stable Version](https://poser.pugx.org/joskolenberg/laravel-jory/v/stable)](https://packagist.org/packages/joskolenberg/laravel-jory)
 [![License](https://poser.pugx.org/joskolenberg/laravel-jory/license)](https://packagist.org/packages/joskolenberg/laravel-jory)
 
-# Laravel-Jory
-Jory is a way of defining database queries using a JSON string, useful for loading dynamic data from the front-end. Jory can add high flexibility to your REST API and can easily be used alongside your existing code.
-
-This package can be used for setting up Jory endpoints in Laravel, to learn about the conventions for setting up Jory queries, take a look at the [jory](https://packagist.org/packages/joskolenberg/jory) package.
+# Laravel-Jory; Flexible Laravel Resources
+This package creates a highly flexible API for your Laravel application.
+JoryResources are comparable to Laravel's Resources, but can be queried in a flexible way by passing a [Jory query](https://packagist.org/packages/joskolenberg/jory) when calling the API.
 
 ## Installation
 ```
@@ -47,9 +46,28 @@ The package will register the following routes for all JoryResources:
 #### Resource list
 A ```GET``` call to ```/jory/{resource}``` returns an array of items based on the ```jory``` parameter holding a [Jory query](https://packagist.org/packages/joskolenberg/jory).
 
-Example call:
-```
-GET /jory/band?jory={"flt":{"f":"name","o":"like","d":"%le%"},"fld":["year_start","name"],"srt":["-name"],"lmt":2,"rlt":{"albums":{"srt":["release_date"],"fld":["name","release_date"]}}}
+Example call using Axios (but you can use whatever tool you like):
+```javascript
+axios.get('jory/band', {
+    params: {
+        jory: {
+            fields: ["year_start", "name"],
+            filter: {
+                field: "name",
+                operator: "like",
+                data: "%le%"
+            },
+            sorts: ["-name"],
+            limit: 2,
+            relations: {
+                albums: {
+                    fields: ["name", "release_date"],
+                    sorts: ["release_date"]
+                }
+            }
+        },
+    },
+});
 ```
 Possible result:
 ```json
@@ -99,8 +117,19 @@ Possible result:
 A ```GET``` call to ```/jory/{resource}/{id}``` returns a single item based on the ```id``` with the ```jory``` parameter applied.
 
 Example call fetching a band's name including related album names and release dates:
-```
-GET /jory/band/1?jory={"fld":["name"],"rlt":{"albums":{"fld":["name","release_date"]}}}
+```javascript
+axios.get('jory/band/1', {
+    params: {
+        jory: {
+            fields: ["name"],
+            relations: {
+                albums: {
+                    fields: ["name", "release_date"]
+                }
+            }
+        },
+    },
+});
 ```
 Possible result:
 ```json
@@ -129,8 +158,18 @@ Possible result:
 A ```GET``` call to ```/jory/{resource}/count``` returns the number of records based on the filtering within the ```jory``` parameter.
 
 Example call counting the bands with a name containing 'le':
-```
-GET /jory/band/count?jory={"flt":{"f":"name","o":"like","d":"%le%"}}
+```javascript
+axios.get('jory/band/count', {
+    params: {
+        jory: {
+            filter: {
+                field: "name",
+                operator: "like",
+                data: "%le%"
+            }
+        },
+    },
+});
 ```
 Possible result:
 ```json
@@ -151,10 +190,28 @@ Possible key values:
 For example, the following keys would all be valid: ```band```, ```band:2```, ```band:count```, ```band:2 as beatles```, ```band:count as number_of_bands```
 
 Example call fetching:
-- All bands having a name containing 'le'. ```band```: ```{"flt":{"f":"name","o":"like","d":"%le%"}}```
-- All bands without a year_end returned as active_bands. ```band as active_bands```: ```{"flt":{"f":"year_end","o":"is_null"}}```
-```
-GET /jory?jory={"band":{"flt":{"f":"name","o":"like","d":"%le%"}},"band as active_bands":{"flt":{"f":"year_end","o":"is_null"}}}
+- All bands having a name containing 'le'. ```band```: ```{"filter":{"field":"name","operator":"like","data":"%le%"}}```
+- All bands without a year_end returned as active_bands. ```band as active_bands```: ```{"filter":{"field":"year_end","operator":"is_null"}}```
+```javascript
+axios.get('jory/band', {
+    params: {
+        jory: {
+            band: {
+                filter: {
+                    field: "name",
+                    operator: "like",
+                    data: "%le%"
+                },
+            },
+            "band as active_bands": {
+                filter: {
+                    field: "year_end",
+                    operator: "is_null"
+                },
+            }
+        },
+    },
+});
 ```
 Possible result:
 ```json
@@ -221,10 +278,11 @@ class BandJoryResource extends JoryResource
 ```
 
 #### Registering filters
-A filter option can be registered using the ```filter()``` method. Optionally the available operators can be provided:
+A filter option can be registered using the ```filter()``` method. By default all operators are available, use the ```operators``` method if you only want to offer a limited set of operators:
 ```php
 $this->filter('name')->operators(['like', '=']);
 ```
+The available operators are: '=', '!=', '<>', '>', '>=', '<', '<=', '<=>', 'like', 'not_like', 'is_null', 'not_null', 'in' and 'not_in'.
 
 #### Registering sorts
 A sort option can be registered using the ```sort()``` method.
@@ -236,7 +294,6 @@ $this->sort('id');
 $this->sort('name')->default();
 ```
 
-
 #### Registering fields
 A field can be registered using the ```field()``` method.
 
@@ -244,7 +301,7 @@ Apply the ```hideByDefault()``` method to NOT return this field when no explicit
 
 Because all fields will mostly be used for filtering and sorting as well, convenient ```filterable()``` and ```sortable()``` methods are provided to register this in one go. You can use an optional callback to fill out any filter and sort details. 
 ```php
-$this->field('id')->description('The band\'s id.')->filterable()->sortable()->hideByDefault();
+$this->field('id')->hideByDefault()->filterable()->sortable();
 
 $this->field('name')
     ->filterable(function (Filter $filter) {
@@ -295,31 +352,62 @@ Alternatively you can make use of Laravel's built in model scopes. When the cust
 Applying custom sorts is the same as custom filters except for the naming convention being ```scope{CustomName}Sort()```. This method receives a query (```Builder``` object) and order (string 'asc' or 'desc') parameter.
 
 #### Defining custom fields
-To make custom fields available for your Jory api add them as a custom attribute on the model and make sure to add the field in the JoryResource's config.
+To make a model's custom attribute available in the JoryResource just add the field in the JoryResource's ```configure``` method.
 
 #### Hooks
 Sometimes you may want to hook into the process to do some additional tweaking.
 
 The JoryResource has these methods which can be overridden to do so:
+- ```beforeQueryBuild()``` Modify the query before all settings from the Jory request input are applied.
 - ```afterQueryBuild()``` Modify the query after all settings from the Jory request input are applied but before it is executed.
-- ```afterFetch()``` Modify the models right after they are fetched from the database.
-
-The ```afterFetch()``` hook is useful to modify the models before the data is retrieved from them. For example, if an Invoice model has a calculated 'total_price' custom attribute which loops through all attached InvoiceLines you might want to eager load the InvoiceLines on the Invoices to save on querying. (This method always receives a collection even if only one item is requested.)
+- ```afterFetch()``` Modify the models right after they are fetched from the database but before they are turned into the result array.
 
 The ```hasField()```, ```hasFilter()``` and ```hasSort()``` helper methods are there to help you write conditionals based on the requested data.
 ```php
 protected function afterFetch(Collection $collection): Collection
 {
-    if ($this->hasField('total_price')) {
-        $collection->load('invoiceLines');
+    if ($this->hasSort('total_price')) {
+        // Do some additional stuff...
     }
     
     return $collection;
 }
 ``` 
 
+### Optimization
+
+#### Explicit select
+By default all queries will be executed selecting all database fields. E.g. ```SELECT users.*```
+With large datasets this could however lead to large memory usage even if only the ```id``` field is requested for each model.
+Call the ```explicitSelect()``` method to select only the requested fields in the database query. In addition; call the ```select()``` method when registering a field which relies on other fields than it's own. Example:
+```php
+    protected function configure(): void
+    {
+        $this->explicitSelect();
+
+        // Fields
+        $this->field('id')->filterable()->sortable();
+        $this->field('first_name')->filterable()->sortable();
+        $this->field('last_name')->filterable()->sortable();
+        $this->field('full_name')->select(['first_name', 'last_name']);
+    }
+```
+
+#### Eager loading
+When a custom attribute uses related models when calculating it's value you should always eager load this relations to prevent n+1 problems. Use the ```load()``` method when registering a field to eager load these relations only when this field is requested.
+```php
+    protected function configure(): void
+    {
+        // Fields
+        $this->field('id')->filterable()->sortable();
+        $this->field('total_amount')->load(['orderLines']);
+    }
+```
+
+
 ## Security
-If you want to limit the exposed data (probably based on the user being logged in), use the ```afterQueryBuild()``` method to filter down to what you want to be visible for the current user. Alternatively you could use Laravel's built in [global scopes](https://laravel.com/docs/5.8/eloquent#global-scopes).  
+If you want to limit the exposed data (probably based on the user being logged in), override the ```authorize()``` method to filter down to what you want to be visible for the current user. This method receives a ```Builder``` object and the current user as parameters.
+Alternatively you could use Laravel's built in [global scopes](https://laravel.com/docs/5.8/eloquent#global-scopes).  
 
 ## Controller usage
 It is a common use case to store data using an api and wanting to retrieve data dynamically in the same call. You can add the dynamic Jory functionality to your own controllers using the ```JosKolenberg\LaravelJory\Facades\Jory``` facade.
@@ -343,13 +431,17 @@ return Jory::on($user)->apply([
 ```
 The facade can also be used on existing queries or a model's class name.
 ```php
-return Jory::on(User::where('enabled', true));
+return Jory::on(User::where('active', true));
 
 return Jory::on(User::class);
 ```
 
 ## Config
 To override Jory's default settings publish the configuration using:
+```
+php artisan jory:publish"
+```
+Which is just a shortcut for:
 ```
 php artisan vendor:publish --provider="JosKolenberg\LaravelJory\JoryServiceProvider"
 ```
