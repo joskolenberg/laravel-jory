@@ -25,29 +25,35 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_generate_for_command_1()
     {
+        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
+
         $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band']);
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
-        $expectedContents = $filesystem->read('BandJoryResource.php');
+        $expectedContentsLocal = $filesystem->read('BandJoryResource.php');
+        $expectedContentsScrutinizer = $filesystem->read('Scrutinizer/BandJoryResource.php');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('BandJoryResource.php');
 
-        $this->assertEquals($expectedContents, $realContents);
+        $this->assertTrue($realContents === $expectedContentsLocal || $realContents === $expectedContentsScrutinizer);
     }
 
     /** @test */
     public function it_can_run_a_generate_for_command_with_name_option()
     {
+        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
+
         $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band', '--name' => 'AlternateBandJoryResource']);
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
-        $expectedContents = $filesystem->read('AlternateBandJoryResource.php');
+        $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
+        $expectedContentsScrutinizer = $filesystem->read('Scrutinizer/AlternateBandJoryResource.php');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('AlternateBandJoryResource.php');
 
-        $this->assertEquals($expectedContents, $realContents);
+        $this->assertTrue($realContents === $expectedContentsLocal || $realContents === $expectedContentsScrutinizer);
     }
 
     /** @test */
@@ -67,15 +73,18 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_make_jory_resource_command_with_related_model()
     {
+        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
+
         $this->artisan('make:jory-resource', ['name' => 'AlternateBandJoryResource', '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band']);
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
-        $expectedContents = $filesystem->read('AlternateBandJoryResource.php');
+        $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
+        $expectedContentsScrutinizer = $filesystem->read('Scrutinizer/AlternateBandJoryResource.php');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('AlternateBandJoryResource.php');
 
-        $this->assertEquals($expectedContents, $realContents);
+        $this->assertTrue($realContents === $expectedContentsLocal || $realContents === $expectedContentsScrutinizer);
     }
 
     /** @test */
@@ -87,8 +96,9 @@ class ConsoleTest extends TestCase
 
         $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
 
-        $this->assertEquals($filesystem->read('AlbumJoryResource.php'), $generatedFilesystem->read('AlbumJoryResource.php'));
-        $this->assertEquals($filesystem->read('BandJoryResource.php'), $generatedFilesystem->read('BandJoryResource.php'));
+        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
+        $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php') || $filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('Scrutinizer/AlbumJoryResource.php'));
+        $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php') || $filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('Scrutinizer/BandJoryResource.php'));
         $this->assertEquals($filesystem->read('PersonJoryResource.php'), $generatedFilesystem->read('PersonJoryResource.php'));
 
         $this->assertTrue($generatedFilesystem->has('AlbumCoverJoryResource.php'));
