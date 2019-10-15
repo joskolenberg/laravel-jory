@@ -97,8 +97,8 @@ class ConsoleTest extends TestCase
         $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
 
         // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
-        $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php') || $filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('Scrutinizer/AlbumJoryResource.php'));
-        $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php') || $filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('Scrutinizer/BandJoryResource.php'));
+        $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php') || $filesystem->read('Scrutinizer/AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php'));
+        $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php') || $filesystem->read('Scrutinizer/BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php'));
         $this->assertEquals($filesystem->read('PersonJoryResource.php'), $generatedFilesystem->read('PersonJoryResource.php'));
 
         $this->assertTrue($generatedFilesystem->has('AlbumCoverJoryResource.php'));
