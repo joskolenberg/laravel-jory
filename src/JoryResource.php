@@ -429,7 +429,7 @@ abstract class JoryResource
      * @param $query
      * @param null $user
      */
-    public function authorize($query, $user = null)
+    public function authorize($query, $user = null): void
     {
     }
 }
