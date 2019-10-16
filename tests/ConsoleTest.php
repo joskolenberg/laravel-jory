@@ -99,7 +99,7 @@ class ConsoleTest extends TestCase
         // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
         $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php') || $filesystem->read('Scrutinizer/AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php'));
         $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php') || $filesystem->read('Scrutinizer/BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php'));
-        $this->assertEquals($filesystem->read('PersonJoryResource.php'), $generatedFilesystem->read('PersonJoryResource.php'));
+        $this->assertTrue($filesystem->read('PersonJoryResource.php') === $generatedFilesystem->read('PersonJoryResource.php') || $filesystem->read('Scrutinizer/PersonJoryResource.php') === $generatedFilesystem->read('PersonJoryResource.php'));
 
         $this->assertTrue($generatedFilesystem->has('AlbumCoverJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('AlbumJoryResource.php'));
