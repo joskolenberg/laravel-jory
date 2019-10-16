@@ -132,7 +132,7 @@ class JoryResourcesRegister
      *
      * @return Collection
      */
-    protected function getAllJoryResources(): Collection
+    public function getAllJoryResources(): Collection
     {
         // Manual registrations get precedence.
         $joryResources = $this->joryResources;
