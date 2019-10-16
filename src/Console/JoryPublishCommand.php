@@ -27,5 +27,7 @@ class JoryPublishCommand extends Command
         Artisan::call('vendor:publish', [
             "--provider" => JoryServiceProvider::class,
         ]);
+
+        $this->info(Artisan::output());
     }
 }
