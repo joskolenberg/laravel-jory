@@ -131,7 +131,8 @@ class ConsoleTest extends TestCase
             $filesystem->delete('jory.php');
         }
 
-        $this->artisan('jory:publish');
+        $this->artisan('jory:publish')
+            ->expectsOutput('Publishing complete.');
 
         $this->assertTrue($filesystem->has('jory.php'));
     }
