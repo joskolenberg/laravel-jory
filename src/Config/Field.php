@@ -118,7 +118,7 @@ class Field
             $relations = [$relations];
         }
 
-        $this->load = $relations;
+        $this->load = array_map('Str::camel', $relations);
 
         return $this;
     }
