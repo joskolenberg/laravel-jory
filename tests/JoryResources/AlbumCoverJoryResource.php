@@ -12,6 +12,8 @@ class AlbumCoverJoryResource extends JoryResource
 
     protected function configure(): void
     {
+        $this->explicitSelect();
+
         // Fields
         $this->field('id')->filterable()->sortable();
         $this->field('image')->filterable()->sortable();
@@ -21,6 +23,6 @@ class AlbumCoverJoryResource extends JoryResource
         $this->sort('album_name');
 
         // Relations
-        $this->relation('album');
+        $this->relation('album')->select('album_id');
     }
 }

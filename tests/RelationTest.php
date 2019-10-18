@@ -1169,4 +1169,25 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_can_select_fields_based_on_the_requested_relations_when_using_explicit_select()
+    {
+        $response = $this->json('GET', 'jory/album-cover/3', [
+            'jory' => '{"fld":["id"],"rlt":{"album":{"fld":["name"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'id' => 3,
+                'album' => [
+                    'name' => 'Exile on main st.',
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(2);
+    }
 }

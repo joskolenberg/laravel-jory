@@ -5,6 +5,8 @@ namespace JosKolenberg\LaravelJory\Traits;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Config\Field;
+use JosKolenberg\LaravelJory\Config\Relation;
+use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryResource;
 
 trait HandlesJorySelects
@@ -48,8 +50,8 @@ trait HandlesJorySelects
         $fields = [];
 
         $table = $query->getModel()->getTable();
-        $configuredFields = $joryResource->getConfig()->getFields();
 
+        $configuredFields = $joryResource->getConfig()->getFields();
         foreach ($joryResource->getJory()->getFields() as $fieldName) {
             $configuredField = Arr::first($configuredFields, function (Field $configuredField) use ($fieldName) {
                 return $configuredField->getField() === $fieldName;
@@ -59,6 +61,19 @@ trait HandlesJorySelects
                 $fields[] = $table.'.'. Str::snake($fieldName);
             } else {
                 $fields = array_merge($fields, $configuredField->getSelect());
+            }
+        }
+
+        $configuredRelations = $joryResource->getConfig()->getRelations();
+        foreach ($joryResource->getJory()->getRelations() as $relation) {
+            $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
+
+            $configuredRelation = Arr::first($configuredRelations, function (Relation $configuredRelation) use ($relationName) {
+                return $configuredRelation->getName() === $relationName;
+            });
+
+            if ($configuredRelation->getSelect() !== null) {
+                $fields = array_merge($fields, $configuredRelation->getSelect());
             }
         }
 
