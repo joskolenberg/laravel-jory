@@ -118,7 +118,7 @@ class Field
             $relations = [$relations];
         }
 
-        $this->load = array_map('Str::camel', $relations);
+        $this->load = array_map('Illuminate\Support\Str::camel', $relations);
 
         return $this;
     }
