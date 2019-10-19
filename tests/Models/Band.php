@@ -31,6 +31,11 @@ class Band extends Model
         return $this->hasManyThrough(Song::class, Album::class);
     }
 
+    public function firstSong()
+    {
+        return $this->hasOneThrough(Song::class, Album::class)->orderBy('id');
+    }
+
     public function scopeHasAlbumWithNameFilter($query, $operator, $data)
     {
         $query->whereHas('albums', function ($query) use ($operator, $data) {

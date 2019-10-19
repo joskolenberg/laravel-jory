@@ -405,6 +405,10 @@ class WithConfigTest extends TestCase
                     'description' => 'The songs relation.',
                     'type' => 'song',
                 ],
+                'first_song' => [
+                    'description' => 'The first_song relation.',
+                    'type' => 'song',
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);

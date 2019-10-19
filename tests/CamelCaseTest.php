@@ -562,6 +562,10 @@ class CamelCaseTest extends TestCase
                     'description' => 'The songs relation.',
                     'type' => 'song',
                 ],
+                'firstSong' => [
+                    'description' => 'The firstSong relation.',
+                    'type' => 'song',
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);

@@ -40,6 +40,7 @@ class BandJoryResource extends JoryResource
         $this->relation('albums', AlbumJoryResource::class)->description('Get the related albums for the band.');
         $this->relation('people');
         $this->relation('songs');
+        $this->relation('first_song');
     }
 
     public function scopeNumberOfAlbumsInYearFilter($query, $operator, $data)

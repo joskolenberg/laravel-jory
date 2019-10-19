@@ -1190,4 +1190,25 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_can_load_a_hasOneThrough_relation()
+    {
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => '{"fld":["id"],"rlt":{"first_song":{"fld":["title"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'id' => 3,
+                'first_song' => [
+                    'title' => 'Sgt. Pepper\'s Lonely Hearts Club Band',
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(2);
+    }
 }

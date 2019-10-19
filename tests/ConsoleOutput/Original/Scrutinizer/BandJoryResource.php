@@ -27,6 +27,7 @@ class BandJoryResource extends JoryResource
 
         // Relations
         $this->relation('albums');
+        $this->relation('first_song');
         $this->relation('people');
         $this->relation('songs');
     }
