@@ -3,7 +3,6 @@
 
 namespace JosKolenberg\LaravelJory;
 
-
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -16,10 +15,8 @@ use JosKolenberg\LaravelJory\Config\Relation;
 use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Helpers\CaseManager as CaseManagerAlias;
 use JosKolenberg\LaravelJory\Helpers\FilterHelper;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
-use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
 abstract class JoryResource
 {
@@ -45,7 +42,7 @@ abstract class JoryResource
     protected $jory;
 
     /**
-     * @var CaseManagerAlias
+     * @var CaseManager
      */
     protected $case;
 
@@ -314,9 +311,9 @@ abstract class JoryResource
      *
      * @return CaseManager
      */
-    public function getCase(): CaseManagerAlias
+    public function getCase(): CaseManager
     {
-        return app(CaseManagerAlias::class);
+        return app(CaseManager::class);
     }
 
     /**

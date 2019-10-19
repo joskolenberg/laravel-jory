@@ -7,7 +7,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
-use JosKolenberg\LaravelJory\Register\JoryResourceRegistration;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Responses\JoryMultipleResponse;
 use JosKolenberg\LaravelJory\Responses\JoryResponse;
