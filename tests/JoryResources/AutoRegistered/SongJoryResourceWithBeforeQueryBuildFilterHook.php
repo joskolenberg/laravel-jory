@@ -1,13 +1,15 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
-class SongJoryResource extends JoryResource
+class SongJoryResourceWithBeforeQueryBuildFilterHook extends JoryResource
 {
     protected $modelClass = Song::class;
+
+    protected $uri = 'song-custom';
 
     protected function configure(): void
     {
@@ -15,11 +17,12 @@ class SongJoryResource extends JoryResource
         $this->field('id')->filterable()->sortable();
         $this->field('title')->filterable()->sortable();
         $this->field('album_id')->filterable()->sortable();
+    }
 
-        // Custom filters
-        $this->filter('album_name');
+    public function beforeQueryBuild($query, $count = false): void
+    {
+        parent::beforeQueryBuild($query);
 
-        // Relations
-        $this->relation('album');
+        $query->where('title', 'like', '%love%');
     }
 }

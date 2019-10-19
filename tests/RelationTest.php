@@ -2,6 +2,9 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\ImageJoryResource;
+
 class RelationTest extends TestCase
 {
     /** @test */
@@ -1203,6 +1206,82 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 'id' => 3,
                 'first_song' => [
                     'title' => 'Sgt. Pepper\'s Lonely Hearts Club Band',
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_load_a_morphOne_relation()
+    {
+        $response = $this->json('GET', 'jory/person/3', [
+            'jory' => '{"fld":["id"],"rlt":{"first_image":{"fld":["url"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'id' => 3,
+                'first_image' => [
+                    'url' => 'peron_image_3.jpg',
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_load_a_morphMany_relation()
+    {
+        $response = $this->json('GET', 'jory/band/4', [
+            'jory' => '{"fld":["id"],"rlt":{"images":{"fld":["url"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'id' => 4,
+                'images' => [
+                    [
+                        'url' => 'band_image_4.jpg',
+                    ],
+                    [
+                        'url' => 'band_image_5.jpg',
+                    ],
+                    [
+                        'url' => 'band_image_6.jpg',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_load_a_morphToMany_relation()
+    {
+        $response = $this->json('GET', 'jory/album/4', [
+            'jory' => '{"fld":["id"],"rlt":{"tags":{"fld":["name"]}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'id' => 4,
+                'tags' => [
+                    [
+                        'name' => 'rock',
+                    ],
+                    [
+                        'name' => 'hardrock',
+                    ],
                 ],
             ],
         ];

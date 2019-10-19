@@ -43,4 +43,9 @@ class Person extends Model
     {
         return $this->belongsToMany(Band::class, 'band_members');
     }
+
+    public function firstImage()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }

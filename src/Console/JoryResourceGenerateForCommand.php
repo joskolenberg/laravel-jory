@@ -3,7 +3,9 @@
 namespace JosKolenberg\LaravelJory\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use JosKolenberg\EloquentReflector\Support\Relation;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use JosKolenberg\EloquentReflector\EloquentReflector;
@@ -38,7 +40,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/jory-resource.stub';
+        return __DIR__ . '/stubs/jory-resource.stub';
     }
 
     /**
@@ -56,8 +58,8 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
         // First we will check to see if the class already exists. If it does, we don't want
         // to create the class and overwrite the user's code. So, we will bail out so the
         // code is untouched. Otherwise, we will continue generating this class' files.
-        if ((! $this->option('force')) && $this->alreadyExists($this->getNameInput())) {
-            $this->error($this->getNameInput().' already exists!');
+        if ((!$this->option('force')) && $this->alreadyExists($this->getNameInput())) {
+            $this->error($this->getNameInput() . ' already exists!');
 
             return false;
         }
@@ -69,7 +71,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
 
         $this->files->put($path, $this->buildClass($name));
 
-        $this->info($this->getNameInput().' created successfully.');
+        $this->info($this->getNameInput() . ' created successfully.');
     }
 
     /**
@@ -83,7 +85,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
             return $this->option('name');
         }
 
-        return class_basename($this->argument('model')).'JoryResource';
+        return class_basename($this->argument('model')) . 'JoryResource';
     }
 
     /**
@@ -94,7 +96,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\JoryResources';
+        return $rootNamespace . '\Http\JoryResources';
     }
 
     /**
@@ -133,8 +135,8 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
      */
     protected function replaceModelClass(&$stub)
     {
-        $stub = str_replace('UseClass', 'use '.$this->argument('model').';', $stub);
-        $stub = str_replace('DummyModelBaseClass', class_basename($this->argument('model')).'::class', $stub);
+        $stub = str_replace('UseClass', 'use ' . $this->argument('model') . ';', $stub);
+        $stub = str_replace('DummyModelBaseClass', class_basename($this->argument('model')) . '::class', $stub);
 
         return $this;
     }
@@ -184,7 +186,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
              * Standard attributes (database columns) can be sorted and filtered
              * out of the box. So make them sortable and filterable.
              */
-            $generatedCode .= "$tab$tab\$this->field('".$attribute->name."')->filterable()->sortable();\n";
+            $generatedCode .= "$tab$tab\$this->field('" . $attribute->name . "')->filterable()->sortable();\n";
         }
 
         // Generate custom attributes configuration.
@@ -198,14 +200,14 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
                  * Often extra queries or heavy calculations are involved
                  * at custom attributes, don't return them by default.
                  */
-                $generatedCode .= "$tab$tab\$this->field('".$attribute->name."')->hideByDefault();\n";
+                $generatedCode .= "$tab$tab\$this->field('" . $attribute->name . "')->hideByDefault();\n";
             }
         }
 
         // Generate relations configuration.
         $generatedCode .= "\n$tab$tab// Relations\n";
         foreach ($this->getModelRelationNames($modelClass) as $relationName) {
-            $generatedCode .= "$tab$tab\$this->relation('".$relationName."');\n";
+            $generatedCode .= "$tab$tab\$this->relation('" . $relationName . "');\n";
         }
 
         // Remove last \n and return result.
@@ -218,7 +220,7 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
         $reflector = new EloquentReflector($modelClass);
 
         $attributes = $reflector->getAttributes()->filter(function ($attribute) {
-            return ! $attribute->custom;
+            return !$attribute->custom;
         });
 
         return $attributes;
@@ -243,10 +245,12 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
         // Create reflector to get attributes and relations from the modelClass.
         $reflector = new EloquentReflector($modelClass);
 
-        $relationNames = $reflector->getRelationNames();
-        asort($relationNames);
-
-        return $relationNames;
+        return $reflector->getRelations()->filter(function (Relation $relation) {
+            return in_array(Str::camel($relation->type), $this->getSupportedRelationTypes());
+        })->sortBy(function (Relation $relation) {
+            return $relation->name;
+        })->pluck('name')
+            ->toArray();
     }
 
     /**
@@ -270,6 +274,27 @@ class JoryResourceGenerateForCommand extends GeneratorCommand
     {
         $name = Str::replaceFirst($this->getNamespace($name), '', $name);
 
-        return config('jory.generator.jory-resources.path').str_replace('\\', '/', $name).'.php';
+        return config('jory.generator.jory-resources.path') . str_replace('\\', '/', $name) . '.php';
+    }
+
+    /**
+     * Get all available relation methods.
+     *
+     * @return array
+     */
+    protected function getSupportedRelationTypes(): array
+    {
+        return [
+            'hasOne',
+            'belongsTo',
+            'hasMany',
+            'belongsToMany',
+            'hasManyThrough',
+            'hasOneThrough',
+            'morphOne',
+            'morphMany',
+            'morphToMany',
+            'morphedByMany',
+        ];
     }
 }

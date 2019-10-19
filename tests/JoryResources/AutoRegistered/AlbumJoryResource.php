@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
@@ -55,6 +55,7 @@ class AlbumJoryResource extends JoryResource
         $this->relation('custom_songs_1', SongJoryResourceWithAfterFetchHook::class);
         $this->relation('custom_songs_2', SongJoryResourceWithAfterQueryBuildFilterHook::class);
         $this->relation('custom_songs_3', SongJoryResource::class);
+        $this->relation('tags');
     }
 
     public function afterFetch(Collection $collection): Collection

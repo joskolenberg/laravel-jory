@@ -100,6 +100,7 @@ class ConsoleTest extends TestCase
         $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php') || $filesystem->read('Scrutinizer/AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php'));
         $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php') || $filesystem->read('Scrutinizer/BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php'));
         $this->assertTrue($filesystem->read('PersonJoryResource.php') === $generatedFilesystem->read('PersonJoryResource.php') || $filesystem->read('Scrutinizer/PersonJoryResource.php') === $generatedFilesystem->read('PersonJoryResource.php'));
+        $this->assertTrue($filesystem->read('ImageJoryResource.php') === $generatedFilesystem->read('ImageJoryResource.php') || $filesystem->read('Scrutinizer/ImageJoryResource.php') === $generatedFilesystem->read('ImageJoryResource.php'));
 
         $this->assertTrue($generatedFilesystem->has('AlbumCoverJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('AlbumJoryResource.php'));

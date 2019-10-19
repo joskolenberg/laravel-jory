@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\Config\Filter;

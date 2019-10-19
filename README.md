@@ -263,7 +263,7 @@ protected $uri = 'albumcover';
 ```
 
 ### Configuring
-To configure your JoryResource use the ```configure``` method, note:
+To configure your JoryResource use the ```configure``` method.
 - All fields, filters, sorts and relations you want to expose need to be configured here explicitly.
 - All multiword configuration should be done using snake_case.
 
@@ -276,6 +276,9 @@ class BandJoryResource extends JoryResource
     }
 }
 ```
+
+Note: It's advised to use the generator commands to create and pre-configure your JoryResources.
+
 
 #### Registering filters
 A filter option can be registered using the ```filter()``` method. By default all operators are available, use the ```operators``` method if you only want to offer a limited set of operators:
@@ -322,6 +325,7 @@ $this->relation('albums');
 
 $this->relation('songs', AlternateSongJoryResource::class);
 ```
+Note: mergeTo relations cannot be used by Jory due their dynamic nature.
 
 #### Setting pagination defaults
 Use the ```limitDefault()``` method to set the default limit when no limit is given.

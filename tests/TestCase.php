@@ -8,19 +8,21 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\JoryServiceProvider;
-use JosKolenberg\LaravelJory\Tests\JoryResources\BandJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\PersonJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\SongJoryResourceWithBeforeQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\BandJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\PersonJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterFetchHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithBeforeQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Groupie;
+use JosKolenberg\LaravelJory\Tests\Models\Image;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Model;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Tag;
 use JosKolenberg\LaravelJory\Tests\Models\User;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -113,6 +115,24 @@ class TestCase extends Orchestra
             $table->string('name');
             $table->unsignedInteger('person_id');
             $table->foreign('person_id')->references('id')->on('people')->onDelete('restrict');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('images', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('url');
+            $table->unsignedInteger('imageable_id');
+            $table->string('imageable_type');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('tags', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('taggables', function (Blueprint $table) {
+            $table->unsignedInteger('tag_id');
+            $table->unsignedInteger('taggable_id');
+            $table->string('taggable_type');
         });
 
     }
@@ -924,6 +944,52 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
                  ] as $data) {
             Groupie::create($data);
         }
+
+        // Seed Images
+        foreach ([
+                     1 => ['url' => 'peron_image_1.jpg', 'imageable_id' => 1, 'imageable_type' => Person::class],
+                     2 => ['url' => 'peron_image_2.jpg', 'imageable_id' => 2, 'imageable_type' => Person::class],
+                     3 => ['url' => 'peron_image_3.jpg', 'imageable_id' => 3, 'imageable_type' => Person::class],
+                     4 => ['url' => 'peron_image_4.jpg', 'imageable_id' => 4, 'imageable_type' => Person::class],
+                     5 => ['url' => 'peron_image_5.jpg', 'imageable_id' => 5, 'imageable_type' => Person::class],
+                     6 => ['url' => 'peron_image_6.jpg', 'imageable_id' => 6, 'imageable_type' => Person::class],
+                     7 => ['url' => 'peron_image_7.jpg', 'imageable_id' => 7, 'imageable_type' => Person::class],
+                     8 => ['url' => 'peron_image_8.jpg', 'imageable_id' => 7, 'imageable_type' => Person::class],
+                     9 => ['url' => 'peron_image_9.jpg', 'imageable_id' => 7, 'imageable_type' => Person::class],
+                     10 => ['url' => 'peron_image_10.jpg', 'imageable_id' => 8, 'imageable_type' => Person::class],
+                     11 => ['url' => 'band_image_1.jpg', 'imageable_id' => 1, 'imageable_type' => Band::class],
+                     12 => ['url' => 'band_image_2.jpg', 'imageable_id' => 2, 'imageable_type' => Band::class],
+                     13 => ['url' => 'band_image_3.jpg', 'imageable_id' => 3, 'imageable_type' => Band::class],
+                     14 => ['url' => 'band_image_4.jpg', 'imageable_id' => 4, 'imageable_type' => Band::class],
+                     15 => ['url' => 'band_image_5.jpg', 'imageable_id' => 4, 'imageable_type' => Band::class],
+                     16 => ['url' => 'band_image_6.jpg', 'imageable_id' => 4, 'imageable_type' => Band::class],
+                 ] as $data) {
+            Image::create($data);
+        }
+
+        // Seed Tags
+        foreach ([
+                     1 => ['name' => 'pop'],
+                     2 => ['name' => 'rock'],
+                     3 => ['name' => 'hardrock'],
+                 ] as $data) {
+            Tag::create($data);
+        }
+        foreach ([
+                     1 => ['tag_id' => 1, 'taggable_id' => 1, 'taggable_type' => Song::class],
+                     2 => ['tag_id' => 2, 'taggable_id' => 1, 'taggable_type' => Song::class],
+                     3 => ['tag_id' => 1, 'taggable_id' => 95, 'taggable_type' => Song::class],
+                     4 => ['tag_id' => 1, 'taggable_id' => 96, 'taggable_type' => Song::class],
+                     5 => ['tag_id' => 1, 'taggable_id' => 97, 'taggable_type' => Song::class],
+                     6 => ['tag_id' => 1, 'taggable_id' => 98, 'taggable_type' => Song::class],
+                     7 => ['tag_id' => 1, 'taggable_id' => 99, 'taggable_type' => Song::class],
+                     8 => ['tag_id' => 2, 'taggable_id' => 4, 'taggable_type' => Album::class],
+                     9 => ['tag_id' => 3, 'taggable_id' => 4, 'taggable_type' => Album::class],
+                     10 => ['tag_id' => 1, 'taggable_id' => 8, 'taggable_type' => Album::class],
+                 ] as $data) {
+            DB::table('taggables')->insert($data);
+        }
+
     }
 
     protected function getPackageProviders($app)
@@ -954,8 +1020,8 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
     {
         parent::getEnvironmentSetUp($app);
         $app['config']->set('jory.auto-registrar', [
-            'namespace' => 'JosKolenberg\LaravelJory\Tests\JoryResources',
-            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'JoryResources',
+            'namespace' => 'JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered',
+            'path' => __DIR__ . DIRECTORY_SEPARATOR . 'JoryResources' . DIRECTORY_SEPARATOR . 'AutoRegistered',
         ]);
         $app['config']->set('jory.generator.models', [
             'namespace' => 'JosKolenberg\LaravelJory\Tests\Models',

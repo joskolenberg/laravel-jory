@@ -1,11 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
-class SongJoryResourceWithAfterQueryBuildFilterHook extends JoryResource
+class SongJoryResource extends JoryResource
 {
     protected $modelClass = Song::class;
 
@@ -15,12 +15,11 @@ class SongJoryResourceWithAfterQueryBuildFilterHook extends JoryResource
         $this->field('id')->filterable()->sortable();
         $this->field('title')->filterable()->sortable();
         $this->field('album_id')->filterable()->sortable();
-    }
 
-    public function afterQueryBuild($query, $count = false): void
-    {
-        parent::afterQueryBuild($query);
+        // Custom filters
+        $this->filter('album_name');
 
-        $query->where('title', 'like', '%love%');
+        // Relations
+        $this->relation('album');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
@@ -25,6 +25,7 @@ class PersonJoryResource extends JoryResource
 
         // Relations
         $this->relation('instruments');
+        $this->relation('first_image');
     }
 
     public function scopeFullNameFilter($query, $operator, $data)

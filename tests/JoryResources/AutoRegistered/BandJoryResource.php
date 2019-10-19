@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\JoryResource;
@@ -41,6 +41,7 @@ class BandJoryResource extends JoryResource
         $this->relation('people');
         $this->relation('songs');
         $this->relation('first_song');
+        $this->relation('images');
     }
 
     public function scopeNumberOfAlbumsInYearFilter($query, $operator, $data)

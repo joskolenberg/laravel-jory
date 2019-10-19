@@ -59,4 +59,9 @@ class Band extends Model
 
         return $result;
     }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }
