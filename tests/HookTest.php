@@ -3,12 +3,12 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterQueryBuildFilterHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterQueryOffsetLimitHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterQuerySortHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithBeforeQueryBuildFilterHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithBeforeQueryBuildSortHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryOffsetLimitHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQuerySortHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithBeforeQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithBeforeQueryBuildSortHook;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class HookTest extends TestCase

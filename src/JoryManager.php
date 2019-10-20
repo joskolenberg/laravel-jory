@@ -33,12 +33,16 @@ class JoryManager
     /**
      * Register a JoryResource using the facade.
      *
-     * @param string $joryResourceClass
+     * @param string|\JosKolenberg\LaravelJory\JoryResource $joryResource
      * @return JoryResourcesRegister
      */
-    public function register(string $joryResourceClass): JoryResourcesRegister
+    public function register($joryResource): JoryResourcesRegister
     {
-        return app()->make(JoryResourcesRegister::class)->add(new $joryResourceClass());
+        if(is_string($joryResource)){
+            $joryResource = new $joryResource();
+        }
+
+        return app()->make(JoryResourcesRegister::class)->add($joryResource);
     }
 
     /**

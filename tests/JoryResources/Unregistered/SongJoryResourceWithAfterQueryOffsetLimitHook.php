@@ -1,11 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
-class SongJoryResourceWithBeforeQueryBuildSortHook extends JoryResource
+class SongJoryResourceWithAfterQueryOffsetLimitHook extends JoryResource
 {
     protected $modelClass = Song::class;
 
@@ -17,10 +17,10 @@ class SongJoryResourceWithBeforeQueryBuildSortHook extends JoryResource
         $this->field('album_id')->filterable()->sortable();
     }
 
-    public function beforeQueryBuild($query, $count = false): void
+    public function afterQueryBuild($query, $count = false): void
     {
-        parent::beforeQueryBuild($query);
+        parent::afterQueryBuild($query);
 
-        $query->orderBy('album_id', 'desc');
+        $query->offset(2)->limit(3);
     }
 }

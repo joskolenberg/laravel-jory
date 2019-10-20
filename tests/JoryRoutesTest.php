@@ -2,6 +2,9 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAlternateUri;
+
 class JoryRoutesTest extends TestCase
 {
     /** @test */
@@ -392,6 +395,8 @@ class JoryRoutesTest extends TestCase
     /** @test */
     public function it_can_display_all_the_available_resources()
     {
+        Jory::register(SongJoryResourceWithAlternateUri::class);
+
         $response = $this->json('OPTIONS', 'jory');
 
         $expected = [

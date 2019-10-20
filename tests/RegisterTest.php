@@ -3,44 +3,42 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterQueryBuildFilterHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterQueryOffsetLimitHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithAfterQuerySortHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithBeforeQueryBuildFilterHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResourceWithBeforeQueryBuildSortHook;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryOffsetLimitHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQuerySortHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithBeforeQueryBuildFilterHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithBeforeQueryBuildSortHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class RegisterTest extends TestCase
 {
     /** @test */
-    public function it_can_hook_into_the_query_before_query_build_with_a_filter_1()
+    public function it_gives_manually_added_jory_resources_precedence_over_autoregistered_jory_resources_with_the_same_uri()
     {
-        Jory::register(SongJoryResourceWithBeforeQueryBuildFilterHook::class);
+        $register = app(JoryResourcesRegister::class);
+        $this->assertInstanceOf(TagJoryResource::class, $register->getByUri('tag'));
 
-        $result = Jory::onModelClass(Song::class)->applyArray([
-            'srt' => [
-                'title',
-            ],
-            'fld' => [
-                'title',
-            ],
-            'lmt' => 3,
-        ])->toArray();
+        Jory::register(TagJoryResourceWithExplicitSelect::class);
 
-        $this->assertEquals([
-            [
-                'title' => 'And the Gods Made Love',
-            ],
-            [
-                'title' => 'Bold as Love',
-            ],
-            [
-                'title' => 'Little Miss Lover',
-            ],
-        ], $result);
-
-        $this->assertQueryCount(1);
+        $this->assertInstanceOf(TagJoryResourceWithExplicitSelect::class, $register->getByUri('tag'));
     }
 
+    /** @test */
+    public function it_gives_any_newly_added_jory_resources_precedence_over_earlier_registered_jory_resources_with_the_same_uri()
+    {
+        $register = app(JoryResourcesRegister::class);
+
+        $this->assertInstanceOf(SongJoryResource::class, $register->getByUri('song'));
+
+        Jory::register(SongJoryResourceWithAfterQueryBuildFilterHook::class);
+        $this->assertInstanceOf(SongJoryResourceWithAfterQueryBuildFilterHook::class, $register->getByUri('song'));
+
+        Jory::register(SongJoryResourceWithAfterQueryOffsetLimitHook::class);
+        $this->assertInstanceOf(SongJoryResourceWithAfterQueryOffsetLimitHook::class, $register->getByUri('song'));
+    }
 }

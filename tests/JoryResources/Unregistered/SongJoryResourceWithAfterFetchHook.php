@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;

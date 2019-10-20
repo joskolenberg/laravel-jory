@@ -1,11 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
-class SongJoryResourceWithAfterQueryOffsetLimitHook extends JoryResource
+class SongJoryResourceWithAfterQueryBuildFilterHook extends JoryResource
 {
     protected $modelClass = Song::class;
 
@@ -21,6 +21,6 @@ class SongJoryResourceWithAfterQueryOffsetLimitHook extends JoryResource
     {
         parent::afterQueryBuild($query);
 
-        $query->offset(2)->limit(3);
+        $query->where('title', 'like', '%love%');
     }
 }

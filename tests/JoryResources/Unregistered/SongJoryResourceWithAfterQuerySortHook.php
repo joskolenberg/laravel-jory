@@ -1,11 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
-class SongJoryResourceWithAfterQueryBuildFilterHook extends JoryResource
+class SongJoryResourceWithAfterQuerySortHook extends JoryResource
 {
     protected $modelClass = Song::class;
 
@@ -21,6 +21,6 @@ class SongJoryResourceWithAfterQueryBuildFilterHook extends JoryResource
     {
         parent::afterQueryBuild($query);
 
-        $query->where('title', 'like', '%love%');
+        $query->orderBy('title', 'desc');
     }
 }

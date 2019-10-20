@@ -6,6 +6,9 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
+use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class FacadeTest extends TestCase
@@ -74,5 +77,25 @@ class FacadeTest extends TestCase
         $this->expectException(LaravelJoryException::class);
         $this->expectExceptionMessage('Unexpected type given. Please provide a model instance, Eloquent builder instance or a model\'s class name.');
         Jory::on(new JoryController());
+    }
+
+    /** @test */
+    public function it_can_register_a_jory_resource_by_class_name()
+    {
+        $this->assertInstanceOf(TagJoryResource::class, app(JoryResourcesRegister::class)->getByUri('tag'));
+
+        Jory::register(TagJoryResourceWithExplicitSelect::class);
+
+        $this->assertInstanceOf(TagJoryResourceWithExplicitSelect::class, app(JoryResourcesRegister::class)->getByUri('tag'));
+    }
+
+    /** @test */
+    public function it_can_register_a_jory_resource_by_instance()
+    {
+        $this->assertInstanceOf(TagJoryResource::class, app(JoryResourcesRegister::class)->getByUri('tag'));
+
+        Jory::register(new TagJoryResourceWithExplicitSelect());
+
+        $this->assertInstanceOf(TagJoryResourceWithExplicitSelect::class, app(JoryResourcesRegister::class)->getByUri('tag'));
     }
 }
