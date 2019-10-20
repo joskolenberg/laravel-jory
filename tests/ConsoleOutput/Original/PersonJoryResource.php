@@ -27,6 +27,7 @@ class PersonJoryResource extends JoryResource
 
         // Relations
         $this->relation('band');
+        $this->relation('first_image');
         $this->relation('groupies');
         $this->relation('instruments');
     }

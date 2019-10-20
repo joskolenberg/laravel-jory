@@ -400,12 +400,14 @@ class JoryRoutesTest extends TestCase
                 'album-cover',
                 'band',
                 'error-person',
+                'image',
                 'instrument',
                 'person',
                 'song',
                 'song-custom',
                 'song-with-after-fetch',
                 'ssoonngg',
+                'tag',
             ],
         ];
 

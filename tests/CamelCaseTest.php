@@ -554,6 +554,10 @@ class CamelCaseTest extends TestCase
                     'description' => 'Get the related albums for the band.',
                     'type' => 'album',
                 ],
+                'images' => [
+                    'description' => 'The images relation.',
+                    'type' => 'image',
+                ],
                 'people' => [
                     'description' => 'The people relation.',
                     'type' => 'person',

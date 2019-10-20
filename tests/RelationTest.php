@@ -1290,4 +1290,56 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_can_load_a_morphedByMany_relation()
+    {
+        $response = $this->json('GET', 'jory/tag/1', [
+            'jory' => '{"fld":["id","name"],"rlt":{"songs":{"fld":["title"]},"albums":{"fld":["name"],"rlt":{"songs":{"fld":["title"],"flt":{"f":"title","o":"like","d":"%Sun%"}}}}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'id' => 1,
+                'name' => 'pop',
+                'songs' => [
+                    [
+                        'title' => 'Gimme Shelter',
+                    ],
+                    [
+                        'title' => 'Her Majesty'
+                    ],
+                    [
+                        'title' => 'Two of Us'
+                    ],
+                    [
+                        'title' => 'Dig a Pony'
+                    ],
+                    [
+                        'title' => 'Across the Universe'
+                    ],
+                    [
+                        'title' => 'I Me Mine" (Harrison'
+                    ],
+                ],
+                'albums' => [
+                    [
+                        'name' => 'Abbey road',
+                        'songs' => [
+                            [
+                                'title' => 'Here Comes the Sun'
+                            ],
+                            [
+                                'title' => 'Sun King'
+                            ],
+                        ]
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(4);
+    }
 }

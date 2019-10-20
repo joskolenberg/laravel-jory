@@ -28,5 +28,6 @@ class AlbumJoryResource extends JoryResource
         $this->relation('cover');
         $this->relation('snake_case_album_cover');
         $this->relation('songs');
+        $this->relation('tags');
     }
 }

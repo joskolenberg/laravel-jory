@@ -397,6 +397,10 @@ class WithConfigTest extends TestCase
                     'description' => 'Get the related albums for the band.',
                     'type' => 'album',
                 ],
+                'images' => [
+                    'description' => 'The images relation.',
+                    'type' => 'image',
+                ],
                 'people' => [
                     'description' => 'The people relation.',
                     'type' => 'person',
@@ -641,6 +645,10 @@ class WithConfigTest extends TestCase
                 'custom_songs_3' => [
                     'description' => 'The custom_songs_3 relation.',
                     'type' => 'song',
+                ],
+                'tags' => [
+                    'description' => 'The tags relation.',
+                    'type' => 'tag',
                 ],
             ],
         ];
