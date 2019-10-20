@@ -37,7 +37,7 @@ class BandJoryResource extends JoryResource
 
         $this->limitDefault(30)->limitMax(120);
 
-        $this->relation('albums', AlbumJoryResource::class)->description('Get the related albums for the band.');
+        $this->relation('albums')->description('Get the related albums for the band.');
         $this->relation('people');
         $this->relation('songs');
         $this->relation('first_song');

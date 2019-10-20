@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Config\Field;
@@ -47,6 +48,20 @@ trait HandlesJorySelects
      */
     protected function applySelectsByJory($query, JoryResource $joryResource)
     {
+        $fields = $this->getSelectsForRequestedFields($query, $joryResource);
+        $fields = array_merge($fields, $this->getFieldsForEagerLoading($query, $joryResource));
+        $fields = array_merge($fields, $this->getSelectsForChildRelations($query, $joryResource));
+        $fields = array_merge($fields, $this->getSelectsForParentRelation($query));
+        $query->select(array_unique($fields));
+    }
+
+    /**
+     * @param $query
+     * @param JoryResource $joryResource
+     * @return array
+     */
+    protected function getSelectsForRequestedFields($query, JoryResource $joryResource)
+    {
         $fields = [];
 
         $table = $query->getModel()->getTable();
@@ -58,25 +73,83 @@ trait HandlesJorySelects
             });
 
             if ($configuredField->getSelect() === null) {
-                $fields[] = $table.'.'. Str::snake($fieldName);
+                $fields[] = $table . '.' . Str::snake($fieldName);
             } else {
                 $fields = array_merge($fields, $configuredField->getSelect());
             }
         }
 
-        $configuredRelations = $joryResource->getConfig()->getRelations();
+        return $fields;
+    }
+
+    /**
+     * @param JoryResource $joryResource
+     * @return array
+     */
+    protected function getSelectsForChildRelations($query, JoryResource $joryResource)
+    {
+        $fields = [];
+
+        $model = $query->getModel();
+
         foreach ($joryResource->getJory()->getRelations() as $relation) {
             $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
 
-            $configuredRelation = Arr::first($configuredRelations, function (Relation $configuredRelation) use ($relationName) {
-                return $configuredRelation->getName() === $relationName;
-            });
+            $relationQuery = $model->{$relationName}();
 
-            if ($configuredRelation->getSelect() !== null) {
-                $fields = array_merge($fields, $configuredRelation->getSelect());
+            if($relationQuery instanceof HasOne){
+                $fields[] = $model->getQualifiedKeyName();
             }
         }
 
-        $query->select($fields);
+        return $fields;
+    }
+
+    /**
+     * @param JoryResource $joryResource
+     * @return array
+     */
+    protected function getFieldsForEagerLoading($query, JoryResource $joryResource)
+    {
+        $fields = [];
+
+        $model = $query->getModel();
+
+        $configuredFields = $joryResource->getConfig()->getFields();
+        foreach ($joryResource->getJory()->getFields() as $fieldName) {
+            $configuredField = Arr::first($configuredFields, function (Field $configuredField) use ($fieldName) {
+                return $configuredField->getField() === $fieldName;
+            });
+
+            if ($configuredField->getEagerLoads() !== null) {
+                foreach ($configuredField->getEagerLoads() as $eagerLoad){
+                    $firstRelation = Str::before($eagerLoad, '.');
+
+                    $relationQuery = $model->{$firstRelation}();
+
+                    if($relationQuery instanceof HasOne){
+                        $fields[] = $model->getQualifiedKeyName();
+                    }
+                }
+            }
+        }
+
+
+        return $fields;
+    }
+
+    /**
+     * @param $query
+     * @return array
+     */
+    protected function getSelectsForParentRelation($query)
+    {
+        $fields = [];
+
+        if($query instanceof HasOne){
+            $fields[] = $query->getQualifiedForeignKeyName();
+        }
+
+        return $fields;
     }
 }

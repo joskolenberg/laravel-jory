@@ -11,8 +11,6 @@ class InstrumentJoryResource extends JoryResource
 
     protected function configure(): void
     {
-        $this->explicitSelect();
-
         // Fields
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();

@@ -33,11 +33,6 @@ class Relation
     protected $case = null;
 
     /**
-     * @var null|array
-     */
-    protected $select = null;
-
-    /**
      * Relation constructor.
      *
      * @param string $name
@@ -89,29 +84,6 @@ class Relation
     }
 
     /**
-     * When using explicitSelect we only query for the requested fields on the model.
-     *
-     * In order to load a relation we might need some foreign key fields on this
-     * model for the relation to load correctly. For example; if a user has
-     * a belongsTo company relation we probably need the company_id field
-     * in order to load the company. Use this method to select this
-     * field in the query when this relation is requested.
-     *
-     * @param mixed $fields
-     * @return Relation
-     */
-    public function select($fields): Relation
-    {
-        if(!is_array($fields)){
-            $fields = [$fields];
-        }
-
-        $this->select = $fields;
-
-        return $this;
-    }
-
-    /**
      * Get the related joryResource.
      *
      * @return JoryResource
@@ -129,15 +101,5 @@ class Relation
     public function getType(): ?string
     {
         return $this->joryResource->getUri();
-    }
-
-    /**
-     * Get the fields to be selected in the query.
-     *
-     * @return null|array
-     */
-    public function getSelect():? array
-    {
-        return $this->select;
     }
 }

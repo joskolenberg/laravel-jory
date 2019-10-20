@@ -22,6 +22,9 @@ class AlbumJoryResource extends JoryResource
         $this->field('band_id')->filterable()->sortable();
         $this->field('release_date')->filterable()->sortable();
 
+        // Custom attributes
+        $this->field('cover_image')->hideByDefault();
+
         // Relations
         $this->relation('album_cover');
         $this->relation('band');

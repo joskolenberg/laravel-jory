@@ -1,17 +1,19 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 
-class AlbumCoverJoryResource extends JoryResource
+class AlbumCoverJoryResourceWithExplicitSelect extends JoryResource
 {
 
     protected $modelClass = AlbumCover::class;
 
     protected function configure(): void
     {
+        $this->explicitSelect();
+
         // Fields
         $this->field('id')->filterable()->sortable();
         $this->field('image')->filterable()->sortable();

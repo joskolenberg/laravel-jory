@@ -1,22 +1,24 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
-class PersonJoryResource extends JoryResource
+class PersonJoryResourceWithExplicitSelect extends JoryResource
 {
     protected $modelClass = Person::class;
 
     protected function configure(): void
     {
+        $this->explicitSelect();
+
         // Fields
-        $this->field('id')->filterable()->sortable();
+        $this->field('id')->select('people.id')->filterable()->sortable();
         $this->field('first_name')->filterable()->sortable();
         $this->field('last_name')->filterable()->sortable();
-        $this->field('date_of_birth')->filterable()->sortable();
-        $this->field('full_name')->filterable();
+        $this->field('date_of_birth')->select(['date_of_birth'])->filterable()->sortable();
+        $this->field('full_name')->select(['first_name', 'last_name'])->filterable();
 
         $this->filter('band.albums.songs.title');
         $this->filter('instruments.name');

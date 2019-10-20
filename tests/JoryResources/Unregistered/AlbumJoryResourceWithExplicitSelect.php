@@ -1,14 +1,16 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\AlbumCoverJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 
-class AlbumJoryResource extends JoryResource
+class AlbumJoryResourceWithExplicitSelect extends JoryResource
 {
     protected $modelClass = Album::class;
 
@@ -36,13 +38,15 @@ class AlbumJoryResource extends JoryResource
 
     protected function configure(): void
     {
+        $this->explicitSelect();
+
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();
         $this->field('band_id')->filterable()->sortable();
         $this->field('release_date')->filterable()->sortable();
-        $this->field('custom_field')->hideByDefault();
+        $this->field('custom_field')->noSelect()->hideByDefault();
 
-        $this->field('cover_image')->load('cover')->hideByDefault();
+        $this->field('cover_image')->noSelect()->load('cover')->hideByDefault();
 
         $this->filter('number_of_songs');
         $this->filter('has_song_with_title');

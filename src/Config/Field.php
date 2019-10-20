@@ -107,6 +107,18 @@ class Field
     }
 
     /**
+     * Tell the query to select no fields in the query when this field is requested.
+     *
+     * @return Field
+     */
+    public function noSelect(): Field
+    {
+        $this->select([]);
+
+        return $this;
+    }
+
+    /**
      * Set the relations to be loaded for this field.
      *
      * @param mixed $relations

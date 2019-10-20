@@ -447,6 +447,10 @@ class WithConfigTest extends TestCase
                     'description' => 'The custom_field field.',
                     'default' => false,
                 ],
+                'cover_image' => [
+                    'description' => 'The cover_image field.',
+                    'default' => false,
+                ],
             ],
             'filters' => [
                 'id' => [
