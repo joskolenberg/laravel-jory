@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -97,9 +98,7 @@ trait HandlesJorySelects
 
             $relationQuery = $model->{$relationName}();
 
-            if($relationQuery instanceof HasOne){
-                $fields[] = $model->getQualifiedKeyName();
-            }
+            $fields = array_merge($fields, $this->getSelectsForRelationQuery($model, $relationQuery));
         }
 
         return $fields;
@@ -127,9 +126,7 @@ trait HandlesJorySelects
 
                     $relationQuery = $model->{$firstRelation}();
 
-                    if($relationQuery instanceof HasOne){
-                        $fields[] = $model->getQualifiedKeyName();
-                    }
+                    $fields = array_merge($fields, $this->getSelectsForRelationQuery($model, $relationQuery));
                 }
             }
         }
@@ -146,10 +143,27 @@ trait HandlesJorySelects
     {
         $fields = [];
 
+        $model = $query->getModel();
+
         if($query instanceof HasOne){
-            $fields[] = $query->getQualifiedForeignKeyName();
+            return [$query->getQualifiedForeignKeyName()];
+        }
+
+        if($query instanceof BelongsTo){
+            return [$model->getQualifiedKeyName()];
         }
 
         return $fields;
+    }
+
+    public function getSelectsForRelationQuery($baseModel, $relationQuery)
+    {
+        if($relationQuery instanceof HasOne){
+            return [$baseModel->getQualifiedKeyName()];
+        }
+
+        if($relationQuery instanceof BelongsTo){
+            return [$relationQuery->getQualifiedForeignKeyName()];
+        }
     }
 }

@@ -9,9 +9,11 @@ use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumCoverJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithExplicitSelect;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class ExplicitSelectTest extends TestCase
 {
@@ -140,8 +142,106 @@ class ExplicitSelectTest extends TestCase
 
         $expected = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
         Jory::register(AlbumJoryResourceWithExplicitSelect::class);
-        Jory::register(AlbumCoverJoryResourceWithExplicitSelect::class);
         $actual = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+    /**
+     * BELONGS TO RELATIONS ===============================================================================================
+     */
+
+    /** @test */
+    public function it_adds_the_foreign_key_field_when_requesting_a_belongsTo_relation_using_explicit_select()
+    {
+        $query = Song::query();
+
+        $joryResource = new SongJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['title'],
+            'rlt' => [
+                'album' => []
+            ]
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_belongsTo_relation_using_explicit_select()
+    {
+        $query = Song::find(1)->album();
+
+        $joryResource = new AlbumJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums` where `albums`.`id` = ?', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_belongsTo_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['title'],
+            'rlt' => [
+                'album' => [
+                    'fld' => ['name']
+                ]
+            ]
+        ];
+
+        $expected = $this->json('GET', 'jory/song', ['jory' => $jory])->getContent();
+        Jory::register(SongJoryResourceWithExplicitSelect::class);
+        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/song', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+    /** @test */
+    public function it_adds_the_foreign_key_field_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select()
+    {
+        $query = Song::query();
+
+        $joryResource = new SongJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['title', 'album_name']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['title', 'album_name']
+        ];
+
+        $expected = $this->json('GET', 'jory/song/3', ['jory' => $jory])->getContent();
+        Jory::register(SongJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/song/3', ['jory' => $jory])->getContent();
 
         $this->assertEquals($expected, $actual);
 
@@ -151,7 +251,7 @@ class ExplicitSelectTest extends TestCase
 }
 
 //'hasOne', ok
-//            'belongsTo',
+//            'belongsTo', ok
 //            'hasMany',
 //            'belongsToMany',
 //            'hasManyThrough',

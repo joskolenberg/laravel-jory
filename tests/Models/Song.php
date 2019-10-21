@@ -27,4 +27,9 @@ class Song extends Model
     {
         $query->join('albums', 'songs.album_id', 'albums.id')->orderBy('albums.name', $order);
     }
+
+    public function getAlbumNameAttribute()
+    {
+        return $this->album->name;
+    }
 }
