@@ -248,6 +248,106 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
+
+    /**
+     * HAS MANY RELATIONS ===============================================================================================
+     */
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_hasMany_relation_using_explicit_select()
+    {
+        $query = Album::query();
+
+        $joryResource = new AlbumJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name'],
+            'rlt' => [
+                'songs' => ['title']
+            ]
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_adds_the_foreign_key_field_when_requesting_a_hasMany_relation_using_explicit_select()
+    {
+        $query = Album::find(1)->songs();
+
+        $joryResource = new SongJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['title']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs` where `songs`.`album_id` = ? and `songs`.`album_id` is not null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_hasMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['name'],
+            'rlt' => [
+                'songs' => [
+                    'fld' => ['title']
+                ]
+            ]
+        ];
+
+        $expected = $this->json('GET', 'jory/album/4', ['jory' => $jory])->getContent();
+        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
+        Jory::register(SongJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/album/4', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select()
+    {
+        $query = Album::query();
+
+        $joryResource = new AlbumJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name', 'titles_string']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['name', 'titles_string']
+        ];
+
+        $expected = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
+        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
 }
 
 //'hasOne', ok

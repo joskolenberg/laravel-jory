@@ -64,4 +64,9 @@ class Album extends Model
     {
         return $this->cover->image;
     }
+
+    public function getTitlesStringAttribute()
+    {
+        return implode(', ', $this->songs->pluck('title')->toArray());
+    }
 }

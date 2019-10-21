@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -153,6 +154,10 @@ trait HandlesJorySelects
             return [$model->getQualifiedKeyName()];
         }
 
+        if($query instanceof HasMany){
+            return [$query->getQualifiedForeignKeyName()];
+        }
+
         return $fields;
     }
 
@@ -165,5 +170,11 @@ trait HandlesJorySelects
         if($relationQuery instanceof BelongsTo){
             return [$relationQuery->getQualifiedForeignKeyName()];
         }
+
+        if($relationQuery instanceof HasMany){
+            return [$baseModel->getQualifiedKeyName()];
+        }
+
+        return [];
     }
 }

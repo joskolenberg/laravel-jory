@@ -43,6 +43,7 @@ class AlbumJoryResource extends JoryResource
         $this->field('custom_field')->hideByDefault();
 
         $this->field('cover_image')->load('cover')->hideByDefault();
+        $this->field('titles_string')->load('songs')->hideByDefault();
 
         $this->filter('number_of_songs');
         $this->filter('has_song_with_title');

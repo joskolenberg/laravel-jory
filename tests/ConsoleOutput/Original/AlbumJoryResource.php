@@ -24,6 +24,7 @@ class AlbumJoryResource extends JoryResource
 
         // Custom attributes
         $this->field('cover_image')->hideByDefault();
+        $this->field('titles_string')->hideByDefault();
 
         // Relations
         $this->relation('album_cover');

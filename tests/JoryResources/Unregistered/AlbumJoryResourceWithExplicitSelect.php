@@ -47,6 +47,7 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
         $this->field('custom_field')->noSelect()->hideByDefault();
 
         $this->field('cover_image')->noSelect()->load('cover')->hideByDefault();
+        $this->field('titles_string')->noSelect()->load('songs')->hideByDefault();
 
         $this->filter('number_of_songs');
         $this->filter('has_song_with_title');
@@ -55,7 +56,7 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
         $this->sort('number_of_songs');
         $this->sort('band_name');
 
-        $this->relation('songs', SongJoryResource::class);
+        $this->relation('songs');
         $this->relation('band');
         $this->relation('cover');
         $this->relation('album_cover', AlbumCoverJoryResource::class);
