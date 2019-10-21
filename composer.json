@@ -11,9 +11,9 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "laravel/framework": "^5.5.43|^6.0",
+    "laravel/framework": "^5.8|^6.0",
     "joskolenberg/jory": "^0.7|^1.0",
-    "joskolenberg/eloquent-reflector": "^0.1|^1.0",
+    "joskolenberg/eloquent-reflector": "^0.1.2|^1.0",
     "rap2hpoutre/similar-text-finder": "^1.1"
   },
   "autoload": {
