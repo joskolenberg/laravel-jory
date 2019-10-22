@@ -1,17 +1,19 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
+namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 
-class BandJoryResource extends JoryResource
+class BandJoryResourceWithExplicitSelect extends JoryResource
 {
     protected $modelClass = Band::class;
 
     protected function configure(): void
     {
+        $this->explicitSelect();
+
         $this->field('id')->filterable(function (Filter $filter) {
             $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=', 'in', 'not_in']);
         })->sortable();
@@ -22,8 +24,8 @@ class BandJoryResource extends JoryResource
 
         $this->field('year_end')->description('The year in which the band quitted, could be null if band still exists.')->filterable()->sortable();
 
-        $this->field('all_albums_string')->load('albums')->hideByDefault();
-        $this->field('titles_string')->load('songs')->hideByDefault();
+        $this->field('all_albums_string')->noSelect()->load('albums')->hideByDefault();
+        $this->field('titles_string')->noSelect()->load('songs')->hideByDefault();
 
         $this->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
         $this->filter('number_of_albums_in_year')->operators([

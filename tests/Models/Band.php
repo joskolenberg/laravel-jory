@@ -64,4 +64,9 @@ class Band extends Model
     {
         return $this->morphMany(Image::class, 'imageable');
     }
+
+    public function getTitlesStringAttribute()
+    {
+        return implode(', ', $this->songs->pluck('title')->toArray());
+    }
 }

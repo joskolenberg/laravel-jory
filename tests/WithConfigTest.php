@@ -273,6 +273,10 @@ class WithConfigTest extends TestCase
                     'description' => 'The all_albums_string field.',
                     'default' => false,
                 ],
+                'titles_string' => [
+                    'description' => 'The titles_string field.',
+                    'default' => false,
+                ],
             ],
             'filters' => [
                 'id' => [

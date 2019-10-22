@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Traits;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -161,6 +162,10 @@ trait HandlesJorySelects
             // No extra selects required.
         }
 
+        if($query instanceof HasManyThrough){
+            // No extra selects required.
+        }
+
         return $fields;
     }
 
@@ -179,6 +184,10 @@ trait HandlesJorySelects
         }
 
         if($relationQuery instanceof BelongsToMany){
+            return [$baseModel->getQualifiedKeyName()];
+        }
+
+        if($relationQuery instanceof HasManyThrough){
             return [$baseModel->getQualifiedKeyName()];
         }
 
