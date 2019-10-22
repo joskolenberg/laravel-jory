@@ -8,6 +8,7 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumCoverJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumJoryResourceWithExplicitSelect;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\InstrumentJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
@@ -248,7 +249,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-
     /**
      * HAS MANY RELATIONS ===============================================================================================
      */
@@ -348,12 +348,109 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
+    /**
+     * BELONGS TO MANY RELATIONS ===============================================================================================
+     */
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_belongsToMany_relation_using_explicit_select()
+    {
+        $query = Person::query();
+
+        $joryResource = new PersonJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['first_name'],
+            'rlt' => [
+                'instruments' => ['title']
+            ]
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_belongsToMany_relation_using_explicit_select()
+    {
+        $query = Person::find(1)->instruments();
+
+        $joryResource = new InstrumentJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `instruments`.`name` from `instruments` inner join `instrument_person` on `instruments`.`id` = `instrument_person`.`instrument_id` where `instrument_person`.`person_id` = ?', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_belongsToMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['first_name'],
+            'rlt' => [
+                'instruments' => ['title']
+            ]
+        ];
+
+        $expected = $this->json('GET', 'jory/person/4', ['jory' => $jory])->getContent();
+        Jory::register(PersonJoryResourceWithExplicitSelect::class);
+        Jory::register(InstrumentJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/person/4', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select()
+    {
+        $query = Person::query();
+
+        $joryResource = new PersonJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['first_name', 'instruments_string']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['first_name', 'instruments_string']
+        ];
+
+        $expected = $this->json('GET', 'jory/person/10', ['jory' => $jory])->getContent();
+        Jory::register(PersonJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/person/10', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
 }
 
 //'hasOne', ok
 //            'belongsTo', ok
-//            'hasMany',
-//            'belongsToMany',
+//            'hasMany', ok
+//            'belongsToMany', ok
 //            'hasManyThrough',
 //            'hasOneThrough',
 //            'morphOne',

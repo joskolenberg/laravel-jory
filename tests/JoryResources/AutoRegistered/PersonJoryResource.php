@@ -18,6 +18,9 @@ class PersonJoryResource extends JoryResource
         $this->field('date_of_birth')->filterable()->sortable();
         $this->field('full_name')->filterable();
 
+        // Custom attributes
+        $this->field('instruments_string')->load('instruments')->hideByDefault();
+
         $this->filter('band.albums.songs.title');
         $this->filter('instruments.name');
 

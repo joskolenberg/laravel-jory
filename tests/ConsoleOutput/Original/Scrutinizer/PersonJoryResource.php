@@ -24,6 +24,7 @@ class PersonJoryResource extends JoryResource
 
         // Custom attributes
         $this->field('full_name')->hideByDefault();
+        $this->field('instruments_string')->hideByDefault();
 
         // Relations
         $this->relation('band');

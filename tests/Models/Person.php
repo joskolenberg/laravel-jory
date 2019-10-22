@@ -48,4 +48,9 @@ class Person extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function getInstrumentsStringAttribute()
+    {
+        return implode(', ', $this->instruments->pluck('name')->toArray());
+    }
 }
