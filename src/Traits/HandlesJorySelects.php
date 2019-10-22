@@ -60,7 +60,14 @@ trait HandlesJorySelects
         $fields = array_merge($fields, $this->getFieldsForEagerLoading($query, $joryResource));
         $fields = array_merge($fields, $this->getSelectsForChildRelations($query, $joryResource));
         $fields = array_merge($fields, $this->getSelectsForParentRelation($query));
-        $query->select(array_unique($fields));
+
+        $fields = array_unique($fields);
+
+        if(count($fields) === 0){
+            $fields[] = $query->getModel()->getQualifiedKeyName();
+        }
+
+        $query->select($fields);
     }
 
     /**

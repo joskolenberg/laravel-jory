@@ -55,6 +55,76 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /** @test */
+    public function it_selects_the_primary_key_field_when_no_fields_are_requested_to_prevent_query_errors_1()
+    {
+        $query = Person::query();
+
+        $joryResource = new PersonJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => [],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `people`.`id` from `people`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_selects_the_primary_key_field_when_no_fields_are_requested_to_prevent_query_errors_2()
+    {
+        $jory = [
+            'fld' => [],
+        ];
+
+        Jory::register(PersonJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/person/3', ['jory' => $jory])->getContent();
+
+        $this->assertEquals('{"data":[]}', $actual);
+    }
+
+    /** @test */
+    public function it_selects_the_primary_key_field_when_no_fields_are_requested_in_a_relation_to_prevent_query_errors_1()
+    {
+        $query = Person::find(3)->instruments();
+
+        $joryResource = new InstrumentJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => [],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `instruments`.`id` from `instruments` inner join `instrument_person` on `instruments`.`id` = `instrument_person`.`instrument_id` where `instrument_person`.`person_id` = ?', $query->toSql());
+    }
+
+    /** @test */
+    public function it_selects_the_primary_key_field_when_no_fields_are_requested_in_a_relation_to_prevent_query_errors_2()
+    {
+        $jory = [
+            'fld' => ['first_name'],
+            'rlt' => [
+                'instruments' => [
+                    'fld' => [],
+                ],
+            ],
+        ];
+
+        Jory::register(PersonJoryResourceWithExplicitSelect::class);
+        Jory::register(InstrumentJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/person/10', ['jory' => $jory])->getContent();
+
+        \Log::info(\DB::getQueryLog());
+
+        $this->assertEquals('{"data":{"first_name":"Paul","instruments":[[],[],[],[],[]]}}', $actual);
+    }
+
     /**
      * HAS ONE RELATIONS ===============================================================================================
      */
