@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -169,6 +170,10 @@ trait HandlesJorySelects
             return [$query->getQualifiedForeignKeyName()];
         }
 
+        if($query instanceof MorphMany){
+            return [$query->getQualifiedForeignKeyName()];
+        }
+
         return $fields;
     }
 
@@ -197,6 +202,10 @@ trait HandlesJorySelects
         // HasOneThrough extends HasManyThrough, so that action is already taken care of
 
         if($relationQuery instanceof MorphOne){
+            return [$baseModel->getQualifiedKeyName()];
+        }
+
+        if($relationQuery instanceof MorphMany){
             return [$baseModel->getQualifiedKeyName()];
         }
 

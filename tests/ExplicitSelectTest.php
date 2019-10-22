@@ -675,7 +675,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /**
-     * Morph One RELATIONS ===============================================================================================
+     * MORPH ONE RELATIONS ===============================================================================================
      */
 
     /** @test */
@@ -777,6 +777,109 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
+    /**
+     * MORPH MANY RELATIONS ===============================================================================================
+     */
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_morphMany_relation_using_explicit_select()
+    {
+        $query = Band::query();
+
+        $joryResource = new BandJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name'],
+            'rlt' => [
+                'images' => [
+                    'fld' => ['url'],
+                ],
+            ],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $query->toSql());
+    }
+
+    /** @test */
+    public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphMany_relation_using_explicit_select(
+    )
+    {
+        $query = Band::find(1)->images();
+
+        $joryResource = new ImageJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['url'],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_id` = ? and `images`.`imageable_id` is not null and `images`.`imageable_type` = ?',
+            $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_morphMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['name'],
+            'rlt' => [
+                'images' => [
+                    'fld' => ['url'],
+                ],
+            ],
+        ];
+
+        $expected = $this->json('GET', 'jory/band/4', ['jory' => $jory])->getContent();
+        Jory::register(BandJoryResourceWithExplicitSelect::class);
+        Jory::register(ImageJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/band/4', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphMany_relation_using_explicit_select()
+    {
+        $query = Band::query();
+
+        $joryResource = new BandJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name', 'image_urls_string']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['name', 'image_urls_string']
+        ];
+
+        $expected = $this->json('GET', 'jory/band', ['jory' => $jory])->getContent();
+        Jory::register(BandJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/band', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
 }
 
 //'hasOne', ok
@@ -786,7 +889,7 @@ class ExplicitSelectTest extends TestCase
 //            'hasManyThrough', ok
 //            'hasOneThrough', ok
 //            'morphOne', ok
-//            'morphMany',
+//            'morphMany', ok
 //            'morphToMany',
 //            'morphedByMany',
 

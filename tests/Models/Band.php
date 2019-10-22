@@ -74,4 +74,9 @@ class Band extends Model
     {
         return $this->firstSong->title;
     }
+
+    public function getImageUrlsStringAttribute()
+    {
+        return implode(', ', $this->images->pluck('url')->toArray());
+    }
 }
