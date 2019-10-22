@@ -69,4 +69,9 @@ class Album extends Model
     {
         return implode(', ', $this->songs->pluck('title')->toArray());
     }
+
+    public function getTagNamesStringAttribute()
+    {
+        return implode(', ', $this->tags->pluck('name')->toArray());
+    }
 }

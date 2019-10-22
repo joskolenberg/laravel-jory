@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Config\Field;
@@ -164,7 +165,7 @@ trait HandlesJorySelects
             return [$query->getQualifiedForeignKeyName()];
         }
 
-        // BelongsToMany, HasManyThrough and HasOneThrough don't require any fields
+        // BelongsToMany, HasManyThrough, HasOneThrough and MorphToMany don't require any fields
 
         if($query instanceof MorphOne){
             return [$query->getQualifiedForeignKeyName()];
@@ -208,6 +209,8 @@ trait HandlesJorySelects
         if($relationQuery instanceof MorphMany){
             return [$baseModel->getQualifiedKeyName()];
         }
+
+        // MorphToMany extends BelongsToMany, so that action is already taken care of
 
         return [];
     }

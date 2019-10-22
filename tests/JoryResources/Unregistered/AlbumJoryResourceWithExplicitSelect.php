@@ -48,6 +48,7 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
 
         $this->field('cover_image')->noSelect()->load('cover')->hideByDefault();
         $this->field('titles_string')->noSelect()->load('songs')->hideByDefault();
+        $this->field('tag_names_string')->noSelect()->load('tags')->hideByDefault();
 
         $this->filter('number_of_songs');
         $this->filter('has_song_with_title');
