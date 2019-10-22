@@ -165,7 +165,7 @@ trait HandlesJorySelects
             return [$query->getQualifiedForeignKeyName()];
         }
 
-        // BelongsToMany, HasManyThrough, HasOneThrough and MorphToMany don't require any fields
+        // BelongsToMany, HasManyThrough, HasOneThrough, MorphToMany and MorpedByMany don't require any fields
 
         if($query instanceof MorphOne){
             return [$query->getQualifiedForeignKeyName()];
@@ -211,6 +211,8 @@ trait HandlesJorySelects
         }
 
         // MorphToMany extends BelongsToMany, so that action is already taken care of
+
+        // MorpedByMany uses a MorphToMany under the hood, so that action is already taken care of
 
         return [];
     }

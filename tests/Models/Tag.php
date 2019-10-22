@@ -20,4 +20,9 @@ class Tag extends Model
     {
         return $this->morphedByMany(Album::class, 'taggable');
     }
+
+    public function getSongTitlesStringAttribute()
+    {
+        return implode(', ', $this->songs->pluck('title')->toArray());
+    }
 }

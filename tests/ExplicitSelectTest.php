@@ -19,6 +19,7 @@ use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Tag;
 
 class ExplicitSelectTest extends TestCase
 {
@@ -984,17 +985,109 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-}
+    /**
+     * MORPHED BY MANY RELATIONS ===============================================================================================
+     */
 
-//'hasOne', ok
-//            'belongsTo', ok
-//            'hasMany', ok
-//            'belongsToMany', ok
-//            'hasManyThrough', ok
-//            'hasOneThrough', ok
-//            'morphOne', ok
-//            'morphMany', ok
-//            'morphToMany', ok
-//            'morphedByMany',
+    /** @test */
+    public function it_adds_the_foreign_key_field_when_requesting_a_morphedByMany_relation_using_explicit_select()
+    {
+        $query = Tag::query();
+
+        $joryResource = new TagJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name'],
+            'rlt' => [
+                'albums' => [
+                    'fld' => ['name'],
+                ],
+            ],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `tags`.`name`, `tags`.`id` from `tags`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphedByMany_relation_using_explicit_select(
+    )
+    {
+        $query = Tag::find(1)->albums();
+
+        $joryResource = new AlbumJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name'],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `albums`.`name` from `albums` inner join `taggables` on `albums`.`id` = `taggables`.`taggable_id` where `taggables`.`tag_id` = ? and `taggables`.`taggable_type` = ?',
+            $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_morphedByMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['name'],
+            'rlt' => [
+                'songs' => [
+                    'fld' => ['title'],
+                ],
+            ],
+        ];
+
+        $expected = $this->json('GET', 'jory/tag/1', ['jory' => $jory])->getContent();
+        Jory::register(TagJoryResourceWithExplicitSelect::class);
+        Jory::register(SongJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/tag/1', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphedByMany_relation_using_explicit_select()
+    {
+        $query = Tag::query();
+
+        $joryResource = new TagJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['name', 'song_titles_string']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `tags`.`name`, `tags`.`id` from `tags`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphedByMany_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['name', 'song_titles_string']
+        ];
+
+        $expected = $this->json('GET', 'jory/tag', ['jory' => $jory])->getContent();
+        Jory::register(TagJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/tag', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+}
 
 // In ieder gaval 1 veld selecten als er niets is geselecteerd

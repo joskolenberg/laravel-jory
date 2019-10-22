@@ -20,6 +20,8 @@ class TagJoryResource extends JoryResource
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();
 
+        $this->field('song_titles_string')->load('songs')->hideByDefault();
+
         // Relations
         $this->relation('albums');
         $this->relation('songs');
