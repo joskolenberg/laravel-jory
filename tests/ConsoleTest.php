@@ -2,19 +2,13 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use Illuminate\Support\Facades\Artisan;
+use JosKolenberg\LaravelJory\JoryServiceProvider;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
 class ConsoleTest extends TestCase
 {
-    /** @test */
-    public function dummy()
-    {
-        // Disabled this tests because they fail on scrutinizer-ci.
-        // Keep them for local testing.
-        $this->assertTrue(true);
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,7 +21,8 @@ class ConsoleTest extends TestCase
     {
         // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
 
-        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band']);
+        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
+            ->expectsOutput('BandJoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('BandJoryResource.php');
@@ -44,7 +39,8 @@ class ConsoleTest extends TestCase
     {
         // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
 
-        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band', '--name' => 'AlternateBandJoryResource']);
+        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band', '--name' => 'AlternateBandJoryResource'])
+            ->expectsOutput('AlternateBandJoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
@@ -59,7 +55,8 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_make_jory_resource_command()
     {
-        $this->artisan('make:jory-resource', ['name' => 'EmptyJoryResource']);
+        $this->artisan('make:jory-resource', ['name' => 'EmptyJoryResource'])
+            ->expectsOutput('JoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContents = $filesystem->read('EmptyJoryResource.php');
@@ -75,7 +72,9 @@ class ConsoleTest extends TestCase
     {
         // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
 
-        $this->artisan('make:jory-resource', ['name' => 'AlternateBandJoryResource', '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band']);
+        $this->artisan('make:jory-resource', ['name' => 'AlternateBandJoryResource', '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
+            ->expectsOutput('AlternateBandJoryResource created successfully.');
+
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
@@ -90,7 +89,18 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_generate_all_command()
     {
-        $this->artisan('jory:generate-all');
+        $this->artisan('jory:generate-all')->expectsOutput('BandJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.')
+            ->expectsOutput('GroupieJoryResource created successfully.')
+            ->expectsOutput('TagJoryResource created successfully.')
+            ->expectsOutput('AlbumCoverJoryResource created successfully.')
+            ->expectsOutput('UserJoryResource created successfully.')
+            ->expectsOutput('PersonJoryResource created successfully.')
+            ->expectsOutput('ErrorPersonJoryResource created successfully.')
+            ->expectsOutput('AlbumJoryResource created successfully.')
+            ->expectsOutput('SongWithAfterFetchHookJoryResource created successfully.')
+            ->expectsOutput('SongWithCustomJoryResourceJoryResource created successfully.')
+            ->expectsOutput('ImageJoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
 
@@ -128,7 +138,7 @@ class ConsoleTest extends TestCase
     {
         $filesystem = new Filesystem(new Local(config_path()));
 
-        if($filesystem->has('jory.php')){
+        if ($filesystem->has('jory.php')) {
             $filesystem->delete('jory.php');
         }
 
