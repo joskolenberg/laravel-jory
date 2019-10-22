@@ -325,7 +325,7 @@ $this->relation('albums');
 
 $this->relation('songs', AlternateSongJoryResource::class);
 ```
-Note: mergeTo relations cannot be used by Jory due their dynamic nature.
+Note: mergeTo relations cannot be used by Jory due their dynamic nature. An easy workaround can be made by creating a separate bolongsTo relation for each "morphable" type.  
 
 #### Setting pagination defaults
 Use the ```limitDefault()``` method to set the default limit when no limit is given.
