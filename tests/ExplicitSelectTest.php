@@ -1159,5 +1159,3 @@ class ExplicitSelectTest extends TestCase
     }
 
 }
-
-// In ieder gaval 1 veld selecten als er niets is geselecteerd

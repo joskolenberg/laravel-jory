@@ -49,7 +49,7 @@ trait HandlesJorySelects
     }
 
     /**
-     * Apply the select part of the query based on the requested fields.
+     * Apply the select part of the query based on the requested fields and relations.
      *
      * @param $query
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
@@ -71,6 +71,8 @@ trait HandlesJorySelects
     }
 
     /**
+     * Get the columns to select in the query based on the requested fields.
+     *
      * @param $query
      * @param JoryResource $joryResource
      * @return array
@@ -98,6 +100,11 @@ trait HandlesJorySelects
     }
 
     /**
+     * Get the columns to be selected in order to be able to retrieve the requested relations.
+     *
+     * E.g. If an Album is requested with the Songs relation we need the
+     * album.id column in order to get the songs from the database.
+     *
      * @param JoryResource $joryResource
      * @return array
      */
@@ -115,13 +122,18 @@ trait HandlesJorySelects
 
             $relationQuery = $model->{$relationName}();
 
-            $fields = array_merge($fields, $this->getSelectsForRelationQuery($model, $relationQuery));
+            $fields = array_merge($fields, $this->getSelectsForChildRelationQuery($model, $relationQuery));
         }
 
         return $fields;
     }
 
     /**
+     * Get the columns to be selected in order to perform the any eager loading which has to be done.
+     *
+     * E.g. If an Album is requested with the AllSongsString custom attribute which has the Songs relation
+     * set to be eager loaded, we need the album.id column in order to get the songs from the database.
+     *
      * @param JoryResource $joryResource
      * @return array
      */
@@ -143,7 +155,7 @@ trait HandlesJorySelects
 
                     $relationQuery = $model->{$firstRelation}();
 
-                    $fields = array_merge($fields, $this->getSelectsForRelationQuery($model, $relationQuery));
+                    $fields = array_merge($fields, $this->getSelectsForChildRelationQuery($model, $relationQuery));
                 }
             }
         }
@@ -153,13 +165,16 @@ trait HandlesJorySelects
     }
 
     /**
+     * Get the columns to be selected in order to be able to bind the relation to the parent model.
+     *
+     * E.g. If an Album is requested with the Songs relation, we need the
+     * songs.album_id column in order to get the songs from the database.
+     *
      * @param $query
      * @return array
      */
     protected function getSelectsForParentRelation($query)
     {
-        $fields = [];
-
         if($query instanceof HasOne){
             return [$query->getQualifiedForeignKeyName()];
         }
@@ -182,10 +197,23 @@ trait HandlesJorySelects
             return [$query->getQualifiedForeignKeyName()];
         }
 
-        return $fields;
+        return [];
     }
 
-    public function getSelectsForRelationQuery($baseModel, $relationQuery)
+    /**
+     * Get the columns to be selected in order to be able to retrieve a requested relation.
+     *
+     * E.g. If an Album is requested with the Songs relation we need the
+     * album.id column in order to get the songs from the database.
+     *
+     * In this example the $baseModel would be an album instance and
+     * the $relationQuery the HasMany query to retrieve the songs.
+     *
+     * @param $baseModel
+     * @param $relationQuery
+     * @return array
+     */
+    public function getSelectsForChildRelationQuery($baseModel, $relationQuery)
     {
         if($relationQuery instanceof HasOne){
             return [$baseModel->getQualifiedKeyName()];

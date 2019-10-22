@@ -97,11 +97,7 @@ class Field
      */
     public function select($fields): Field
     {
-        if(!is_array($fields)){
-            $fields = [$fields];
-        }
-
-        $this->select = $fields;
+        $this->select = is_array($fields) ? $fields : func_get_args();
 
         return $this;
     }
@@ -126,9 +122,7 @@ class Field
      */
     public function load($relations): Field
     {
-        if(!is_array($relations)){
-            $relations = [$relations];
-        }
+        $relations = is_array($relations) ? $relations : func_get_args();
 
         $this->load = array_map('Illuminate\Support\Str::camel', $relations);
 
