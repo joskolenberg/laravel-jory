@@ -19,8 +19,10 @@ class PersonJoryResourceWithExplicitSelect extends JoryResource
         $this->field('last_name')->filterable()->sortable();
         $this->field('date_of_birth')->select(['date_of_birth'])->filterable()->sortable();
         $this->field('full_name')->select(['first_name', 'last_name'])->filterable();
+
         // Custom attributes
         $this->field('instruments_string')->noSelect()->load('instruments')->hideByDefault();
+        $this->field('first_image_url')->noSelect()->load('first_image')->hideByDefault();
 
         $this->filter('band.albums.songs.title');
         $this->filter('instruments.name');

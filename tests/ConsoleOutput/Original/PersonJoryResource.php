@@ -23,6 +23,7 @@ class PersonJoryResource extends JoryResource
         $this->field('date_of_birth')->filterable()->sortable();
 
         // Custom attributes
+        $this->field('first_image_url')->hideByDefault();
         $this->field('full_name')->hideByDefault();
         $this->field('instruments_string')->hideByDefault();
 

@@ -53,4 +53,9 @@ class Person extends Model
     {
         return implode(', ', $this->instruments->pluck('name')->toArray());
     }
+
+    public function getFirstImageUrlAttribute()
+    {
+        return $this->firstImage->url;
+    }
 }

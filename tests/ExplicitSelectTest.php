@@ -9,6 +9,7 @@ use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumCoverJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\BandJoryResourceWithExplicitSelect;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\ImageJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\InstrumentJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithExplicitSelect;
@@ -673,6 +674,109 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
+    /**
+     * Morph One RELATIONS ===============================================================================================
+     */
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_morphOne_relation_using_explicit_select()
+    {
+        $query = Person::query();
+
+        $joryResource = new PersonJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['first_name'],
+            'rlt' => [
+                'first_image' => [
+                    'fld' => ['url'],
+                ],
+            ],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $query->toSql());
+    }
+    
+    /** @test */
+    public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphOne_relation_using_explicit_select(
+    )
+    {
+        $query = Person::find(1)->firstImage();
+
+        $joryResource = new ImageJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['url'],
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_id` = ? and `images`.`imageable_id` is not null and `images`.`imageable_type` = ?',
+            $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_morphOne_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['first_name'],
+            'rlt' => [
+                'first_image' => [
+                    'fld' => ['url'],
+                ],
+            ],
+        ];
+
+        $expected = $this->json('GET', 'jory/person/4', ['jory' => $jory])->getContent();
+        Jory::register(PersonJoryResourceWithExplicitSelect::class);
+        Jory::register(ImageJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/person/4', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
+    /** @test */
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphOne_relation_using_explicit_select()
+    {
+        $query = Person::query();
+
+        $joryResource = new PersonJoryResourceWithExplicitSelect();
+
+        $joryResource->setJory((new ArrayParser([
+            'fld' => ['first_name', 'first_image_url']
+        ]))->getJory());
+
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($query);
+
+        $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $query->toSql());
+    }
+
+    /** @test */
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphOne_relation_using_explicit_select()
+    {
+        $jory = [
+            'fld' => ['first_name', 'first_image_url']
+        ];
+
+        $expected = $this->json('GET', 'jory/person/1', ['jory' => $jory])->getContent();
+        Jory::register(PersonJoryResourceWithExplicitSelect::class);
+        $actual = $this->json('GET', 'jory/person/1', ['jory' => $jory])->getContent();
+
+        $this->assertEquals($expected, $actual);
+
+        $this->assertQueryCount(4);
+    }
+
 }
 
 //'hasOne', ok
@@ -681,7 +785,7 @@ class ExplicitSelectTest extends TestCase
 //            'belongsToMany', ok
 //            'hasManyThrough', ok
 //            'hasOneThrough', ok
-//            'morphOne',
+//            'morphOne', ok
 //            'morphMany',
 //            'morphToMany',
 //            'morphedByMany',
