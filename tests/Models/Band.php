@@ -33,7 +33,7 @@ class Band extends Model
 
     public function firstSong()
     {
-        return $this->hasOneThrough(Song::class, Album::class)->orderBy('id');
+        return $this->hasOneThrough(Song::class, Album::class)->orderBy('songs.id');
     }
 
     public function scopeHasAlbumWithNameFilter($query, $operator, $data)
@@ -68,5 +68,10 @@ class Band extends Model
     public function getTitlesStringAttribute()
     {
         return implode(', ', $this->songs->pluck('title')->toArray());
+    }
+
+    public function getFirstTitleStringAttribute()
+    {
+        return $this->firstSong->title;
     }
 }

@@ -24,6 +24,7 @@ class BandJoryResource extends JoryResource
 
         // Custom attributes
         $this->field('all_albums_string')->hideByDefault();
+        $this->field('first_title_string')->hideByDefault();
         $this->field('titles_string')->hideByDefault();
 
         // Relations

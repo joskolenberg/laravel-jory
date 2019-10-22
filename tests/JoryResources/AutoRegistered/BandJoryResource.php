@@ -24,6 +24,7 @@ class BandJoryResource extends JoryResource
 
         $this->field('all_albums_string')->load('albums')->hideByDefault();
         $this->field('titles_string')->load('songs')->hideByDefault();
+        $this->field('first_title_string')->load('first_song')->hideByDefault();
 
         $this->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
         $this->filter('number_of_albums_in_year')->operators([

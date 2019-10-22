@@ -434,6 +434,10 @@ class CamelCaseTest extends TestCase
                     'description' => 'The titlesString field.',
                     'default' => false,
                 ],
+                'firstTitleString' => [
+                    'description' => 'The firstTitleString field.',
+                    'default' => false,
+                ],
             ],
             'filters' => [
                 'id' => [

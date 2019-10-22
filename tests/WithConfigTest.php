@@ -277,6 +277,10 @@ class WithConfigTest extends TestCase
                     'description' => 'The titles_string field.',
                     'default' => false,
                 ],
+                'first_title_string' => [
+                    'description' => 'The first_title_string field.',
+                    'default' => false,
+                ],
             ],
             'filters' => [
                 'id' => [

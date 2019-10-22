@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Config\Field;
@@ -99,6 +100,9 @@ trait HandlesJorySelects
         foreach ($joryResource->getJory()->getRelations() as $relation) {
             $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
 
+            // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
+            $relationName = Str::camel($relationName);
+
             $relationQuery = $model->{$relationName}();
 
             $fields = array_merge($fields, $this->getSelectsForRelationQuery($model, $relationQuery));
@@ -158,13 +162,7 @@ trait HandlesJorySelects
             return [$query->getQualifiedForeignKeyName()];
         }
 
-        if($query instanceof BelongsToMany){
-            // No extra selects required.
-        }
-
-        if($query instanceof HasManyThrough){
-            // No extra selects required.
-        }
+        // BelongsToMany, HasManyThrough and HasOneThrough don't require any fields
 
         return $fields;
     }
@@ -190,6 +188,8 @@ trait HandlesJorySelects
         if($relationQuery instanceof HasManyThrough){
             return [$baseModel->getQualifiedKeyName()];
         }
+
+        // HasOneThrough extends HasManyThrough, so that action is already taken care of
 
         return [];
     }
