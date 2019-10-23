@@ -2,6 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
-class ErrorPerson extends Person
+class ModelWithoutJoryResource extends Model
 {
 }

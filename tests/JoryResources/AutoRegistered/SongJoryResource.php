@@ -24,5 +24,6 @@ class SongJoryResource extends JoryResource
 
         // Relations
         $this->relation('album');
+        $this->relation('test_relation_without_jory_resource');
     }
 }

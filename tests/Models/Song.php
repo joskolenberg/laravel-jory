@@ -32,4 +32,9 @@ class Song extends Model
     {
         return $this->album->name;
     }
+
+    public function testRelationWithoutJoryResource()
+    {
+        return $this->hasMany(ModelWithoutJoryResource::class);
+    }
 }

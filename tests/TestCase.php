@@ -1029,6 +1029,7 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
             'exclude' => [
                 Model::class,
                 \JosKolenberg\LaravelJory\Tests\Models\Instrument::class,
+                \JosKolenberg\LaravelJory\Tests\Models\ModelWithoutJoryResource::class,
             ]
         ]);
         $app['config']->set('jory.generator.jory-resources', [

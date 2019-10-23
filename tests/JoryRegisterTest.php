@@ -3,24 +3,48 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
-use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
-use JosKolenberg\LaravelJory\Tests\Models\Groupie;
+use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class JoryRegisterTest extends TestCase
 {
+
     /** @test */
-    public function it_throws_an_exception_when_no_associated_jory_resource_is_found()
+    public function it_does_throw_an_exception_when_no_associated_jory_resource_is_found_when_the_relation_is_requested()
     {
-        $response = $this->json('GET', 'jory/error-person/1', []);
-
-        $response->assertStatus(500);
-
         $this->expectException(RegistrationNotFoundException::class);
-        $this->expectExceptionMessage('No joryResource found for model JosKolenberg\LaravelJory\Tests\Models\Groupie. Does JosKolenberg\LaravelJory\Tests\Models\Groupie have an associated JoryResource?');
+        $this->expectExceptionMessage('No joryResource found for model JosKolenberg\LaravelJory\Tests\Models\ModelWithoutJoryResource. Does JosKolenberg\LaravelJory\Tests\Models\ModelWithoutJoryResource have an associated JoryResource?');
 
-        $register = app(JoryResourcesRegister::class);
+        Jory::on(Song::find(1))->apply([
+            'rlt' => [
+                'test_relation_without_jory_resource' => []
+            ]
+        ])->toArray();
+    }
+    /** @test */
+    public function it_doesnt_throw_an_exception_when_no_associated_jory_resource_is_found_as_long_as_the_relation_isnt_requested()
+    {
+        $response = $this->json('GET', 'jory/song/1', [
+            'jory' => [
+                'fld' => ['title'],
+            ]
+        ]);
 
-        $register->getByModelClass(Groupie::class);
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function it_does_throw_an_exception_when_no_associated_jory_resource_is_found_when_the_relation_is_requested_1()
+    {
+        $response = $this->json('GET', 'jory/song/1', [
+            'jory' => [
+                'fld' => ['title'],
+                'rlt' => [
+                    'test_relation_without_jory_resource' => []
+                ]
+            ]
+        ]);
+        $response->assertStatus(500);
     }
 
 }

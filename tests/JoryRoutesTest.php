@@ -404,7 +404,6 @@ class JoryRoutesTest extends TestCase
                 'album',
                 'album-cover',
                 'band',
-                'error-person',
                 'image',
                 'instrument',
                 'person',

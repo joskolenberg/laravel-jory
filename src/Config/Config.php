@@ -164,22 +164,7 @@ class Config
      */
     public function relation(string $name, string $joryResource = null): Relation
     {
-        if (!$joryResource) {
-            /**
-             * When no explicit joryResource is given,
-             * we will search for the joryResource for the related model.
-             */
-            $relationMethod = Str::camel($name);
-            $relatedClass = get_class((new $this->modelClass())->{$relationMethod}()->getRelated());
-
-            $joryResource = app()->make(JoryResourcesRegister::class)->getByModelClass($relatedClass);
-        } else{
-            // Class name given, new it up.
-            $joryResource = new $joryResource();
-        }
-
-        // Add the relation
-        $relation = new Relation($name, $joryResource);
+        $relation = new Relation($name, $this->modelClass, $joryResource ? new $joryResource : null);
 
         $this->relations[] = $relation;
 
