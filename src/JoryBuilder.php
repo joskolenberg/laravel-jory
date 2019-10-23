@@ -104,16 +104,7 @@ class JoryBuilder
     {
         $query = $this->builder;
 
-        $this->joryResource->beforeQueryBuild($query, true);
-
-        // Apply filters if there are any
-        if ($this->joryResource->getJory()->getFilter()) {
-            $this->applyFilter($query, $this->joryResource);
-        }
-
-        $this->authorizeQuery($query);
-
-        $this->joryResource->afterQueryBuild($query, true);
+        $this->applyOnCountQuery($query);
 
         return $query->count();
     }
@@ -136,8 +127,9 @@ class JoryBuilder
      * Apply the jory data on an existing query.
      *
      * @param $query
+     * @return mixed
      */
-    public function applyOnQuery($query): void
+    public function applyOnQuery($query)
     {
         $jory = $this->joryResource->getJory();
 
@@ -156,6 +148,30 @@ class JoryBuilder
         $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
         $this->joryResource->afterQueryBuild($query);
+
+        return $query;
+    }
+
+    /**
+     * Apply the jory data on an existing query.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function applyOnCountQuery($query)
+    {
+        $this->joryResource->beforeQueryBuild($query, true);
+
+        // Apply filters if there are any
+        if ($this->joryResource->getJory()->getFilter()) {
+            $this->applyFilter($query, $this->joryResource);
+        }
+
+        $this->authorizeQuery($query);
+
+        $this->joryResource->afterQueryBuild($query, true);
+
+        return $query;
     }
 
     /**

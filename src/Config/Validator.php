@@ -8,7 +8,6 @@ use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Support\GroupOrFilter;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
-use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use SimilarText\Finder;
 
 /**
@@ -196,13 +195,7 @@ class Validator
         }
 
         foreach ($this->jory->getRelations() as $joryRelation) {
-            $relationName = $joryRelation->getName();
-
-            // Remove the alias part if the relation has one
-            $relationParts = explode(' as ', $relationName);
-            if (count($relationParts) > 1) {
-                $relationName = $relationParts[0];
-            }
+            $relationName = ResourceNameHelper::explode($joryRelation->getName())->baseName;
 
             if (!in_array($relationName, $availableRelations)) {
                 $this->errors[] = 'Relation "' . $relationName . '" is not available, ' . $this->getSuggestion($availableRelations, $relationName) . ' (Location: ' . $this->address . 'relations.' . $relationName . ')';

@@ -54,27 +54,41 @@ trait LoadsJoryRelations
             return;
         }
 
-        $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
+        if(ResourceNameHelper::explode($relation->getName())->type === 'count'){
+            $this->loadCountRelation($collection, $relation, $joryResource);
 
-        // Build the JoryResource to be applied on the relation query.
-        $relatedJoryResource = $joryResource
-            ->getConfig()
-            ->getRelation($relationName)
-            ->getJoryResource()
-            ->fresh();
+            return;
+        }
 
-        $relatedJoryResource->setJory($relation->getJory());
+        $this->loadFetchRelation($collection, $relation, $joryResource);
+    }
 
-        // Create a JoryBuilder which can alter the relation query with the data in the Jory query and JoryResource
-        $joryBuilder = app()->makeWith(JoryBuilder::class, ['joryResource' => $relatedJoryResource]);
-
+    protected function loadCountRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
+    {
         // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
-        $relationName = Str::camel($relationName);
+        $relationName = Str::camel(ResourceNameHelper::explode($relation->getName())->baseName);
+
+        $relatedJoryResource = $this->getJoryResourceForRelation($relation, $joryResource);
+        $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
+
+        foreach ($collection as $model) {
+            // We store the count under the full relation name including alias
+            $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnCountQuery($model->$relationName())->count());
+        }
+    }
+
+    protected function loadFetchRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
+    {
+        // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
+        $relationName = Str::camel(ResourceNameHelper::explode($relation->getName())->baseName);
+
+        $relatedJoryResource = $this->getJoryResourceForRelation($relation, $joryResource);
+        $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
 
         $collection->load([
-            $relationName => function ($query) use ($joryBuilder, $relation) {
+            $relationName => function ($query) use ($relatedJoryBuilder, $relation) {
                 // Apply the data in the subjory (filtering/sorting/...) on the query
-                $joryBuilder->applyOnQuery($query);
+                $relatedJoryBuilder->applyOnQuery($query);
             },
         ]);
 
@@ -100,7 +114,7 @@ trait LoadsJoryRelations
         }
 
         // Load the subrelations
-        $joryBuilder->loadRelations($allRelated, $relatedJoryResource);
+        $relatedJoryBuilder->loadRelations($allRelated, $relatedJoryResource);
     }
 
     /**
@@ -146,5 +160,40 @@ trait LoadsJoryRelations
         }
 
         $collection->load($eagerLoads);
+    }
+
+    /**
+     * Get a JoryBuilder from the container by JoryResource.
+     *
+     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @return mixed
+     */
+    protected function getJoryBuilderForResource(JoryResource $joryResource)
+    {
+        return app()->makeWith(JoryBuilder::class, ['joryResource' => $joryResource]);
+    }
+
+    /**
+     * Get a JoryResource based on a relation and parent JoryResource.
+     *
+     * @param \JosKolenberg\Jory\Support\Relation $relation
+     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @return \JosKolenberg\LaravelJory\JoryResource
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     */
+    protected function getJoryResourceForRelation(Relation $relation, JoryResource $joryResource)
+    {
+        $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
+
+        // Build the JoryResource to be applied on the relation query.
+        $relatedJoryResource = $joryResource
+            ->getConfig()
+            ->getRelation($relationName)
+            ->getJoryResource()
+            ->fresh();
+
+        $relatedJoryResource->setJory($relation->getJory());
+
+        return $relatedJoryResource;
     }
 }

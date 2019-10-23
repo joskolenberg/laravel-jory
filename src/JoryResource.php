@@ -1,6 +1,5 @@
 <?php
 
-
 namespace JosKolenberg\LaravelJory;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -20,7 +19,6 @@ use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 
 abstract class JoryResource
 {
-
     /**
      * @var string
      */
@@ -66,7 +64,7 @@ abstract class JoryResource
      */
     public function getUri()
     {
-        if (!$this->uri) {
+        if (! $this->uri) {
             // If no uri is set explicitly we default to the kebabcased model class.
             return Str::kebab(class_basename($this->modelClass));
         }
@@ -83,7 +81,6 @@ abstract class JoryResource
     {
         return $this->modelClass;
     }
-
 
     /**
      * Add a field which can be requested by the API users..
@@ -187,7 +184,7 @@ abstract class JoryResource
      */
     public function getConfig(): Config
     {
-        if (!$this->config) {
+        if (! $this->config) {
             $this->config = new Config($this->modelClass);
             $this->configure();
         }
@@ -336,16 +333,15 @@ abstract class JoryResource
      * aliases) The values of the array are JoryResource objects which
      * in turn hold the Jory query object for the relation.
      *
-     * We build this array here once so we don't have to grab for
-     * a new JoryResource for each record we want to convert to
-     * an array leading into bad performance.
+     * We build this array here once so we don't have to grab for a new
+     * JoryResource for each record we want to convert to an array.
      *
      * @return array
      * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getRelatedJoryResources(): array
     {
-        if (!$this->relatedJoryResources) {
+        if (! $this->relatedJoryResources) {
             $this->relatedJoryResources = [];
 
             foreach ($this->jory->getRelations() as $relation) {
@@ -385,36 +381,25 @@ abstract class JoryResource
          */
         $raw = $model->attributesToArray();
         foreach ($jory->getFields() as $field) {
-            $result[$field] = array_key_exists(Str::snake($field), $raw) ? $raw[Str::snake($field)] : $model->{Str::snake($field)};
+            $result[$field] = array_key_exists(Str::snake($field),
+                $raw) ? $raw[Str::snake($field)] : $model->{Str::snake($field)};
         }
 
         // Add the relations to the result
         foreach ($this->getRelatedJoryResources() as $relationName => $relatedJoryResource) {
-            $relationAlias = $relationName;
-
-            // Split the relation name in Laravel's relation name and the alias, if there is one.
-            $relationParts = explode(' as ', $relationName);
-            if (count($relationParts) > 1) {
-                $relationAlias = $relationParts[1];
-            }
+            $relationDetails = ResourceNameHelper::explode($relationName);
+            $relationAlias = $relationDetails->alias;
 
             // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
             $related = $model->joryRelations[$relationName];
 
-            if ($related === null) {
-                // No related model found
-                $result[$relationAlias] = null;
-            } elseif ($related instanceof Model) {
-                // A related model is found
-                $result[$relationAlias] = $relatedJoryResource->modelToArray($related);
-            } else {
-                // A related collection
-                $relationResult = [];
-                foreach ($related as $relatedModel) {
-                    $relationResult[] = $relatedJoryResource->modelToArray($relatedModel);
-                }
-                $result[$relationAlias] = $relationResult;
+            if ($relationDetails->type === 'count') {
+                // A count query; just put the result here
+                $result[$relationAlias] = $related;
+                continue;
             }
+
+            $result[$relationAlias] = $this->turnRelationResultIntoArray($related, $relatedJoryResource);
         }
 
         return $result;
@@ -428,5 +413,33 @@ abstract class JoryResource
      */
     public function authorize($query, $user = null): void
     {
+    }
+
+    /**
+     * Turn the result of a loaded relation into a result array.
+     *
+     * @param mixed $relatedData
+     * @param \JosKolenberg\LaravelJory\JoryResource $relatedJoryResource
+     * @return array|null
+     * @throws \JosKolenberg\Jory\Exceptions\JoryException
+     */
+    protected function turnRelationResultIntoArray($relatedData, JoryResource $relatedJoryResource):? array
+    {
+        if ($relatedData === null) {
+            return null;
+        }
+
+        if ($relatedData instanceof Model) {
+            // A related model is found
+            return $relatedJoryResource->modelToArray($relatedData);
+        }
+
+        // Must be a related collection
+        $relationResult = [];
+        foreach ($relatedData as $relatedModel) {
+            $relationResult[] = $relatedJoryResource->modelToArray($relatedModel);
+        }
+
+        return $relationResult;
     }
 }

@@ -1286,19 +1286,19 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         'title' => 'Gimme Shelter',
                     ],
                     [
-                        'title' => 'Her Majesty'
+                        'title' => 'Her Majesty',
                     ],
                     [
-                        'title' => 'Two of Us'
+                        'title' => 'Two of Us',
                     ],
                     [
-                        'title' => 'Dig a Pony'
+                        'title' => 'Dig a Pony',
                     ],
                     [
-                        'title' => 'Across the Universe'
+                        'title' => 'Across the Universe',
                     ],
                     [
-                        'title' => 'I Me Mine" (Harrison'
+                        'title' => 'I Me Mine" (Harrison',
                     ],
                 ],
                 'albums' => [
@@ -1306,12 +1306,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         'name' => 'Abbey road',
                         'songs' => [
                             [
-                                'title' => 'Here Comes the Sun'
+                                'title' => 'Here Comes the Sun',
                             ],
                             [
-                                'title' => 'Sun King'
+                                'title' => 'Sun King',
                             ],
-                        ]
+                        ],
                     ],
                 ],
             ],
@@ -1320,5 +1320,127 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
 
         $this->assertQueryCount(4);
+    }
+
+    /** @test */
+    public function it_can_load_a_relation_count()
+    {
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums:count":{"flt":{"f":"id","o":">","d":7}}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'name' => 'Beatles',
+                'album_no_eight' => [
+                    [
+                        'id' => 8,
+                        'band_id' => 3,
+                        'name' => 'Abbey road',
+                        'release_date' => '1969-09-26 00:00:00',
+                    ],
+                ],
+                'albums:count' => 2,
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
+    }
+
+    /** @test */
+    public function it_can_load_a_relation_count_2()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"rlt":{"albums:count":{"flt":{"f":"name","o":"like","d":"%ed%"}}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'name' => 'Rolling Stones',
+                    'albums:count' => 1,
+                ],
+                [
+                    'name' => 'Led Zeppelin',
+                    'albums:count' => 3,
+                ],
+                [
+                    'name' => 'Beatles',
+                    'albums:count' => 0,
+                ],
+                [
+                    'name' => 'Jimi Hendrix Experience',
+                    'albums:count' => 1,
+                ],
+            ],
+        ];
+
+        \Log::info(\DB::getQueryLog());
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(5);
+    }
+
+    /** @test */
+    public function it_can_load_a_relation_count_as_an_alias()
+    {
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums:count as album_count":{}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                'name' => 'Beatles',
+                'album_no_eight' => [
+                    [
+                        'id' => 8,
+                        'band_id' => 3,
+                        'name' => 'Abbey road',
+                        'release_date' => '1969-09-26 00:00:00',
+                    ],
+                ],
+                'album_count' => 3,
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(3);
+    }
+
+    /** @test */
+    public function it_can_load_a_relation_count_as_an_alias_2()
+    {
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => '{"fld":["name"],"rlt":{"songs:count as song_count":{}}}',
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'name' => 'Rolling Stones',
+                    'song_count' => 37,
+                ],
+                [
+                    'name' => 'Led Zeppelin',
+                    'song_count' => 28,
+                ],
+                [
+                    'name' => 'Beatles',
+                    'song_count' => 42,
+                ],
+                [
+                    'name' => 'Jimi Hendrix Experience',
+                    'song_count' => 40,
+                ],
+            ],
+        ];
+
+        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
+
+        $this->assertQueryCount(5);
     }
 }
