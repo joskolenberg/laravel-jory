@@ -443,10 +443,6 @@ return Jory::on(User::class);
 ## Config
 To override Jory's default settings publish the configuration using:
 ```
-php artisan jory:publish"
-```
-Which is just a shortcut for:
-```
 php artisan vendor:publish --provider="JosKolenberg\LaravelJory\JoryServiceProvider"
 ```
 
