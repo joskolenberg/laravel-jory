@@ -2,8 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use Illuminate\Support\Facades\Artisan;
-use JosKolenberg\LaravelJory\JoryServiceProvider;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
@@ -17,11 +15,11 @@ class ConsoleTest extends TestCase
     }
 
     /** @test */
-    public function it_can_run_a_generate_for_command_1()
+    public function it_can_run_a_generate_command_for_a_model()
     {
         // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
 
-        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
+        $this->artisan('jory:generate', ['--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
             ->expectsOutput('BandJoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
@@ -35,12 +33,14 @@ class ConsoleTest extends TestCase
     }
 
     /** @test */
-    public function it_can_run_a_generate_for_command_with_name_option()
+    public function it_can_run_a_generate_for_command_for_a_model_with_name_option()
     {
         // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
 
-        $this->artisan('jory:generate-for', ['model' => 'JosKolenberg\LaravelJory\Tests\Models\Band', '--name' => 'AlternateBandJoryResource'])
-            ->expectsOutput('AlternateBandJoryResource created successfully.');
+        $this->artisan('jory:generate', [
+            '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band',
+            '--name' => 'AlternateBandJoryResource'
+        ])->expectsOutput('AlternateBandJoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
@@ -53,43 +53,19 @@ class ConsoleTest extends TestCase
     }
 
     /** @test */
-    public function it_can_run_a_make_jory_resource_command()
+    public function it_can_run_a_generate_for_command_without_a_model_to_be_prompted_for_the_model()
     {
-        $this->artisan('make:jory-resource', ['name' => 'EmptyJoryResource'])
-            ->expectsOutput('JoryResource created successfully.');
-
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
-        $expectedContents = $filesystem->read('EmptyJoryResource.php');
-
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
-        $realContents = $filesystem->read('EmptyJoryResource.php');
-
-        $this->assertEquals($expectedContents, $realContents);
+        $this->artisan('jory:generate')
+            ->expectsQuestion('For which model would you like to generate?', 'JosKolenberg\LaravelJory\Tests\Models\Song')
+            ->expectsOutput('SongJoryResource created successfully.');
     }
 
     /** @test */
-    public function it_can_run_a_make_jory_resource_command_with_related_model()
+    public function it_can_run_a_generate_command_for_all_models()
     {
-        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
-
-        $this->artisan('make:jory-resource', ['name' => 'AlternateBandJoryResource', '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
-            ->expectsOutput('AlternateBandJoryResource created successfully.');
-
-
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
-        $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
-        $expectedContentsScrutinizer = $filesystem->read('Scrutinizer/AlternateBandJoryResource.php');
-
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
-        $realContents = $filesystem->read('AlternateBandJoryResource.php');
-
-        $this->assertTrue($realContents === $expectedContentsLocal || $realContents === $expectedContentsScrutinizer);
-    }
-
-    /** @test */
-    public function it_can_run_a_generate_all_command()
-    {
-        $this->artisan('jory:generate-all')->expectsOutput('BandJoryResource created successfully.')
+        $this->artisan('jory:generate', [
+            '--all' => true
+        ])->expectsOutput('BandJoryResource created successfully.')
             ->expectsOutput('SongJoryResource created successfully.')
             ->expectsOutput('GroupieJoryResource created successfully.')
             ->expectsOutput('TagJoryResource created successfully.')
@@ -125,25 +101,57 @@ class ConsoleTest extends TestCase
         $this->assertFalse($generatedFilesystem->has('NonExistingJoryResource.php'));
     }
 
+    /** @test */
+    public function it_can_run_a_generate_command_for_all_models_using_the_selector()
+    {
+        $this->artisan('jory:generate')
+            ->expectsQuestion('For which model would you like to generate?', 'All models')
+            ->expectsOutput('BandJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.')
+            ->expectsOutput('GroupieJoryResource created successfully.')
+            ->expectsOutput('TagJoryResource created successfully.')
+            ->expectsOutput('AlbumCoverJoryResource created successfully.')
+            ->expectsOutput('UserJoryResource created successfully.')
+            ->expectsOutput('PersonJoryResource created successfully.')
+            ->expectsOutput('ErrorPersonJoryResource created successfully.')
+            ->expectsOutput('AlbumJoryResource created successfully.')
+            ->expectsOutput('SongWithAfterFetchHookJoryResource created successfully.')
+            ->expectsOutput('SongWithCustomJoryResourceJoryResource created successfully.')
+            ->expectsOutput('ImageJoryResource created successfully.');
+    }
+
+    /** @test */
+    public function it_can_use_the_force_option_to_override_existing_files()
+    {
+        $this->artisan('jory:generate', [
+            '--all' => true,
+        ])->expectsOutput('BandJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.')
+            ->expectsOutput('GroupieJoryResource created successfully.');
+
+        $adapter = new Local(__DIR__ . '/ConsoleOutput/Generated');
+        $filesystem = new Filesystem($adapter);
+        $filesystem->delete('SongJoryResource.php');
+
+        $this->artisan('jory:generate')
+            ->expectsQuestion('For which model would you like to generate?', 'All models')
+            ->expectsOutput('BandJoryResource already exists!')
+            ->expectsOutput('SongJoryResource created successfully.')
+            ->expectsOutput('GroupieJoryResource already exists!');
+
+        $this->artisan('jory:generate', [
+            '--force' => true,
+        ])->expectsQuestion('For which model would you like to generate?', 'All models')
+            ->expectsOutput('BandJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.')
+            ->expectsOutput('GroupieJoryResource created successfully.');
+    }
+
     protected function cleanup()
     {
         // Remove all previously built JoryResources
         $adapter = new Local(__DIR__ . '/ConsoleOutput');
         $filesystem = new Filesystem($adapter);
         $filesystem->deleteDir('Generated');
-    }
-
-    /** @test */
-    public function it_can_run_a_generate_jory_publish()
-    {
-        $filesystem = new Filesystem(new Local(config_path()));
-
-        if ($filesystem->has('jory.php')) {
-            $filesystem->delete('jory.php');
-        }
-
-        $this->artisan('jory:publish');
-
-        $this->assertTrue($filesystem->has('jory.php'));
     }
 }

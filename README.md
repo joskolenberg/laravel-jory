@@ -25,13 +25,13 @@ Every model you want to query using [Jory queries](https://packagist.org/package
 Take a look [here](#configuring) to see how to configure a JoryResource.
 
 ### Creating a JoryResource
-For a quick start you can call the ```jory:generate-all``` command to create a JoryResource for each of your models.
+For a quick start you can call the ```jory:generate --all``` command to create a JoryResource for each of your models.
 ```
-php artisan jory:generate-all
+php artisan jory:generate --all
 ```
-If you'd like to be more explicit you can use the ```jory:generate-for``` command which requires a model class as an attribute instead.
+If you'd like to be more explicit you can use the ```jory:generate``` command and pick a single model from a list instead.
 ```
-php artisan jory:generate-for 'App\User'
+php artisan jory:generate
 ```
 All these JoryResources will be pre-configured by using reflection on your model classes.
 
