@@ -217,6 +217,8 @@ class JoryResourceGenerateCommand extends GeneratorCommand
             $modelClasses[] = $className;
         }
 
+        asort($modelClasses);
+
         return $modelClasses;
     }
 

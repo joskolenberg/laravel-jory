@@ -65,17 +65,17 @@ class ConsoleTest extends TestCase
     {
         $this->artisan('jory:generate', [
             '--all' => true
-        ])->expectsOutput('BandJoryResource created successfully.')
-            ->expectsOutput('SongJoryResource created successfully.')
-            ->expectsOutput('GroupieJoryResource created successfully.')
-            ->expectsOutput('TagJoryResource created successfully.')
+        ])->expectsOutput('AlbumJoryResource created successfully.')
             ->expectsOutput('AlbumCoverJoryResource created successfully.')
-            ->expectsOutput('UserJoryResource created successfully.')
+            ->expectsOutput('BandJoryResource created successfully.')
+            ->expectsOutput('GroupieJoryResource created successfully.')
+            ->expectsOutput('ImageJoryResource created successfully.')
             ->expectsOutput('PersonJoryResource created successfully.')
-            ->expectsOutput('AlbumJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.')
             ->expectsOutput('SongWithAfterFetchHookJoryResource created successfully.')
             ->expectsOutput('SongWithCustomJoryResourceJoryResource created successfully.')
-            ->expectsOutput('ImageJoryResource created successfully.');
+            ->expectsOutput('TagJoryResource created successfully.')
+            ->expectsOutput('UserJoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
 
@@ -104,17 +104,17 @@ class ConsoleTest extends TestCase
     {
         $this->artisan('jory:generate')
             ->expectsQuestion('For which model would you like to generate?', 'All models')
-            ->expectsOutput('BandJoryResource created successfully.')
-            ->expectsOutput('SongJoryResource created successfully.')
-            ->expectsOutput('GroupieJoryResource created successfully.')
-            ->expectsOutput('TagJoryResource created successfully.')
-            ->expectsOutput('AlbumCoverJoryResource created successfully.')
-            ->expectsOutput('UserJoryResource created successfully.')
-            ->expectsOutput('PersonJoryResource created successfully.')
             ->expectsOutput('AlbumJoryResource created successfully.')
+            ->expectsOutput('AlbumCoverJoryResource created successfully.')
+            ->expectsOutput('BandJoryResource created successfully.')
+            ->expectsOutput('GroupieJoryResource created successfully.')
+            ->expectsOutput('ImageJoryResource created successfully.')
+            ->expectsOutput('PersonJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.')
             ->expectsOutput('SongWithAfterFetchHookJoryResource created successfully.')
             ->expectsOutput('SongWithCustomJoryResourceJoryResource created successfully.')
-            ->expectsOutput('ImageJoryResource created successfully.');
+            ->expectsOutput('TagJoryResource created successfully.')
+            ->expectsOutput('UserJoryResource created successfully.');
     }
 
     /** @test */
@@ -123,8 +123,8 @@ class ConsoleTest extends TestCase
         $this->artisan('jory:generate', [
             '--all' => true,
         ])->expectsOutput('BandJoryResource created successfully.')
-            ->expectsOutput('SongJoryResource created successfully.')
-            ->expectsOutput('GroupieJoryResource created successfully.');
+            ->expectsOutput('GroupieJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.');
 
         $adapter = new Local(__DIR__ . '/ConsoleOutput/Generated');
         $filesystem = new Filesystem($adapter);
@@ -133,15 +133,15 @@ class ConsoleTest extends TestCase
         $this->artisan('jory:generate')
             ->expectsQuestion('For which model would you like to generate?', 'All models')
             ->expectsOutput('BandJoryResource already exists!')
-            ->expectsOutput('SongJoryResource created successfully.')
-            ->expectsOutput('GroupieJoryResource already exists!');
+            ->expectsOutput('GroupieJoryResource already exists!')
+            ->expectsOutput('SongJoryResource created successfully.');
 
         $this->artisan('jory:generate', [
             '--force' => true,
         ])->expectsQuestion('For which model would you like to generate?', 'All models')
             ->expectsOutput('BandJoryResource created successfully.')
-            ->expectsOutput('SongJoryResource created successfully.')
-            ->expectsOutput('GroupieJoryResource created successfully.');
+            ->expectsOutput('GroupieJoryResource created successfully.')
+            ->expectsOutput('SongJoryResource created successfully.');
     }
 
     protected function cleanup()
