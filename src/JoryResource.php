@@ -16,6 +16,7 @@ use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Helpers\FilterHelper;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
+use JosKolenberg\LaravelJory\Scopes\FilterScope;
 
 abstract class JoryResource
 {
@@ -97,11 +98,12 @@ abstract class JoryResource
      * Add a filter option which can be applied by the API users.
      *
      * @param $field
+     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope|null $scope
      * @return Filter
      */
-    public function filter($field): Filter
+    public function filter($field, FilterScope $scope = null): Filter
     {
-        return $this->config->filter($field);
+        return $this->config->filter($field, $scope);
     }
 
     /**

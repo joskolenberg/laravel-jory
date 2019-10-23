@@ -2,8 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Scopes\FilterScope;
 
 /**
  * Class Filter.
@@ -33,13 +33,20 @@ class Filter
     protected $case = null;
 
     /**
+     * @var \JosKolenberg\LaravelJory\Scopes\FilterScope
+     */
+    protected $scope = null;
+
+    /**
      * Field constructor.
      *
      * @param string $field
+     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope|null $scope
      */
-    public function __construct(string $field)
+    public function __construct(string $field, FilterScope $scope = null)
     {
         $this->field = $field;
+        $this->scope = $scope;
         $this->operators = config('jory.filters.operators');
 
         $this->case = app(CaseManager::class);
@@ -72,6 +79,19 @@ class Filter
     }
 
     /**
+     * Set the filter's scope class.
+     *
+     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope $scope
+     * @return $this
+     */
+    public function scope(FilterScope $scope = null): Filter
+    {
+        $this->scope = $scope;
+
+        return $this;
+    }
+
+    /**
      * Get the filter's field.
      *
      * @return string
@@ -79,6 +99,16 @@ class Filter
     public function getField(): string
     {
         return $this->case->toCurrent($this->field);
+    }
+
+    /**
+     * Get the filter's optional scope class.
+     *
+     * @return \JosKolenberg\LaravelJory\Scopes\FilterScope|null
+     */
+    public function getScope():? FilterScope
+    {
+        return $this->scope;
     }
 
     /**

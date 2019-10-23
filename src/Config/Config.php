@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Config;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
-use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Scopes\FilterScope;
 
 /**
  * Class Config.
@@ -99,11 +99,12 @@ class Config
      * Add a filter to the config.
      *
      * @param $field
+     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope|null $scope
      * @return Filter
      */
-    public function filter($field): Filter
+    public function filter($field, FilterScope $scope = null): Filter
     {
-        $filter = new Filter($field);
+        $filter = new Filter($field, $scope);
 
         $this->filters[] = $filter;
 
@@ -208,6 +209,21 @@ class Config
         }
 
         return $filters;
+    }
+
+    /**
+     * Get a filter by it's fields name.
+     *
+     * @param $field
+     * @return \JosKolenberg\LaravelJory\Config\Filter|null
+     */
+    public function getFilter($field): ?Filter
+    {
+        foreach ($this->getFilters() as $filter) {
+            if (Str::camel($filter->getField()) === Str::camel($field)) {
+                return $filter;
+            }
+        }
     }
 
     /**
@@ -421,7 +437,8 @@ class Config
         $defaultSorts = [];
         foreach ($this->getSorts() as $sort) {
             if ($sort->getDefaultIndex() !== null) {
-                $defaultSorts[$sort->getDefaultIndex()] = new \JosKolenberg\Jory\Support\Sort($sort->getField(), $sort->getDefaultOrder());
+                $defaultSorts[$sort->getDefaultIndex()] = new \JosKolenberg\Jory\Support\Sort($sort->getField(),
+                    $sort->getDefaultOrder());
             }
         }
         ksort($defaultSorts);

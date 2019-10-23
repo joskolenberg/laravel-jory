@@ -72,6 +72,13 @@ trait HandlesJoryFilters
      */
     protected function applyFieldFilter($query, Filter $filter, JoryResource $joryResource): void
     {
+        // First check if there is a custom scope attached to the filter
+        $scope = $joryResource->getConfig()->getFilter($filter->getField())->getScope();
+        if($scope){
+            $scope->apply($query, $filter->getOperator(), $filter->getData());
+            return;
+        }
+
         $customMethodName = $this->getCustomFilterMethodName($filter);
         // Check if the JoryResource has a custom scope method for this filter
         if (method_exists($joryResource, $customMethodName)) {

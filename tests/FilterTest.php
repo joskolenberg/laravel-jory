@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithScopes;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
@@ -109,7 +110,7 @@ class FilterTest extends TestCase
                     ],
                 ],
             ],
-            'fld' => ['title']
+            'fld' => ['title'],
         ])->toArray();
 
         $this->assertEquals([
@@ -210,7 +211,7 @@ class FilterTest extends TestCase
                     ],
                 ],
             ],
-            'fld' => ['title']
+            'fld' => ['title'],
         ])->toArray();
 
         $this->assertEquals([
@@ -299,8 +300,7 @@ class FilterTest extends TestCase
      */
     public function it_doesnt_apply_any_filter_when_parameter_is_omitted()
     {
-        $actual = Jory::onModelClass(Band::class)
-            ->applyArray(['fld' =>['name']])->toArray();
+        $actual = Jory::onModelClass(Band::class)->applyArray(['fld' => ['name']])->toArray();
 
         $this->assertEquals([
             ['name' => 'Rolling Stones'],
@@ -602,12 +602,12 @@ class FilterTest extends TestCase
                             'f' => 'instruments.name',
                             'o' => 'like',
                             'd' => '%guitar%',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'fld' => [
-                    'full_name'
-                ]
+                    'full_name',
+                ],
             ],
         ]);
 
@@ -641,12 +641,12 @@ class FilterTest extends TestCase
                             'f' => 'album_cover.album_id',
                             'o' => '=',
                             'd' => 1,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'fld' => [
-                    'name'
-                ]
+                    'name',
+                ],
             ],
         ]);
 
@@ -680,14 +680,14 @@ class FilterTest extends TestCase
                             'f' => 'albumCover.albumId',
                             'o' => '=',
                             'd' => 1,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'fld' => [
-                    'name'
-                ]
+                    'name',
+                ],
             ],
-            'case' => 'camel'
+            'case' => 'camel',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -702,5 +702,103 @@ class FilterTest extends TestCase
         ]);
 
         $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_apply_using_a_filter_scope_class()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => [
+                'flt' => [
+                    'f' => 'hasSmallId',
+                    'o' => '=',
+                    'd' => 6,
+                ],
+                'fld' => [
+                    'name',
+                ],
+            ],
+            'case' => 'camel'
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'name' => 'Let it bleed',
+                ],
+                [
+                    'name' => 'Sticky Fingers',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_apply_via_the_field_using_a_filter_scope_class()
+    {
+        Jory::register(PersonJoryResourceWithScopes::class);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'flt' => [
+                    'f' => 'firstName',
+                ],
+                'fld' => [
+                    'lastName',
+                ],
+            ],
+            'case' => 'camel'
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'lastName' => 'Bonham',
+                ],
+                [
+                    'lastName' => 'Lennon',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_apply_via_the_field_using_a_filter_scope_class_when_requesting_a_relation()
+    {
+        Jory::register(PersonJoryResourceWithScopes::class);
+
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => [
+                'fld' => [
+                    'name',
+                ],
+                'rlt' => [
+                    'people' => [
+                        'fld' => ['lastName'],
+                        'flt' => [
+                            'f' => 'firstName',
+                        ],
+                    ]
+                ]
+            ],
+            'case' => 'camel'
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'name' => 'Beatles',
+                'people' => [
+                    [
+                        'lastName' => 'Lennon',
+                    ],
+                ]
+            ],
+        ]);
+
+        $this->assertQueryCount(2);
     }
 }

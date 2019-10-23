@@ -606,6 +606,25 @@ class WithConfigTest extends TestCase
                         'not_in',
                     ],
                 ],
+                'has_small_id' => [
+                    'description' => 'Filter on the has_small_id field.',
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'not_like',
+                        'is_null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
             ],
             'sorts' => [
                 'id' => [

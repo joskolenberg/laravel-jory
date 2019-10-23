@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Scopes\HasSmallIdFilter;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
@@ -49,6 +50,7 @@ class AlbumJoryResource extends JoryResource
         $this->filter('number_of_songs');
         $this->filter('has_song_with_title');
         $this->filter('album_cover.album_id');
+        $this->filter('has_small_id', new HasSmallIdFilter);
 
         $this->sort('number_of_songs');
         $this->sort('band_name');
