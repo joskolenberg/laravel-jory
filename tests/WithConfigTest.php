@@ -651,6 +651,10 @@ class WithConfigTest extends TestCase
                     'description' => 'Sort by the band_name field.',
                     'default' => false,
                 ],
+                'alphabetic_name' => [
+                    'description' => 'Sort by the alphabetic_name field.',
+                    'default' => false,
+                ],
             ],
             'limit' => [
                 'default' => null,

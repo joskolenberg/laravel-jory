@@ -2,8 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Scopes\SortScope;
 
 /**
  * Class Sort.
@@ -38,13 +38,20 @@ class Sort
     protected $case = null;
 
     /**
+     * @var SortScope
+     */
+    protected $scope = null;
+
+    /**
      * Sort constructor.
      *
      * @param string $field
+     * @param SortScope $scope
      */
-    public function __construct(string $field)
+    public function __construct(string $field, SortScope $scope = null)
     {
         $this->field = $field;
+        $this->scope = $scope;
 
         $this->case = app(CaseManager::class);
     }
@@ -58,6 +65,19 @@ class Sort
     public function description(string $description): Sort
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Set the sort's scope class.
+     *
+     * @param SortScope $scope
+     * @return $this
+     */
+    public function scope(SortScope $scope = null): Sort
+    {
+        $this->scope = $scope;
 
         return $this;
     }
@@ -84,6 +104,16 @@ class Sort
         }
 
         return $this->description;
+    }
+
+    /**
+     * Get the sort's optional scope class.
+     *
+     * @return SortScope|null
+     */
+    public function getScope():? SortScope
+    {
+        return $this->scope;
     }
 
     /**

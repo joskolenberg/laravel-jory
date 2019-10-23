@@ -17,6 +17,7 @@ use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Helpers\FilterHelper;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
+use JosKolenberg\LaravelJory\Scopes\SortScope;
 
 abstract class JoryResource
 {
@@ -110,11 +111,12 @@ abstract class JoryResource
      * Add a sort option which can be applied by the API users.
      *
      * @param $field
+     * @param SortScope|null $scope
      * @return Sort
      */
-    public function sort($field): Sort
+    public function sort($field, SortScope $scope = null): Sort
     {
-        return $this->config->sort($field);
+        return $this->config->sort($field, $scope);
     }
 
     /**

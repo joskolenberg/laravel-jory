@@ -120,8 +120,6 @@ class ExplicitSelectTest extends TestCase
         Jory::register(InstrumentJoryResourceWithExplicitSelect::class);
         $actual = $this->json('GET', 'jory/person/10', ['jory' => $jory])->getContent();
 
-        \Log::info(\DB::getQueryLog());
-
         $this->assertEquals('{"data":{"first_name":"Paul","instruments":[[],[],[],[],[]]}}', $actual);
     }
 

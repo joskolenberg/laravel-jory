@@ -2,10 +2,10 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use Illuminate\Support\Str;
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
+use JosKolenberg\LaravelJory\Scopes\SortScope;
 
 /**
  * Class Config.
@@ -117,9 +117,9 @@ class Config
      * @param $field
      * @return Sort
      */
-    public function sort($field): Sort
+    public function sort($field, SortScope $scope = null): Sort
     {
-        $sort = new Sort($field);
+        $sort = new Sort($field, $scope);
 
         $this->sorts[] = $sort;
 
@@ -245,6 +245,21 @@ class Config
         }
 
         return $sorts;
+    }
+
+    /**
+     * Get a config sort by a jory sort.
+     *
+     * @param \JosKolenberg\Jory\Support\Sort $jorySort
+     * @return Sort|null
+     */
+    public function getSort(\JosKolenberg\Jory\Support\Sort $jorySort): ?Sort
+    {
+        foreach ($this->getSorts() as $sort) {
+            if ($sort->getField() === $jorySort->getField()) {
+                return $sort;
+            }
+        }
     }
 
     /**

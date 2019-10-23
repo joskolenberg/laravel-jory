@@ -2,6 +2,9 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithScopes;
+
 class SortTest extends TestCase
 {
     /** @test */
@@ -803,5 +806,115 @@ class SortTest extends TestCase
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
 
         $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_apply_sorting_by_using_a_sort_scope_class()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => [
+                'srt' => ['-alphabeticName'],
+                'fld' => [
+                    'name',
+                ],
+                'lmt' => 4,
+            ],
+            'case' => 'camel'
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'name' => 'Sticky Fingers'
+                ],
+                [
+                    'name' => 'Sgt. Peppers lonely hearts club band'
+                ],
+                [
+                    'name' => 'Let it bleed'
+                ],
+                [
+                    'name' => 'Let it be'
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_apply_a_sort_via_the_field_using_a_sort_scope_class()
+    {
+        Jory::register(PersonJoryResourceWithScopes::class);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'srt' => ['dateOfBirth'],
+                'fld' => [
+                    'lastName',
+                ],
+                'lmt' => 3,
+            ],
+            'case' => 'camel'
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'lastName' => 'Watts',
+                ],
+                [
+                    'lastName' => 'Harrison',
+                ],
+                [
+                    'lastName' => 'Hendrix',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_apply_via_the_field_using_a_filter_scope_class_when_requesting_a_relation()
+    {
+        Jory::register(PersonJoryResourceWithScopes::class);
+
+        $response = $this->json('GET', 'jory/band/3', [
+            'jory' => [
+                'fld' => [
+                    'name',
+                ],
+                'rlt' => [
+                    'people' => [
+                        'fld' => ['lastName'],
+                        'srt' => ['-dateOfBirth'],
+                    ]
+                ]
+            ],
+            'case' => 'camel'
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'name' => 'Beatles',
+                'people' => [
+                    [
+                        'lastName' => 'Starr',
+                    ],
+                    [
+                        'lastName' => 'McCartney',
+                    ],
+                    [
+                        'lastName' => 'Lennon',
+                    ],
+                    [
+                        'lastName' => 'Harrison',
+                    ],
+                ]
+            ],
+        ]);
+
+        $this->assertQueryCount(2);
     }
 }

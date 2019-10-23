@@ -1377,8 +1377,6 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
             ],
         ];
 
-        \Log::info(\DB::getQueryLog());
-
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
 
         $this->assertQueryCount(5);

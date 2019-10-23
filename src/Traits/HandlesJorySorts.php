@@ -31,6 +31,13 @@ trait HandlesJorySorts
      */
     protected function applySort($query, Sort $sort, JoryResource $joryResource): void
     {
+        // First check if there is a custom scope attached to the sort configuration
+        $scope = $joryResource->getConfig()->getSort($sort)->getScope();
+        if($scope){
+            $scope->apply($query, $sort->getOrder());
+            return;
+        }
+
         $customMethodName = $this->getCustomSortMethodName($sort);
         if (method_exists($joryResource, $customMethodName)) {
             $joryResource->$customMethodName($query, $sort->getOrder());

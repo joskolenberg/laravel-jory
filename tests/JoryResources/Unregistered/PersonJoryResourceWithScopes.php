@@ -2,7 +2,9 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
+use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Scopes\FirstNameSort;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Scopes\SpecialFirstNameFilter;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
@@ -18,7 +20,9 @@ class PersonJoryResourceWithScopes extends JoryResource
             $filter->scope(new SpecialFirstNameFilter());
         })->sortable();
         $this->field('last_name')->filterable()->sortable();
-        $this->field('date_of_birth')->filterable()->sortable();
+        $this->field('date_of_birth')->filterable()->sortable(function(Sort $sort){
+            $sort->scope(new FirstNameSort);
+        });
         $this->field('full_name')->filterable();
 
         // Custom attributes

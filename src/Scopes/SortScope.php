@@ -5,15 +5,14 @@ namespace JosKolenberg\LaravelJory\Scopes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-interface FilterScope
+interface SortScope
 {
     /**
      * Apply the scope to a given Eloquent query builder.
      *
      * @param Builder|Relation $builder
-     * @param string $operator
-     * @param mixed $data
+     * @param string $order
      * @return void
      */
-    public function apply($builder, string $operator = null, $data = null);
+    public function apply($builder, string $order = 'asc');
 }
