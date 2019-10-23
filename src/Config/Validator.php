@@ -103,22 +103,21 @@ class Validator
             return;
         }
 
-        $this->doValidateFilter($this->config->getFilters(), $this->jory->getFilter(), $this->address . 'filter');
+        $this->doValidateFilter($this->jory->getFilter(), $this->address . 'filter');
     }
 
     /**
      * Validate Jory Filter object by the settings in the Config.
      *
-     * @param array $configFilters
      * @param FilterInterface $joryFilter
      * @param string $address
      */
-    protected function doValidateFilter(array $configFilters, FilterInterface $joryFilter, string $address): void
+    protected function doValidateFilter(FilterInterface $joryFilter, string $address): void
     {
         // If it is a grouped OR filter, check subfilters recursive
         if ($joryFilter instanceof GroupOrFilter) {
             foreach ($joryFilter as $key => $subFilter) {
-                $this->doValidateFilter($configFilters, $subFilter, $address . '(or).' . $key);
+                $this->doValidateFilter($subFilter, $address . '(or).' . $key);
             }
 
             return;
@@ -126,26 +125,24 @@ class Validator
         // If it is a grouped AND filter, check subfilters recursive
         if ($joryFilter instanceof GroupAndFilter) {
             foreach ($joryFilter as $key => $subFilter) {
-                $this->doValidateFilter($configFilters, $subFilter, $address . '(and).' . $key);
+                $this->doValidateFilter($subFilter, $address . '(and).' . $key);
             }
 
             return;
         }
 
         // It is a filter on a field, do validation on field an operator
-        foreach ($configFilters as $configFilter) {
-            if ($configFilter->getField() === $joryFilter->getField()) {
-                if ($joryFilter->getOperator() !== null && !in_array($joryFilter->getOperator(), $configFilter->getOperators())) {
-                    $this->errors[] = 'Operator "' . $joryFilter->getOperator() . '" is not available for field "' . $joryFilter->getField() . '". (Location: ' . $address . '(' . $joryFilter->getField() . '))';
-                }
-
-                return;
+        $configFilter = $this->config->getFilter($joryFilter);
+        if($configFilter){
+            if ($joryFilter->getOperator() !== null && !in_array($joryFilter->getOperator(), $configFilter->getOperators())) {
+                $this->errors[] = 'Operator "' . $joryFilter->getOperator() . '" is not available for field "' . $joryFilter->getField() . '". (Location: ' . $address . '(' . $joryFilter->getField() . '))';
             }
+            return;
         }
 
         // When we get here the field was not found in the config
         $availableFields = [];
-        foreach ($configFilters as $bpf) {
+        foreach ($this->config->getFilters() as $bpf) {
             $availableFields[] = $bpf->getField();
         }
         $this->errors[] = 'Field "' . $joryFilter->getField() . '" is not available for filtering, ' . $this->getSuggestion($availableFields, $joryFilter->getField()) . ' (Location: ' . $address . '(' . $joryFilter->getField() . '))';

@@ -212,18 +212,20 @@ class Config
     }
 
     /**
-     * Get a filter by it's fields name.
+     * Get a config filter by a jory filter.
      *
-     * @param $field
+     * @param \JosKolenberg\Jory\Support\Filter $joryFilter
      * @return \JosKolenberg\LaravelJory\Config\Filter|null
      */
-    public function getFilter($field): ?Filter
+    public function getFilter(\JosKolenberg\Jory\Support\Filter $joryFilter): ?Filter
     {
         foreach ($this->getFilters() as $filter) {
-            if (Str::camel($filter->getField()) === Str::camel($field)) {
+            if ($filter->getField() === $joryFilter->getField()) {
                 return $filter;
             }
         }
+
+        return null;
     }
 
     /**
