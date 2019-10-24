@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
@@ -359,7 +358,6 @@ class Config
      *
      * @param Jory $jory
      * @return Jory
-     * @throws JoryException
      */
     public function applyToJory(Jory $jory): Jory
     {

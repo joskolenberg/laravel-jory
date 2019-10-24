@@ -4,7 +4,6 @@
 namespace JosKolenberg\LaravelJory\Traits;
 
 
-use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\Config\Config;
 
@@ -17,7 +16,6 @@ trait AppliesConfigToJory
      * @param Jory $jory
      * @param Config $config
      * @return Jory
-     * @throws JoryException
      */
     protected function applyConfigToJory(Jory $jory, Config $config): Jory
     {
@@ -56,7 +54,6 @@ trait AppliesConfigToJory
      *
      * @param Jory $jory
      * @param array $sorts
-     * @throws JoryException
      */
     protected function applySortsToJory(Jory $jory, array $sorts): void
     {

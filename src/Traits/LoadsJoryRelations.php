@@ -4,10 +4,8 @@ namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Relation;
-use JosKolenberg\LaravelJory\Config\Field;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
@@ -19,7 +17,6 @@ trait LoadsJoryRelations
      *
      * @param Collection $models
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelations(Collection $models, JoryResource $joryResource): void
     {
@@ -46,7 +43,6 @@ trait LoadsJoryRelations
      * @param Collection $collection
      * @param Relation $relation
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function loadRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
     {
@@ -175,7 +171,6 @@ trait LoadsJoryRelations
      * @param \JosKolenberg\Jory\Support\Relation $relation
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      * @return \JosKolenberg\LaravelJory\JoryResource
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function getJoryResourceForRelation(Relation $relation, JoryResource $joryResource)
     {

@@ -9,14 +9,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
-use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Parsers\JsonParser;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
-use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
-use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
@@ -86,7 +82,6 @@ class JoryResponse implements Responsable
      *
      * @param string $uri
      * @return $this
-     * @throws ResourceNotFoundException
      */
     public function byUri(string $uri): JoryResponse
     {
@@ -100,7 +95,6 @@ class JoryResponse implements Responsable
      *
      * @param string $modelClass
      * @return $this
-     * @throws RegistrationNotFoundException
      */
     public function onModelClass(string $modelClass): JoryResponse
     {
@@ -115,7 +109,6 @@ class JoryResponse implements Responsable
      *
      * @param Model $model
      * @return JoryResponse
-     * @throws RegistrationNotFoundException
      */
     public function onModel(Model $model): JoryResponse
     {
@@ -137,7 +130,6 @@ class JoryResponse implements Responsable
      *
      * @param Builder $query
      * @return JoryResponse
-     * @throws RegistrationNotFoundException
      */
     public function onQuery(Builder $query): JoryResponse
     {
@@ -152,7 +144,6 @@ class JoryResponse implements Responsable
      *
      * @param mixed $jory
      * @return JoryResponse
-     * @throws LaravelJoryException
      */
     public function apply($jory): JoryResponse
     {
@@ -236,8 +227,6 @@ class JoryResponse implements Responsable
      *
      * @param Request $request
      * @return void
-     * @throws LaravelJoryException
-     * @throws JoryException
      */
     public function toResponse($request)
     {
@@ -254,8 +243,6 @@ class JoryResponse implements Responsable
      * (could also be an int instead of an array when using count())
      *
      * @return mixed
-     * @throws LaravelJoryException
-     * @throws JoryException
      */
     public function toArray()
     {
@@ -301,8 +288,6 @@ class JoryResponse implements Responsable
      * on the current settings in the response.
      *
      * @return JoryBuilder
-     * @throws LaravelJoryException
-     * @throws JoryException
      */
     protected function getJoryBuilder(): JoryBuilder
     {
@@ -345,7 +330,6 @@ class JoryResponse implements Responsable
      * Get the Jory query object to be applied.
      *
      * @return Jory
-     * @throws JoryException
      */
     protected function getJory(): Jory
     {

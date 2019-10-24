@@ -2,11 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Parsers;
 
-use JosKolenberg\Jory\Jory;
 use Illuminate\Http\Request;
-use JosKolenberg\Jory\Parsers\JsonParser;
-use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
+use JosKolenberg\Jory\Jory;
+use JosKolenberg\Jory\Parsers\ArrayParser;
+use JosKolenberg\Jory\Parsers\JsonParser;
 
 /**
  * Class to parse an Laravel request to a Jory query Object.
@@ -35,7 +35,6 @@ class RequestParser implements JoryParserInterface
      * Get the jory query object based on the given Request.
      *
      * @return Jory
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getJory(): Jory
     {

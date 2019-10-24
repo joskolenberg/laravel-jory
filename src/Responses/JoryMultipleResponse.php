@@ -7,7 +7,6 @@ namespace JosKolenberg\LaravelJory\Responses;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
@@ -57,8 +56,6 @@ class JoryMultipleResponse implements Responsable
      *
      * @param $jory
      * @return $this
-     * @throws LaravelJoryCallException
-     * @throws LaravelJoryException
      */
     public function apply($jory): JoryMultipleResponse
     {
@@ -78,7 +75,6 @@ class JoryMultipleResponse implements Responsable
      *
      * @param string $jory
      * @return $this
-     * @throws LaravelJoryCallException
      */
     public function applyJson(string $jory): JoryMultipleResponse
     {
@@ -114,9 +110,6 @@ class JoryMultipleResponse implements Responsable
      *
      * @param Request $request
      * @return Response
-     * @throws JoryException
-     * @throws LaravelJoryCallException
-     * @throws LaravelJoryException
      */
     public function toResponse($request)
     {
@@ -131,9 +124,6 @@ class JoryMultipleResponse implements Responsable
      * Collect all the data for the requested resources.
      *
      * @return array
-     * @throws JoryException
-     * @throws LaravelJoryCallException
-     * @throws LaravelJoryException
      */
     public function toArray(): array
     {
@@ -170,9 +160,6 @@ class JoryMultipleResponse implements Responsable
 
     /**
      * Process the raw request data into the jories array.
-     *
-     * @throws LaravelJoryCallException
-     * @throws LaravelJoryException
      */
     protected function dataIntoJories(): void
     {
@@ -212,7 +199,6 @@ class JoryMultipleResponse implements Responsable
      *
      * @param string $name
      * @param array $data
-     * @throws ResourceNotFoundException
      */
     protected function addJory(string $name, array $data): void
     {
@@ -235,9 +221,6 @@ class JoryMultipleResponse implements Responsable
      *
      * @param $single
      * @return mixed
-     * @throws LaravelJoryCallException
-     * @throws JoryException
-     * @throws LaravelJoryException
      */
     protected function processSingle($single)
     {

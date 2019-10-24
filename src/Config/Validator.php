@@ -53,8 +53,6 @@ class Validator
 
     /**
      * Validate and update the Jory query object by the settings in the Config.
-     *
-     * @throws LaravelJoryCallException
      */
     public function validate(): void
     {

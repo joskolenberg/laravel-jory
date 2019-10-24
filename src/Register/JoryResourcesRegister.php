@@ -3,7 +3,6 @@
 namespace JosKolenberg\LaravelJory\Register;
 
 use Illuminate\Support\Collection;
-use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\JoryResource;
@@ -38,7 +37,6 @@ class JoryResourcesRegister
      *
      * @param JoryResource $joryResource
      * @return JoryResourcesRegister
-     * @throws LaravelJoryException
      */
     public function add(JoryResource $joryResource): JoryResourcesRegister
     {
@@ -80,7 +78,6 @@ class JoryResourcesRegister
      *
      * @param string $modelClass
      * @return JoryResource
-     * @throws RegistrationNotFoundException
      */
     public function getByModelClass(string $modelClass): JoryResource
     {
@@ -96,7 +93,6 @@ class JoryResourcesRegister
     /**
      * @param string $uri
      * @return JoryResource
-     * @throws ResourceNotFoundException
      */
     public function getByUri(string $uri): JoryResource
     {

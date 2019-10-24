@@ -5,7 +5,6 @@ namespace JosKolenberg\LaravelJory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\LaravelJory\Config\Config;
 use JosKolenberg\LaravelJory\Config\Field;
@@ -265,7 +264,6 @@ abstract class JoryResource
      * Apply a Jory query on the Resource.
      *
      * @param Jory $jory
-     * @throws JoryException
      */
     public function setJory(Jory $jory): void
     {
@@ -284,8 +282,6 @@ abstract class JoryResource
 
     /**
      * Validate the Jory query against the configuration.
-     *
-     * @throws Exceptions\LaravelJoryCallException
      */
     public function validate(): void
     {
@@ -341,7 +337,6 @@ abstract class JoryResource
      * JoryResource for each record we want to convert to an array.
      *
      * @return array
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function getRelatedJoryResources(): array
     {
@@ -366,7 +361,6 @@ abstract class JoryResource
      *
      * @param Model $model
      * @return array
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     public function modelToArray(Model $model): array
     {
@@ -423,7 +417,6 @@ abstract class JoryResource
      * @param mixed $relatedData
      * @param \JosKolenberg\LaravelJory\JoryResource $relatedJoryResource
      * @return array|null
-     * @throws \JosKolenberg\Jory\Exceptions\JoryException
      */
     protected function turnRelationResultIntoArray($relatedData, JoryResource $relatedJoryResource):? array
     {

@@ -3,7 +3,6 @@
 
 namespace JosKolenberg\LaravelJory;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
@@ -50,8 +49,6 @@ class JoryManager
      *
      * @param string $uri
      * @return JoryResponse
-     * @throws Exceptions\ResourceNotFoundException
-     * @throws BindingResolutionException
      */
     public function byUri(string $uri): JoryResponse
     {
@@ -65,9 +62,6 @@ class JoryManager
      *
      * @param mixed $resource
      * @return JoryResponse
-     * @throws Exceptions\RegistrationNotFoundException
-     * @throws LaravelJoryException
-     * @throws BindingResolutionException
      */
     public function on($resource): JoryResponse
     {
@@ -92,8 +86,6 @@ class JoryManager
      *
      * @param string $modelClass
      * @return JoryResponse
-     * @throws Exceptions\RegistrationNotFoundException
-     * @throws BindingResolutionException
      */
     public function onModelClass(string $modelClass): JoryResponse
     {
@@ -105,8 +97,6 @@ class JoryManager
      *
      * @param Model $model
      * @return JoryResponse
-     * @throws Exceptions\RegistrationNotFoundException
-     * @throws BindingResolutionException
      */
     public function onModel(Model $model): JoryResponse
     {
@@ -118,8 +108,6 @@ class JoryManager
      *
      * @param Builder $query
      * @return JoryResponse
-     * @throws Exceptions\RegistrationNotFoundException
-     * @throws BindingResolutionException
      */
     public function onQuery(Builder $query): JoryResponse
     {
@@ -130,7 +118,6 @@ class JoryManager
      * Get a fresh JoryResponse.
      *
      * @return JoryResponse
-     * @throws BindingResolutionException
      */
     protected function getJoryResponse(): JoryResponse
     {
