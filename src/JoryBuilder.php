@@ -98,11 +98,11 @@ class JoryBuilder
      */
     public function getCount(): int
     {
-        $query = $this->builder;
+        $builder = $this->builder;
 
-        $this->applyOnCountQuery($query);
+        $this->applyOnCountQuery($builder);
 
-        return $query->count();
+        return $builder->count();
     }
 
     /**
@@ -112,80 +112,80 @@ class JoryBuilder
      */
     protected function buildQuery(): Builder
     {
-        $query = $this->builder;
+        $builder = $this->builder;
 
-        $this->applyOnQuery($query);
+        $this->applyOnQuery($builder);
 
-        return $query;
+        return $builder;
     }
 
     /**
      * Apply the jory data on an existing query.
      *
-     * @param $query
+     * @param $builder
      * @return mixed
      */
-    public function applyOnQuery($query)
+    public function applyOnQuery($builder)
     {
         $jory = $this->joryResource->getJory();
 
-        $this->applySelects($query, $this->joryResource);
+        $this->applySelects($builder, $this->joryResource);
 
         // Apply filters if there are any
         if ($jory->getFilter()) {
-            $this->applyFilter($query, $this->joryResource);
+            $this->applyFilter($builder, $this->joryResource);
         }
 
-        $this->authorizeQuery($query);
+        $this->authorizeQuery($builder);
 
-        $this->applySorts($query, $this->joryResource);
-        $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
+        $this->applySorts($builder, $this->joryResource);
+        $this->applyOffsetAndLimit($builder, $jory->getOffset(), $jory->getLimit());
 
-        return $query;
+        return $builder;
     }
 
     /**
      * Apply the jory data on an existing query.
      *
-     * @param $query
+     * @param $builder
      * @return mixed
      */
-    public function applyOnCountQuery($query)
+    public function applyOnCountQuery($builder)
     {
         // Apply filters if there are any
         if ($this->joryResource->getJory()->getFilter()) {
-            $this->applyFilter($query, $this->joryResource);
+            $this->applyFilter($builder, $this->joryResource);
         }
 
-        $this->authorizeQuery($query);
+        $this->authorizeQuery($builder);
 
-        return $query;
+        return $builder;
     }
 
     /**
      * Apply an offset and limit on the query.
      *
-     * @param $query
+     * @param $builder
      * @param int|null $offset
      * @param int|null $limit
      */
-    protected function applyOffsetAndLimit($query, int $offset = null, int $limit = null): void
+    protected function applyOffsetAndLimit($builder, int $offset = null, int $limit = null): void
     {
         if ($offset !== null) {
             // Check on null, so even 0 will be applied.
             // this can be overruled by the request this way.
-            $query->offset($offset);
+            $builder->offset($offset);
         }
         if ($limit !== null) {
-            $query->limit($limit);
+            $builder->limit($limit);
         }
     }
 
     /**
-     * @param $query
+     * @param $builder
      */
-    protected function authorizeQuery($query)
+    protected function authorizeQuery($builder)
     {
-        $this->joryResource->authorize($query, Auth::user());
+        $this->joryResource->authorize($builder, Auth::user());
     }
 }

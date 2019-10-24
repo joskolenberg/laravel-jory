@@ -18,12 +18,12 @@ trait HandlesJoryFilters
      * This methods starts at the top layer of the filter and uses
      * doApplyFilter to go through any sublayers recursively.
      *
-     * @param mixed $query
+     * @param mixed $builder
      * @param JoryResource $joryResource
      */
-    protected function applyFilter($query, JoryResource $joryResource): void
+    protected function applyFilter($builder, JoryResource $joryResource): void
     {
-        $this->doApplyFilter($query, $joryResource->getJory()->getFilter(), $joryResource);
+        $this->doApplyFilter($builder, $joryResource->getJory()->getFilter(), $joryResource);
     }
 
     /**
@@ -34,27 +34,27 @@ trait HandlesJoryFilters
      * will be using the same joryResource for the subfilters as well
      * so we do have to supply them as two different parameters.
      *
-     * @param mixed $query
+     * @param mixed $builder
      * @param FilterInterface $filter
      * @param JoryResource $joryResource
      */
-    protected function doApplyFilter($query, FilterInterface $filter, JoryResource $joryResource): void
+    protected function doApplyFilter($builder, FilterInterface $filter, JoryResource $joryResource): void
     {
         if ($filter instanceof Filter) {
-            $this->applyFieldFilter($query, $filter, $joryResource);
+            $this->applyFieldFilter($builder, $filter, $joryResource);
         }
         if ($filter instanceof GroupAndFilter) {
-            $query->where(function ($query) use ($joryResource, $filter) {
+            $builder->where(function ($builder) use ($joryResource, $filter) {
                 foreach ($filter as $subFilter) {
-                    $this->doApplyFilter($query, $subFilter, $joryResource);
+                    $this->doApplyFilter($builder, $subFilter, $joryResource);
                 }
             });
         }
         if ($filter instanceof GroupOrFilter) {
-            $query->where(function ($query) use ($joryResource, $filter) {
+            $builder->where(function ($builder) use ($joryResource, $filter) {
                 foreach ($filter as $subFilter) {
-                    $query->orWhere(function ($query) use ($joryResource, $subFilter) {
-                        $this->doApplyFilter($query, $subFilter, $joryResource);
+                    $builder->orWhere(function ($builder) use ($joryResource, $subFilter) {
+                        $this->doApplyFilter($builder, $subFilter, $joryResource);
                     });
                 }
             });
@@ -66,11 +66,11 @@ trait HandlesJoryFilters
      * Use custom filter method if available.
      * If not, run the default filter method..
      *
-     * @param mixed $query
+     * @param mixed $builder
      * @param Filter $filter
      * @param JoryResource $joryResource
      */
-    protected function applyFieldFilter($query, Filter $filter, JoryResource $joryResource): void
+    protected function applyFieldFilter($builder, Filter $filter, JoryResource $joryResource): void
     {
         /**
          * First check if there is a custom scope attached
@@ -80,8 +80,8 @@ trait HandlesJoryFilters
         if($scope){
             // Wrap in a where closure to encapsulate any OR clauses in custom method
             // which could lead to unexpected results.
-            $query->where(function ($query) use ($joryResource, $filter, $scope) {
-                $scope->apply($query, $filter->getOperator(), $filter->getData());
+            $builder->where(function ($builder) use ($joryResource, $filter, $scope) {
+                $scope->apply($builder, $filter->getOperator(), $filter->getData());
             });
             return;
         }
@@ -91,7 +91,7 @@ trait HandlesJoryFilters
          * with the last part of the string being the field to filter on.
          */
         if(Str::contains($filter->getField(), '.')){
-            $this->applyRelationFilter($query, $filter);
+            $this->applyRelationFilter($builder, $filter);
 
             return;
         }
@@ -101,18 +101,18 @@ trait HandlesJoryFilters
          * is being queried even if a join is applied (e.g. when filtering
          * a belongsToMany relation), so we prefix the field with the table name.
          */
-        $field = $query->getModel()->getTable().'.'.Str::snake($filter->getField());
-        FilterHelper::applyWhere($query, $field, $filter->getOperator(), $filter->getData());
+        $field = $builder->getModel()->getTable().'.'.Str::snake($filter->getField());
+        FilterHelper::applyWhere($builder, $field, $filter->getOperator(), $filter->getData());
     }
 
     /**
      * Apply a filter on a field in a relation
      * using relation1.relation2.etc.field notation.
      *
-     * @param mixed $query
+     * @param mixed $builder
      * @param Filter $filter
      */
-    protected function applyRelationFilter($query, Filter $filter)
+    protected function applyRelationFilter($builder, Filter $filter)
     {
         $relations = explode('.', Str::snake($filter->getField()));
 
@@ -120,8 +120,8 @@ trait HandlesJoryFilters
 
         $relation = Str::camel(implode('.', $relations));
 
-        $query->whereHas($relation, function ($query) use ($filter, $field) {
-            FilterHelper::applyWhere($query, $field, $filter->getOperator(), $filter->getData());
+        $builder->whereHas($relation, function ($builder) use ($filter, $field) {
+            FilterHelper::applyWhere($builder, $field, $filter->getOperator(), $filter->getData());
         });
     }
 

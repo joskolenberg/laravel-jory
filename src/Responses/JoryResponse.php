@@ -64,7 +64,7 @@ class JoryResponse implements Responsable
     /**
      * @var Builder
      */
-    protected $query;
+    protected $builder;
 
     /**
      * JoryResponse constructor.
@@ -128,13 +128,13 @@ class JoryResponse implements Responsable
     /**
      * Set an existing query to build upon.
      *
-     * @param Builder $query
+     * @param Builder $builder
      * @return JoryResponse
      */
-    public function onQuery(Builder $query): JoryResponse
+    public function onQuery(Builder $builder): JoryResponse
     {
-        $this->joryResource = $this->register->getByModelClass(get_class($query->getModel()))->fresh();
-        $this->query = $query;
+        $this->joryResource = $this->register->getByModelClass(get_class($builder->getModel()))->fresh();
+        $this->builder = $builder;
 
         return $this;
     }
@@ -310,20 +310,20 @@ class JoryResponse implements Responsable
     protected function getBaseQuery(): Builder
     {
         // If there has been given a query explicitly, use this one without further modifying it.
-        if ($this->query) {
-            return $this->query;
+        if ($this->builder) {
+            return $this->builder;
         }
 
         // Else; create a query from the given model in the registration.
         $modelClass = $this->joryResource->getModelClass();
-        $query = $modelClass::query();
+        $builder = $modelClass::query();
 
         // When a modelId is passed we add a filter to only get this record.
         if ($this->modelId !== null) {
-            $query->whereKey($this->modelId);
+            $builder->whereKey($this->modelId);
         }
 
-        return $query;
+        return $builder;
     }
 
     /**

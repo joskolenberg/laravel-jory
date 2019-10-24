@@ -106,12 +106,12 @@ class JoryManager
     /**
      * Create a new response based on an existing query.
      *
-     * @param Builder $query
+     * @param Builder $builder
      * @return JoryResponse
      */
-    public function onQuery(Builder $query): JoryResponse
+    public function onQuery(Builder $builder): JoryResponse
     {
-        return $this->getJoryResponse()->onQuery($query);
+        return $this->getJoryResponse()->onQuery($builder);
     }
 
     /**

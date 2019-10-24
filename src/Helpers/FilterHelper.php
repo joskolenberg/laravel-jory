@@ -10,36 +10,36 @@ class FilterHelper
     /**
      * Extend Laravel's default "where operators" with is_null, not_null etc.
      *
-     * @param mixed $query
+     * @param mixed $builder
      * @param $field
      * @param $operator
      * @param $data
      */
-    public static function applyWhere($query, $field, $operator, $data): void
+    public static function applyWhere($builder, $field, $operator, $data): void
     {
         switch ($operator) {
             case 'is_null':
-                $query->whereNull($field);
+                $builder->whereNull($field);
 
                 return;
             case 'not_null':
-                $query->whereNotNull($field);
+                $builder->whereNotNull($field);
 
                 return;
             case 'in':
-                $query->whereIn($field, $data);
+                $builder->whereIn($field, $data);
 
                 return;
             case 'not_in':
-                $query->whereNotIn($field, $data);
+                $builder->whereNotIn($field, $data);
 
                 return;
             case 'not_like':
-                $query->where($field, 'not like', $data);
+                $builder->where($field, 'not like', $data);
 
                 return;
             default:
-                $query->where($field, $operator ?: '=', $data);
+                $builder->where($field, $operator ?: '=', $data);
         }
     }
 

@@ -4,7 +4,6 @@ namespace JosKolenberg\LaravelJory\Traits;
 
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Sort;
-use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\JoryResource;
 
 trait HandlesJorySorts
@@ -12,24 +11,24 @@ trait HandlesJorySorts
     /**
      * Apply an array of sorts on the query.
      *
-     * @param $query
+     * @param $builder
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      */
-    protected function applySorts($query, JoryResource $joryResource): void
+    protected function applySorts($builder, JoryResource $joryResource): void
     {
         foreach ($joryResource->getJory()->getSorts() as $sort) {
-            $this->applySort($query, $sort, $joryResource);
+            $this->applySort($builder, $sort, $joryResource);
         }
     }
 
     /**
      * Apply a single sort on a query.
      *
-     * @param $query
+     * @param $builder
      * @param Sort $sort
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      */
-    protected function applySort($query, Sort $sort, JoryResource $joryResource): void
+    protected function applySort($builder, Sort $sort, JoryResource $joryResource): void
     {
         /**
          * First check if there is a custom scope attached
@@ -37,27 +36,27 @@ trait HandlesJorySorts
          */
         $scope = $joryResource->getConfig()->getSort($sort)->getScope();
         if($scope){
-            $scope->apply($query, $sort->getOrder());
+            $scope->apply($builder, $sort->getOrder());
             return;
         }
 
         // Always apply the sort on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $query->getModel()->getTable().'.'.Str::snake($sort->getField());
-        $this->applyDefaultSort($query, $field, $sort->getOrder());
+        $field = $builder->getModel()->getTable().'.'.Str::snake($sort->getField());
+        $this->applyDefaultSort($builder, $field, $sort->getOrder());
     }
 
     /**
      * Apply a sort to a field with default options.
      *
-     * @param $query
+     * @param $builder
      * @param string $field
      * @param string $order
      */
-    protected function applyDefaultSort($query, string $field, string $order): void
+    protected function applyDefaultSort($builder, string $field, string $order): void
     {
-        $query->orderBy($field, $order);
+        $builder->orderBy($field, $order);
     }
 
     /**

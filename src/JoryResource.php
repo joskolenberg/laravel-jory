@@ -239,29 +239,6 @@ abstract class JoryResource
     }
 
     /**
-     * Get the CaseManager.
-     *
-     * @return CaseManager
-     */
-    public function getCase(): CaseManager
-    {
-        return app(CaseManager::class);
-    }
-
-    /**
-     * Extend Laravel's default "where operators" with is_null, not_null etc.
-     *
-     * @param mixed $query
-     * @param $field
-     * @param $operator
-     * @param $data
-     */
-    protected function applyWhere($query, $field, $operator, $data): void
-    {
-        FilterHelper::applyWhere($query, $field, $operator, $data);
-    }
-
-    /**
      * Get an associative array of all relations requested in the Jory query.
      *
      * The key of the array holds the name of the relation (including any
@@ -339,10 +316,10 @@ abstract class JoryResource
     /**
      * Apply any user specific actions on the query.
      *
-     * @param $query
+     * @param $builder
      * @param null $user
      */
-    public function authorize($query, $user = null): void
+    public function authorize($builder, $user = null): void
     {
     }
 

@@ -7,14 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use JosKolenberg\LaravelJory\Config\Field;
-use JosKolenberg\LaravelJory\Config\Relation;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryResource;
 
@@ -23,65 +18,65 @@ trait HandlesJorySelects
     /**
      * Apply the select part of the query.
      *
-     * @param $query
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param $builder
+     * @param JoryResource $joryResource
      */
-    protected function applySelects($query, JoryResource $joryResource): void
+    protected function applySelects($builder, JoryResource $joryResource): void
     {
         if (! $joryResource->getConfig()->hasExplicitSelect()) {
-            $this->applyDefaultSelect($query);
+            $this->applyDefaultSelect($builder);
 
             return;
         }
 
-        $this->applySelectsByJory($query, $joryResource);
+        $this->applySelectsByJory($builder, $joryResource);
     }
 
     /**
      * Apply the default way of selecting columns.
      *
-     * @param $query
+     * @param $builder
      */
-    protected function applyDefaultSelect($query)
+    protected function applyDefaultSelect($builder)
     {
-        $table = $query->getModel()->getTable();
-        $query->select($table.'.*');
+        $table = $builder->getModel()->getTable();
+        $builder->select($table.'.*');
     }
 
     /**
      * Apply the select part of the query based on the requested fields and relations.
      *
-     * @param $query
+     * @param $builder
      * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
      */
-    protected function applySelectsByJory($query, JoryResource $joryResource)
+    protected function applySelectsByJory($builder, JoryResource $joryResource)
     {
-        $fields = $this->getSelectsForRequestedFields($query, $joryResource);
-        $fields = array_merge($fields, $this->getFieldsForEagerLoading($query, $joryResource));
-        $fields = array_merge($fields, $this->getSelectsForChildRelations($query, $joryResource));
-        $fields = array_merge($fields, $this->getSelectsForParentRelation($query));
+        $fields = $this->getSelectsForRequestedFields($builder, $joryResource);
+        $fields = array_merge($fields, $this->getFieldsForEagerLoading($builder, $joryResource));
+        $fields = array_merge($fields, $this->getSelectsForChildRelations($builder, $joryResource));
+        $fields = array_merge($fields, $this->getSelectsForParentRelation($builder));
 
         $fields = array_unique($fields);
 
         if(count($fields) === 0){
-            $fields[] = $query->getModel()->getQualifiedKeyName();
+            $fields[] = $builder->getModel()->getQualifiedKeyName();
         }
 
-        $query->select($fields);
+        $builder->select($fields);
     }
 
     /**
      * Get the columns to select in the query based on the requested fields.
      *
-     * @param $query
+     * @param $builder
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getSelectsForRequestedFields($query, JoryResource $joryResource)
+    protected function getSelectsForRequestedFields($builder, JoryResource $joryResource)
     {
         $fields = [];
 
-        $table = $query->getModel()->getTable();
+        $table = $builder->getModel()->getTable();
 
         foreach ($joryResource->getJory()->getFields() as $fieldName) {
             $configuredField = $joryResource->getConfig()->getField($fieldName);
@@ -105,11 +100,11 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getSelectsForChildRelations($query, JoryResource $joryResource)
+    protected function getSelectsForChildRelations($builder, JoryResource $joryResource)
     {
         $fields = [];
 
-        $model = $query->getModel();
+        $model = $builder->getModel();
 
         foreach ($joryResource->getJory()->getRelations() as $relation) {
             $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
@@ -134,11 +129,11 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getFieldsForEagerLoading($query, JoryResource $joryResource)
+    protected function getFieldsForEagerLoading($builder, JoryResource $joryResource)
     {
         $fields = [];
 
-        $model = $query->getModel();
+        $model = $builder->getModel();
 
         foreach ($joryResource->getJory()->getFields() as $fieldName) {
             $configuredField = $joryResource->getConfig()->getField($fieldName);
@@ -164,31 +159,31 @@ trait HandlesJorySelects
      * E.g. If an Album is requested with the Songs relation, we need the
      * songs.album_id column in order to get the songs from the database.
      *
-     * @param $query
+     * @param $builder
      * @return array
      */
-    protected function getSelectsForParentRelation($query)
+    protected function getSelectsForParentRelation($builder)
     {
-        if($query instanceof HasOne){
-            return [$query->getQualifiedForeignKeyName()];
+        if($builder instanceof HasOne){
+            return [$builder->getQualifiedForeignKeyName()];
         }
 
-        if($query instanceof BelongsTo){
-            return [$query->getModel()->getQualifiedKeyName()];
+        if($builder instanceof BelongsTo){
+            return [$builder->getModel()->getQualifiedKeyName()];
         }
 
-        if($query instanceof HasMany){
-            return [$query->getQualifiedForeignKeyName()];
+        if($builder instanceof HasMany){
+            return [$builder->getQualifiedForeignKeyName()];
         }
 
         // BelongsToMany, HasManyThrough, HasOneThrough, MorphToMany and MorpedByMany don't require any fields
 
-        if($query instanceof MorphOne){
-            return [$query->getQualifiedForeignKeyName()];
+        if($builder instanceof MorphOne){
+            return [$builder->getQualifiedForeignKeyName()];
         }
 
-        if($query instanceof MorphMany){
-            return [$query->getQualifiedForeignKeyName()];
+        if($builder instanceof MorphMany){
+            return [$builder->getQualifiedForeignKeyName()];
         }
 
         return [];

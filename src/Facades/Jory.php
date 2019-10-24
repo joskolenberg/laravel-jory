@@ -19,7 +19,7 @@ use JosKolenberg\LaravelJory\Responses\JoryResponse;
  * @method static JoryResponse on($resource)
  * @method static JoryResponse onModel(Model $model)
  * @method static JoryResponse onModelClass(string $modelClass)
- * @method static JoryResponse onQuery(Builder $query)
+ * @method static JoryResponse onQuery(Builder $builder)
  * @method static JoryResponse byUri(string $uri)
  * @method static JoryMultipleResponse multiple()
  * @method static JoryResourcesRegister register(string $joryResourceClass)
