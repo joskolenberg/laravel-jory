@@ -16,11 +16,6 @@ class Song extends Model
         return $this->belongsTo(Album::class);
     }
 
-    public function scopeAlbumNameSort($query, string $order)
-    {
-        $query->join('albums', 'songs.album_id', 'albums.id')->orderBy('albums.name', $order);
-    }
-
     public function getAlbumNameAttribute()
     {
         return $this->album->name;

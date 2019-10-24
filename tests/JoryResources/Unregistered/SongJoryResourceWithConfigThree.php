@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Scopes\SongAlbumNameSort;
 
 class SongJoryResourceWithConfigThree extends JoryResource
 {
@@ -19,6 +20,6 @@ class SongJoryResourceWithConfigThree extends JoryResource
         $this->limitDefault(null)->limitMax(10);
 
         $this->sort('title')->default(2, 'desc');
-        $this->sort('album_name')->default(1, 'asc');
+        $this->sort('album_name', new SongAlbumNameSort)->default(1, 'asc');
     }
 }

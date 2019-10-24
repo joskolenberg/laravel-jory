@@ -9,23 +9,15 @@ use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Scopes\BandNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSongWithTitleFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsFilter;
+use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsSort;
 use SebastianBergmann\ObjectEnumerator\InvalidArgumentException;
 
 class AlbumJoryResourceWithExplicitSelect extends JoryResource
 {
     protected $modelClass = Album::class;
-
-    public function scopeNumberOfSongsSort($query, string $order)
-    {
-        $query->withCount('songs')->orderBy('songs_count', $order);
-    }
-
-    public function scopeBandNameSort($query, string $order)
-    {
-        $query->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $order);
-    }
 
     protected function configure(): void
     {
@@ -45,8 +37,8 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
         $this->filter('has_song_with_title', new HasSongWithTitleFilter);
         $this->filter('album_cover.album_id');
 
-        $this->sort('number_of_songs');
-        $this->sort('band_name');
+        $this->sort('number_of_songs', new NumberOfSongsSort);
+        $this->sort('band_name', new BandNameSort);
 
         $this->relation('songs');
         $this->relation('band');

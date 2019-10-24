@@ -22,10 +22,4 @@ class InstrumentJoryResourceWithExplicitSelect extends JoryResource
         })->sortable();
         $this->field('type_name')->filterable()->sortable()->hideByDefault();
     }
-
-    public function scopeNameFilter($query, $operator, $data)
-    {
-        $this->applyWhere($query, 'name', $operator, $data);
-        $query->has('people');
-    }
 }

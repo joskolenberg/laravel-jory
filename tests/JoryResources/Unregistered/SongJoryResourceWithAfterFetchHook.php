@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Scopes\CustomFilterFieldFilter;
+use JosKolenberg\LaravelJory\Tests\Scopes\CustomSortFieldSort;
 
 class SongJoryResourceWithAfterFetchHook extends JoryResource
 {
@@ -22,7 +23,7 @@ class SongJoryResourceWithAfterFetchHook extends JoryResource
         $this->field('custom_field')->hideByDefault();
 
         $this->filter('custom_filter_field', new CustomFilterFieldFilter);
-        $this->sort('custom_sort_field');
+        $this->sort('custom_sort_field', new CustomSortFieldSort);
     }
 
     public function afterFetch(Collection $collection): Collection
@@ -49,10 +50,5 @@ class SongJoryResourceWithAfterFetchHook extends JoryResource
         return $collection->filter(function ($model) {
             return $model->id > 100;
         });
-    }
-
-    public function scopeCustomSortFieldSort($query, $order)
-    {
-        // Do nothing
     }
 }

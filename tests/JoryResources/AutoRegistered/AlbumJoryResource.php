@@ -5,26 +5,18 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Scopes\AlphabeticNameSort;
+use JosKolenberg\LaravelJory\Tests\Scopes\BandNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSmallIdFilter;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSongWithTitleFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsFilter;
+use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsSort;
 
 class AlbumJoryResource extends JoryResource
 {
     protected $modelClass = Album::class;
-
-    public function scopeNumberOfSongsSort($query, string $order)
-    {
-        $query->withCount('songs')->orderBy('songs_count', $order);
-    }
-
-    public function scopeBandNameSort($query, string $order)
-    {
-        $query->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $order);
-    }
 
     protected function configure(): void
     {
@@ -43,8 +35,8 @@ class AlbumJoryResource extends JoryResource
         $this->filter('album_cover.album_id');
         $this->filter('has_small_id', new HasSmallIdFilter);
 
-        $this->sort('number_of_songs');
-        $this->sort('band_name');
+        $this->sort('number_of_songs', new NumberOfSongsSort);
+        $this->sort('band_name', new BandNameSort);
         $this->sort('alphabetic_name', new AlphabeticNameSort);
 
         $this->relation('songs', SongJoryResource::class);
