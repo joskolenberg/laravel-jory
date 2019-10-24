@@ -72,7 +72,6 @@ class ConsoleTest extends TestCase
             ->expectsOutput('ImageJoryResource created successfully.')
             ->expectsOutput('PersonJoryResource created successfully.')
             ->expectsOutput('SongJoryResource created successfully.')
-            ->expectsOutput('SongWithAfterFetchHookJoryResource created successfully.')
             ->expectsOutput('SongWithCustomJoryResourceJoryResource created successfully.')
             ->expectsOutput('TagJoryResource created successfully.')
             ->expectsOutput('UserJoryResource created successfully.');
@@ -95,7 +94,6 @@ class ConsoleTest extends TestCase
         $this->assertFalse($generatedFilesystem->has('ModelJoryResource.php')); // Excluded in config
         $this->assertTrue($generatedFilesystem->has('PersonJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('SongJoryResource.php'));
-        $this->assertTrue($generatedFilesystem->has('SongWithAfterFetchHookJoryResource.php'));
         $this->assertFalse($generatedFilesystem->has('NonExistingJoryResource.php'));
     }
 
@@ -111,7 +109,6 @@ class ConsoleTest extends TestCase
             ->expectsOutput('ImageJoryResource created successfully.')
             ->expectsOutput('PersonJoryResource created successfully.')
             ->expectsOutput('SongJoryResource created successfully.')
-            ->expectsOutput('SongWithAfterFetchHookJoryResource created successfully.')
             ->expectsOutput('SongWithCustomJoryResourceJoryResource created successfully.')
             ->expectsOutput('TagJoryResource created successfully.')
             ->expectsOutput('UserJoryResource created successfully.');

@@ -46,15 +46,4 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
         $this->relation('custom_songs_3', SongJoryResource::class);
         $this->relation('tags');
     }
-
-    public function afterFetch(Collection $collection): Collection
-    {
-        if($this->hasField('custom_field')){
-            $collection->each(function ($album){
-                $album->custom_field = 'custom value';
-            });
-        }
-
-        return $collection;
-    }
 }

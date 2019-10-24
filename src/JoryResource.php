@@ -196,39 +196,6 @@ abstract class JoryResource
     }
 
     /**
-     * Tell if the Jory query requests the given field.
-     *
-     * @param $field
-     * @return bool
-     */
-    protected function hasField($field): bool
-    {
-        return $this->jory->hasField($this->getCase()->toCurrent($field));
-    }
-
-    /**
-     * Tell if the Jory query has a filter on the given field.
-     *
-     * @param $field
-     * @return bool
-     */
-    protected function hasFilter($field): bool
-    {
-        return $this->jory->hasFilter($this->getCase()->toCurrent($field));
-    }
-
-    /**
-     * Tell if the Jory query has a sort on the given field.
-     *
-     * @param $field
-     * @return bool
-     */
-    protected function hasSort($field): bool
-    {
-        return $this->jory->hasSort($this->getCase()->toCurrent($field));
-    }
-
-    /**
      * Apply a Jory query on the Resource.
      *
      * @param Jory $jory
