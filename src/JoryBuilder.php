@@ -143,8 +143,6 @@ class JoryBuilder
         $this->applySorts($query, $this->joryResource);
         $this->applyOffsetAndLimit($query, $jory->getOffset(), $jory->getLimit());
 
-        $this->joryResource->afterQueryBuild($query);
-
         return $query;
     }
 
@@ -164,8 +162,6 @@ class JoryBuilder
         }
 
         $this->authorizeQuery($query);
-
-        $this->joryResource->afterQueryBuild($query, true);
 
         return $query;
     }

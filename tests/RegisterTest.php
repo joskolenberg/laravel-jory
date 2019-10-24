@@ -5,14 +5,13 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryOffsetLimitHook;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource2;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfig;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfigThree;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfigTwo;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class RegisterTest extends TestCase
 {
@@ -34,11 +33,11 @@ class RegisterTest extends TestCase
 
         $this->assertInstanceOf(SongJoryResource::class, $register->getByUri('song'));
 
-        Jory::register(SongJoryResourceWithAfterQueryBuildFilterHook::class);
-        $this->assertInstanceOf(SongJoryResourceWithAfterQueryBuildFilterHook::class, $register->getByUri('song'));
+        Jory::register(CustomSongJoryResource::class);
+        $this->assertInstanceOf(CustomSongJoryResource::class, $register->getByUri('song'));
 
-        Jory::register(SongJoryResourceWithAfterQueryOffsetLimitHook::class);
-        $this->assertInstanceOf(SongJoryResourceWithAfterQueryOffsetLimitHook::class, $register->getByUri('song'));
+        Jory::register(CustomSongJoryResource2::class);
+        $this->assertInstanceOf(CustomSongJoryResource2::class, $register->getByUri('song'));
     }
 
     /** @test */

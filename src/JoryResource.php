@@ -206,17 +206,6 @@ abstract class JoryResource
     }
 
     /**
-     * Hook into the query after all settings in Jory object
-     * are applied and just before the query is executed.
-     *
-     * @param $query
-     * @param bool $count
-     */
-    public function afterQueryBuild($query, $count = false): void
-    {
-    }
-
-    /**
      * Tell if the Jory query requests the given field.
      *
      * @param $field
