@@ -32,9 +32,6 @@ trait LoadsJoryRelations
 
         // Load any relations which need to be eager loaded
         $this->applyEagerLoads($models, $this->joryResource);
-
-        // Hook into the afterFetch() method for custom tweaking in subclasses.
-        $joryResource->afterFetch($models);
     }
 
     /**

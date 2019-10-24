@@ -6,14 +6,11 @@ use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\AlbumCoverJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Scopes\BandNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSongWithTitleFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsSort;
-use SebastianBergmann\ObjectEnumerator\InvalidArgumentException;
 
 class AlbumJoryResourceWithExplicitSelect extends JoryResource
 {
@@ -45,7 +42,6 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
         $this->relation('cover');
         $this->relation('album_cover', AlbumCoverJoryResource::class);
         $this->relation('snake_case_album_cover');
-        $this->relation('custom_songs_1', SongJoryResourceWithAfterFetchHook::class);
         $this->relation('custom_songs_2', SongJoryResourceWithAfterQueryBuildFilterHook::class);
         $this->relation('custom_songs_3', SongJoryResource::class);
         $this->relation('tags');

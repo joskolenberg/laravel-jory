@@ -196,17 +196,6 @@ abstract class JoryResource
     }
 
     /**
-     * Hook into the collection right after it is fetched and before it is turned into an array.
-     *
-     * @param Collection $collection
-     * @return Collection
-     */
-    public function afterFetch(Collection $collection): Collection
-    {
-        return $collection;
-    }
-
-    /**
      * Do some tweaking before the Jory settings are applied to the query.
      *
      * @param $query

@@ -80,14 +80,13 @@ class ConfigTest extends TestCase
             'jory' => [
                 'fld' => ['name'],
                 'rlt' => [
-                    'customSongs1 as songs' => [
+                    'customSongs2 as songs' => [
                         'flt' => [
                             'f' => 'title',
                             'o' => 'like',
                             'd' => '%love%',
                         ],
                         'fld' => [
-                            'title',
                             'customField',
                         ],
                     ],
@@ -100,7 +99,6 @@ class ConfigTest extends TestCase
             'name' => 'Led Zeppelin II',
             'songs' => [
                 [
-                    'title' => 'altered',
                     'customField' => 'custom_value',
                 ],
             ],
@@ -117,7 +115,7 @@ class ConfigTest extends TestCase
             'jory' => [
                 'fld' => ['name'],
                 'rlt' => [
-                    'customSongs2 as songs' => [
+                    'customSongs3 as songs' => [
                         'flt' => [
                             'f' => 'title',
                             'o' => 'like',
@@ -134,7 +132,7 @@ class ConfigTest extends TestCase
         ]);
 
         $expected = [
-            'Field "customField" is not available, no suggestions found. (Location: customSongs2 as songs.fields.customField)',
+            'Field "customField" is not available, no suggestions found. (Location: customSongs3 as songs.fields.customField)',
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
 

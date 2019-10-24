@@ -68,8 +68,6 @@ class JoryBuilder
     {
         $collection = $this->buildQuery()->get();
 
-        $collection = $this->joryResource->afterFetch($collection);
-
         $this->loadRelations($collection, $this->joryResource);
 
         return $collection;
@@ -87,8 +85,6 @@ class JoryBuilder
         if (!$model) {
             return null;
         }
-
-        $model = $this->joryResource->afterFetch(new Collection([$model]))->first();
 
         $this->loadRelations(new Collection([$model]), $this->joryResource);
 

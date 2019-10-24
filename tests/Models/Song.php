@@ -21,6 +21,11 @@ class Song extends Model
         return $this->album->name;
     }
 
+    public function getCustomFieldAttribute()
+    {
+        return 'custom_value';
+    }
+
     public function testRelationWithoutJoryResource()
     {
         return $this->hasMany(ModelWithoutJoryResource::class);

@@ -15,6 +15,7 @@ class SongJoryResourceWithAfterQueryBuildFilterHook extends JoryResource
         $this->field('id')->filterable()->sortable();
         $this->field('title')->filterable()->sortable();
         $this->field('album_id')->filterable()->sortable();
+        $this->field('custom_field');
     }
 
     public function afterQueryBuild($query, $count = false): void

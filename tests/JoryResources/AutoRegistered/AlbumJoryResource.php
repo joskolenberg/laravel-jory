@@ -7,7 +7,6 @@ use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Scopes\AlphabeticNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\BandNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSmallIdFilter;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSongWithTitleFilter;
@@ -44,7 +43,6 @@ class AlbumJoryResource extends JoryResource
         $this->relation('cover');
         $this->relation('album_cover', AlbumCoverJoryResource::class);
         $this->relation('snake_case_album_cover');
-        $this->relation('custom_songs_1', SongJoryResourceWithAfterFetchHook::class);
         $this->relation('custom_songs_2', SongJoryResourceWithAfterQueryBuildFilterHook::class);
         $this->relation('custom_songs_3', SongJoryResource::class);
         $this->relation('tags');

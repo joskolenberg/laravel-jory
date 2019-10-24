@@ -1146,34 +1146,6 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     }
 
     /** @test */
-    public function it_calls_the_afterFetch_hook_on_relations()
-    {
-        $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums":{"fld":["name","custom_field"],"lmt":2}}}',
-        ]);
-
-        $expected = [
-            'data' => [
-                'name' => 'Beatles',
-                'albums' => [
-                    [
-                        'name' => 'Sgt. Peppers lonely hearts club band',
-                        'custom_field' => 'custom value',
-                    ],
-                    [
-                        'name' => 'Abbey road',
-                        'custom_field' => 'custom value',
-                    ],
-                ],
-            ],
-        ];
-
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(2);
-    }
-
-    /** @test */
     public function it_can_load_a_hasOneThrough_relation()
     {
         $response = $this->json('GET', 'jory/band/3', [
