@@ -2,8 +2,10 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
+use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
+use JosKolenberg\LaravelJory\Tests\Scopes\FullNameFilter;
 
 class PersonJoryResource extends JoryResource
 {
@@ -16,7 +18,9 @@ class PersonJoryResource extends JoryResource
         $this->field('first_name')->filterable()->sortable();
         $this->field('last_name')->filterable()->sortable();
         $this->field('date_of_birth')->filterable()->sortable();
-        $this->field('full_name')->filterable();
+        $this->field('full_name')->filterable(function (Filter $filter){
+            $filter->scope(new FullNameFilter);
+        });
 
         // Custom attributes
         $this->field('instruments_string')->load('instruments')->hideByDefault();
@@ -28,11 +32,5 @@ class PersonJoryResource extends JoryResource
         // Relations
         $this->relation('instruments');
         $this->relation('first_image');
-    }
-
-    public function scopeFullNameFilter($query, $operator, $data)
-    {
-        $query->where('first_name', 'like', '%'.$data.'%');
-        $query->orWhere('last_name', 'like', '%'.$data.'%');
     }
 }

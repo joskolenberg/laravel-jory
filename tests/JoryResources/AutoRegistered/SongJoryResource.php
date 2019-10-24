@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Scopes\AlbumNameFilter;
 
 class SongJoryResource extends JoryResource
 {
@@ -20,7 +21,7 @@ class SongJoryResource extends JoryResource
         $this->field('album_name')->load('album')->hideByDefault();
 
         // Custom filters
-        $this->filter('album_name');
+        $this->filter('album_name', new AlbumNameFilter);
 
         // Relations
         $this->relation('album');

@@ -9,22 +9,12 @@ use JosKolenberg\LaravelJory\Tests\Scopes\HasSmallIdFilter;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Scopes\HasSongWithTitleFilter;
+use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsFilter;
 
 class AlbumJoryResource extends JoryResource
 {
     protected $modelClass = Album::class;
-
-    public function scopeNumberOfSongsFilter($query, $operator, $data)
-    {
-        $query->has('songs', $operator, $data);
-    }
-
-    public function scopeHasSongWithTitleFilter($query, $operator, $data)
-    {
-        $query->whereHas('songs', function ($query) use ($operator, $data) {
-            $query->where('title', $operator, $data);
-        });
-    }
 
     public function scopeNumberOfSongsSort($query, string $order)
     {
@@ -48,8 +38,8 @@ class AlbumJoryResource extends JoryResource
         $this->field('titles_string')->load('songs')->hideByDefault();
         $this->field('tag_names_string')->load('tags')->hideByDefault();
 
-        $this->filter('number_of_songs');
-        $this->filter('has_song_with_title');
+        $this->filter('number_of_songs', new NumberOfSongsFilter);
+        $this->filter('has_song_with_title', new HasSongWithTitleFilter);
         $this->filter('album_cover.album_id');
         $this->filter('has_small_id', new HasSmallIdFilter);
 

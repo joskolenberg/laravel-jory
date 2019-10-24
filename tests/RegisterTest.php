@@ -12,6 +12,7 @@ use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWi
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithBeforeQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithBeforeQueryBuildSortHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfig;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfigThree;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfigTwo;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
@@ -597,6 +598,26 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
+                    'field' => 'has_small_id',
+                    'description' => null,
+                    'operators' => [
+                        '=',
+                        '!=',
+                        '<>',
+                        '>',
+                        '>=',
+                        '<',
+                        '<=',
+                        '<=>',
+                        'like',
+                        'not_like',
+                        'is_null',
+                        'not_null',
+                        'in',
+                        'not_in',
+                    ],
+                ],
+                [
                     'field' => 'id',
                     'description' => null,
                     'operators' => [
@@ -689,6 +710,11 @@ class RegisterTest extends TestCase
                     'default' => false,
                 ],
                 [
+                    'field' => 'alphabetic_name',
+                    'description' => null,
+                    'default' => false,
+                ],
+                [
                     'field' => 'id',
                     'description' => null,
                     'default' => false,
@@ -753,6 +779,11 @@ class RegisterTest extends TestCase
                     'relation' => 'custom_songs_3',
                     'description' => null,
                     'type' => 'song',
+                ],
+                [
+                    'relation' => 'tags',
+                    'description' => null,
+                    'type' => 'tag',
                 ],
             ],
         ];

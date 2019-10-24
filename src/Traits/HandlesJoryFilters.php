@@ -86,30 +86,6 @@ trait HandlesJoryFilters
             return;
         }
 
-        $customMethodName = $this->getCustomFilterMethodName($filter);
-        // Check if the JoryResource has a custom scope method for this filter
-        if (method_exists($joryResource, $customMethodName)) {
-            // Wrap in a where closure to encapsulate any OR clauses in custom method
-            // which could lead to unexpected results.
-            $query->where(function ($query) use ($joryResource, $filter, $customMethodName) {
-                $joryResource->$customMethodName($query, $filter->getOperator(), $filter->getData());
-            });
-
-            return;
-        }
-
-        $model = $query->getModel();
-        // Check if the Model has a custom method for this filter
-        if (method_exists($model, $customMethodName)) {
-            // Wrap in a where closure to encapsulate any OR clauses in custom method
-            // which could lead to unexpected results.
-            $query->where(function ($query) use ($model, $filter, $customMethodName) {
-                $model->$customMethodName($query, $filter->getOperator(), $filter->getData());
-            });
-
-            return;
-        }
-
         /**
          * When the field contains dots, we want to query on a relation
          * with the last part of the string being the field to filter on.
@@ -127,18 +103,6 @@ trait HandlesJoryFilters
          */
         $field = $query->getModel()->getTable().'.'.Str::snake($filter->getField());
         FilterHelper::applyWhere($query, $field, $filter->getOperator(), $filter->getData());
-    }
-
-    /**
-     * Get the custom method name to look for to apply a filter.
-     *
-     * @param Filter $filter
-     *
-     * @return string
-     */
-    protected function getCustomFilterMethodName(Filter $filter): string
-    {
-        return 'scope'.Str::studly($filter->getField()).'Filter';
     }
 
     /**

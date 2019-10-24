@@ -5,6 +5,8 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Scopes\HasAlbumWithNameFilter;
+use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfAlbumsInYearFilter;
 
 class BandJoryResourceWithExplicitSelect extends JoryResource
 {
@@ -29,8 +31,8 @@ class BandJoryResourceWithExplicitSelect extends JoryResource
         $this->field('first_title_string')->noSelect()->load('first_song')->hideByDefault();
         $this->field('image_urls_string')->noSelect()->load('images')->hideByDefault();
 
-        $this->filter('has_album_with_name')->description('Filter bands that have an album with a given name.');
-        $this->filter('number_of_albums_in_year')->operators([
+        $this->filter('has_album_with_name', new HasAlbumWithNameFilter)->description('Filter bands that have an album with a given name.');
+        $this->filter('number_of_albums_in_year', new NumberOfAlbumsInYearFilter)->operators([
             '=',
             '>',
             '<',
@@ -47,17 +49,6 @@ class BandJoryResourceWithExplicitSelect extends JoryResource
         $this->relation('songs');
         $this->relation('first_song');
         $this->relation('images');
-    }
-
-    public function scopeNumberOfAlbumsInYearFilter($query, $operator, $data)
-    {
-        $year = $data['year'];
-        $value = $data['value'];
-
-        $query->whereHas('albums', function ($query) use ($year) {
-            $query->where('release_date', '>=', $year.'-01-01');
-            $query->where('release_date', '<=', $year.'-12-31');
-        }, $operator, $value);
     }
 
     public function authorize($query, $user = null): void

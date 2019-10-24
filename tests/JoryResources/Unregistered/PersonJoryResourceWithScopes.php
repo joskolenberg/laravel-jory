@@ -2,9 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
+use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Scopes\FirstNameSort;
+use JosKolenberg\LaravelJory\Tests\Scopes\FullNameFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\SpecialFirstNameFilter;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 
@@ -23,7 +25,9 @@ class PersonJoryResourceWithScopes extends JoryResource
         $this->field('date_of_birth')->filterable()->sortable(function(Sort $sort){
             $sort->scope(new FirstNameSort);
         });
-        $this->field('full_name')->filterable();
+        $this->field('full_name')->filterable(function (Filter $filter){
+            $filter->scope(new FullNameFilter);
+        });
 
         // Custom attributes
         $this->field('instruments_string')->load('instruments')->hideByDefault();
@@ -35,11 +39,5 @@ class PersonJoryResourceWithScopes extends JoryResource
         // Relations
         $this->relation('instruments');
         $this->relation('first_image');
-    }
-
-    public function scopeFullNameFilter($query, $operator, $data)
-    {
-        $query->where('first_name', 'like', '%'.$data.'%');
-        $query->orWhere('last_name', 'like', '%'.$data.'%');
     }
 }

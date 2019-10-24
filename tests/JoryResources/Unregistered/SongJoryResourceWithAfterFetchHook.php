@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Scopes\CustomFilterFieldFilter;
 
 class SongJoryResourceWithAfterFetchHook extends JoryResource
 {
@@ -20,7 +21,7 @@ class SongJoryResourceWithAfterFetchHook extends JoryResource
         $this->field('album_id')->filterable()->sortable();
         $this->field('custom_field')->hideByDefault();
 
-        $this->filter('custom_filter_field');
+        $this->filter('custom_filter_field', new CustomFilterFieldFilter);
         $this->sort('custom_sort_field');
     }
 
@@ -48,11 +49,6 @@ class SongJoryResourceWithAfterFetchHook extends JoryResource
         return $collection->filter(function ($model) {
             return $model->id > 100;
         });
-    }
-
-    public function scopeCustomFilterFieldFilter($query, $operator, $data)
-    {
-        // Do nothing
     }
 
     public function scopeCustomSortFieldSort($query, $order)
