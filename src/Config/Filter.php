@@ -124,14 +124,10 @@ class Filter
     /**
      * Get the description.
      *
-     * @return string
+     * @return null|string
      */
-    public function getDescription(): string
+    public function getDescription():? string
     {
-        if ($this->description === null) {
-            return 'Filter on the ' . $this->getField() . ' field.';
-        }
-
         return $this->description;
     }
 }

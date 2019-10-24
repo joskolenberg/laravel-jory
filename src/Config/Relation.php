@@ -81,14 +81,10 @@ class Relation
     /**
      * Get the description.
      *
-     * @return string
+     * @return null|string
      */
-    public function getDescription(): string
+    public function getDescription():? string
     {
-        if ($this->description === null) {
-            return 'The ' . $this->getName() . ' relation.';
-        }
-
         return $this->description;
     }
 

@@ -40,22 +40,4 @@ class JoryController extends Controller
     {
         return Jory::multiple();
     }
-
-    /**
-     * Give the options for a resource.
-     */
-    public function options(string $resource, JoryResourcesRegister $register)
-    {
-        $joryResource = $register->getByUri($resource);
-
-        return response($joryResource->getConfig()->toArray());
-    }
-
-    /**
-     * Display a list of available resources.
-     */
-    public function resourceList(JoryResourcesRegister $register)
-    {
-        return response(['resources' => $register->getUrisArray()]);
-    }
 }

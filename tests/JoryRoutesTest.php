@@ -393,35 +393,6 @@ class JoryRoutesTest extends TestCase
     }
 
     /** @test */
-    public function it_can_display_all_the_available_resources()
-    {
-        Jory::register(SongJoryResourceWithAlternateUri::class);
-
-        $response = $this->json('OPTIONS', 'jory');
-
-        $expected = [
-            'resources' => [
-                'album',
-                'album-cover',
-                'band',
-                'image',
-                'instrument',
-                'person',
-                'song',
-                'song-custom',
-                'song-with-after-fetch',
-                'ssoonngg',
-                'tag',
-            ],
-        ];
-
-        // ExactJson doesn't tell if the sort order is right so do both checks.
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(0);
-    }
-
-    /** @test */
     public function it_returns_a_404_when_an_unknown_model_is_configured()
     {
         $this->json('GET', 'jory/bandd', [
@@ -431,8 +402,6 @@ class JoryRoutesTest extends TestCase
         $this->json('GET', 'jory/bandd/3')->assertStatus(404);
 
         $this->json('GET', 'jory/bandd/count')->assertStatus(404);
-
-        $this->json('OPTIONS', 'jory/bandd')->assertStatus(404);
 
         $this->assertQueryCount(0);
     }
@@ -542,25 +511,6 @@ class JoryRoutesTest extends TestCase
         $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
 
         $this->assertQueryCount(2);
-    }
-
-    /** @test */
-    public function it_returns_404_when_an_option_call_for_an_unknown_resource_is_done()
-    {
-        $response = $this->json('OPTIONS', 'jory/persn', [
-            'jory' => '{}',
-        ]);
-
-        $expected = [
-            'errors' => [
-                'Resource persn not found, did you mean "person"?',
-            ],
-        ];
-
-        // ExactJson doesn't tell if the sort order is right so do both checks.
-        $response->assertStatus(404)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(0);
     }
 
     /** @test */

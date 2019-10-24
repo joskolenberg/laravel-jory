@@ -95,14 +95,10 @@ class Sort
     /**
      * Get the description.
      *
-     * @return string
+     * @return null|string
      */
-    public function getDescription(): string
+    public function getDescription():? string
     {
-        if ($this->description === null) {
-            return 'Sort by the '.$this->getField().' field.';
-        }
-
         return $this->description;
     }
 
