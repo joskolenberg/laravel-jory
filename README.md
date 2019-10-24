@@ -37,13 +37,13 @@ All these JoryResources will be pre-configured by using reflection on your model
 
 ## Routes
 The package will register the following routes for all JoryResources:
-- ```GET``` ```/jory/{resource}``` Get an [array of items](#resource-list) for this resource based on the [Jory query](https://packagist.org/packages/joskolenberg/jory) in the 'jory' parameter.
+- ```GET``` ```/jory/{resource}``` Get an [array of items](#resource-collection) for this resource based on the [Jory query](https://packagist.org/packages/joskolenberg/jory) in the 'jory' parameter.
 - ```GET``` ```/jory/{resource}/{id}``` Get a [single record](#single-resource) and apply the 'jory' parameter. 
-- ```GET``` ```/jory/{resource}/count``` Get the [record count](#resource-count) for the resource based on the 'jory' parameter.
+- ```GET``` ```/jory/{resource}/count``` Get the [record count](#resource-count) for the resource based on the filters in the 'jory' parameter.
 - ```GET``` ```/jory``` Get [multiple](#multiple-resources) unrelated resources in one call.
 
 
-#### Resource list
+#### Resource collection
 A ```GET``` call to ```/jory/{resource}``` returns an array of items based on the ```jory``` parameter holding a [Jory query](https://packagist.org/packages/joskolenberg/jory).
 
 Example call using Axios (but you can use whatever tool you like):
@@ -248,16 +248,16 @@ Use the JoryResource classes to configure your Jory api.
 
 ### Registering
 JoryResources are automatically discovered as long as they are in the default App\Http\JoryResources namespace.
-Alter the jory [config](#config) file or use the Register() method on the Jory facade to change this behaviour.
+Alter the jory [config](#config) file to change this behaviour, or use the ```register()``` method on the Jory facade to register manually.
 
 ### Linked model
-The ```modelClass``` attribute needs a reference to the related model. Normally there would be only one JoryResource for a model (however multiple is possible).
+The ```modelClass``` attribute needs a reference to the related model. Normally there would be only one JoryResource for each of your models (however multiple is possible).
 ```php
 protected $modelClass = AlbumCover::class;
 ```
 
 ### Uri
-By default your model can be called in the jory api using the kebabcased model name (e.g. ```/jory/album-cover```), you can set your own using the $uri attribute.
+By default your model can be called in the jory api using the kebabcased model name (e.g. ```/jory/album-cover```), you can set your own using the $uri attribute. The uri must be unique across all your JoryResources.
 ```php
 protected $uri = 'albumcover';
 ```
@@ -277,55 +277,239 @@ class BandJoryResource extends JoryResource
 }
 ```
 
-Note: It's advised to use the generator commands to create and pre-configure your JoryResources.
+Note: It's advised to use the ```jory:generate``` command to create and pre-configure your JoryResources.
+
+
+
+#### Registering fields
+You must explicitly configure which fields can be requested. A fields can be a model's database column or custom attribute and can be registered using the ```field()``` method.
+
+Apply the ```hideByDefault()``` method to NOT return this field when no explicit fields are requested in the [Jory query](https://packagist.org/packages/joskolenberg/jory).
+```php
+protected function configure(): void
+{
+    $this->field('id');
+    $this->field('name');
+    $this->field('number_of_songs');
+    $this->field('custom_attribute_with_heavy_calculations')->hideByDefault();
+    ...
+}
+```
 
 
 #### Registering filters
-A filter option can be registered using the ```filter()``` method. By default all operators are available, use the ```operators``` method if you only want to offer a limited set of operators:
+A filter option can be registered using the ```filter()``` method.
 ```php
-$this->filter('name')->operators(['like', '=']);
+protected function configure(): void
+{
+    ...
+
+    $this->filter('id');
+    $this->filter('name');
+    $this->filter('number_of_songs');
+    ...
+}
 ```
+By default there will be queried on a database column matching the name of the filter, but custom filters can be created by adding a FilterScope as a second parameter. This FilterScope class must implement the ```JosKolenberg\LaravelJory\Scopes\FilterScope``` interface.
+
+FilterScope: 
+```php
+use JosKolenberg\LaravelJory\Scopes\FilterScope;
+
+class HasSongWithTitleFilter implements FilterScope
+{
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param Builder|Relation $builder
+     * @param string $operator
+     * @param mixed $data
+     * @return void
+     */
+    public function apply($builder, string $operator = null, $data = null)
+    {
+        $builder->whereHas('songs', function ($builder) use ($operator, $data) {
+            $builder->where('title', $operator, $data);
+        });
+    }
+}
+```
+JoryResource configuration:
+```php
+protected function configure(): void
+{
+    ...
+
+    $this->filter('id');
+    $this->filter('name');
+    $this->filter('number_of_songs');
+    $this->filter('has_song_with_title', new HasSongWithTitleFilter);
+    ...
+}
+```
+
+By default all operators are available to the api, use the ```operators``` method if you only want to offer a limited set of operators:
 The available operators are: '=', '!=', '<>', '>', '>=', '<', '<=', '<=>', 'like', 'not_like', 'is_null', 'not_null', 'in' and 'not_in'.
+
+```php
+protected function configure(): void
+{
+    ...
+
+    $this->filter('id');
+    $this->filter('name');
+    $this->filter('number_of_songs')->operators(['>', '>=', '=', '<=', '<']);
+    $this->filter('has_song_with_title', new HasSongWithTitleFilter)->operators(['like', '=']);
+    ...
+}
+```
 
 #### Registering sorts
 A sort option can be registered using the ```sort()``` method.
 
-Apply the ```default()``` method on the sort to apply sorting on this field by default.
+Apply the ```default()``` method on the sort to apply sorting on this field when no sort parameter is given in the request.
 ```php
-$this->sort('id');
+protected function configure(): void
+{
+    ...
 
-$this->sort('name')->default();
+    $this->sort('id');
+    $this->sort('name')->default();
+    ...
+}
+```
+By default there will be sorted on the database column matching the name of the sort, but custom sorts can be created by adding a SortScope as a second parameter. This SortScope class must implement the ```JosKolenberg\LaravelJory\Scopes\SortScope``` interface.
+
+SortScope: 
+```php
+use JosKolenberg\LaravelJory\Scopes\SortScope;
+
+class BandNameSort implements SortScope
+{
+
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param Builder|Relation $builder
+     * @param string $order
+     * @return void
+     */
+    public function apply($builder, string $order = 'asc')
+    {
+        $builder->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $order);
+    }
+}
+```
+JoryResource configuration:
+```php
+protected function configure(): void
+{
+    ...
+
+    $this->sort('id');
+    $this->sort('name')->default();
+    $this->sort('band_name', new BandNameSort);
+    ...
+}
 ```
 
-#### Registering fields
-A field can be registered using the ```field()``` method.
-
-Apply the ```hideByDefault()``` method to NOT return this field when no explicit fields are requested in the [Jory query](https://packagist.org/packages/joskolenberg/jory).
-
-Because all fields will mostly be used for filtering and sorting as well, convenient ```filterable()``` and ```sortable()``` methods are provided to register this in one go. You can use an optional callback to fill out any filter and sort details. 
+#### Shorthand Field, Filter and Sort registering
+Because all fields will most likely be used for filtering and sorting as well, convenient ```filterable()``` and ```sortable()``` methods are provided to register this all in one go. You can use an optional callback to fill out any filter and sort details. 
 ```php
-$this->field('id')->hideByDefault()->filterable()->sortable();
+protected function configure(): void
+{
+    $this->field('id')->filterable()->sortable();
 
-$this->field('name')
-    ->filterable(function (Filter $filter) {
-        $filter->operators(['like', '=']);
-    })->sortable(function (Sort $sort) {
-        $sort->default();
-    });
+    $this->field('name')
+        ->filterable()
+        ->sortable(function (Sort $sort) {
+             $sort->default();
+         });
+
+    $this->field('number_of_songs')
+        ->filterable(function (Filter $filter) {
+            $filter->operators(['>', '>=', '=', '<=', '<']);
+        })->sortable();
+
+    $this->field('custom_attribute_with_heavy_calculations')->hideByDefault();
+    
+    $this->filter('has_song_with_title', new HasSongWithTitleFilter)->operators(['like', '=']);
+
+    $this->sort('band_name', new BandNameSort);
+}
 ```
 
 #### Registering relations
 A relation can be registered using the ```relation()``` method.
 When relations are fetched, the JoryResource for the related model will be used to handle the relation request.
 
-You can pass an JoryResource class as a second parameter if you don't want to use the default JoryResource for this relation.
+You can pass an JoryResource class as a second parameter if you don't want to use the registered JoryResource for this relation.
 
 ```php
 $this->relation('albums');
 
 $this->relation('songs', AlternateSongJoryResource::class);
 ```
-Note: mergeTo relations cannot be used by Jory due their dynamic nature. An easy workaround can be made by creating a separate belongsTo relation for each "morphable" type.  
+When calling a Jory api, relations can be requested as a count and/or with an alias as well.
+
+Requesting a band with:
+- Their total number of albums
+- Their 3 latest albums
+- Their total number of songs
+- Their number of songs with a top 1 ranking
+```javascript
+axios.get('jory/band/1', {
+    params: {
+        jory: {
+            fields: ["name"],
+            relations: {
+                "albums:count": {},
+                "albums as latest_albums" : {
+                    fields: ["name"],
+                    sorts: ["-release_date"],
+                    limit: 3
+                },
+                "songs:count as song_count": {},
+                "songs:count as hit_song_count": {
+                    filter: {
+                        field: "highest_ranking",
+                        operator: "=",
+                        data: 1,
+                    },
+                },
+            }
+        },
+    },
+});
+```
+Possible result:
+```json
+{
+    "data": {
+        "name": "Rolling Stones",
+        "albums:count": 15,
+        "latest_albums": [
+            {
+                "name": "Exile on main st.",
+                "release_date": "1972-05-12"
+            },
+            {
+                "name": "Sticky Fingers",
+                "release_date": "1971-04-23"
+            },
+            {
+                "name": "Let it bleed",
+                "release_date": "1969-12-05"
+            }
+        ],
+        "song_count": 143,
+        "hit_song_count": 31
+    }
+}
+```
+
+
+A note on relations: mergeTo relations cannot be used by Jory due their dynamic nature. However, an easy workaround can be made by creating a separate belongsTo relation for each "morphable" type.  
 
 #### Setting pagination defaults
 Use the ```limitDefault()``` method to set the default limit when no limit is given.
@@ -334,49 +518,6 @@ Use the ```limitMax()``` to set the maximum number of records that can be reques
 ```php
 $this->limitDefault(25)->limitMax(100);
 ```
-
-#### Defining custom filters
-Often you want to be able to filter on more than just a field. You can add custom filter methods to the JoryResource using the following convention ```scope{CustomName}Filter()```:
-```php
-public function scopeHasSongWithTitleFilter($query, $operator, $data)
-{
-    $query->whereHas('songs', function ($query) use ($operator, $data) {
-        $query->where('title', $operator, $data);
-    });
-}
-```
-And don't forget to register the field in the configuration:
-```php
-$this->filter('has_song_with_title');
-```
-
-Alternatively you can make use of Laravel's built in model scopes. When the custom filter function is available on the model the JoryResource will find it as well.
-
-#### Defining custom sorts
-Applying custom sorts is the same as custom filters except for the naming convention being ```scope{CustomName}Sort()```. This method receives a query (```Builder``` object) and order (string 'asc' or 'desc') parameter.
-
-#### Defining custom fields
-To make a model's custom attribute available in the JoryResource just add the field in the JoryResource's ```configure``` method.
-
-#### Hooks
-Sometimes you may want to hook into the process to do some additional tweaking.
-
-The JoryResource has these methods which can be overridden to do so:
-- ```beforeQueryBuild()``` Modify the query before all settings from the Jory request input are applied.
-- ```afterQueryBuild()``` Modify the query after all settings from the Jory request input are applied but before it is executed.
-- ```afterFetch()``` Modify the models right after they are fetched from the database but before they are turned into the result array.
-
-The ```hasField()```, ```hasFilter()``` and ```hasSort()``` helper methods are there to help you write conditionals based on the requested data.
-```php
-protected function afterFetch(Collection $collection): Collection
-{
-    if ($this->hasSort('total_price')) {
-        // Do some additional stuff...
-    }
-    
-    return $collection;
-}
-``` 
 
 ### Optimization
 
@@ -396,9 +537,11 @@ Call the ```explicitSelect()``` method to select only the requested fields in th
         $this->field('full_name')->select(['first_name', 'last_name']);
     }
 ```
+Note; the ```explicitSelect``` option is smart enough to detect any primary or foreign keys which need to be added to the query for any requested relations to be loaded.
+
 
 #### Eager loading
-When a custom attribute uses related models when calculating it's value you should always eager load this relations to prevent n+1 problems. Use the ```load()``` method when registering a field to eager load these relations only when this field is requested.
+When a custom attribute uses related models when calculating it's value you should always eager load these relations to prevent n+1 problems. Use the ```load()``` method when registering a field to eager load these relations when this field is requested.
 ```php
     protected function configure(): void
     {
@@ -426,13 +569,8 @@ public function store(Request $request)
 	return Jory::on($user);
 }
 ```
-The example above will use the (optional) [Jory query](https://packagist.org/packages/joskolenberg/jory) from the 'jory' parameter in the request, but if you don't want to be dynamic you could also set the [Jory query](https://packagist.org/packages/joskolenberg/jory) manually using the ```apply()``` method.
+The example above will use the (optional) [Jory query](https://packagist.org/packages/joskolenberg/jory) from the 'jory' parameter in the request, and return the data accordingly.
 
-```php
-return Jory::on($user)->apply([
-	'fld' => ['id', 'name', 'etc']
-]);
-```
 The facade can also be used on existing queries or a model's class name.
 ```php
 return Jory::on(User::where('active', true));
