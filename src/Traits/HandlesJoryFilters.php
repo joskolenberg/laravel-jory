@@ -72,10 +72,17 @@ trait HandlesJoryFilters
      */
     protected function applyFieldFilter($query, Filter $filter, JoryResource $joryResource): void
     {
-        // First check if there is a custom scope attached to the filter
+        /**
+         * First check if there is a custom scope attached
+         * to the filter. If so, apply that one.
+         */
         $scope = $joryResource->getConfig()->getFilter($filter)->getScope();
         if($scope){
-            $scope->apply($query, $filter->getOperator(), $filter->getData());
+            // Wrap in a where closure to encapsulate any OR clauses in custom method
+            // which could lead to unexpected results.
+            $query->where(function ($query) use ($joryResource, $filter, $scope) {
+                $scope->apply($query, $filter->getOperator(), $filter->getData());
+            });
             return;
         }
 
