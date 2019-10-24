@@ -90,7 +90,7 @@ trait AppliesConfigToJory
     protected function applyOffsetAndLimitToJory(Jory $jory, int $limit = null, int $limitDefault = null): void
     {
         if (is_null($limit) && $limitDefault !== null) {
-            $jory->setLimit($this->getLimitDefault());
+            $jory->setLimit($limitDefault);
         }
     }
 }
