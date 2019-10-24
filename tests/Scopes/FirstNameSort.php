@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\Scopes;
+namespace JosKolenberg\LaravelJory\Tests\Scopes;
 
 
 use JosKolenberg\LaravelJory\Scopes\SortScope;

@@ -4,8 +4,11 @@ namespace JosKolenberg\LaravelJory\Config;
 
 use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
+use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
 use JosKolenberg\LaravelJory\Scopes\SortScope;
+use JosKolenberg\LaravelJory\Traits\AppliesConfigToJory;
+use JosKolenberg\LaravelJory\Traits\ConvertsConfigToArray;
 
 /**
  * Class Config.
@@ -14,6 +17,8 @@ use JosKolenberg\LaravelJory\Scopes\SortScope;
  */
 class Config
 {
+    use AppliesConfigToJory, ConvertsConfigToArray;
+
     /**
      * @var string
      */
@@ -193,6 +198,23 @@ class Config
     }
 
     /**
+     * Get a config filter by it's name.
+     *
+     * @param $name
+     * @return Field|null
+     */
+    public function getField($name): ?Field
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field->getField() === $name) {
+                return $field;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get the filters in the config.
      *
      * @return array
@@ -297,6 +319,23 @@ class Config
     }
 
     /**
+     * Get a config relation by a jory relation.
+     *
+     * @param \JosKolenberg\Jory\Support\Relation $joryRelation
+     * @return Relation
+     */
+    public function getRelation(\JosKolenberg\Jory\Support\Relation $joryRelation): ?Relation
+    {
+        foreach ($this->relations as $relation) {
+            if ($relation->getName() === ResourceNameHelper::explode($joryRelation->getName())->baseName) {
+                return $relation;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Does this config use explicitSelect?
      *
      * @return bool
@@ -313,93 +352,8 @@ class Config
      */
     public function toArray(): array
     {
-        return [
-            'fields' => $this->fieldsToArray(),
-            'filters' => $this->filtersToArray(),
-            'sorts' => $this->sortsToArray(),
-            'limit' => [
-                'default' => $this->getLimitDefault(),
-                'max' => $this->getLimitMax(),
-            ],
-            'relations' => $this->relationsToArray(),
-        ];
+        return $this->configToArray($this);
     }
-
-    /**
-     * Turn the fields part of the config into an array.
-     *
-     * @return array
-     */
-    protected function fieldsToArray(): array
-    {
-        $result = [];
-        foreach ($this->fields as $field) {
-            $result[$field->getField()] = [
-                'description' => $field->getDescription(),
-                'default' => $field->isShownByDefault(),
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Turn the filters part of the config into an array.
-     *
-     * @return array
-     */
-    protected function filtersToArray(): array
-    {
-        $result = [];
-        foreach ($this->getFilters() as $filter) {
-            $result[$filter->getField()] = [
-                'description' => $filter->getDescription(),
-                'operators' => $filter->getOperators(),
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Turn the sorts part of the config into an array.
-     *
-     * @return array
-     */
-    protected function sortsToArray(): array
-    {
-        $result = [];
-        foreach ($this->getSorts() as $sort) {
-            $result[$sort->getField()] = [
-                'description' => $sort->getDescription(),
-                'default' => ($sort->getDefaultIndex() === null ? false : [
-                    'index' => $sort->getDefaultIndex(),
-                    'order' => $sort->getDefaultOrder(),
-                ]),
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Turn the relations part of the config into an array.
-     *
-     * @return array|string
-     */
-    protected function relationsToArray(): array
-    {
-        $result = [];
-        foreach ($this->relations as $relation) {
-            $result[$relation->getName()] = [
-                'description' => $relation->getDescription(),
-                'type' => $relation->getType(),
-            ];
-        }
-
-        return $result;
-    }
-
     /**
      * Update a Jory query object with the defaults from this Config.
      *
@@ -409,89 +363,6 @@ class Config
      */
     public function applyToJory(Jory $jory): Jory
     {
-        $this->applyFieldsToJory($jory);
-        $this->applySortsToJory($jory);
-        $this->applyOffsetAndLimitToJory($jory);
-
-        return $jory;
-    }
-
-    /**
-     * Apply the field settings in this Config on the Jory query.
-     *
-     * When no fields are specified in the request, the default fields in will be set on the Jory query.
-     *
-     * @param Jory $jory
-     */
-    protected function applyFieldsToJory(Jory $jory): void
-    {
-        if ($jory->getFields() === null) {
-            // No fields set in the request, than we will update the fields
-            // with the ones to be shown by default.
-            $defaultFields = [];
-            foreach ($this->getFields() as $field) {
-                if ($field->isShownByDefault()) {
-                    $defaultFields[] = $field->getField();
-                }
-            }
-            $jory->setFields($defaultFields);
-        }
-    }
-
-    /**
-     * Apply the sort settings in this Config on the Jory query.
-     *
-     * @param Jory $jory
-     * @throws JoryException
-     */
-    protected function applySortsToJory(Jory $jory): void
-    {
-        /**
-         * When default sorts are defined, add them to the Jory query.
-         * When no sorts are requested, the default sorts in this Config will be applied.
-         * When sorts are requested, the default sorts are applied after the requested ones.
-         */
-        $defaultSorts = [];
-        foreach ($this->getSorts() as $sort) {
-            if ($sort->getDefaultIndex() !== null) {
-                $defaultSorts[$sort->getDefaultIndex()] = new \JosKolenberg\Jory\Support\Sort($sort->getField(),
-                    $sort->getDefaultOrder());
-            }
-        }
-        ksort($defaultSorts);
-        foreach ($defaultSorts as $sort) {
-            $jory->addSort($sort);
-        }
-    }
-
-    /**
-     * Apply the offset and limit settings in this Config on the Jory query.
-     *
-     * When no offset or limit is set, the defaults will be used.
-     *
-     * @param Jory $jory
-     */
-    protected function applyOffsetAndLimitToJory(Jory $jory): void
-    {
-        if (is_null($jory->getLimit()) && $this->getLimitDefault() !== null) {
-            $jory->setLimit($this->getLimitDefault());
-        }
-    }
-
-    /**
-     * Get a relation by it's name.
-     *
-     * @param $relationName
-     * @return Relation
-     */
-    public function getRelation($relationName): ?Relation
-    {
-        foreach ($this->relations as $relation) {
-            if ($relation->getName() === $relationName) {
-                return $relation;
-            }
-        }
-
-        return null;
+        return $this->applyConfigToJory($jory, $this);
     }
 }

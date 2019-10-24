@@ -1,10 +1,10 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\JoryResources\Scopes;
+namespace JosKolenberg\LaravelJory\Tests\Scopes;
 
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
 
-class HasSmallIdFilter implements FilterScope
+class SpecialFirstNameFilter implements FilterScope
 {
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -16,6 +16,6 @@ class HasSmallIdFilter implements FilterScope
      */
     public function apply($builder, string $operator = null, $data = null)
     {
-        $builder->where('id', '<', 3);
+        $builder->where('first_name', '=', 'John');
     }
 }

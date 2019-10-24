@@ -83,11 +83,8 @@ trait HandlesJorySelects
 
         $table = $query->getModel()->getTable();
 
-        $configuredFields = $joryResource->getConfig()->getFields();
         foreach ($joryResource->getJory()->getFields() as $fieldName) {
-            $configuredField = Arr::first($configuredFields, function (Field $configuredField) use ($fieldName) {
-                return $configuredField->getField() === $fieldName;
-            });
+            $configuredField = $joryResource->getConfig()->getField($fieldName);
 
             if ($configuredField->getSelect() === null) {
                 $fields[] = $table . '.' . Str::snake($fieldName);
@@ -143,11 +140,8 @@ trait HandlesJorySelects
 
         $model = $query->getModel();
 
-        $configuredFields = $joryResource->getConfig()->getFields();
         foreach ($joryResource->getJory()->getFields() as $fieldName) {
-            $configuredField = Arr::first($configuredFields, function (Field $configuredField) use ($fieldName) {
-                return $configuredField->getField() === $fieldName;
-            });
+            $configuredField = $joryResource->getConfig()->getField($fieldName);
 
             if ($configuredField->getEagerLoads() !== null) {
                 foreach ($configuredField->getEagerLoads() as $eagerLoad){

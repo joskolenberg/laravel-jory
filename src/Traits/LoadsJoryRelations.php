@@ -147,12 +147,8 @@ trait LoadsJoryRelations
     {
         $eagerLoads = [];
 
-        $configuredFields = $joryResource->getConfig()->getFields();
-
         foreach ($joryResource->getJory()->getFields() as $fieldName) {
-            $configuredField = Arr::first($configuredFields, function (Field $configuredField) use ($fieldName) {
-                return $configuredField->getField() === $fieldName;
-            });
+            $configuredField = $joryResource->getConfig()->getField($fieldName);
 
             if ($configuredField->getEagerLoads() !== null) {
                 $eagerLoads = array_merge($eagerLoads, $configuredField->getEagerLoads());
@@ -183,12 +179,10 @@ trait LoadsJoryRelations
      */
     protected function getJoryResourceForRelation(Relation $relation, JoryResource $joryResource)
     {
-        $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
-
         // Build the JoryResource to be applied on the relation query.
         $relatedJoryResource = $joryResource
             ->getConfig()
-            ->getRelation($relationName)
+            ->getRelation($relation)
             ->getJoryResource()
             ->fresh();
 

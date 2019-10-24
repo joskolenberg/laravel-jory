@@ -349,9 +349,7 @@ abstract class JoryResource
             $this->relatedJoryResources = [];
 
             foreach ($this->jory->getRelations() as $relation) {
-                $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
-
-                $relatedJoryResource = $this->getConfig()->getRelation($relationName)->getJoryResource()->fresh();
+                $relatedJoryResource = $this->getConfig()->getRelation($relation)->getJoryResource()->fresh();
 
                 $relatedJoryResource->setJory($relation->getJory());
 

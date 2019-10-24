@@ -206,10 +206,8 @@ class Validator
     protected function validateSubJories(): void
     {
         foreach ($this->jory->getRelations() as $joryRelation) {
-            $relationName = ResourceNameHelper::explode($joryRelation->getName())->baseName;
-
             $relation = $relatedModelClass = $this->config
-                ->getRelation($relationName);
+                ->getRelation($joryRelation);
 
             /**
              * If the relation could not be found, there will already be

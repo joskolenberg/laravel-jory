@@ -4,8 +4,8 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Scopes\AlphabeticNameSort;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Scopes\HasSmallIdFilter;
+use JosKolenberg\LaravelJory\Tests\Scopes\AlphabeticNameSort;
+use JosKolenberg\LaravelJory\Tests\Scopes\HasSmallIdFilter;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterFetchHook;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAfterQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
