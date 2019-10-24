@@ -11,7 +11,6 @@ use JosKolenberg\LaravelJory\JoryServiceProvider;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\BandJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\PersonJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithBeforeQueryBuildFilterHook;
 use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
@@ -1005,7 +1004,6 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
          */
         Jory::register(BandJoryResource::class);
         Jory::register(PersonJoryResource::class);
-        Jory::register(SongJoryResourceWithBeforeQueryBuildFilterHook::class);
         Jory::register(SongJoryResource::class);
     }
 

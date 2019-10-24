@@ -60,7 +60,6 @@ class RegisterTest extends TestCase
             'instrument',
             'person',
             'song',
-            'song-custom',
             'tag',
         ];
 

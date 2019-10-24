@@ -129,8 +129,6 @@ class JoryBuilder
     {
         $jory = $this->joryResource->getJory();
 
-        $this->joryResource->beforeQueryBuild($query);
-
         $this->applySelects($query, $this->joryResource);
 
         // Apply filters if there are any
@@ -154,8 +152,6 @@ class JoryBuilder
      */
     public function applyOnCountQuery($query)
     {
-        $this->joryResource->beforeQueryBuild($query, true);
-
         // Apply filters if there are any
         if ($this->joryResource->getJory()->getFilter()) {
             $this->applyFilter($query, $this->joryResource);
@@ -177,7 +173,6 @@ class JoryBuilder
     {
         if ($offset !== null) {
             // Check on null, so even 0 will be applied.
-            // In case a default is set in beforeQueryBuild()
             // this can be overruled by the request this way.
             $query->offset($offset);
         }

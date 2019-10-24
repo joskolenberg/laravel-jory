@@ -430,45 +430,9 @@ class JoryRoutesTest extends TestCase
     }
 
     /** @test */
-    public function it_applies_scopes_defined_in_a_custom_jory_resource_when_requesting_a_single_record_1()
-    {
-        $response = $this->json('GET', 'jory/song-custom/74', [
-            'jory' => '{"fld":["title"]}',
-        ]);
-
-        $expected = [
-            'data' => null,
-        ];
-
-        // ExactJson doesn't tell if the sort order is right so do both checks.
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
-    public function it_applies_scopes_defined_in_a_custom_jory_resource_when_requesting_a_single_record_2()
-    {
-        $response = $this->json('GET', 'jory/song-custom/75', [
-            'jory' => '{"fld":["title"]}',
-        ]);
-
-        $expected = [
-            'data' => [
-                'title' => 'Lovely Rita',
-            ],
-        ];
-
-        // ExactJson doesn't tell if the sort order is right so do both checks.
-        $response->assertStatus(200)->assertJson($expected)->assertExactJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
     public function it_can_handle_an_incoming_array_instead_of_json()
     {
-        $response = $this->json('GET', 'jory/song-custom/75', [
+        $response = $this->json('GET', 'jory/song/75', [
             'jory' => [
                 'fld' => ['title'],
             ],
