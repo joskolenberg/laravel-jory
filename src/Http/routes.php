@@ -1,8 +1,8 @@
 <?php
 
-Route::get('', 'JoryController@multiple');
+Route::get('', 'JoryController@multiple')->name('jory.multiple');
 
 // Routes by resource
-Route::get('/{resource}/count', 'JoryController@count');
-Route::get('/{resource}/{id}', 'JoryController@show');
-Route::get('/{resource}', 'JoryController@index');
+Route::get('/{resource}/count', 'JoryController@count')->name('jory.count');
+Route::get('/{resource}/{id}', 'JoryController@show')->name('jory.show');
+Route::get('/{resource}', 'JoryController@index')->name('jory.index');

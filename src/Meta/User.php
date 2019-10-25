@@ -6,15 +6,8 @@ namespace JosKolenberg\LaravelJory\Meta;
 
 use Illuminate\Support\Facades\Auth;
 
-class User implements Metadata
+class User extends Metadata
 {
-
-    /**
-     * Do any preparation for the metadata.
-     * Called at the start of the request.
-     *
-     */
-    public function init(){}
 
     /**
      * Get the return value for the metadata.

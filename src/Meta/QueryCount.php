@@ -4,18 +4,19 @@
 namespace JosKolenberg\LaravelJory\Meta;
 
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class QueryCount implements Metadata
+class QueryCount extends Metadata
 {
-
     /**
-     * Do any preparation for the metadata.
-     * Called at the start of the request.
-     *
+     * QueryCount constructor.
+     * @param Request $request
      */
-    public function init()
+    public function __construct(Request $request)
     {
+        parent::__construct($request);
+
         DB::enableQueryLog();
     }
 

@@ -196,4 +196,109 @@ class MetadataTest extends TestCase
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_can_give_the_total_records_for_a_single_resource()
+    {
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"fld":["title"],"filter":{"f":"title","o":"like","d":"%love%"},"lmt":3}',
+            'meta' => ['total'],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'title' => 'Love In Vain (Robert Johnson)',
+                ],
+                [
+                    'title' => 'Lovely Rita',
+                ],
+                [
+                    'title' => 'Whole Lotta Love',
+                ],
+            ],
+            'meta' => [
+                'total' => 8,
+            ]
+        ]);
+
+        $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_give_the_total_records_for_multiple_resources_and_returns_no_total_for_count_or_show_requests()
+    {
+        $response = $this->json('GET', 'jory', [
+            'jory' => [
+                'song as lovesongs' => [
+                    "fld" => ['title'],
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                    'lmt' => 3,
+                    'srt' => ["id"]
+                ],
+                'song:count as lovesong_count' => [
+                    "fld" => ['title'],
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                    'lmt' => 3,
+                    'srt' => ["id"]
+                ],
+                'song as all_songs' => [
+                    'fld' => ['title'],
+                    'lmt' => 3,
+                    'srt' => ["id"]
+                ],
+                'song:1 as first_song' => [
+                    'fld' => ['title'],
+                ],
+            ],
+            'meta' => ['total'],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'lovesongs' => [
+                    [
+                        'title' => 'Love In Vain (Robert Johnson)',
+                    ],
+                    [
+                        'title' => 'Lovely Rita',
+                    ],
+                    [
+                        'title' => 'Whole Lotta Love',
+                    ],
+                ],
+                'lovesong_count' => 8,
+                'all_songs' => [
+                    [
+                        'title' => 'Gimme Shelter',
+                    ],
+                    [
+                        'title' => 'Love In Vain (Robert Johnson)',
+                    ],
+                    [
+                        'title' => 'Country Honk',
+                    ],
+                ],
+                'first_song' => [
+                    'title' => 'Gimme Shelter',
+                ],
+            ],
+            'meta' => [
+                'total' => [
+                    'lovesongs' => 8,
+                    'all_songs' => 147,
+                ],
+            ]
+        ]);
+
+        $this->assertQueryCount(6);
+    }
 }

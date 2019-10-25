@@ -142,7 +142,7 @@ class JoryMultipleResponse implements Responsable
             $this->dataIntoJories();
         }
 
-        //Process all Jorie queries.
+        //Process all Jory queries.
         $results = [];
         $errors = [];
         foreach ($this->jories as $single) {

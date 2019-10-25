@@ -32,9 +32,7 @@ trait ProcessesMetadata
 
         foreach ($availableMetaData as $metaName => $metaClass) {
             if (in_array($metaName, $requestedMetaData)) {
-                $metaObject = new $metaClass();
-                $metaObject->init();
-                $this->meta[$metaName] = $metaObject;
+                $this->meta[$metaName] = new $metaClass($request);
             }
         }
     }

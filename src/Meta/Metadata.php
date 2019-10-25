@@ -4,20 +4,28 @@
 namespace JosKolenberg\LaravelJory\Meta;
 
 
-interface Metadata
+use Illuminate\Http\Request;
+
+abstract class Metadata
 {
+
+    protected $request;
+
     /**
-     * Do any preparation for the metadata.
-     * Called at the start of the request.
+     * Metadata constructor.
      *
+     * @param Request $request
      */
-    public function init();
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * Get the return value for the metadata.
      * Called at the end of the request.
      *
      */
-    public function get();
+    abstract public function get();
 
 }

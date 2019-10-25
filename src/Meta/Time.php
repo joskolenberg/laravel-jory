@@ -4,18 +4,24 @@
 namespace JosKolenberg\LaravelJory\Meta;
 
 
-class Time implements Metadata
+use Illuminate\Http\Request;
+
+class Time extends Metadata
 {
 
+    /**
+     * @var float
+     */
     protected $startTime;
 
     /**
-     * Do any preparation for the metadata.
-     * Called at the start of the request.
-     *
+     * Time constructor.
+     * @param Request $request
      */
-    public function init()
+    public function __construct(Request $request)
     {
+        parent::__construct($request);
+
         $this->startTime = microtime(true);
     }
 
