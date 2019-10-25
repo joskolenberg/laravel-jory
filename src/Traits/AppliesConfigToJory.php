@@ -65,7 +65,7 @@ trait AppliesConfigToJory
         $defaultSorts = [];
         foreach ($sorts as $sort) {
             if ($sort->getDefaultIndex() !== null) {
-                $defaultSorts[$sort->getDefaultIndex()] = new \JosKolenberg\Jory\Support\Sort($sort->getField(),
+                $defaultSorts[$sort->getDefaultIndex()] = new \JosKolenberg\Jory\Support\Sort($sort->getName(),
                     $sort->getDefaultOrder());
             }
         }

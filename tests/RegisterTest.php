@@ -123,12 +123,12 @@ class RegisterTest extends TestCase
             ],
             'sorts' => [
                 [
-                    'field' => 'id',
+                    'name' => 'id',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'title',
+                    'name' => 'title',
                     'description' => 'Order by the title.',
                     'default' => false,
                 ],
@@ -199,7 +199,7 @@ class RegisterTest extends TestCase
             ],
             'sorts' => [
                 [
-                    'field' => 'title',
+                    'name' => 'title',
                     'description' => null,
                     'default' => false,
                 ],
@@ -243,7 +243,7 @@ class RegisterTest extends TestCase
             'filters' => [],
             'sorts' => [
                 [
-                    'field' => 'title',
+                    'name' => 'title',
                     'description' => null,
                     'default' => [
                         'index' => 2,
@@ -251,7 +251,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'album_name',
+                    'name' => 'album_name',
                     'description' => null,
                     'default' => [
                         'index' => 1,
@@ -423,22 +423,22 @@ class RegisterTest extends TestCase
             ],
             'sorts' => [
                 [
-                    'field' => 'id',
+                    'name' => 'id',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'name',
+                    'name' => 'name',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'year_start',
+                    'name' => 'year_start',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'year_end',
+                    'name' => 'year_end',
                     'description' => null,
                     'default' => false,
                 ],
@@ -693,37 +693,37 @@ class RegisterTest extends TestCase
             ],
             'sorts' => [
                 [
-                    'field' => 'number_of_songs',
+                    'name' => 'number_of_songs',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'band_name',
+                    'name' => 'band_name',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'alphabetic_name',
+                    'name' => 'alphabetic_name',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'id',
+                    'name' => 'id',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'name',
+                    'name' => 'name',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'band_id',
+                    'name' => 'band_id',
                     'description' => null,
                     'default' => false,
                 ],
                 [
-                    'field' => 'release_date',
+                    'name' => 'release_date',
                     'description' => null,
                     'default' => false,
                 ],

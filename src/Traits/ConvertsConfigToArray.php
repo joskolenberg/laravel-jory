@@ -80,7 +80,7 @@ trait ConvertsConfigToArray
         $result = [];
         foreach ($sorts as $sort) {
             $result[] = [
-                'field' => $sort->getField(),
+                'name' => $sort->getName(),
                 'description' => $sort->getDescription(),
                 'default' => ($sort->getDefaultIndex() === null ? false : [
                     'index' => $sort->getDefaultIndex(),

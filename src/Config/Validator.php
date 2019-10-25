@@ -153,7 +153,7 @@ class Validator
     {
         $availableFields = [];
         foreach ($this->config->getSorts() as $sort) {
-            $availableFields[] = $sort->getField();
+            $availableFields[] = $sort->getName();
         }
 
         foreach ($this->jory->getSorts() as $jorySort) {

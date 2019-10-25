@@ -15,7 +15,7 @@ class Sort
     /**
      * @var string
      */
-    protected $field;
+    protected $name;
 
     /**
      * @var null|string
@@ -45,12 +45,12 @@ class Sort
     /**
      * Sort constructor.
      *
-     * @param string $field
+     * @param string $name
      * @param SortScope $scope
      */
-    public function __construct(string $field, SortScope $scope = null)
+    public function __construct(string $name, SortScope $scope = null)
     {
-        $this->field = $field;
+        $this->name = $name;
         $this->scope = $scope;
 
         $this->case = app(CaseManager::class);
@@ -87,9 +87,9 @@ class Sort
      *
      * @return string
      */
-    public function getField(): string
+    public function getName(): string
     {
-        return $this->case->toCurrent($this->field);
+        return $this->case->toCurrent($this->name);
     }
 
     /**

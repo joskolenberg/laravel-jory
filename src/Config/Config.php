@@ -277,7 +277,7 @@ class Config
     public function getSort(\JosKolenberg\Jory\Support\Sort $jorySort): ?Sort
     {
         foreach ($this->getSorts() as $sort) {
-            if ($sort->getField() === $jorySort->getField()) {
+            if ($sort->getName() === $jorySort->getField()) {
                 return $sort;
             }
         }
