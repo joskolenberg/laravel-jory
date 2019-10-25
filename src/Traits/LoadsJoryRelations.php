@@ -133,7 +133,7 @@ trait LoadsJoryRelations
     /**
      * Load any relations to be eager loaded.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param Collection $collection
      * @param JoryResource $joryResource
      */
     protected function applyEagerLoads(Collection $collection, JoryResource $joryResource): void

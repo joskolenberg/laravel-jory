@@ -12,7 +12,7 @@ trait HandlesJorySorts
      * Apply an array of sorts on the query.
      *
      * @param $builder
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param JoryResource $joryResource
      */
     protected function applySorts($builder, JoryResource $joryResource): void
     {
@@ -26,7 +26,7 @@ trait HandlesJorySorts
      *
      * @param $builder
      * @param Sort $sort
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param JoryResource $joryResource
      */
     protected function applySort($builder, Sort $sort, JoryResource $joryResource): void
     {

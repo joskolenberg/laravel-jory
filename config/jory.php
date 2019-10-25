@@ -155,6 +155,7 @@ return [
     'metadata' => [
 
         'query_count' => \JosKolenberg\LaravelJory\Meta\QueryCount::class,
+        'time' => \JosKolenberg\LaravelJory\Meta\Time::class,
 
     ],
 

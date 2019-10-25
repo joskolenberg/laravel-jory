@@ -47,7 +47,7 @@ trait HandlesJorySelects
      * Apply the select part of the query based on the requested fields and relations.
      *
      * @param $builder
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param JoryResource $joryResource
      */
     protected function applySelectsByJory($builder, JoryResource $joryResource)
     {

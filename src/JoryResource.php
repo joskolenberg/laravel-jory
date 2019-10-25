@@ -98,7 +98,7 @@ abstract class JoryResource
      * Add a filter option which can be applied by the API users.
      *
      * @param $field
-     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope|null $scope
+     * @param FilterScope|null $scope
      * @return Filter
      */
     public function filter($field, FilterScope $scope = null): Filter
@@ -327,7 +327,7 @@ abstract class JoryResource
      * Turn the result of a loaded relation into a result array.
      *
      * @param mixed $relatedData
-     * @param \JosKolenberg\LaravelJory\JoryResource $relatedJoryResource
+     * @param JoryResource $relatedJoryResource
      * @return array|null
      */
     protected function turnRelationResultIntoArray($relatedData, JoryResource $relatedJoryResource):? array

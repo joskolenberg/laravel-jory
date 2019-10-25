@@ -75,10 +75,10 @@ class MetadataTest extends TestCase
                     'songs:count' => 37,
                 ],
                 'led_zeppelin' => [
-                'name' => "Led Zeppelin",
-                'albums:count' => 3,
-                'songs:count' => 28,
-            ]            ],
+                    'name' => "Led Zeppelin",
+                    'albums:count' => 3,
+                    'songs:count' => 28,
+                ]],
             'meta' => [
                 'query_count' => 6
             ]
@@ -109,6 +109,30 @@ class MetadataTest extends TestCase
         ]);
 
         $this->assertQueryCount(3);
+
+    }
+
+    /** @test */
+    public function it_can_return_the_processing_time()
+    {
+        $response = $this->json('GET', 'jory/song/1', [
+            'jory' => '{}',
+            'meta' => ['query_count', 'time'],
+        ]);
+
+        $response->assertStatus(200)->assertJsonStructure([
+            'data' => [
+                'id',
+                'album_id',
+                'title',
+            ],
+            'meta' => [
+                'query_count',
+                'time'
+            ]
+        ]);
+
+        $this->assertQueryCount(1);
 
     }
 }
