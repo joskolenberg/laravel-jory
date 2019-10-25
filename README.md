@@ -527,18 +527,6 @@ Use the ```limitMax()``` to set the maximum number of records that can be reques
 $this->limitDefault(25)->limitMax(100);
 ```
 
-## Error messages
-Whenever a request is made using invalid data the client receives a 422 status code along with helpful error messages like:
-```
-Field "first_nam" is not available, did you mean "first_name"? (Location: fields.first_nam)
-```
-```
-Field "releaseDaate" is not available for filtering, did you mean "releaseDate"? (Location: albums.filter(or).1(releaseDaate))
-```
-```
-Jory string is no valid json.
-```
-
 ## Optimization
 
 ### Explicit select
@@ -655,6 +643,31 @@ The config file has options to:
 - Configure the autogenerator for JoryResources.
 
 All setting in the [config](https://github.com/joskolenberg/laravel-jory/blob/master/config/jory.php) file should be pretty self explanatory.
+
+## Various
+
+### Error messages
+Whenever a request is made using invalid data the client receives a 422 status code along with helpful error messages like:
+```
+Field "first_nam" is not available, did you mean "first_name"? (Location: fields.first_nam)
+```
+```
+Field "releaseDaate" is not available for filtering, did you mean "releaseDate"? (Location: albums.filter(or).1(releaseDaate))
+```
+```
+Jory string is no valid json.
+```
+
+### Base64 support
+The Jory api may be consumed with base64 encoded json strings as well to provide prettier urls. As a bonus this can also resolve some edge-case problems when using reserved keywords in your json string combined with webserver restrictions.
+```
+GET /jory/band?jory=eyJmaWx0ZXIiOnsiZiI6Im51bWJlcl9vZl9hbGJ1bXNfaW5feWVhciIsIm8iOiI9IiwiZCI6eyJ5ZWFyIjoxOTcwLCJ2YWx1ZSI6MX19LCJybHQiOnsiYWxidW1zIjp7ImZsdCI6eyJmIjoiaGFzX3Nvbmdfd2l0aF90aXRsZSIsIm8iOiJsaWtlIiwiZCI6IiVsb3ZlJSJ9LCJybHQiOnsiY292ZXIiOnt9fX0sInNvbmdzIjp7ImZsdCI6eyJmIjoidGl0bGUiLCJvIjoibGlrZSIsImQiOiIlYWMlIn0sInJsdCI6eyJhbGJ1bSI6eyJybHQiOnsiYmFuZCI6e319fX0sImZsZCI6WyJpZCIsInRpdGxlIl19LCJwZW9wbGUiOnsiZmxkIjpbImlkIiwibGFzdF9uYW1lIl0sInJsdCI6eyJpbnN0cnVtZW50cyI6e319fX19
+```
+equals
+```
+GET /jory/band?jory={"filter":{"f":"number_of_albums_in_year","o":"=","d":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","d":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","d":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}},"fld":["id","title"]},"people":{"fld":["id","last_name"],"rlt":{"instruments":{}}}}}
+```
+Note: Adding base64 encoding does not provide any security. For real security use the other [security](#security) options instead.
 
 
 That's it! Any suggestions or issues? Please contact me!
