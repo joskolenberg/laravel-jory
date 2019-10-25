@@ -410,10 +410,10 @@ abstract class JoryResource
     /**
      * Apply any user specific actions on the query.
      *
-     * @param $query
+     * @param $builder
      * @param null $user
      */
-    public function authorize($query, $user = null): void
+    public function authorize($builder, $user = null): void
     {
     }
 

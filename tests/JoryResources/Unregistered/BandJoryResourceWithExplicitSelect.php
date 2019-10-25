@@ -60,10 +60,10 @@ class BandJoryResourceWithExplicitSelect extends JoryResource
         }, $operator, $value);
     }
 
-    public function authorize($query, $user = null): void
+    public function authorize($builder, $user = null): void
     {
         if($user && $user->id == 1){
-            $query->where('id', '>=', 3);
+            $builder->where('id', '>=', 3);
         }
     }
 }
