@@ -79,9 +79,9 @@ trait LoadsJoryRelations
         $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
 
         $collection->load([
-            $relationName => function ($query) use ($relatedJoryBuilder, $relation) {
+            $relationName => function ($builder) use ($relatedJoryBuilder, $relation) {
                 // Apply the data in the subjory (filtering/sorting/...) on the query
-                $relatedJoryBuilder->applyOnQuery($query);
+                $relatedJoryBuilder->applyOnQuery($builder);
             },
         ]);
 
