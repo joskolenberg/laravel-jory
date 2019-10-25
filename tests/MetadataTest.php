@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\LaravelJory\Tests\Models\User;
+
 class MetadataTest extends TestCase
 {
 
@@ -33,7 +35,6 @@ class MetadataTest extends TestCase
         ]);
 
         $this->assertQueryCount(2);
-
     }
 
     /** @test */
@@ -56,7 +57,6 @@ class MetadataTest extends TestCase
         ]);
 
         $this->assertQueryCount(3);
-
     }
 
     /** @test */
@@ -85,7 +85,6 @@ class MetadataTest extends TestCase
         ]);
 
         $this->assertQueryCount(6);
-
     }
 
     /** @test */
@@ -109,7 +108,6 @@ class MetadataTest extends TestCase
         ]);
 
         $this->assertQueryCount(3);
-
     }
 
     /** @test */
@@ -133,6 +131,69 @@ class MetadataTest extends TestCase
         ]);
 
         $this->assertQueryCount(1);
+    }
 
+    /** @test */
+    public function it_can_return_the_current_users_email()
+    {
+        $this->actingAs(User::find(3));
+
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{}}}',
+            'meta' => ['query_count', 'user'],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'id' => 12,
+                    'album_id' => 2,
+                    'title' => 'Wild Horses',
+                    'album' => [
+                        'id' => 2,
+                        'band_id' => 1,
+                        'name' => 'Sticky Fingers',
+                        'release_date' => '1971-04-23 00:00:00',
+                    ],
+                ],
+            ],
+            'meta' => [
+                'query_count' => 3,
+                'user' => 'ronnie@rollingstones.com',
+            ]
+        ]);
+
+        $this->assertQueryCount(3);
+    }
+
+    /** @test */
+    public function it_returns_null_if_no_user_is_logged_in()
+    {
+        $response = $this->json('GET', 'jory/song', [
+            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{}}}',
+            'meta' => ['query_count', 'user'],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'id' => 12,
+                    'album_id' => 2,
+                    'title' => 'Wild Horses',
+                    'album' => [
+                        'id' => 2,
+                        'band_id' => 1,
+                        'name' => 'Sticky Fingers',
+                        'release_date' => '1971-04-23 00:00:00',
+                    ],
+                ],
+            ],
+            'meta' => [
+                'query_count' => 2,
+                'user' => null,
+            ]
+        ]);
+
+        $this->assertQueryCount(2);
     }
 }
