@@ -141,7 +141,7 @@ class Validator
         // When we get here the field was not found in the config
         $availableFields = [];
         foreach ($this->config->getFilters() as $bpf) {
-            $availableFields[] = $bpf->getField();
+            $availableFields[] = $bpf->getName();
         }
         $this->errors[] = 'Field "' . $joryFilter->getField() . '" is not available for filtering, ' . $this->getSuggestion($availableFields, $joryFilter->getField()) . ' (Location: ' . $address . '(' . $joryFilter->getField() . '))';
     }

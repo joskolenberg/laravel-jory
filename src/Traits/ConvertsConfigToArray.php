@@ -60,7 +60,7 @@ trait ConvertsConfigToArray
         $result = [];
         foreach ($filters as $filter) {
             $result[] = [
-                'field' => $filter->getField(),
+                'name' => $filter->getName(),
                 'description' => $filter->getDescription(),
                 'operators' => $filter->getOperators(),
             ];

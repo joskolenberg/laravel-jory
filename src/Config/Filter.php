@@ -15,7 +15,7 @@ class Filter
     /**
      * @var string
      */
-    protected $field;
+    protected $name;
 
     /**
      * @var array
@@ -33,19 +33,19 @@ class Filter
     protected $case = null;
 
     /**
-     * @var \JosKolenberg\LaravelJory\Scopes\FilterScope
+     * @var FilterScope
      */
     protected $scope = null;
 
     /**
      * Field constructor.
      *
-     * @param string $field
-     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope|null $scope
+     * @param string $name
+     * @param FilterScope|null $scope
      */
-    public function __construct(string $field, FilterScope $scope = null)
+    public function __construct(string $name, FilterScope $scope = null)
     {
-        $this->field = $field;
+        $this->name = $name;
         $this->scope = $scope;
         $this->operators = config('jory.filters.operators');
 
@@ -92,13 +92,13 @@ class Filter
     }
 
     /**
-     * Get the filter's field.
+     * Get the filter's name.
      *
      * @return string
      */
-    public function getField(): string
+    public function getName(): string
     {
-        return $this->case->toCurrent($this->field);
+        return $this->case->toCurrent($this->name);
     }
 
     /**

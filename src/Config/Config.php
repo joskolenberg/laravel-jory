@@ -102,13 +102,13 @@ class Config
     /**
      * Add a filter to the config.
      *
-     * @param $field
-     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope|null $scope
+     * @param $name
+     * @param FilterScope|null $scope
      * @return Filter
      */
-    public function filter($field, FilterScope $scope = null): Filter
+    public function filter($name, FilterScope $scope = null): Filter
     {
-        $filter = new Filter($field, $scope);
+        $filter = new Filter($name, $scope);
 
         $this->filters[] = $filter;
 
@@ -236,12 +236,12 @@ class Config
      * Get a config filter by a jory filter.
      *
      * @param \JosKolenberg\Jory\Support\Filter $joryFilter
-     * @return \JosKolenberg\LaravelJory\Config\Filter|null
+     * @return Filter|null
      */
     public function getFilter(\JosKolenberg\Jory\Support\Filter $joryFilter): ?Filter
     {
         foreach ($this->getFilters() as $filter) {
-            if ($filter->getField() === $joryFilter->getField()) {
+            if ($filter->getName() === $joryFilter->getField()) {
                 return $filter;
             }
         }

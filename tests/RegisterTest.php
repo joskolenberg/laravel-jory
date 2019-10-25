@@ -94,7 +94,7 @@ class RegisterTest extends TestCase
             ],
             'filters' => [
                 [
-                    'field' => 'title',
+                    'name' => 'title',
                     'description' => 'Filter on the title.',
                     'operators' => [
                         '=',
@@ -114,7 +114,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'album_id',
+                    'name' => 'album_id',
                     'description' => 'Filter on the album id.',
                     'operators' => [
                         '=',
@@ -177,7 +177,7 @@ class RegisterTest extends TestCase
             ],
             'filters' => [
                 [
-                    'field' => 'title',
+                    'name' => 'title',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -321,7 +321,7 @@ class RegisterTest extends TestCase
             ],
             'filters' => [
                 [
-                    'field' => 'has_album_with_name',
+                    'name' => 'has_album_with_name',
                     'description' => 'Filter bands that have an album with a given name.',
                     'operators' => [
                         '=',
@@ -341,12 +341,12 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'number_of_albums_in_year',
+                    'name' => 'number_of_albums_in_year',
                     'description' => 'Filter the bands that released a given number of albums in a year, pass value and year parameter.',
                     'operators' => ['=', '>', '<', '<=', '>=', '<>', '!='],
                 ],
                 [
-                    'field' => 'id',
+                    'name' => 'id',
                     'description' => 'Try this filter by id!',
                     'operators' => [
                         '=',
@@ -361,7 +361,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'name',
+                    'name' => 'name',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -381,7 +381,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'year_start',
+                    'name' => 'year_start',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -401,7 +401,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'year_end',
+                    'name' => 'year_end',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -531,7 +531,7 @@ class RegisterTest extends TestCase
             ],
             'filters' => [
                 [
-                    'field' => 'number_of_songs',
+                    'name' => 'number_of_songs',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -551,7 +551,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'has_song_with_title',
+                    'name' => 'has_song_with_title',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -571,7 +571,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'album_cover.album_id',
+                    'name' => 'album_cover.album_id',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -591,7 +591,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'has_small_id',
+                    'name' => 'has_small_id',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -611,7 +611,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'id',
+                    'name' => 'id',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -631,7 +631,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'name',
+                    'name' => 'name',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -651,7 +651,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'band_id',
+                    'name' => 'band_id',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -671,7 +671,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'field' => 'release_date',
+                    'name' => 'release_date',
                     'description' => null,
                     'operators' => [
                         '=',

@@ -86,12 +86,12 @@ abstract class JoryResource
     /**
      * Add a field which can be requested by the API users..
      *
-     * @param $field
+     * @param $name
      * @return Field
      */
-    public function field($field): Field
+    public function field($name): Field
     {
-        return $this->config->field($field);
+        return $this->config->field($name);
     }
 
     /**
