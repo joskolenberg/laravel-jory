@@ -17,6 +17,7 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Parsers\RequestParser;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Traits\ProcessesMetadata;
 
 /**
  * Class JoryResponse
@@ -25,6 +26,7 @@ use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
  */
 class JoryResponse implements Responsable
 {
+    use ProcessesMetadata;
 
     /**
      * @var JoryResourcesRegister
@@ -75,6 +77,8 @@ class JoryResponse implements Responsable
     {
         $this->register = $register;
         $this->request = $request;
+
+        $this->initMetadata($request);
     }
 
     /**
@@ -234,6 +238,11 @@ class JoryResponse implements Responsable
 
         $responseKey = $this->getDataResponseKey();
         $response = $responseKey === null ? $data : [$responseKey => $data];
+
+        $meta = $this->getMetadata();
+        if($responseKey !== null && $meta !== null){
+            $response[$this->getMetaResponseKey()] = $meta;
+        }
 
         return response($response);
     }

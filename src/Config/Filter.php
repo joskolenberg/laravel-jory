@@ -81,7 +81,7 @@ class Filter
     /**
      * Set the filter's scope class.
      *
-     * @param \JosKolenberg\LaravelJory\Scopes\FilterScope $scope
+     * @param FilterScope $scope
      * @return $this
      */
     public function scope(FilterScope $scope = null): Filter
@@ -104,7 +104,7 @@ class Filter
     /**
      * Get the filter's optional scope class.
      *
-     * @return \JosKolenberg\LaravelJory\Scopes\FilterScope|null
+     * @return FilterScope|null
      */
     public function getScope():? FilterScope
     {

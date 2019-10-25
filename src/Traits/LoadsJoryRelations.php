@@ -16,7 +16,7 @@ trait LoadsJoryRelations
      * Load the given relations on the given model(s).
      *
      * @param Collection $models
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param JoryResource $joryResource
      */
     protected function loadRelations(Collection $models, JoryResource $joryResource): void
     {
@@ -39,7 +39,7 @@ trait LoadsJoryRelations
      *
      * @param Collection $collection
      * @param Relation $relation
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param JoryResource $joryResource
      */
     protected function loadRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
     {
@@ -134,7 +134,7 @@ trait LoadsJoryRelations
      * Load any relations to be eager loaded.
      *
      * @param \Illuminate\Database\Eloquent\Collection $collection
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param JoryResource $joryResource
      */
     protected function applyEagerLoads(Collection $collection, JoryResource $joryResource): void
     {
@@ -154,7 +154,7 @@ trait LoadsJoryRelations
     /**
      * Get a JoryBuilder from the container by JoryResource.
      *
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
+     * @param JoryResource $joryResource
      * @return mixed
      */
     protected function getJoryBuilderForResource(JoryResource $joryResource)
@@ -165,11 +165,11 @@ trait LoadsJoryRelations
     /**
      * Get a JoryResource based on a relation and parent JoryResource.
      *
-     * @param \JosKolenberg\Jory\Support\Relation $relation
-     * @param \JosKolenberg\LaravelJory\JoryResource $joryResource
-     * @return \JosKolenberg\LaravelJory\JoryResource
+     * @param Relation $relation
+     * @param JoryResource $joryResource
+     * @return JoryResource
      */
-    protected function getJoryResourceForRelation(Relation $relation, JoryResource $joryResource)
+    protected function getJoryResourceForRelation(Relation $relation, JoryResource $joryResource): JoryResource
     {
         // Build the JoryResource to be applied on the relation query.
         $relatedJoryResource = $joryResource

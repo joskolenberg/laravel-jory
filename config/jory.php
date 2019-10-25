@@ -21,6 +21,8 @@ return [
 
         'case-key' => 'case',
 
+        'meta-key' => 'meta',
+
     ],
 
     /*
@@ -31,7 +33,8 @@ return [
     | Here you can set the keys on
     | which the data will be returned.
     |
-    | Set to null to return data in root.
+    | Set to null to return data in root, but note that it's not
+    | possible use metadata when you set the data-key to null.
     |
     */
 
@@ -40,6 +43,8 @@ return [
         'data-key' => 'data',
 
         'errors-key' => 'errors',
+
+        'meta-key' => 'meta',
 
     ],
 
@@ -115,6 +120,46 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define if the default jory api routes should be enabled,
+    | the uri for these routes and which middleware should be applied.
+    |
+    */
+
+    'routes' => [
+
+        'enabled' => true,
+
+        'path' => '/jory',
+
+        'middleware' => [
+            'api',
+            \JosKolenberg\LaravelJory\Http\Middleware\SetJoryHandler::class
+        ],
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Metadata
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define which metadata is available to be
+    | requested. Note that returning metadata is disabled
+    | when the response.data-key value is set to null.
+    |
+    */
+
+    'metadata' => [
+
+        'query_count' => \JosKolenberg\LaravelJory\Meta\QueryCount::class,
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Registrars
     |--------------------------------------------------------------------------
     |
@@ -145,30 +190,6 @@ return [
         'path' => app_path('Http' . DIRECTORY_SEPARATOR . 'JoryResources'),
 
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Routes
-    |--------------------------------------------------------------------------
-    |
-    | Here you can define if the default jory api routes should be enabled,
-    | the uri for these routes and which middleware should be applied.
-    |
-    */
-
-    'routes' => [
-
-        'enabled' => true,
-
-        'path' => '/jory',
-
-        'middleware' => [
-            'api',
-            \JosKolenberg\LaravelJory\Http\Middleware\SetJoryHandler::class
-        ],
-
-    ],
-
 
     /*
     |--------------------------------------------------------------------------

@@ -13,6 +13,7 @@ use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Traits\ProcessesMetadata;
 use stdClass;
 
 /**
@@ -22,6 +23,7 @@ use stdClass;
  */
 class JoryMultipleResponse implements Responsable
 {
+    use ProcessesMetadata;
 
     /**
      * @var Request
@@ -49,6 +51,8 @@ class JoryMultipleResponse implements Responsable
     {
         $this->request = $request;
         $this->register = $register;
+
+        $this->initMetadata($request);
     }
 
     /**
@@ -115,9 +119,15 @@ class JoryMultipleResponse implements Responsable
     {
         $data = $this->toArray();
 
-        $dataResponseKey = config('jory.response.data-key');
+        $responseKey = config('jory.response.data-key');
+        $response = $responseKey === null ? $data : [$responseKey => $data];
 
-        return response($dataResponseKey === null ? $data : [$dataResponseKey => $data]);
+        $meta = $this->getMetadata();
+        if($responseKey !== null && $meta !== null){
+            $response[$this->getMetaResponseKey()] = $meta;
+        }
+
+        return response($response);
     }
 
     /**

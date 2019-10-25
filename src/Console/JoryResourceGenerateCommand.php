@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use JosKolenberg\EloquentReflector\EloquentReflector;
 use JosKolenberg\EloquentReflector\Support\Relation;
@@ -237,7 +238,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
     /**
      * Get the folder where models are stored.
      *
-     * @return \Illuminate\Config\Repository|mixed
+     * @return mixed
      */
     protected function getModelsPath()
     {
@@ -247,7 +248,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
     /**
      * Get the namespace of the models folder.
      *
-     * @return \Illuminate\Config\Repository|mixed
+     * @return mixed
      */
     protected function getModelsNamespace()
     {
@@ -383,7 +384,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
      * Get all the database from a model class.
      *
      * @param $modelClass
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     protected function getModelFields($modelClass)
     {
@@ -401,7 +402,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
      * Get all custom attributes from a model class.
      *
      * @param $modelClass
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     protected function getModelCustomAttributes($modelClass)
     {
