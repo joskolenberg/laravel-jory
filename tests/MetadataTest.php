@@ -226,6 +226,25 @@ class MetadataTest extends TestCase
     }
 
     /** @test */
+    public function it_gives_null_as_total_records_for_a_count_request()
+    {
+        $response = $this->json('GET', 'jory/song/count', [
+            'jory' => '{"fld":["title"],"filter":{"f":"title","o":"like","d":"%love%"},"lmt":3}',
+            'meta' => ['query_count', 'total'],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => 8,
+            'meta' => [
+                'query_count' => 1,
+                'total' => null,
+            ]
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
     public function it_can_give_the_total_records_for_multiple_resources_and_returns_no_total_for_count_or_show_requests()
     {
         $response = $this->json('GET', 'jory', [
