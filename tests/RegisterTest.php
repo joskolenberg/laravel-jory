@@ -143,6 +143,11 @@ class RegisterTest extends TestCase
                     'description' => null,
                     'type' => 'album',
                 ],
+                [
+                    'relation' => 'test_relation_without_jory_resource',
+                    'description' => null,
+                    'type' => null,
+                ],
             ],
         ];
 

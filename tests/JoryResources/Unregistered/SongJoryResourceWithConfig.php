@@ -28,5 +28,6 @@ class SongJoryResourceWithConfig extends JoryResource
         $this->limitDefault(50)->limitMax(250);
 
         $this->relation('album');
+        $this->relation('test_relation_without_jory_resource');
     }
 }

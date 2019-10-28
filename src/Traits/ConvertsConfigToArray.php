@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Traits;
 
 
 use JosKolenberg\LaravelJory\Config\Config;
+use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 
 trait ConvertsConfigToArray
 {
@@ -102,10 +103,15 @@ trait ConvertsConfigToArray
     {
         $result = [];
         foreach ($relations as $relation) {
+            try{
+                $type = $relation->getType();
+            }catch (RegistrationNotFoundException $e){
+                $type = null;
+            }
             $result[] = [
                 'relation' => $relation->getName(),
                 'description' => $relation->getDescription(),
-                'type' => $relation->getType(),
+                'type' => $type,
             ];
         }
 
