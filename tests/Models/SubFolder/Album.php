@@ -1,6 +1,12 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Models;
+namespace JosKolenberg\LaravelJory\Tests\Models\SubFolder;
+
+use JosKolenberg\LaravelJory\Tests\Models\AlbumCover;
+use JosKolenberg\LaravelJory\Tests\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Models\Model;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\Tag;
 
 class Album extends Model
 {

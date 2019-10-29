@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Models;
 
+use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
+
 class Song extends Model
 {
     protected $table = 'songs';

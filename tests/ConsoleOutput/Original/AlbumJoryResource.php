@@ -3,7 +3,7 @@
 namespace App\Http\JoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
 
 class AlbumJoryResource extends JoryResource
 {

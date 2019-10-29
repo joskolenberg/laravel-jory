@@ -3,7 +3,7 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory as Facade;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
+use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 

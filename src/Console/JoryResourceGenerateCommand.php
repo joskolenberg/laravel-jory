@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use JosKolenberg\EloquentReflector\EloquentReflector;
@@ -170,7 +171,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
      */
     protected function parseChoice($choice)
     {
-        if ($choice === 'All models') {
+        if ($choice === '<comment>All models</comment>') {
             return;
         }
 
@@ -186,7 +187,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
     protected function generatableChoices()
     {
         return array_merge(
-            ['All models'],
+            ['<comment>All models</comment>'],
             $this->getModelClasses()
         );
     }
@@ -198,7 +199,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
      */
     protected function getModelClasses()
     {
-        $files = (new Finder())->files()->in($this->getModelsPath())->depth('== 0');
+        $files = (new Finder())->files()->in($this->getModelsPath());
 
         $exludedModelClasses = config('jory.generator.models.exclude', []);
 
@@ -211,6 +212,10 @@ class JoryResourceGenerateCommand extends GeneratorCommand
             $className = $this->getClassNameFromFilePath($file);
 
             if(in_array($className, $exludedModelClasses)){
+                continue;
+            }
+
+            if(!is_subclass_of($className, Model::class)){
                 continue;
             }
 

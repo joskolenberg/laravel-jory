@@ -2,13 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
-use Illuminate\Database\Eloquent\Collection;
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource;
+use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
 use JosKolenberg\LaravelJory\Tests\Scopes\AlphabeticNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\BandNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSmallIdFilter;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource;
-use JosKolenberg\LaravelJory\Tests\Models\Album;
 use JosKolenberg\LaravelJory\Tests\Scopes\HasSongWithTitleFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfSongsSort;
