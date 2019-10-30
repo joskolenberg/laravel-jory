@@ -2,6 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use JosKolenberg\LaravelJory\Tests\Models\User;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
@@ -139,6 +140,21 @@ class ConsoleTest extends TestCase
             ->expectsOutput('BandJoryResource created successfully.')
             ->expectsOutput('GroupieJoryResource created successfully.')
             ->expectsOutput('SongJoryResource created successfully.');
+    }
+
+    /** @test */
+    public function it_doesnt_configure_fields_which_are_marked_to_be_excluded()
+    {
+        $this->artisan('jory:generate', [
+            '--model' => User::class,
+        ])->expectsOutput('UserJoryResource created successfully.');
+
+        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
+
+        $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
+
+        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
+        $this->assertTrue($filesystem->read('UserJoryResource.php') === $generatedFilesystem->read('UserJoryResource.php') || $filesystem->read('Scrutinizer/UserJoryResource.php') === $generatedFilesystem->read('UserJoryResource.php'));
     }
 
     protected function cleanup()

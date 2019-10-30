@@ -244,6 +244,24 @@ return [
             ],
         ],
 
+        /*
+        |--------------------------------------------------------------------------
+        | Fields
+        |--------------------------------------------------------------------------
+        |
+        | Here you can tell the generator which fields should NOT be
+        | automatically be configured, this is useful for hiding
+        | sensitive data like password and token fields.
+        |
+        */
+
+        'fields' => [
+            'exclude' => [
+                'password',
+                'remember_token'
+            ],
+        ],
+
     ],
 
 ];

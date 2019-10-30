@@ -396,8 +396,9 @@ class JoryResourceGenerateCommand extends GeneratorCommand
         // Create reflector to get attributes and relations from the modelClass.
         $reflector = new EloquentReflector($modelClass);
 
-        $attributes = $reflector->getAttributes()->filter(function ($attribute) {
-            return !$attribute->custom;
+        $excludedField = config('jory.generator.fields.exclude');
+        $attributes = $reflector->getAttributes()->filter(function ($attribute) use ($excludedField) {
+            return !$attribute->custom && !in_array($attribute->name, $excludedField);
         });
 
         return $attributes;
@@ -414,8 +415,9 @@ class JoryResourceGenerateCommand extends GeneratorCommand
         // Create reflector to get attributes and relations from the modelClass.
         $reflector = new EloquentReflector($modelClass);
 
-        $attributes = $reflector->getAttributes()->filter(function ($attribute) {
-            return $attribute->custom;
+        $excludedField = config('jory.generator.fields.exclude');
+        $attributes = $reflector->getAttributes()->filter(function ($attribute) use ($excludedField) {
+            return $attribute->custom && !in_array($attribute->name, $excludedField);
         })->sortBy(function ($attribute) {
             return $attribute->name;
         });
