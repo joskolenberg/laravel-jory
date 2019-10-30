@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use JosKolenberg\Jory\Jory;
@@ -13,7 +12,6 @@ use JosKolenberg\LaravelJory\Config\Relation;
 use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
-use JosKolenberg\LaravelJory\Helpers\FilterHelper;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
 use JosKolenberg\LaravelJory\Scopes\SortScope;
@@ -24,6 +22,11 @@ abstract class JoryResource
      * @var string
      */
     protected $modelClass;
+
+    /**
+     * @var boolean
+     */
+    protected $routes = true;
 
     /**
      * @var string
@@ -348,5 +351,15 @@ abstract class JoryResource
         }
 
         return $relationResult;
+    }
+
+    /**
+     * Tell if the routes should be enabled for this resource.
+     *
+     * @return bool
+     */
+    public function hasRoutes(): bool
+    {
+        return $this->routes;
     }
 }

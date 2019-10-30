@@ -96,9 +96,9 @@ class JoryResourcesRegister
      */
     public function getByUri(string $uri): JoryResource
     {
-        foreach ($this->getAllJoryResources() as $registration) {
-            if ($registration->getUri() == $uri) {
-                return $registration;
+        foreach ($this->getAllJoryResources() as $joryResource) {
+            if ($joryResource->getUri() === $uri && $joryResource->hasRoutes()) {
+                return $joryResource;
             }
         }
 
@@ -114,7 +114,9 @@ class JoryResourcesRegister
     {
         $result = [];
 
-        foreach ($this->getAllJoryResources()->sortBy(function($joryResource){
+        foreach ($this->getAllJoryResources()->filter(function(JoryResource $joryResource){
+            return $joryResource->hasRoutes();
+        })->sortBy(function(JoryResource $joryResource){
             return $joryResource->getUri();
         }) as $joryResource) {
             $result[] = $joryResource->getUri();

@@ -5,6 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\SongJoryResource;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumCoverJoryResourceWithoutRoutes;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource2;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
@@ -45,12 +46,7 @@ class RegisterTest extends TestCase
     {
         $register = app(JoryResourcesRegister::class);
 
-        $actual = [];
-        foreach ($register->getAllJoryResources()->sortBy(function ($joryResource) {
-            return $joryResource->getUri();
-        }) as $joryResource) {
-            $actual[] = $joryResource->getUri();
-        }
+        $actual = $register->getUrisArray();
 
         $expected = [
             'album',
@@ -782,4 +778,124 @@ class RegisterTest extends TestCase
         ];
 
         $this->assertEquals(json_encode($expected), json_encode($actual));
-    }}
+    }
+
+    /** @test */
+    public function it_doesnt_return_a_jory_resource_without_routes_enabled()
+    {
+        Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
+
+        $register = app(JoryResourcesRegister::class);
+
+        $actual = $register->getUrisArray();
+
+        $expected = [
+            'album',
+            'band',
+            'image',
+            'instrument',
+            'person',
+            'song',
+            'tag',
+        ];
+
+        $this->assertEquals(json_encode($expected), json_encode($actual));
+    }
+
+    /** @test */
+    public function a_jory_resource_without_routes_enabled_cannot_be_called_from_the_uri_1()
+    {
+        Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
+
+        $this->json('GET', 'jory/album-cover', [
+            'jory' => '{}',
+        ])->assertStatus(404);
+    }
+
+    /** @test */
+    public function a_jory_resource_without_routes_enabled_cannot_be_called_from_the_uri_2()
+    {
+        Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
+
+        $this->json('GET', 'jory/album-cover/4', [
+            'jory' => '{}',
+        ])->assertStatus(404);
+    }
+
+    /** @test */
+    public function a_jory_resource_without_routes_enabled_cannot_be_called_from_the_uri_3()
+    {
+        Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
+
+        $this->json('GET', 'jory/album-cover/count', [
+            'jory' => '{}',
+        ])->assertStatus(404);
+    }
+
+    /** @test */
+    public function a_jory_resource_without_routes_enabled_can_still_be_used_to_query_relations()
+    {
+        Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
+
+        $response = $this->json('GET', 'jory/album/3', [
+            'jory' => [
+                'fld' => ['name'],
+                'rlt' => [
+                    'cover' => [
+                        'fld' => ['image']
+                    ]
+                ]
+            ]
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'name' => 'Exile on main st.',
+                'cover' => [
+                    'image' => '....-@@+*::+=W+:-#WW#:@=WWW@*#-+@W@@W#---*-*---@@=@#=*+#WW*@*W@#W==WWW##W@@@@@@
+---..+@:++:***--::+:::*+:*::**:++*+*=*-++=**++-==++----:+:**=====+++=#*-::::+:-
+#=#:--@+-:WW@----*+*=#--=#@WWWWW-#@#:+:***=++-+*+:+-::*-*=@@WW@#@###**W+@W##*##
+==@*#@#:#:W#@+--:=+##*=-+++@+-=W.=:=#=+*-#**-:--=@@*=@*=+@@@#=@@@W@=**#*#*###@@
++W@##=#:@=W##-*--:-=#+*---+++#W+:***+#*:----------::----+@@+:-:@=+++=*:*=*#@@=#
++:::WW@+=**::*@:-+:*=+*-----:W@---**----*==*++:----++:::*@W:--:@@:=*:-:*WW@##WW
+-.*WW=::=#@--+#--+*@@*:-:-@WWW@-----+---=**===**:*+++#+=*-+@**@@#WW@:+:+W@###WW
+-::*@---#***===---::-*::*+##@@*----..---:++*++:+::::+=+*#===####@@#@@=#:+++*+++
+*::+#*----:+*=@=WW@#.----------------:=++++=*++*+-:+*=##@#@=+:+-::+=---**:+:::*
+W@=:+#*:::+*:--:WWW@..---:==-.-------::::::*::::--+*=::-*:+@-------:*--::-::::*
+=-...-**W@=**:+#*=@#...-=@:==+:------:WWWWWW#-----***++:+-:-------:=::-::::::-*
+#-...--+@=**#@@++:+@..::-:**:--------:WW@#WWW*....*+*=+=:--*+----:@@#*:-::++++:
+@:....++@*--=##+*+=@.-+*--:::--------+WW@WWWW#-..-*+==#::*:-------+=W@---+:**:+
+@=.....:W#WW@***#@WW...-:-----:------+W@@WW@-.-..-*:::=W=-*:--.---+WW*--::+:**:
+@#*....:W=+@W#@--#WW..::--=-:-*------+@@@#WWWWWW:-*+:+##@W=:+-:+::*WW+-:-+*=+==
+@*+....-#@*=@@W+*++@...------:-:-----*WWWWWWWWWW-:=*+*WWWWW@-----+=WW#++*@WW@@@
+@#:....-++-++++*==*+:+****+++:::+=WWW@@@#####+**+::-::*###@+--:-::::--::++++++=
+--------::-=:+*:+:::-:::-:=+--::=WW@W@*@WWWWW*:++=*=:*++*:*-...*@*...=#@*=@@W:-
+=::+-+:-:*+*++*=:*:+-::+++++--::*WW@@#=@+@WWW*---:===-.--:W@+-.=:-...+#+=+@WW+-
+#--*-=+:++*##=#=:+++-:::::**--::*W@#+@@@@#@WW*..--=@+..--:WW@#**.--=-+=*#=*@@+-
+@--=@@=+++*#=**:+:++-::+**:#=:++*WW#=W@*=+#WW=.--+#=:...-:WW##@@===-+**#=#=#@:-
+@*:*@@#=::*@+**=*++*:++*==*#@+:+*WW@@@**@-=W#*---=@W*...-:WWWW@W:#W@-+*:=*:@=:-
+*+*+:*++==@@@@@W@*#@+*=*#==*=+++*WWW@W=#@@:W--...=WW#..--:WWWW@W@=+=+*@WW##*++@
+=-+@=:=-WWWW@@@W@#@@+=WWWWWWWWWW=@WWW@@@@@@W:*++*=@@@*==#*WWW#@@=..=:+:--:::--:
+.......:=*****+++--+@@@@WWWWWWW#*+++:+*:::+:+-:+:++:++++-....-:----....-----==-
+.......*WWWW@W:+:--:@#+@WWWWWWW=*++++==#++==+-#==#-=:*=#=---*:=@*--....----:@#-
+.......*WWWWWW::+--:@=@@@=#=WW@=*+++**+@+*=@*:=+-=-+++---.-.-=@.---....--:++*@+
+...--..*WWWWWW:-:-::#@@WW@@WWWW@#++***====#@#----:--:-+::--.-+=+:*-.---+=#=+*=-
+.-+#=-.+WWWWWW::++*+#@W@WWWWWWWW@*++*+*#@@@@=+--.--:+----.---+@-#@W##---:**==+-
+*@##W*-*WWWWWW+::*WW=WWWWWWWWWWWW+++++==#*#W*+::::-:*-.:-.--.*@*=*#W#------#:*.
+.*WWW*.+WWWWWW+:::WW*WW@@WWWWWW@#+::++*+=***+--.@*+*:.+:----*-=*=:::----:+:-*--
+WWWWWWW=WWWWWW+:+-@W+::::*:+:+:::::::+::+++++::+++++**+---=#@#==@*:+@#::::+++++
++#*=+=W*+::::----*#+W@=WW@@WW#-----:::----:##+****+#+*+++*+*+*+W*:+-@@:*+++:-.-
+*-+**+*:*+##=+==#*=+#-::*:+*W@------------:=#=##@@*=++*+++**+*:::==##@*+**+-#**
+--..--:+=*##@===@W@*#=++@*@#@@:-:::+:==++:-*=*@WWW*#+**+*+=@*+:=::-++==+*:+--..
+.......-WWWW++WW@=@*WW@WW@@@@@:#W#=##==*+:-*#+WW@==#++**++*=++*#+*++++++:::+***
+***+:+++----.-------:-------:---==#WW#*==*:+#+#@W=*@+#@=###W#@WWW#::::::::::+#W
+WWW@@@@*..--=@@@+..----+----*#+*+##@#@#@**::=+*#@=*#*W@@@@@@#=@@@@::-:::::::+=W
+#=##@@#:----#---:..-:---:=@@.=:-:===*****===+:*:*+++:+*****=**==*=+:::::-:-::#W
+W@@#WWW+.---*++:-.--==---+@:-:--*WW@#=+::*=*-:::===+-::::-@WWWWW@W@@WW#----:+=W',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(2);
+    }
+}
