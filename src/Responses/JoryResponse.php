@@ -257,8 +257,6 @@ class JoryResponse implements Responsable
     {
         $builder = $this->getJoryBuilder();
 
-        $builder->onQuery($this->getBaseQuery());
-
         if ($this->count) {
             return $builder->getCount();
         }
@@ -298,7 +296,7 @@ class JoryResponse implements Responsable
      *
      * @return JoryBuilder
      */
-    protected function getJoryBuilder(): JoryBuilder
+    public function getJoryBuilder(): JoryBuilder
     {
         if (!$this->joryResource) {
             throw new LaravelJoryException('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
@@ -308,7 +306,11 @@ class JoryResponse implements Responsable
 
         $this->joryResource->validate();
 
-        return app()->makeWith(JoryBuilder::class, ['joryResource' => $this->joryResource]);
+        $builder = app()->makeWith(JoryBuilder::class, ['joryResource' => $this->joryResource]);
+
+        $builder->onQuery($this->getBaseQuery());
+
+        return $builder;
     }
 
     /**
