@@ -46,6 +46,10 @@ class ResourceNameHelper
             $type = 'count';
             $baseName = $nameParts[0];
             $id = null;
+        } elseif ($nameParts[1] === 'first') {
+            $type = 'first';
+            $baseName = $nameParts[0];
+            $id = null;
         } else {
             $type = 'single';
             $baseName = $nameParts[0];

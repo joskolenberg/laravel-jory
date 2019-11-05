@@ -31,7 +31,7 @@ class JoryController extends Controller
     }
 
     /**
-     * Give a single record.
+     * Give a single record by id.
      *
      * @param string $resource
      * @param $id
@@ -40,6 +40,17 @@ class JoryController extends Controller
     public function show(string $resource, $id)
     {
         return Jory::byUri($resource)->find($id);
+    }
+
+    /**
+     * Give the first record by filter and sort parameters.
+     *
+     * @param string $resource
+     * @return JoryResponse
+     */
+    public function first(string $resource)
+    {
+        return Jory::byUri($resource)->first();
     }
 
     /**

@@ -47,15 +47,25 @@ trait LoadsJoryRelations
             return;
         }
 
-        if(ResourceNameHelper::explode($relation->getName())->type === 'count'){
-            $this->loadCountRelation($collection, $relation, $joryResource);
-
-            return;
+        switch (ResourceNameHelper::explode($relation->getName())->type){
+            case 'count':
+                $this->loadCountRelation($collection, $relation, $joryResource);
+                break;
+            case 'first':
+                $this->loadFirstRelation($collection, $relation, $joryResource);
+                break;
+            default:
+                $this->loadFetchRelation($collection, $relation, $joryResource);
         }
-
-        $this->loadFetchRelation($collection, $relation, $joryResource);
     }
 
+    /**
+     * Load a count relation on a collection of models.
+     *
+     * @param Collection $collection
+     * @param Relation $relation
+     * @param JoryResource $joryResource
+     */
     protected function loadCountRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
     {
         // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
@@ -70,6 +80,34 @@ trait LoadsJoryRelations
         }
     }
 
+    /**
+     * Load the first item of a relation on a collection of models.
+     *
+     * @param Collection $collection
+     * @param Relation $relation
+     * @param JoryResource $joryResource
+     */
+    protected function loadFirstRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
+    {
+        // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
+        $relationName = Str::camel(ResourceNameHelper::explode($relation->getName())->baseName);
+
+        $relatedJoryResource = $this->getJoryResourceForRelation($relation, $joryResource);
+        $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
+
+        foreach ($collection as $model) {
+            // We store the count under the full relation name including alias
+            $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnQuery($model->$relationName())->first());
+        }
+    }
+
+    /**
+     * Load a standard relation on a collection of models.
+     *
+     * @param Collection $collection
+     * @param Relation $relation
+     * @param JoryResource $joryResource
+     */
     protected function loadFetchRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
     {
         // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
