@@ -20,13 +20,15 @@ class Total extends Metadata
     {
         $route = Route::currentRouteName();
 
-        if($route === 'jory.index'){
+        if($route === 'jory.get'){
             return $this->getIndexCount();
         }
 
         if($route === 'jory.multiple'){
             return $this->getMultipleCount();
         }
+
+        return null;
     }
 
     /**
