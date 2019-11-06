@@ -76,7 +76,6 @@ class JoryServiceProvider extends ServiceProvider
     private function routeConfiguration()
     {
         return [
-            'namespace' => 'JosKolenberg\LaravelJory\Http\Controllers',
             'prefix' => config('jory.routes.path'),
             'middleware' => 'jory',
         ];
