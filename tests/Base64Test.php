@@ -83,5 +83,43 @@ class Base64Test extends TestCase
         $this->assertQueryCount(3);
     }
 
+    /** @test */
+    public function it_can_process_a_base64_encoded_json_string_for_multiple_resources()
+    {
+        $response = $this->json('GET', 'jory', [
+            'jory' => base64_encode('{"band as lz":{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]},"song as songs":{"filter":{"f":"title","o":"like","d":"%let%"},"fld":["title"]}}'),
+        ]);
 
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'lz' => [
+                    [
+                        'id' => 2,
+                        'name' => 'Led Zeppelin',
+                        'albums' => [
+                            [
+                                'id' => 6,
+                                'band_id' => 2,
+                                'name' => 'Led Zeppelin III',
+                                'release_date' => '1970-10-05 00:00:00',
+                            ],
+                        ],
+                    ],
+                ],
+                'songs' => [
+                    [
+                        'title' => 'Let It Be',
+                    ],
+                    [
+                        'title' => 'Let It Bleed',
+                    ],
+                    [
+                        'title' => 'Let It Loose',
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(3);
+    }
 }

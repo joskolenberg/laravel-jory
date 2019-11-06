@@ -11,6 +11,7 @@ use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\ResourceNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Helpers\Base64Validator;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Traits\ProcessesMetadata;
@@ -69,6 +70,10 @@ class JoryMultipleResponse implements Responsable
 
         if (!is_string($jory)) {
             throw new LaravelJoryException('Unexpected type given. Please provide an array or Json string.');
+        }
+
+        if (Base64Validator::check($jory)) {
+            $jory = base64_decode($jory);
         }
 
         return $this->applyJson($jory);
