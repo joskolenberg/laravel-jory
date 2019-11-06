@@ -35,7 +35,7 @@ trait LoadsJoryRelations
     }
 
     /**
-     * Load the given relation on a collection of models.
+     * Load the given relation, relation:count or relation:first on a collection of models.
      *
      * @param Collection $collection
      * @param Relation $relation
@@ -55,7 +55,7 @@ trait LoadsJoryRelations
                 $this->loadFirstRelation($collection, $relation, $joryResource);
                 break;
             default:
-                $this->loadFetchRelation($collection, $relation, $joryResource);
+                $this->loadStandardRelation($collection, $relation, $joryResource);
         }
     }
 
@@ -108,7 +108,7 @@ trait LoadsJoryRelations
      * @param Relation $relation
      * @param JoryResource $joryResource
      */
-    protected function loadFetchRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
+    protected function loadStandardRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
     {
         // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
         $relationName = Str::camel(ResourceNameHelper::explode($relation->getName())->baseName);
