@@ -51,7 +51,7 @@ class ResourceNameHelper
             $baseName = $nameParts[0];
             $id = null;
         } else {
-            $type = 'single';
+            $type = 'find';
             $baseName = $nameParts[0];
             $id = $nameParts[1];
         }

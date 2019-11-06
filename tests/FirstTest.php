@@ -119,4 +119,40 @@ class FirstTest extends TestCase
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_can_return_the_first_item_when_fetching_multiple_resources()
+    {
+        $response = $this->json('GET', 'jory', [
+            'jory' => [
+                'song:first as first_song' => [
+                    'srt' => ['-title'],
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                    'fld' => ['title'],
+                ],
+                'band:first' => [
+                    'srt' => ['id'],
+                    'fld' => ['name'],
+                ]
+            ]
+        ]);
+
+        $expected = [
+            'data' => [
+                'first_song' => [
+                    'title' => 'Whole Lotta Love',
+                ],
+                'band:first' => [
+                    'name' => 'Rolling Stones',
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
+    }
 }
