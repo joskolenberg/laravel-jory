@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\Attributes\SongDescription;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class CustomSongJoryResource extends JoryResource
@@ -16,5 +17,6 @@ class CustomSongJoryResource extends JoryResource
         $this->field('title')->filterable()->sortable();
         $this->field('album_id')->filterable()->sortable();
         $this->field('custom_field');
+        $this->field('description', new SongDescription);
     }
 }

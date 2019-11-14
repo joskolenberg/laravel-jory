@@ -2,7 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Config;
 
-use Illuminate\Support\Str;
+use JosKolenberg\LaravelJory\Attributes\Attribute;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 
 /**
@@ -53,13 +53,20 @@ class Field
     protected $load = null;
 
     /**
+     * @var Attribute
+     */
+    private $getter;
+
+    /**
      * Field constructor.
      *
      * @param string $field
+     * @param Attribute|null $getter
      */
-    public function __construct(string $field)
+    public function __construct(string $field, Attribute $getter = null)
     {
         $this->field = $field;
+        $this->getter = $getter;
 
         $this->case = app(CaseManager::class);
     }
@@ -167,6 +174,16 @@ class Field
     public function getEagerLoads():? array
     {
         return $this->load;
+    }
+
+    /**
+     * Get the optional custom getter instance.
+     *
+     * @return null|Attribute
+     */
+    public function getGetter():? Attribute
+    {
+        return $this->getter;
     }
 
     /**

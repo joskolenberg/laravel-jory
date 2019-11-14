@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Config;
 
 use JosKolenberg\Jory\Jory;
+use JosKolenberg\LaravelJory\Attributes\Attribute;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
 use JosKolenberg\LaravelJory\Scopes\SortScope;
@@ -88,11 +89,12 @@ class Config
      * Add a field to the config.
      *
      * @param $field
+     * @param Attribute $getter
      * @return Field
      */
-    public function field($field): Field
+    public function field($field, Attribute $getter = null): Field
     {
-        $field = new Field($field);
+        $field = new Field($field, $getter);
 
         $this->fields[] = $field;
 
