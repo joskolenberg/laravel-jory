@@ -12,7 +12,7 @@ interface Attribute
      * Get the attribute for the model.
      *
      * @param Model $model
-     * @return string
+     * @return mixed
      */
-    public function get(Model $model): string;
+    public function get(Model $model);
 }

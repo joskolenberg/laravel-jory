@@ -14,9 +14,9 @@ class SongDescription implements Attribute
      * Get the attribute for the model.
      *
      * @param Model $song
-     * @return string
+     * @return mixed
      */
-    public function get(Model $song): string
+    public function get(Model $song)
     {
         return $song->title . ' from the ' . $song->album->name . ' album.';
     }
