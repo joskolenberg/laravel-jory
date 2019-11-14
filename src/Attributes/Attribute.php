@@ -11,8 +11,8 @@ interface Attribute
     /**
      * Get the attribute for the model.
      *
-     * @param Model $song
+     * @param Model $model
      * @return string
      */
-    public function get(Model $song): string;
+    public function get(Model $model): string;
 }
