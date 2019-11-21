@@ -162,6 +162,11 @@ class ConsoleTest extends TestCase
         // Remove all previously built JoryResources
         $adapter = new Local(__DIR__ . '/ConsoleOutput');
         $filesystem = new Filesystem($adapter);
-        $filesystem->deleteDir('Generated');
+
+        foreach ($filesystem->listContents('Generated') as $file){
+            if($file['basename'] !== '.gitignore'){
+                $filesystem->delete($file['path']);
+            }
+        }
     }
 }
