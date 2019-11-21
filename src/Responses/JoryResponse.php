@@ -7,6 +7,7 @@ namespace JosKolenberg\LaravelJory\Responses;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
 use JosKolenberg\Jory\Jory;
@@ -235,6 +236,10 @@ class JoryResponse implements Responsable
     public function toResponse($request)
     {
         $data = $this->toArray();
+
+        if($this->first && $data === null){
+            throw (new ModelNotFoundException)->setModel($this->joryResource->getModelClass(), $this->modelId ? [$this->modelId] : []);
+        }
 
         $responseKey = $this->getDataResponseKey();
         $response = $responseKey === null ? $data : [$responseKey => $data];

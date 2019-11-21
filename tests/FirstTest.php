@@ -155,4 +155,44 @@ class FirstTest extends TestCase
 
         $this->assertQueryCount(2);
     }
+
+    /** @test */
+    public function it_returns_a_404_when_a_model_is_not_found_by_id()
+    {
+        $response = $this->json('GET', 'jory/band/1234', [
+            'jory' => [
+                'srt' => ['id'],
+                'fld' => ['name'],
+            ]
+        ]);
+
+        $expected = [
+            'message' => 'No query results for model [JosKolenberg\LaravelJory\Tests\Models\Band] 1234',
+        ];
+        $response->assertStatus(404)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_returns_a_404_when_a_model_is_not_found_by_first()
+    {
+        $response = $this->json('GET', 'jory/band/first', [
+            'jory' => [
+                'flt' => [
+                    'f' => 'name',
+                    'd' => 'The Kinks'
+                ],
+                'srt' => ['id'],
+                'fld' => ['name'],
+            ]
+        ]);
+
+        $expected = [
+            'message' => 'No query results for model [JosKolenberg\LaravelJory\Tests\Models\Band].',
+        ];
+        $response->assertStatus(404)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(1);
+    }
 }
