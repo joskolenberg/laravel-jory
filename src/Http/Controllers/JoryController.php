@@ -14,7 +14,7 @@ class JoryController extends Controller
      * @param string $resource
      * @return JoryResponse
      */
-    public function index(string $resource)
+    public function get(string $resource)
     {
         return Jory::byUri($resource);
     }
@@ -37,7 +37,7 @@ class JoryController extends Controller
      * @param $id
      * @return JoryResponse
      */
-    public function show(string $resource, $id)
+    public function find(string $resource, $id)
     {
         return Jory::byUri($resource)->find($id);
     }
