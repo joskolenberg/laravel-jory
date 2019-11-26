@@ -16,7 +16,7 @@ class JoryController extends Controller
      */
     public function get(string $resource)
     {
-        return Jory::byUri($resource);
+        return Jory::byUri($resource)->explicit(false);
     }
 
     /**
@@ -27,7 +27,7 @@ class JoryController extends Controller
      */
     public function count(string $resource)
     {
-        return Jory::byUri($resource)->count();
+        return Jory::byUri($resource)->explicit(false)->count();
     }
 
     /**
@@ -39,7 +39,7 @@ class JoryController extends Controller
      */
     public function find(string $resource, $id)
     {
-        return Jory::byUri($resource)->find($id);
+        return Jory::byUri($resource)->explicit(false)->find($id);
     }
 
     /**
@@ -50,7 +50,7 @@ class JoryController extends Controller
      */
     public function first(string $resource)
     {
-        return Jory::byUri($resource)->first();
+        return Jory::byUri($resource)->explicit(false)->first();
     }
 
     /**

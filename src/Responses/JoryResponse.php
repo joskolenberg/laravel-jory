@@ -70,6 +70,11 @@ class JoryResponse implements Responsable
     protected $builder;
 
     /**
+     * @var bool
+     */
+    protected $explicit = true;
+
+    /**
      * JoryResponse constructor.
      * @param Request $request
      * @param JoryResourcesRegister $register
@@ -235,6 +240,10 @@ class JoryResponse implements Responsable
      */
     public function toResponse($request)
     {
+        if(!$this->shouldProcess()){
+            return response([]);
+        }
+
         $data = $this->toArray();
 
         if($this->first && $data === null){
@@ -283,6 +292,29 @@ class JoryResponse implements Responsable
         }
 
         return $result;
+    }
+
+    /**
+     * Set the explicit mode for the response.
+     *
+     * Being in explicit mode requires the response to have a
+     * Jory query set (this Jory query may be empty though).
+     * This way when using Jory::on() in your controllers,
+     * the queries will only be executed when passing in
+     * the Jory parameter.
+     *
+     * When disabling explicit mode this could lead
+     * into silently returning complete database
+     * tables frequently, so use with caution.
+     *
+     * @param bool $explicit
+     * @return JoryResponse
+     */
+    public function explicit($explicit = true): JoryResponse
+    {
+        $this->explicit = $explicit;
+
+        return $this;
     }
 
     /**
@@ -358,5 +390,24 @@ class JoryResponse implements Responsable
         }
 
         return (new RequestParser($this->request))->getJory();
+    }
+
+    /**
+     * Check if the response should process at all.
+     *
+     * When the response is in explicit mode the response
+     * should only be processed when Jory input is given.
+     */
+    protected function shouldProcess()
+    {
+        if(!$this->explicit){
+            return true;
+        }
+
+        if ($this->parser) {
+            return true;
+        }
+
+        return $this->request->has(config('jory.request.key'));
     }
 }

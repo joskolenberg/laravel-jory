@@ -41,7 +41,9 @@ class ControllerUsageTest extends TestCase
     /** @test */
     public function it_can_return_a_single_record_based_on_request()
     {
-        $response = $this->json('GET', 'band/2');
+        $response = $this->json('GET', 'band/2', [
+            'jory' => []
+        ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
@@ -83,4 +85,23 @@ class ControllerUsageTest extends TestCase
 
         $this->assertQueryCount(1);
     }
+
+    /** @test */
+    public function it_does_not_execute_when_no_jory_parameter_is_given()
+    {
+        $response = $this->json('GET', 'band/2');
+        $response->assertStatus(200)->assertExactJson([]);
+
+        $response = $this->json('GET', 'band/first-by-filter');
+        $response->assertStatus(200)->assertExactJson([]);
+
+        $response = $this->json('GET', 'band');
+        $response->assertStatus(200)->assertExactJson([]);
+
+        $response = $this->json('GET', 'band/count');
+        $response->assertStatus(200)->assertExactJson([]);
+
+        $this->assertQueryCount(0);
+    }
+
 }
