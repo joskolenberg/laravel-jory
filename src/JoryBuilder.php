@@ -30,19 +30,12 @@ class JoryBuilder
     protected $joryResource;
 
     /**
-     * @var CaseManager
-     */
-    protected $case = null;
-
-    /**
      * JoryBuilder constructor.
      * @param JoryResource $joryResource
      */
     public function __construct(JoryResource $joryResource)
     {
         $this->joryResource = $joryResource;
-
-        $this->case = app(CaseManager::class);
     }
 
     /**
