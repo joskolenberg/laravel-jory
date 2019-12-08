@@ -69,13 +69,23 @@ class Relation
     }
 
     /**
-     * Get the name.
+     * Get the relation's name in the current case.
      *
      * @return string
      */
     public function getName(): string
     {
         return $this->case->toCurrent($this->name);
+    }
+
+    /**
+     * Get the relation name as configured (which should be the actual relation name)
+     *
+     * @return string
+     */
+    public function getOriginalName(): string
+    {
+        return $this->name;
     }
 
     /**

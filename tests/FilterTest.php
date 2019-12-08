@@ -626,6 +626,45 @@ class FilterTest extends TestCase
     }
 
     /** @test */
+    public function it_can_filter_on_a_related_models_field_in_default_case()
+    {
+        $response = $this->json('GET', 'jory/album', [
+            'jory' => [
+                'flt' => [
+                    'or' => [
+                        [
+                            'f' => 'albumCover.album_id',
+                            'o' => '=',
+                            'd' => 6,
+                        ],
+                        [
+                            'f' => 'albumCover.album_id',
+                            'o' => '=',
+                            'd' => 1,
+                        ],
+                    ],
+                ],
+                'fld' => [
+                    'name',
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                [
+                    'name' => 'Let it bleed',
+                ],
+                [
+                    'name' => 'Led Zeppelin III',
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
     public function it_can_filter_on_a_related_models_field_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -648,6 +687,7 @@ class FilterTest extends TestCase
                     'name',
                 ],
             ],
+            'case' => 'snake',
         ]);
 
         $response->assertStatus(200)->assertExactJson([

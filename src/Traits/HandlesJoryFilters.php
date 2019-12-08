@@ -72,11 +72,13 @@ trait HandlesJoryFilters
      */
     protected function applyFieldFilter($builder, Filter $filter, JoryResource $joryResource): void
     {
+        $configuredFilter = $joryResource->getConfig()->getFilter($filter);
+
         /**
          * First check if there is a custom scope attached
          * to the filter. If so, apply that one.
          */
-        $scope = $joryResource->getConfig()->getFilter($filter)->getScope();
+        $scope = $configuredFilter->getScope();
         if($scope){
             // Wrap in a where closure to encapsulate any OR clauses in custom method
             // which could lead to unexpected results.
@@ -91,7 +93,7 @@ trait HandlesJoryFilters
          * with the last part of the string being the field to filter on.
          */
         if(Str::contains($filter->getField(), '.')){
-            $this->applyRelationFilter($builder, $filter);
+            $this->applyRelationFilter($builder, $filter, $configuredFilter);
 
             return;
         }
@@ -101,7 +103,7 @@ trait HandlesJoryFilters
          * is being queried even if a join is applied (e.g. when filtering
          * a belongsToMany relation), so we prefix the field with the table name.
          */
-        $field = $builder->getModel()->getTable().'.'.Str::snake($filter->getField());
+        $field = $builder->getModel()->getTable().'.'.$configuredFilter->getField();
         FilterHelper::applyWhere($builder, $field, $filter->getOperator(), $filter->getData());
     }
 
@@ -112,13 +114,13 @@ trait HandlesJoryFilters
      * @param mixed $builder
      * @param Filter $filter
      */
-    protected function applyRelationFilter($builder, Filter $filter)
+    protected function applyRelationFilter($builder, Filter $filter, \JosKolenberg\LaravelJory\Config\Filter $configuredFilter)
     {
-        $relations = explode('.', Str::snake($filter->getField()));
+        $relations = explode('.', $configuredFilter->getField());
 
         $field = array_pop($relations);
 
-        $relation = Str::camel(implode('.', $relations));
+        $relation = implode('.', $relations);
 
         $builder->whereHas($relation, function ($builder) use ($filter, $field) {
             FilterHelper::applyWhere($builder, $field, $filter->getOperator(), $filter->getData());

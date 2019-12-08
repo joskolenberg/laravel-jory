@@ -141,9 +141,9 @@ trait ConvertsModelToArray
              * No custom attribute class is present, get the attribute
              * from the casted array or directly from the model.
              */
-            $result[$field] = array_key_exists(Str::snake($field), $raw)
-                ? $raw[Str::snake($field)]
-                : $model->{Str::snake($field)};
+            $result[$field] = array_key_exists($configuredField->getOriginalField(), $raw)
+                ? $raw[$configuredField->getOriginalField()]
+                : $model->{$configuredField->getOriginalField()};
         }
 
         return $result;

@@ -653,7 +653,7 @@ class ExplicitSelectTest extends TestCase
         $joryResource->setJory((new ArrayParser([
             'fld' => ['name'],
             'rlt' => [
-                'first_song' => [
+                'firstSong' => [
                     'fld' => ['title'],
                 ],
             ],
@@ -692,7 +692,7 @@ class ExplicitSelectTest extends TestCase
         $jory = [
             'fld' => ['name'],
             'rlt' => [
-                'first_song' => [
+                'firstSong' => [
                     'fld' => ['title'],
                 ],
             ],
@@ -756,7 +756,7 @@ class ExplicitSelectTest extends TestCase
         $joryResource->setJory((new ArrayParser([
             'fld' => ['first_name'],
             'rlt' => [
-                'first_image' => [
+                'firstImage' => [
                     'fld' => ['url'],
                 ],
             ],
@@ -795,7 +795,7 @@ class ExplicitSelectTest extends TestCase
         $jory = [
             'fld' => ['first_name'],
             'rlt' => [
-                'first_image' => [
+                'firstImage' => [
                     'fld' => ['url'],
                 ],
             ],

@@ -30,11 +30,13 @@ trait HandlesJorySorts
      */
     protected function applySort($builder, Sort $sort, JoryResource $joryResource): void
     {
+        $configuredSort = $joryResource->getConfig()->getSort($sort);
+
         /**
          * First check if there is a custom scope attached
          * to the sort. If so, apply that one.
          */
-        $scope = $joryResource->getConfig()->getSort($sort)->getScope();
+        $scope = $configuredSort->getScope();
         if($scope){
             $scope->apply($builder, $sort->getOrder());
             return;
@@ -43,7 +45,7 @@ trait HandlesJorySorts
         // Always apply the sort on the table of the model which
         // is being queried even if a join is applied (e.g. when filtering
         // a belongsToMany relation), so we prefix the field with the table name.
-        $field = $builder->getModel()->getTable().'.'.Str::snake($sort->getField());
+        $field = $builder->getModel()->getTable().'.'.$configuredSort->getField();
         $this->applyDefaultSort($builder, $field, $sort->getOrder());
     }
 
@@ -57,16 +59,5 @@ trait HandlesJorySorts
     protected function applyDefaultSort($builder, string $field, string $order): void
     {
         $builder->orderBy($field, $order);
-    }
-
-    /**
-     * Get the custom method name to look for to apply a sort.
-     *
-     * @param Sort $sort
-     * @return string
-     */
-    protected function getCustomSortMethodName(Sort $sort): string
-    {
-        return 'scope'.Str::studly($sort->getField()).'Sort';
     }
 }

@@ -30,7 +30,7 @@ class AlternateBandJoryResource extends JoryResource
 
         // Relations
         $this->relation('albums');
-        $this->relation('first_song');
+        $this->relation('firstSong');
         $this->relation('images');
         $this->relation('people');
         $this->relation('songs');

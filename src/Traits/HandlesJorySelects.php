@@ -82,7 +82,7 @@ trait HandlesJorySelects
             $configuredField = $joryResource->getConfig()->getField($fieldName);
 
             if ($configuredField->getSelect() === null) {
-                $fields[] = $table . '.' . Str::snake($fieldName);
+                $fields[] = $table . '.' . $configuredField->getOriginalField();
             } else {
                 $fields = array_merge($fields, $configuredField->getSelect());
             }
@@ -107,12 +107,9 @@ trait HandlesJorySelects
         $model = $builder->getModel();
 
         foreach ($joryResource->getJory()->getRelations() as $relation) {
-            $relationName = ResourceNameHelper::explode($relation->getName())->baseName;
+            $configuredRelation = $joryResource->getConfig()->getRelation($relation);
 
-            // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
-            $relationName = Str::camel($relationName);
-
-            $relationQuery = $model->{$relationName}();
+            $relationQuery = $model->{$configuredRelation->getOriginalName()}();
 
             $fields = array_merge($fields, $this->getSelectsForChildRelationQuery($model, $relationQuery));
         }

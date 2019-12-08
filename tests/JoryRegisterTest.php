@@ -17,7 +17,7 @@ class JoryRegisterTest extends TestCase
 
         Jory::on(Song::find(1))->apply([
             'rlt' => [
-                'test_relation_without_jory_resource' => []
+                'testRelationWithoutJoryResource' => []
             ]
         ])->toArray();
     }
@@ -40,7 +40,7 @@ class JoryRegisterTest extends TestCase
             'jory' => [
                 'fld' => ['title'],
                 'rlt' => [
-                    'test_relation_without_jory_resource' => []
+                    'testRelationWithoutJoryResource' => []
                 ]
             ]
         ]);

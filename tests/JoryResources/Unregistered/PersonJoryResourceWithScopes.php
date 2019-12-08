@@ -38,6 +38,6 @@ class PersonJoryResourceWithScopes extends JoryResource
 
         // Relations
         $this->relation('instruments');
-        $this->relation('first_image');
+        $this->relation('firstImage');
     }
 }

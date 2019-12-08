@@ -110,13 +110,16 @@ return [
     |
     | This casing will be used when calling the JoryResource or API.
     |
-    | NB. All configuration in the JoryResource
-    | classes should always be in snake case.
+    | NB. All configuration in the JoryResource should always
+    | be done using the actual attribute and relation names.
     |
-    | Possible values: 'snake', 'camel'.
+    | The 'default' option does not apply any casing and
+    | uses all fields and relations as configured.
+    |
+    | Possible values: 'default', 'snake', 'camel'.
     */
 
-    'case' => 'snake',
+    'case' => 'default',
 
     /*
     |--------------------------------------------------------------------------

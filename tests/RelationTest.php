@@ -951,6 +951,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/album', [
             'jory' => '{"filter":{"f":"name","o":"=","d":"Abbey road"},"rlt":{"album_cover":{}}}',
+            'case' => 'snake',
         ]);
 
         $response->assertExactJson([
@@ -1015,7 +1016,6 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_nested_relations_with_as_little_queries_as_possible()
     {
         $response = $this->json('GET', 'jory/band', [
-//            'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{}}}}}}}}}',
             'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"cover":{"rlt":{"album":{"rlt":{"band":{}}}}}}}}}}}}}}}}}',
         ]);
 
@@ -1149,13 +1149,13 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_hasOneThrough_relation()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["id"],"rlt":{"first_song":{"fld":["title"]}}}',
+            'jory' => '{"fld":["id"],"rlt":{"firstSong":{"fld":["title"]}}}',
         ]);
 
         $expected = [
             'data' => [
                 'id' => 3,
-                'first_song' => [
+                'firstSong' => [
                     'title' => 'Sgt. Pepper\'s Lonely Hearts Club Band',
                 ],
             ],
@@ -1170,13 +1170,13 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_morphOne_relation()
     {
         $response = $this->json('GET', 'jory/person/3', [
-            'jory' => '{"fld":["id"],"rlt":{"first_image":{"fld":["url"]}}}',
+            'jory' => '{"fld":["id"],"rlt":{"firstImage":{"fld":["url"]}}}',
         ]);
 
         $expected = [
             'data' => [
                 'id' => 3,
-                'first_image' => [
+                'firstImage' => [
                     'url' => 'peron_image_3.jpg',
                 ],
             ],

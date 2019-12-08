@@ -28,10 +28,9 @@ class AlbumJoryResource extends JoryResource
         $this->field('titles_string')->hideByDefault();
 
         // Relations
-        $this->relation('album_cover');
+        $this->relation('albumCover');
         $this->relation('band');
         $this->relation('cover');
-        $this->relation('snake_case_album_cover');
         $this->relation('songs');
         $this->relation('tags');
     }

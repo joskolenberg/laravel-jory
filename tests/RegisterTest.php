@@ -140,7 +140,7 @@ class RegisterTest extends TestCase
                     'type' => 'album',
                 ],
                 [
-                    'relation' => 'test_relation_without_jory_resource',
+                    'relation' => 'testRelationWithoutJoryResource',
                     'description' => null,
                     'type' => null,
                 ],
@@ -465,7 +465,7 @@ class RegisterTest extends TestCase
                     'type' => 'song',
                 ],
                 [
-                    'relation' => 'first_song',
+                    'relation' => 'firstSong',
                     'description' => null,
                     'type' => 'song',
                 ],
@@ -572,7 +572,7 @@ class RegisterTest extends TestCase
                     ],
                 ],
                 [
-                    'name' => 'album_cover.album_id',
+                    'name' => 'albumCover.album_id',
                     'description' => null,
                     'operators' => [
                         '=',
@@ -750,22 +750,17 @@ class RegisterTest extends TestCase
                     'type' => 'album-cover',
                 ],
                 [
-                    'relation' => 'album_cover',
+                    'relation' => 'albumCover',
                     'description' => null,
                     'type' => 'album-cover',
                 ],
                 [
-                    'relation' => 'snake_case_album_cover',
-                    'description' => null,
-                    'type' => 'album-cover',
-                ],
-                [
-                    'relation' => 'custom_songs_2',
+                    'relation' => 'customSongs2',
                     'description' => null,
                     'type' => 'song',
                 ],
                 [
-                    'relation' => 'custom_songs_3',
+                    'relation' => 'customSongs3',
                     'description' => null,
                     'type' => 'song',
                 ],

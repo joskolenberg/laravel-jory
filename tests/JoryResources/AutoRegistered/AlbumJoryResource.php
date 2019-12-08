@@ -30,7 +30,7 @@ class AlbumJoryResource extends JoryResource
 
         $this->filter('number_of_songs', new NumberOfSongsFilter);
         $this->filter('has_song_with_title', new HasSongWithTitleFilter);
-        $this->filter('album_cover.album_id');
+        $this->filter('albumCover.album_id');
         $this->filter('has_small_id', new HasSmallIdFilter);
 
         $this->sort('number_of_songs', new NumberOfSongsSort);
@@ -40,10 +40,9 @@ class AlbumJoryResource extends JoryResource
         $this->relation('songs', SongJoryResource::class);
         $this->relation('band');
         $this->relation('cover');
-        $this->relation('album_cover', AlbumCoverJoryResource::class);
-        $this->relation('snake_case_album_cover');
-        $this->relation('custom_songs_2', CustomSongJoryResource::class);
-        $this->relation('custom_songs_3', SongJoryResource::class);
+        $this->relation('albumCover', AlbumCoverJoryResource::class);
+        $this->relation('customSongs2', CustomSongJoryResource::class);
+        $this->relation('customSongs3', SongJoryResource::class);
         $this->relation('tags');
     }
 }

@@ -92,13 +92,26 @@ class Filter
     }
 
     /**
-     * Get the filter's name.
+     * Get the filter's name in the current case.
      *
      * @return string
      */
     public function getName(): string
     {
         return $this->case->toCurrent($this->name);
+    }
+
+    /**
+     * Get the field to filter on.
+     *
+     * This is always the name of the configured filter
+     * unless a custom FilterScope is applied.
+     *
+     * @return string
+     */
+    public function getField(): string
+    {
+        return $this->name;
     }
 
     /**

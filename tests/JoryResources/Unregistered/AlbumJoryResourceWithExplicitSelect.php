@@ -39,10 +39,9 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
         $this->relation('songs');
         $this->relation('band');
         $this->relation('cover');
-        $this->relation('album_cover', AlbumCoverJoryResource::class);
-        $this->relation('snake_case_album_cover');
-        $this->relation('custom_songs_2', CustomSongJoryResource::class);
-        $this->relation('custom_songs_3', SongJoryResource::class);
+        $this->relation('albumCover', AlbumCoverJoryResource::class);
+        $this->relation('customSongs2', CustomSongJoryResource::class);
+        $this->relation('customSongs3', SongJoryResource::class);
         $this->relation('tags');
     }
 }

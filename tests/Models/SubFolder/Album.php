@@ -56,11 +56,6 @@ class Album extends Model
         return $this->hasOne(AlbumCover::class);
     }
 
-    public function snakeCaseAlbumCover()
-    {
-        return $this->hasOne(AlbumCover::class);
-    }
-
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');

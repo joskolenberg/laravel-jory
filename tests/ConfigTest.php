@@ -87,19 +87,18 @@ class ConfigTest extends TestCase
                             'd' => '%love%',
                         ],
                         'fld' => [
-                            'customField',
+                            'custom_field',
                         ],
                     ],
                 ],
             ],
-            'case' => 'camel',
         ]);
 
         $expected = [
             'name' => 'Led Zeppelin II',
             'songs' => [
                 [
-                    'customField' => 'custom_value',
+                    'custom_field' => 'custom_value',
                 ],
             ],
         ];
@@ -123,16 +122,15 @@ class ConfigTest extends TestCase
                         ],
                         'fld' => [
                             'title',
-                            'customField',
+                            'custom_field',
                         ],
                     ],
                 ],
             ],
-            'case' => 'camel',
         ]);
 
         $expected = [
-            'Field "customField" is not available, no suggestions found. (Location: customSongs3 as songs.fields.customField)',
+            'Field "custom_field" is not available, no suggestions found. (Location: customSongs3 as songs.fields.custom_field)',
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
 
@@ -154,16 +152,15 @@ class ConfigTest extends TestCase
                         ],
                         'fld' => [
                             'title',
-                            'customField',
+                            'custom_field',
                         ],
                     ],
                 ],
             ],
-            'case' => 'camel',
         ]);
 
         $expected = [
-            'Field "customField" is not available, no suggestions found. (Location: customSongs3.fields.customField)',
+            'Field "custom_field" is not available, no suggestions found. (Location: customSongs3.fields.custom_field)',
         ];
         $response->assertStatus(422)->assertExactJson($expected)->assertJson($expected);
 

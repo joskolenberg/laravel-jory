@@ -47,7 +47,7 @@ class BandJoryResourceWithExplicitSelect extends JoryResource
         $this->relation('albums')->description('Get the related albums for the band.');
         $this->relation('people');
         $this->relation('songs');
-        $this->relation('first_song');
+        $this->relation('firstSong');
         $this->relation('images');
     }
 

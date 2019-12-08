@@ -17,7 +17,7 @@ class CaseManager
     /**
      * @var string
      */
-    private $case = 'snake';
+    private $case = 'default';
 
     /**
      * CaseManager constructor.
@@ -28,7 +28,7 @@ class CaseManager
         $this->case = config('jory.case');
 
         $inputCase = $request->input(config('jory.request.case-key'));
-        if (in_array($inputCase, ['snake', 'camel'])) {
+        if (in_array($inputCase, ['default', 'snake', 'camel'])) {
             $this->case = $inputCase;
         }
     }
@@ -45,7 +45,11 @@ class CaseManager
             return Str::camel($string);
         }
 
-        return Str::snake($string);
+        if ($this->case === 'snake') {
+            return Str::snake($string);
+        }
+
+        return $string;
     }
 
 }

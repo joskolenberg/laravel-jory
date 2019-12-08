@@ -83,13 +83,26 @@ class Sort
     }
 
     /**
-     * Get the field.
+     * Get the fields name in the current case.
      *
      * @return string
      */
     public function getName(): string
     {
         return $this->case->toCurrent($this->name);
+    }
+
+    /**
+     * Get the field to sort on.
+     *
+     * This is always the name of the configured sort
+     * unless a custom SortScope is applied.
+     *
+     * @return string
+     */
+    public function getField(): string
+    {
+        return $this->name;
     }
 
     /**

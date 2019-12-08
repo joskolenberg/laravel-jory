@@ -68,15 +68,14 @@ trait LoadsJoryRelations
      */
     protected function loadCountRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
     {
-        // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
-        $relationName = Str::camel(ResourceNameHelper::explode($relation->getName())->baseName);
+        $configuredRelation = $joryResource->getConfig()->getRelation($relation);
 
         $relatedJoryResource = $this->getJoryResourceForRelation($relation, $joryResource);
         $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
 
         foreach ($collection as $model) {
             // We store the count under the full relation name including alias
-            $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnCountQuery($model->$relationName())->count());
+            $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnCountQuery($model->{$configuredRelation->getOriginalName()}())->count());
         }
     }
 
@@ -89,15 +88,14 @@ trait LoadsJoryRelations
      */
     protected function loadFirstRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
     {
-        // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
-        $relationName = Str::camel(ResourceNameHelper::explode($relation->getName())->baseName);
+        $configuredRelation = $joryResource->getConfig()->getRelation($relation);
 
         $relatedJoryResource = $this->getJoryResourceForRelation($relation, $joryResource);
         $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
 
         foreach ($collection as $model) {
             // We store the count under the full relation name including alias
-            $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnQuery($model->$relationName())->first());
+            $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnQuery($model->{$configuredRelation->getOriginalName()}())->first());
         }
     }
 
@@ -110,8 +108,8 @@ trait LoadsJoryRelations
      */
     protected function loadStandardRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
     {
-        // Laravel's relations are in camelCase, convert if in case we're not in camelCase mode
-        $relationName = Str::camel(ResourceNameHelper::explode($relation->getName())->baseName);
+        $configuredRelation = $joryResource->getConfig()->getRelation($relation);
+        $relationName = $configuredRelation->getOriginalName();
 
         $relatedJoryResource = $this->getJoryResourceForRelation($relation, $joryResource);
         $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);

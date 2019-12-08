@@ -137,13 +137,23 @@ class Field
     }
 
     /**
-     * Get the field (name).
+     * Get the field (name) in the current case.
      *
      * @return string
      */
     public function getField(): string
     {
         return $this->case->toCurrent($this->field);
+    }
+
+    /**
+     * Get the field (name) as configured.
+     *
+     * @return string
+     */
+    public function getOriginalField(): string
+    {
+        return $this->field;
     }
 
     /**
