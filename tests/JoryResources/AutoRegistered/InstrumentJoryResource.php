@@ -3,11 +3,9 @@
 namespace JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered;
 
 use JosKolenberg\LaravelJory\Config\Filter;
-use JosKolenberg\LaravelJory\Helpers\FilterHelper;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Scopes\NameFilter;
-use JosKolenberg\LaravelJory\Tests\Scopes\NumberOfAlbumsInYearFilter;
 
 class InstrumentJoryResource extends JoryResource
 {

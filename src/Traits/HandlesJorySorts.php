@@ -2,7 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Traits;
 
-use Illuminate\Support\Str;
 use JosKolenberg\Jory\Support\Sort;
 use JosKolenberg\LaravelJory\JoryResource;
 

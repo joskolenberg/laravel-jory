@@ -2,9 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\ImageJoryResource;
-
 class RelationTest extends TestCase
 {
     /** @test */

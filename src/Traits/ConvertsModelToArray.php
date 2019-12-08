@@ -5,7 +5,6 @@ namespace JosKolenberg\LaravelJory\Traits;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
 use JosKolenberg\LaravelJory\JoryResource;
 

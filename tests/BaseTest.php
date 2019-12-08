@@ -3,9 +3,9 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory as Facade;
-use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
 
 class BaseTest extends TestCase
 {

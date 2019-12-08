@@ -2,9 +2,6 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
-use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAlternateUri;
-
 class JoryRoutesTest extends TestCase
 {
     /** @test */

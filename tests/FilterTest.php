@@ -5,8 +5,8 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithScopes;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
+use JosKolenberg\LaravelJory\Tests\Models\Song;
 
 class FilterTest extends TestCase
 {

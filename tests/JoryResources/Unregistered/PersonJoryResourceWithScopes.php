@@ -5,10 +5,10 @@ namespace JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered;
 use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Scopes\FirstNameSort;
 use JosKolenberg\LaravelJory\Tests\Scopes\FullNameFilter;
 use JosKolenberg\LaravelJory\Tests\Scopes\SpecialFirstNameFilter;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class PersonJoryResourceWithScopes extends JoryResource
 {
