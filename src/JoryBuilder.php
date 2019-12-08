@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Traits\HandlesJoryFilters;
 use JosKolenberg\LaravelJory\Traits\HandlesJorySelects;
 use JosKolenberg\LaravelJory\Traits\HandlesJorySorts;
