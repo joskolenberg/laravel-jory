@@ -16,7 +16,7 @@ class FirstNameSort implements SortScope
      * @param string $order
      * @return void
      */
-    public function apply($builder, string $order = 'asc')
+    public function apply($builder, string $order = 'asc'): void
     {
         $builder->orderBy('first_name', $order);
     }

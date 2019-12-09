@@ -16,7 +16,7 @@ class BandNameSort implements SortScope
      * @param string $order
      * @return void
      */
-    public function apply($builder, string $order = 'asc')
+    public function apply($builder, string $order = 'asc'): void
     {
         $builder->join('bands', 'band_id', 'bands.id')->orderBy('bands.name', $order);
     }

@@ -59,7 +59,7 @@ class JoryServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private function registerRoutes()
+    private function registerRoutes(): void
     {
         if(config('jory.routes.enabled')){
             Route::group($this->routeConfiguration(), function () {
@@ -73,7 +73,7 @@ class JoryServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    private function routeConfiguration()
+    private function routeConfiguration(): array
     {
         return [
             'prefix' => config('jory.routes.path'),

@@ -15,5 +15,5 @@ interface FilterScope
      * @param mixed $data
      * @return void
      */
-    public function apply($builder, string $operator = null, $data = null);
+    public function apply($builder, string $operator = null, $data = null): void;
 }

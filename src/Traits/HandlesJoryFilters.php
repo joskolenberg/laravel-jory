@@ -113,8 +113,9 @@ trait HandlesJoryFilters
      *
      * @param mixed $builder
      * @param Filter $filter
+     * @return void
      */
-    protected function applyRelationFilter($builder, Filter $filter, \JosKolenberg\LaravelJory\Config\Filter $configuredFilter)
+    protected function applyRelationFilter($builder, Filter $filter, \JosKolenberg\LaravelJory\Config\Filter $configuredFilter): void
     {
         $relations = explode('.', $configuredFilter->getField());
 

@@ -66,7 +66,7 @@ abstract class JoryResource
      *
      * @return string
      */
-    public function getUri()
+    public function getUri(): string
     {
         if (! $this->uri) {
             // If no uri is set explicitly we default to the kebabcased model class.
@@ -81,7 +81,7 @@ abstract class JoryResource
      *
      * @return string
      */
-    public function getModelClass()
+    public function getModelClass(): string
     {
         return $this->modelClass;
     }

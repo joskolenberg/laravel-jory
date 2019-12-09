@@ -18,7 +18,7 @@ class CustomSortFieldSort implements SortScope
      * @param string $order
      * @return void
      */
-    public function apply($builder, string $order = 'asc')
+    public function apply($builder, string $order = 'asc'): void
     {
         // Do nothing...
     }

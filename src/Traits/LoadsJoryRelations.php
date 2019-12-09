@@ -64,8 +64,9 @@ trait LoadsJoryRelations
      * @param Collection $collection
      * @param Relation $relation
      * @param JoryResource $joryResource
+     * @return void
      */
-    protected function loadCountRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
+    protected function loadCountRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
     {
         $configuredRelation = $joryResource->getConfig()->getRelation($relation);
 
@@ -84,8 +85,9 @@ trait LoadsJoryRelations
      * @param Collection $collection
      * @param Relation $relation
      * @param JoryResource $joryResource
+     * @return void
      */
-    protected function loadFirstRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
+    protected function loadFirstRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
     {
         $configuredRelation = $joryResource->getConfig()->getRelation($relation);
 
@@ -104,8 +106,9 @@ trait LoadsJoryRelations
      * @param Collection $collection
      * @param Relation $relation
      * @param JoryResource $joryResource
+     * @return void
      */
-    protected function loadStandardRelation(Collection $collection, Relation $relation, JoryResource $joryResource)
+    protected function loadStandardRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
     {
         $configuredRelation = $joryResource->getConfig()->getRelation($relation);
         $relationName = $configuredRelation->getOriginalName();

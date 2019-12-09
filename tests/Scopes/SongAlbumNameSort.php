@@ -16,7 +16,7 @@ class SongAlbumNameSort implements SortScope
      * @param string $order
      * @return void
      */
-    public function apply($builder, string $order = 'asc')
+    public function apply($builder, string $order = 'asc'): void
     {
         $builder->join('albums', 'songs.album_id', 'albums.id')->orderBy('albums.name', $order);
     }

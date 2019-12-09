@@ -19,7 +19,7 @@ class HasAlbumWithNameFilter implements FilterScope
      * @param mixed $data
      * @return void
      */
-    public function apply($builder, string $operator = null, $data = null)
+    public function apply($builder, string $operator = null, $data = null): void
     {
         $builder->whereHas('albums', function ($builder) use ($operator, $data) {
             $builder->where('name', $operator, $data);

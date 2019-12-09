@@ -15,6 +15,7 @@ class Total extends Metadata
      * Get the return value for the metadata.
      * Called at the end of the request.
      *
+     * @return mixed
      */
     public function get()
     {

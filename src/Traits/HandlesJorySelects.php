@@ -35,8 +35,9 @@ trait HandlesJorySelects
      * Apply the default way of selecting columns.
      *
      * @param $builder
+     * @return void
      */
-    protected function applyDefaultSelect($builder)
+    protected function applyDefaultSelect($builder): void
     {
         $table = $builder->getModel()->getTable();
         $builder->select($table.'.*');
@@ -48,7 +49,7 @@ trait HandlesJorySelects
      * @param $builder
      * @param JoryResource $joryResource
      */
-    protected function applySelectsByJory($builder, JoryResource $joryResource)
+    protected function applySelectsByJory($builder, JoryResource $joryResource): void
     {
         $fields = $this->getSelectsForRequestedFields($builder, $joryResource);
         $fields = array_merge($fields, $this->getFieldsForEagerLoading($builder, $joryResource));
@@ -71,7 +72,7 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getSelectsForRequestedFields($builder, JoryResource $joryResource)
+    protected function getSelectsForRequestedFields($builder, JoryResource $joryResource): array
     {
         $fields = [];
 
@@ -99,7 +100,7 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getSelectsForChildRelations($builder, JoryResource $joryResource)
+    protected function getSelectsForChildRelations($builder, JoryResource $joryResource): array
     {
         $fields = [];
 
@@ -125,7 +126,7 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getFieldsForEagerLoading($builder, JoryResource $joryResource)
+    protected function getFieldsForEagerLoading($builder, JoryResource $joryResource): array
     {
         $fields = [];
 
@@ -158,7 +159,7 @@ trait HandlesJorySelects
      * @param $builder
      * @return array
      */
-    protected function getSelectsForParentRelation($builder)
+    protected function getSelectsForParentRelation($builder): array
     {
         if($builder instanceof HasOne){
             return [$builder->getQualifiedForeignKeyName()];
@@ -198,7 +199,7 @@ trait HandlesJorySelects
      * @param $relationQuery
      * @return array
      */
-    public function getSelectsForChildRelationQuery($baseModel, $relationQuery)
+    public function getSelectsForChildRelationQuery($baseModel, $relationQuery): array
     {
         if($relationQuery instanceof HasOne){
             return [$baseModel->getQualifiedKeyName()];
@@ -233,7 +234,5 @@ trait HandlesJorySelects
         // MorphToMany extends BelongsToMany, so that action is already taken care of
 
         // MorpedByMany uses a MorphToMany under the hood, so that action is already taken care of
-
-        return [];
     }
 }

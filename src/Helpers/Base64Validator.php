@@ -16,7 +16,7 @@ class Base64Validator
      * @param $data
      * @return bool
      */
-    public static function check($data)
+    public static function check($data): bool
     {
         return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $data);
     }

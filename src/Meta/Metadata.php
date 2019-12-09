@@ -25,6 +25,7 @@ abstract class Metadata
      * Get the return value for the metadata.
      * Called at the end of the request.
      *
+     * @return mixed
      */
     abstract public function get();
 

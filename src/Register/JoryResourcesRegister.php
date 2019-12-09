@@ -148,8 +148,9 @@ class JoryResourcesRegister
      *
      * @param Collection $subject
      * @param Collection $additional
+     * @return void
      */
-    protected function mergeJoryResources(Collection $subject, Collection $additional)
+    protected function mergeJoryResources(Collection $subject, Collection $additional): void
     {
         foreach ($additional as $joryResource){
             /**

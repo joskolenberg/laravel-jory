@@ -19,7 +19,7 @@ class HasSongWithTitleFilter implements FilterScope
      * @param mixed $data
      * @return void
      */
-    public function apply($builder, string $operator = null, $data = null)
+    public function apply($builder, string $operator = null, $data = null): void
     {
         $builder->whereHas('songs', function ($builder) use ($operator, $data) {
             $builder->where('title', $operator, $data);

@@ -397,8 +397,10 @@ class JoryResponse implements Responsable
      *
      * When the response is in explicit mode the response
      * should only be processed when Jory input is given.
+     *
+     * @return bool
      */
-    protected function shouldProcess()
+    protected function shouldProcess(): bool
     {
         if(!$this->explicit){
             return true;
