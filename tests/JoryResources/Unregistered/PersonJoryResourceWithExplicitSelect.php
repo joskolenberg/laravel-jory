@@ -21,7 +21,7 @@ class PersonJoryResourceWithExplicitSelect extends JoryResource
         $this->field('last_name')->filterable()->sortable();
         $this->field('date_of_birth')->select(['date_of_birth'])->filterable()->sortable();
         $this->field('full_name')
-            ->select(['first_name', 'last_name'])
+            ->select('first_name', 'last_name')
             ->filterable(function (Filter $filter){
                 $filter->scope(new FullNameFilter);
             });

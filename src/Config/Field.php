@@ -99,12 +99,12 @@ class Field
     /**
      * Set the fields to be selected in the query.
      *
-     * @param mixed $fields
+     * @param string|array $fields
      * @return Field
      */
-    public function select($fields): Field
+    public function select(...$fields): Field
     {
-        $this->select = is_array($fields) ? $fields : func_get_args();
+        $this->select = is_array($fields[0]) ? $fields[0] : $fields;
 
         return $this;
     }
