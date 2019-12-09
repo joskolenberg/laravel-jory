@@ -50,6 +50,9 @@ trait LoadsJoryRelations
             case 'count':
                 $this->loadCountRelation($collection, $relation, $joryResource);
                 break;
+            case 'exists':
+                $this->loadCountRelation($collection, $relation, $joryResource, true);
+                break;
             case 'first':
                 $this->loadFirstRelation($collection, $relation, $joryResource);
                 break;
@@ -64,9 +67,10 @@ trait LoadsJoryRelations
      * @param Collection $collection
      * @param Relation $relation
      * @param JoryResource $joryResource
+     * @param bool $exists
      * @return void
      */
-    protected function loadCountRelation(Collection $collection, Relation $relation, JoryResource $joryResource): void
+    protected function loadCountRelation(Collection $collection, Relation $relation, JoryResource $joryResource, $exists = false): void
     {
         $configuredRelation = $joryResource->getConfig()->getRelation($relation);
 
@@ -74,8 +78,12 @@ trait LoadsJoryRelations
         $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
 
         foreach ($collection as $model) {
+            $relationQuery = $relatedJoryBuilder->applyOnCountQuery($model->{$configuredRelation->getOriginalName()}());
+
+            $result = $exists ? $relationQuery->exists() : $relationQuery->count();
+
             // We store the count under the full relation name including alias
-            $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnCountQuery($model->{$configuredRelation->getOriginalName()}())->count());
+            $this->storeRelationOnModel($model, $relation->getName(), $result);
         }
     }
 

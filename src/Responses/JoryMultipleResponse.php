@@ -249,6 +249,9 @@ class JoryMultipleResponse implements Responsable
         if ($single->type === 'count') {
             $singleResponse->count();
         }
+        if ($single->type === 'exists') {
+            $singleResponse->exists();
+        }
         if ($single->type === 'find' || $single->type === 'first') {
             // Return a single item
             $singleResponse->find($single->id);

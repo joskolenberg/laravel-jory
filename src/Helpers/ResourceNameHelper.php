@@ -42,12 +42,8 @@ class ResourceNameHelper
         if (count($nameParts) === 1) {
             $type = 'multiple';
             $id = null;
-        } elseif ($nameParts[1] === 'count') {
-            $type = 'count';
-            $baseName = $nameParts[0];
-            $id = null;
-        } elseif ($nameParts[1] === 'first') {
-            $type = 'first';
+        } elseif (in_array($nameParts[1], ['count', 'exists', 'first'])) {
+            $type = $nameParts[1];
             $baseName = $nameParts[0];
             $id = null;
         } else {

@@ -50,6 +50,11 @@ class JoryResponse implements Responsable
     protected $count = false;
 
     /**
+     * @var bool
+     */
+    protected $exists = false;
+
+    /**
      * @var mixed
      */
     protected $modelId;
@@ -207,6 +212,18 @@ class JoryResponse implements Responsable
     }
 
     /**
+     * Set the response to return the record existence.
+     *
+     * @return $this
+     */
+    public function exists(): JoryResponse
+    {
+        $this->exists = true;
+
+        return $this;
+    }
+
+    /**
      * Set the response to return a single model by the given id.
      *
      * @param $modelId
@@ -273,6 +290,10 @@ class JoryResponse implements Responsable
 
         if ($this->count) {
             return $builder->getCount();
+        }
+
+        if ($this->exists) {
+            return $builder->getExists();
         }
 
         if ($this->first) {

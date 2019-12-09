@@ -35,7 +35,7 @@ trait ConvertsModelToArray
             // Get the related records which were fetched earlier. These are stored in the model under the full relation's name including alias
             $related = $model->joryRelations[$relationName];
 
-            if ($relationDetails->type === 'count') {
+            if (in_array($relationDetails->type, ['count', 'exists'])) {
                 // A count query; just put the result here
                 $result[$relationAlias] = $related;
                 continue;

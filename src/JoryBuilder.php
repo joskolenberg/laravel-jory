@@ -98,6 +98,20 @@ class JoryBuilder
     }
 
     /**
+     * Tell if any record exists based on the filters in the Jory object.
+     *
+     * @return bool
+     */
+    public function getExists(): bool
+    {
+        $builder = $this->builder;
+
+        $this->applyOnCountQuery($builder);
+
+        return $builder->exists();
+    }
+
+    /**
      * Build a new query based on the baseQuery and Jory data.
      *
      * @return Builder

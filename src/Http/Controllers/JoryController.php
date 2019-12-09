@@ -31,6 +31,17 @@ class JoryController extends Controller
     }
 
     /**
+     * Tell if a record exists.
+     *
+     * @param string $resource
+     * @return JoryResponse
+     */
+    public function exists(string $resource)
+    {
+        return Jory::byUri($resource)->explicit(false)->exists();
+    }
+
+    /**
      * Give a single record by id.
      *
      * @param string $resource
