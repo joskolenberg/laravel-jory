@@ -129,9 +129,11 @@ class Field
      */
     public function load($relations): Field
     {
-        $relations = is_array($relations) ? $relations : func_get_args();
+        if (is_string($relations)) {
+            $relations = func_get_args();
+        }
 
-        $this->load = array_map('Illuminate\Support\Str::camel', $relations);
+        $this->load = $relations;
 
         return $this;
     }

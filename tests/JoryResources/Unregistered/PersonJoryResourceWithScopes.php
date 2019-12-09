@@ -31,7 +31,7 @@ class PersonJoryResourceWithScopes extends JoryResource
 
         // Custom attributes
         $this->field('instruments_string')->load('instruments')->hideByDefault();
-        $this->field('first_image_url')->load('first_image')->hideByDefault();
+        $this->field('first_image_url')->load('firstImage')->hideByDefault();
 
         $this->filter('band.albums.songs.title');
         $this->filter('instruments.name');
