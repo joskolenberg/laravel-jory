@@ -320,4 +320,41 @@ class MetadataTest extends TestCase
 
         $this->assertQueryCount(6);
     }
+
+    /** @test */
+    public function it_returns_a_422_error_when_unknown_metadata_is_requested()
+    {
+        $response = $this->json('GET', 'jory/band/1', [
+            'jory' => '{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}}',
+            'meta' => ['total', 'unknown', 'query_count', 'unknown2'],
+        ]);
+
+        $response->assertStatus(422)->assertExactJson([
+            'errors' => [
+                'Meta tag unknown is not supported.',
+                'Meta tag unknown2 is not supported.'
+            ],
+        ]);
+
+        $this->assertQueryCount(0);
+    }
+
+    /** @test */
+    public function it_returns_a_422_error_when_metadata_is_requested_while_its_not_supported()
+    {
+        config()->set('jory.response.data-key', null);
+
+        $response = $this->json('GET', 'jory/band/1', [
+            'jory' => '{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}}',
+            'meta' => ['query_count'],
+        ]);
+
+        $response->assertStatus(422)->assertExactJson([
+            'errors' => [
+                'Meta tags are not supported when data is returned in the root.',
+            ],
+        ]);
+
+        $this->assertQueryCount(0);
+    }
 }
