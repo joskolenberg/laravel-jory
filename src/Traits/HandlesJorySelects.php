@@ -234,5 +234,7 @@ trait HandlesJorySelects
         // MorphToMany extends BelongsToMany, so that action is already taken care of
 
         // MorpedByMany uses a MorphToMany under the hood, so that action is already taken care of
+
+        return [];
     }
 }
