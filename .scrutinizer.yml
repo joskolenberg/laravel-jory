@@ -39,13 +39,13 @@ build:
       environment:
         php: 7.1
 
-    php73-lowest:
+    php74-lowest:
       environment:
-        php: 7.3
+        php: 7.4
       dependencies:
         override:
           - composer update --no-interaction --prefer-lowest
 
-    php73:
+    php74:
       environment:
-        php: 7.3
+        php: 7.4
