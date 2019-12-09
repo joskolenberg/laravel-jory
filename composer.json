@@ -13,7 +13,7 @@
   "require": {
     "laravel/framework": "^5.8|^6.0",
     "joskolenberg/jory": "^0.7|^1.0",
-    "joskolenberg/eloquent-reflector": "2.x-dev",
+    "joskolenberg/eloquent-reflector": "^2.0",
     "rap2hpoutre/similar-text-finder": "^1.1"
   },
   "autoload": {
