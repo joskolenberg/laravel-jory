@@ -15,21 +15,21 @@ class BandJoryResource extends JoryResource
     protected function configure(): void
     {
         $this->field('id')->filterable(function (Filter $filter) {
-            $filter->description('Try this filter by id!')->operators(['=', '>', '<', '<=', '>=', '<>', '!=', 'in', 'not_in']);
+            $filter->operators(['=', '>', '<', '<=', '>=', '<>', '!=', 'in', 'not_in']);
         })->sortable();
 
         $this->field('name')->filterable()->sortable();
 
-        $this->field('year_start')->description('The year in which the band started.')->filterable()->sortable();
+        $this->field('year_start')->filterable()->sortable();
 
-        $this->field('year_end')->description('The year in which the band quitted, could be null if band still exists.')->filterable()->sortable();
+        $this->field('year_end')->filterable()->sortable();
 
         $this->field('all_albums_string')->load('albums')->hideByDefault();
         $this->field('titles_string')->load('songs')->hideByDefault();
         $this->field('first_title_string')->load('firstSong')->hideByDefault();
         $this->field('image_urls_string')->load('images')->hideByDefault();
 
-        $this->filter('has_album_with_name', new HasAlbumWithNameFilter)->description('Filter bands that have an album with a given name.');
+        $this->filter('has_album_with_name', new HasAlbumWithNameFilter);
         $this->filter('number_of_albums_in_year', new NumberOfAlbumsInYearFilter)->operators([
             '=',
             '>',
@@ -38,11 +38,11 @@ class BandJoryResource extends JoryResource
             '>=',
             '<>',
             '!=',
-        ])->description('Filter the bands that released a given number of albums in a year, pass value and year parameter.');
+        ]);
 
         $this->limitDefault(30)->limitMax(120);
 
-        $this->relation('albums')->description('Get the related albums for the band.');
+        $this->relation('albums');
         $this->relation('people');
         $this->relation('songs');
         $this->relation('firstSong');

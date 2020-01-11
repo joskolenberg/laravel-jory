@@ -23,11 +23,6 @@ class Field
     protected $showByDefault = true;
 
     /**
-     * @var null|string
-     */
-    protected $description = null;
-
-    /**
      * @var null|Filter
      */
     protected $filter = null;
@@ -79,19 +74,6 @@ class Field
     public function hideByDefault(): Field
     {
         $this->showByDefault = false;
-
-        return $this;
-    }
-
-    /**
-     * Set the fields description.
-     *
-     * @param string $description
-     * @return $this
-     */
-    public function description(string $description): Field
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -156,16 +138,6 @@ class Field
     public function getOriginalField(): string
     {
         return $this->field;
-    }
-
-    /**
-     * Get the description.
-     *
-     * @return null|string
-     */
-    public function getDescription():? string
-    {
-        return $this->description;
     }
 
     /**

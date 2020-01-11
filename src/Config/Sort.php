@@ -18,11 +18,6 @@ class Sort
     protected $name;
 
     /**
-     * @var null|string
-     */
-    protected $description = null;
-
-    /**
      * @var null|int
      */
     protected $defaultIndex = null;
@@ -54,19 +49,6 @@ class Sort
         $this->scope = $scope;
 
         $this->case = app(CaseManager::class);
-    }
-
-    /**
-     * Set the sort's description.
-     *
-     * @param string $description
-     * @return $this
-     */
-    public function description(string $description): Sort
-    {
-        $this->description = $description;
-
-        return $this;
     }
 
     /**
@@ -103,16 +85,6 @@ class Sort
     public function getField(): string
     {
         return $this->name;
-    }
-
-    /**
-     * Get the description.
-     *
-     * @return null|string
-     */
-    public function getDescription():? string
-    {
-        return $this->description;
     }
 
     /**

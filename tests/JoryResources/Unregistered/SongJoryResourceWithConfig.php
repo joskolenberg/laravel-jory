@@ -15,14 +15,10 @@ class SongJoryResourceWithConfig extends JoryResource
     {
         $this->field('id')->sortable();
 
-        $this->field('title')->description('The songs title.')->filterable(function (Filter $filter) {
-            $filter->description('Filter on the title.');
-        })->sortable(function (Sort $sort) {
-            $sort->description('Order by the title.');
-        });
+        $this->field('title')->filterable()->sortable();
 
         $this->field('album_id')->hideByDefault()->filterable(function (Filter $filter) {
-            $filter->description('Filter on the album id.')->operators(['=']);
+            $filter->operators(['=']);
         });
 
         $this->limitDefault(50)->limitMax(250);

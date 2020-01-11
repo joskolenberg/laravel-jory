@@ -74,24 +74,20 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'title',
-                    'description' => 'The songs title.',
                     'default' => true,
                 ],
                 [
                     'field' => 'album_id',
-                    'description' => null,
                     'default' => false,
                 ],
             ],
             'filters' => [
                 [
                     'name' => 'title',
-                    'description' => 'Filter on the title.',
                     'operators' => [
                         '=',
                         '!=',
@@ -111,7 +107,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'album_id',
-                    'description' => 'Filter on the album id.',
                     'operators' => [
                         '=',
                     ],
@@ -120,12 +115,10 @@ class RegisterTest extends TestCase
             'sorts' => [
                 [
                     'name' => 'id',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'title',
-                    'description' => 'Order by the title.',
                     'default' => false,
                 ],
             ],
@@ -136,12 +129,10 @@ class RegisterTest extends TestCase
             'relations' => [
                 [
                     'relation' => 'album',
-                    'description' => null,
                     'type' => 'album',
                 ],
                 [
                     'relation' => 'testRelationWithoutJoryResource',
-                    'description' => null,
                     'type' => null,
                 ],
             ],
@@ -162,24 +153,20 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'title',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'album_id',
-                    'description' => null,
                     'default' => true,
                 ],
             ],
             'filters' => [
                 [
                     'name' => 'title',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -201,7 +188,6 @@ class RegisterTest extends TestCase
             'sorts' => [
                 [
                     'name' => 'title',
-                    'description' => null,
                     'default' => false,
                 ],
             ],
@@ -227,17 +213,14 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'title',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'album_id',
-                    'description' => null,
                     'default' => true,
                 ],
             ],
@@ -245,7 +228,6 @@ class RegisterTest extends TestCase
             'sorts' => [
                 [
                     'name' => 'title',
-                    'description' => null,
                     'default' => [
                         'index' => 2,
                         'order' => 'desc'
@@ -253,7 +235,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'album_name',
-                    'description' => null,
                     'default' => [
                         'index' => 1,
                         'order' => 'asc'
@@ -281,49 +262,40 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'name',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'year_start',
-                    'description' => 'The year in which the band started.',
                     'default' => true,
                 ],
                 [
                     'field' => 'year_end',
-                    'description' => 'The year in which the band quitted, could be null if band still exists.',
                     'default' => true,
                 ],
                 [
                     'field' => 'all_albums_string',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'field' => 'titles_string',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'field' => 'first_title_string',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'field' => 'image_urls_string',
-                    'description' => null,
                     'default' => false,
                 ],
             ],
             'filters' => [
                 [
                     'name' => 'has_album_with_name',
-                    'description' => 'Filter bands that have an album with a given name.',
                     'operators' => [
                         '=',
                         '!=',
@@ -343,12 +315,10 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'number_of_albums_in_year',
-                    'description' => 'Filter the bands that released a given number of albums in a year, pass value and year parameter.',
                     'operators' => ['=', '>', '<', '<=', '>=', '<>', '!='],
                 ],
                 [
                     'name' => 'id',
-                    'description' => 'Try this filter by id!',
                     'operators' => [
                         '=',
                         '>',
@@ -363,7 +333,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'name',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -383,7 +352,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'year_start',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -403,7 +371,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'year_end',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -425,22 +392,18 @@ class RegisterTest extends TestCase
             'sorts' => [
                 [
                     'name' => 'id',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'name',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'year_start',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'year_end',
-                    'description' => null,
                     'default' => false,
                 ],
             ],
@@ -451,27 +414,22 @@ class RegisterTest extends TestCase
             'relations' => [
                 [
                     'relation' => 'albums',
-                    'description' => 'Get the related albums for the band.',
                     'type' => 'album',
                 ],
                 [
                     'relation' => 'people',
-                    'description' => null,
                     'type' => 'person',
                 ],
                 [
                     'relation' => 'songs',
-                    'description' => null,
                     'type' => 'song',
                 ],
                 [
                     'relation' => 'firstSong',
-                    'description' => null,
                     'type' => 'song',
                 ],
                 [
                     'relation' => 'images',
-                    'description' => null,
                     'type' => 'image',
                 ],
             ],
@@ -491,49 +449,40 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'name',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'band_id',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'release_date',
-                    'description' => null,
                     'default' => true,
                 ],
                 [
                     'field' => 'custom_field',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'field' => 'cover_image',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'field' => 'titles_string',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'field' => 'tag_names_string',
-                    'description' => null,
                     'default' => false,
                 ],
             ],
             'filters' => [
                 [
                     'name' => 'number_of_songs',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -553,7 +502,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'has_song_with_title',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -573,7 +521,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'albumCover.album_id',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -593,7 +540,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'has_small_id',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -613,7 +559,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'id',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -633,7 +578,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'name',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -653,7 +597,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'band_id',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -673,7 +616,6 @@ class RegisterTest extends TestCase
                 ],
                 [
                     'name' => 'release_date',
-                    'description' => null,
                     'operators' => [
                         '=',
                         '!=',
@@ -695,37 +637,30 @@ class RegisterTest extends TestCase
             'sorts' => [
                 [
                     'name' => 'number_of_songs',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'band_name',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'alphabetic_name',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'id',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'name',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'band_id',
-                    'description' => null,
                     'default' => false,
                 ],
                 [
                     'name' => 'release_date',
-                    'description' => null,
                     'default' => false,
                 ],
             ],
@@ -736,37 +671,30 @@ class RegisterTest extends TestCase
             'relations' => [
                 [
                     'relation' => 'songs',
-                    'description' => null,
                     'type' => 'song',
                 ],
                 [
                     'relation' => 'band',
-                    'description' => null,
                     'type' => 'band',
                 ],
                 [
                     'relation' => 'cover',
-                    'description' => null,
                     'type' => 'album-cover',
                 ],
                 [
                     'relation' => 'albumCover',
-                    'description' => null,
                     'type' => 'album-cover',
                 ],
                 [
                     'relation' => 'customSongs2',
-                    'description' => null,
                     'type' => 'song',
                 ],
                 [
                     'relation' => 'customSongs3',
-                    'description' => null,
                     'type' => 'song',
                 ],
                 [
                     'relation' => 'tags',
-                    'description' => null,
                     'type' => 'tag',
                 ],
             ],

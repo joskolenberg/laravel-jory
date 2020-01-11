@@ -30,11 +30,6 @@ class Relation
     protected $joryResource;
 
     /**
-     * @var string
-     */
-    protected $description;
-
-    /**
      * @var CaseManager
      */
     protected $case = null;
@@ -56,19 +51,6 @@ class Relation
     }
 
     /**
-     * Set the relation's description.
-     *
-     * @param string $description
-     * @return $this
-     */
-    public function description(string $description): Relation
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
      * Get the relation's name in the current case.
      *
      * @return string
@@ -86,16 +68,6 @@ class Relation
     public function getOriginalName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * Get the description.
-     *
-     * @return null|string
-     */
-    public function getDescription():? string
-    {
-        return $this->description;
     }
 
     /**

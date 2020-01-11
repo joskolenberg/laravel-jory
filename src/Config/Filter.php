@@ -23,11 +23,6 @@ class Filter
     protected $operators = [];
 
     /**
-     * @var null|string
-     */
-    protected $description = null;
-
-    /**
      * @var CaseManager
      */
     protected $case = null;
@@ -50,19 +45,6 @@ class Filter
         $this->operators = config('jory.filters.operators');
 
         $this->case = app(CaseManager::class);
-    }
-
-    /**
-     * Set the filter's description.
-     *
-     * @param string $description
-     * @return $this
-     */
-    public function description(string $description): Filter
-    {
-        $this->description = $description;
-
-        return $this;
     }
 
     /**
@@ -132,15 +114,5 @@ class Filter
     public function getOperators(): array
     {
         return $this->operators;
-    }
-
-    /**
-     * Get the description.
-     *
-     * @return null|string
-     */
-    public function getDescription():? string
-    {
-        return $this->description;
     }
 }
