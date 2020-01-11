@@ -41,7 +41,7 @@ trait ConvertsConfigToArray
         $result = [];
         foreach ($fields as $field) {
             $result[] = [
-                'field' => $field->getField(),
+                'field' => $field->getOriginalField(),
                 'default' => $field->isShownByDefault(),
             ];
         }
@@ -60,7 +60,7 @@ trait ConvertsConfigToArray
         $result = [];
         foreach ($filters as $filter) {
             $result[] = [
-                'name' => $filter->getName(),
+                'name' => $filter->getField(),
                 'operators' => $filter->getOperators(),
             ];
         }
@@ -79,7 +79,7 @@ trait ConvertsConfigToArray
         $result = [];
         foreach ($sorts as $sort) {
             $result[] = [
-                'name' => $sort->getName(),
+                'name' => $sort->getField(),
                 'default' => ($sort->getDefaultIndex() === null ? false : [
                     'index' => $sort->getDefaultIndex(),
                     'order' => $sort->getDefaultOrder(),
@@ -106,7 +106,7 @@ trait ConvertsConfigToArray
                 $type = null;
             }
             $result[] = [
-                'relation' => $relation->getName(),
+                'relation' => $relation->getOriginalName(),
                 'type' => $type,
             ];
         }
