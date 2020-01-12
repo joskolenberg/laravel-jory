@@ -235,7 +235,7 @@ class JoryRoutesTest extends TestCase
 
         $expected = [
             'errors' => [
-                'A filter should contain one of the these fields: "f", "field", "and", "group_and", "or" or "group_or". (Location: album.songs.filter)',
+                'Unknown key "wrong" in Jory Query. (Location: album.songs.filter)',
             ],
         ];
 
