@@ -9,7 +9,7 @@
 
 ## Concept Overview
 Laravel Jory creates a dynamic API for your Laravel application to serve the data from your Eloquent models.
-JoryResources are comparable to Laravel's built-in Resource classes but you only write (or [generate](/{{route}}/{{version}}/generator)) a JoryResource once for each model. Next, your data can be queried in a flexible way by passing a [Jory Query](/{{route}}/{{version}}/query_introduction) to the [Jory Endpoints](/{{route}}/{{version}}/endpoints).
+JoryResources are comparable to Laravel's built-in Resource classes but you only write (or [generate](https://laravel-jory.kolenberg.net/docs/2.0/generator)) a JoryResource once for each model. Next, your data can be queried in a flexible way by passing a [Jory Query](https://laravel-jory.kolenberg.net/docs/2.0/query_introduction) to the [Jory Endpoints](https://laravel-jory.kolenberg.net/docs/2.0/endpoints).
 
 
 Jory is designed to be simple enough to master within minutes but flexible enough to fit 95% of your data-fetching use-cases. It brings Eloquent Query Builder's most-used features directly to your frontend.  
@@ -18,25 +18,25 @@ Jory is designed to be simple enough to master within minutes but flexible enoug
 <a name="supported-functions"></a>
 ## Supported Functions
 ### Querying
-- [Selecting fields](/{{route}}/{{version}}/query_fields) (database fields & custom attributes)
-- [Filtering](/{{route}}/{{version}}/query_filters) (including nested ```and``` and ```or``` clauses and custom filters)
-- [Sorting](/{{route}}/{{version}}/query_sorts) (including custom sorts)
-- [Relations](/{{route}}/{{version}}/query_relations)
-- [Offset & Limit](/{{route}}/{{version}}/query_offset_and_limit)
+- [Selecting fields](https://laravel-jory.kolenberg.net/docs/2.0/query_fields) (database fields & custom attributes)
+- [Filtering](https://laravel-jory.kolenberg.net/docs/2.0/query_filters) (including nested ```and``` and ```or``` clauses and custom filters)
+- [Sorting](https://laravel-jory.kolenberg.net/docs/2.0/query_sorts) (including custom sorts)
+- [Relations](https://laravel-jory.kolenberg.net/docs/2.0/query_relations)
+- [Offset & Limit](https://laravel-jory.kolenberg.net/docs/2.0/query_offset_and_limit)
 
 ### Endpoints
-- Fetch a [single record](/{{route}}/{{version}}/endpoints#first) (like Laravel's ```first()```)
-- Fetch a [single record by id](/{{route}}/{{version}}/endpoints#find) (like Laravel's ```find()```)
-- Fetch [multiple records](/{{route}}/{{version}}/endpoints#get) (like Laravel's ```get()```)
-- Fetch [multiple resources at once](/{{route}}/{{version}}/endpoints#multiple)
+- Fetch a [single record](https://laravel-jory.kolenberg.net/docs/2.0/endpoints#first) (like Laravel's ```first()```)
+- Fetch a [single record by id](https://laravel-jory.kolenberg.net/docs/2.0/endpoints#find) (like Laravel's ```find()```)
+- Fetch [multiple records](https://laravel-jory.kolenberg.net/docs/2.0/endpoints#get) (like Laravel's ```get()```)
+- Fetch [multiple resources at once](https://laravel-jory.kolenberg.net/docs/2.0/endpoints#multiple)
 
 ### Aggregates
-- [Count](/{{route}}/{{version}}/endpoints#aggregates)
-- [Exists](/{{route}}/{{version}}/endpoints#aggregates)
+- [Count](https://laravel-jory.kolenberg.net/docs/2.0/endpoints#aggregates)
+- [Exists](https://laravel-jory.kolenberg.net/docs/2.0/endpoints#aggregates)
 
 ### Metadata
-- [Total records](/{{route}}/{{version}}/metadata#total) (for pagination)
-- [Query count](/{{route}}/{{version}}/metadata#query-count)
+- [Total records](https://laravel-jory.kolenberg.net/docs/2.0/metadata#total) (for pagination)
+- [Query count](https://laravel-jory.kolenberg.net/docs/2.0/metadata#query-count)
 
 
 For more information take a look at the [docs](https://laravel-jory.kolenberg.net/docs).
