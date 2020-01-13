@@ -103,7 +103,7 @@ trait LoadsJoryRelations
         $relatedJoryBuilder = $this->getJoryBuilderForResource($relatedJoryResource);
 
         foreach ($collection as $model) {
-            // We store the count under the full relation name including alias
+            // We store the result under the full relation name including alias
             $this->storeRelationOnModel($model, $relation->getName(), $relatedJoryBuilder->applyOnQuery($model->{$configuredRelation->getOriginalName()}())->first());
         }
     }
