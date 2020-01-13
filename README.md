@@ -39,7 +39,7 @@ Jory is designed to be simple enough to master within minutes but flexible enoug
 - [Query count](/{{route}}/{{version}}/metadata#query-count)
 
 
-For more information take a look at the [Docs](https://laravel-jory.kolenberg.net/docs).
+For more information take a look at the [docs](https://laravel-jory.kolenberg.net/docs).
 
 
 Happy coding!

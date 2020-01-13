@@ -12,7 +12,7 @@
   "minimum-stability": "stable",
   "require": {
     "laravel/framework": "^5.8|^6.0",
-    "joskolenberg/jory": "v2.x-dev",
+    "joskolenberg/jory": "^2.0",
     "joskolenberg/eloquent-reflector": "^2.0",
     "rap2hpoutre/similar-text-finder": "^1.1"
   },
