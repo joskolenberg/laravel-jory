@@ -116,7 +116,7 @@ class JoryBuilder
      *
      * @return Builder
      */
-    protected function buildQuery(): Builder
+    public function buildQuery(): Builder
     {
         $builder = $this->builder;
 
