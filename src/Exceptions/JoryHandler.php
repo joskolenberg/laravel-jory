@@ -2,10 +2,7 @@
 
 namespace JosKolenberg\LaravelJory\Exceptions;
 
-use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use JosKolenberg\Jory\Exceptions\JoryException;
 
 /**
@@ -17,13 +14,9 @@ class JoryHandler extends ExceptionHandler
 {
 
     /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  Request  $request
-     * @param  \Exception  $exception
-     * @return Response
+     * @inheritDoc
      */
-    public function render($request, Exception $exception)
+    public function render($request, $exception)
     {
         if ($exception instanceof JoryException) {
             return response([
