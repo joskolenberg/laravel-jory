@@ -28,9 +28,9 @@ build:
           format: 'clover'
 
   nodes:
-    php71-lowest:
+    php72-lowest:
       environment:
-        php: 7.1
+        php: 7.2
       dependencies:
         override:
           - composer update --no-interaction --prefer-lowest

@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use JosKolenberg\Jory\Exceptions\JoryException;
+use Throwable;
 
 /**
  * Class JoryHandler
@@ -16,7 +17,7 @@ class JoryHandler extends ExceptionHandler
     /**
      * @inheritDoc
      */
-    public function render($request, $exception)
+    public function render($request, Throwable $exception)
     {
         if ($exception instanceof JoryException) {
             return response([
