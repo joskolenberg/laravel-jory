@@ -6,10 +6,7 @@ class Person extends Model
 {
     protected $table = 'people';
 
-    protected function serializeDate(\DateTimeInterface $date)
-    {
-        return $date->format('Y/m/d');
-    }
+    protected $dateFormat = 'Y/m/d';
 
     protected $hidden = [
         'pivot',
