@@ -74,10 +74,10 @@ class AutoRegistrar implements RegistersJoryResources
     {
         $className = $this->getClassNameFromFilePath($file->getRealPath());
 
-        $joryResource = new $className();
+        $reflector = new \ReflectionClass($className);
 
-        if($joryResource instanceof JoryResource){
-            $this->joryResources->push($joryResource);
+        if($reflector->isSubclassOf(JoryResource::class)){
+            $this->joryResources->push(new $className());
         }
     }
 
