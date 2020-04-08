@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
 
 // Multiple resources
