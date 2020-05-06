@@ -30,7 +30,23 @@ class ExistsTest extends TestCase
     public function it_can_tell_if_an_item_exists_using_the_uri_2()
     {
         $response = $this->json('GET', 'jory/band/exists', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]}',
+            'jory' => [
+                'fld' => ['id', 'name'],
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'flt' => [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'd' => '%III%',
+                        ]
+                    ]
+                ]
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -65,7 +81,24 @@ class ExistsTest extends TestCase
     public function it_can_tell_if_a_relation_exists_1()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%es%"},"rlt":{"songs:exists":{"flt":{"f":"title","o":"like","d":"%gimme%"},"fld":["title"]}},"fld":["name"]}',
+            'jory' => [
+                'fld' => 'name',
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%es%',
+                ],
+                'rlt' => [
+                    'songs:exists' => [
+                        'fld' => 'title',
+                        'flt' => [
+                            'f' => 'title',
+                            'o' => 'like',
+                            'd' => '%gimme%',
+                        ]
+                    ]
+                ]
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -88,7 +121,15 @@ class ExistsTest extends TestCase
     public function it_can_tell_if_a_relation_exists_2()
     {
         $response = $this->json('GET', 'jory/album/3', [
-            'jory' => '{"rlt":{"songs:exists as song_exists":{"srt":["-id"],"fld":["title"]}},"fld":["name"]}',
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'songs:exists as song_exists' => [
+                        'fld' => 'title',
+                        'srt' => '-id',
+                    ]
+                ]
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -105,7 +146,14 @@ class ExistsTest extends TestCase
     public function it_doesnt_fail_when_requesting_exists_on_a_non_collection_relation()
     {
         $response = $this->json('GET', 'jory/song/first', [
-            'jory' => '{"rlt":{"album:exists":{"fld":["name"]}},"fld":["title"]}',
+            'jory' => [
+                'fld' => 'title',
+                'rlt' => [
+                    'album:exists' => [
+                        'fld' => 'name',
+                    ]
+                ]
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([

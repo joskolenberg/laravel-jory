@@ -17,7 +17,18 @@ class ResponseTest extends TestCase
     public function it_can_apply_on_a_model_class()
     {
         $actual = Jory::onModelClass(Song::class)
-            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->apply([
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love',
+                    ],
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+            ])
             ->toArray();
 
         $this->assertEquals([
@@ -34,7 +45,18 @@ class ResponseTest extends TestCase
     public function it_can_apply_on_a_query()
     {
         $actual = Jory::onQuery(Song::query()->where('title', 'like', '%ol%'))
-            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->apply([
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love',
+                    ],
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+            ])
             ->toArray();
 
         $this->assertEquals([
@@ -49,7 +71,22 @@ class ResponseTest extends TestCase
     public function it_can_return_a_single_record_when_applying_a_model_instance()
     {
         $actual = Jory::onModel(Song::find(47))
-            ->applyJson('{"fld":["title"],"rlt":{"album":{"fld":["name"]}}}')
+            ->apply([
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'rlt' =>
+                    [
+                        'album' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'name',
+                                    ],
+                            ],
+                    ],
+            ])
             ->toArray();
 
         $this->assertEquals([
@@ -68,7 +105,18 @@ class ResponseTest extends TestCase
         Jory::register(SongJoryResourceWithAlternateUri::class);
 
         $actual = Jory::byUri('ssoonngg')
-            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->apply([
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love',
+                    ],
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+            ])
             ->toArray();
 
         $this->assertEquals([
@@ -85,7 +133,18 @@ class ResponseTest extends TestCase
     public function it_can_apply_a_json_string()
     {
         $actual = Jory::on(Song::class)
-            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->applyJson(json_encode([
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love',
+                    ],
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+            ]))
             ->toArray();
 
         $this->assertEquals([
@@ -102,7 +161,18 @@ class ResponseTest extends TestCase
     public function it_can_apply_a_json_string_using_apply()
     {
         $actual = Jory::on(Song::class)
-            ->apply('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->apply(json_encode([
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love',
+                    ],
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+            ]))
             ->toArray();
 
         $this->assertEquals([

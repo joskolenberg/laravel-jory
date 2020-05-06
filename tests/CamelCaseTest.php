@@ -29,7 +29,9 @@ class CamelCaseTest extends TestCase
     public function it_returns_the_defined_fields_in_camel_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'jory' => '{"fld":["yearStart","id","yearEnd"]}',
+            'jory' => [
+                'fld' => ["yearStart", "id", "yearEnd"],
+            ],
             'case' => 'camel',
         ]);
 
@@ -49,7 +51,9 @@ class CamelCaseTest extends TestCase
     public function it_validates_the_fields_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'jory' => '{"fld":["yearStart","id","year_end"]}',
+            'jory' => [
+                'fld' => ["yearStart", "id", "year_end"],
+            ],
             'case' => 'camel',
         ]);
 
@@ -68,7 +72,12 @@ class CamelCaseTest extends TestCase
     public function it_can_apply_default_filters_in_camelcase()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"yearStart","d":1968}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'yearStart',
+                    'd' => 1968,
+                ],
+            ],
             'case' => 'camel',
         ]);
 
@@ -92,7 +101,14 @@ class CamelCaseTest extends TestCase
     public function it_can_apply_custom_filters_in_camelcase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"flt":{"f":"numberOfSongs","o":">=","d":15},"srt":["id"]}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'numberOfSongs',
+                    'o' => '>=',
+                    'd' => 15,
+                ],
+                'srt' => 'id',
+            ],
             'case' => 'camel',
         ]);
 
@@ -128,7 +144,13 @@ class CamelCaseTest extends TestCase
     public function it_validates_the_filters_in_camelCase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"flt":{"f":"number_of_songs","o":">=","d":15}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'number_of_songs',
+                    'o' => '>=',
+                    'd' => 15,
+                ],
+            ],
             'case' => 'camel',
         ]);
 
@@ -147,7 +169,9 @@ class CamelCaseTest extends TestCase
     public function it_can_apply_default_sorts_in_camelcase()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["yearEnd","-yearStart"]}',
+            'jory' => [
+                'srt' => ["yearEnd", "-yearStart"],
+            ],
             'case' => 'camel',
         ]);
 
@@ -189,7 +213,11 @@ class CamelCaseTest extends TestCase
     public function it_can_apply_custom_sorts_in_camelcase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":["numberOfSongs","-bandId"],"lmt":5,"offset":7}',
+            'jory' => [
+                'srt' => ["numberOfSongs", "-bandId"],
+                'lmt' => 5,
+                'offset' => 7,
+            ],
             'case' => 'camel',
         ]);
 
@@ -237,7 +265,11 @@ class CamelCaseTest extends TestCase
     public function it_validates_the_sorts_in_camelCase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":["number_of_songs","-band_id"],"lmt":5,"offset":7}',
+            'jory' => [
+                'srt' => ["number_of_songs", "-band_id"],
+                'lmt' => 5,
+                'offset' => 7,
+            ],
             'case' => 'camel',
         ]);
 
@@ -257,7 +289,12 @@ class CamelCaseTest extends TestCase
     public function it_can_return_relations_in_camelcase()
     {
         $response = $this->json('GET', 'jory/album/2', [
-            'jory' => '{"rlt":{"albumCover":{}},"fld":["name"]}',
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'albumCover' => []
+                ],
+            ],
             'case' => 'camel',
         ]);
 
@@ -320,7 +357,12 @@ class CamelCaseTest extends TestCase
     public function it_validates_the_relations_in_camelCase()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"rlt":{"album_cover":{}},"fld":["name"]}',
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'album_cover' => []
+                ],
+            ],
             'case' => 'camel',
         ]);
 
@@ -339,7 +381,9 @@ class CamelCaseTest extends TestCase
     public function it_can_return_multiple_records_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"lmt":2}',
+            'jory' => [
+                'lmt' => 2,
+            ],
             'case' => 'camel',
         ]);
 
@@ -368,7 +412,12 @@ class CamelCaseTest extends TestCase
     public function it_can_do_a_count_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/count', [
-            'jory' => '{"flt":{"f":"yearEnd","d":1970}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'yearEnd',
+                    'd' => 1970,
+                ],
+            ],
             'case' => 'camel',
         ]);
 
@@ -405,7 +454,19 @@ class CamelCaseTest extends TestCase
     public function it_can_get_apply_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"album as albumWithCover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover:2 as stickyFingersAlbumCover":{}}',
+            'jory' => [
+                'album as albumWithCover' => [
+                    'fld' => 'name',
+                    'flt' => [
+                        'f' => 'id',
+                        'd' => 2,
+                    ],
+                    'rlt' => [
+                        'albumCover' => []
+                    ],
+                ],
+                'album-cover:2 as stickyFingersAlbumCover' => [],
+            ],
             'case' => 'camel',
         ]);
 
@@ -515,7 +576,18 @@ class CamelCaseTest extends TestCase
     public function it_validates_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"album as albumWithCover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
+            'jory' => [
+                'album as albumWithCover' => [
+                    'fld' => 'name',
+                    'flt' => [
+                        'f' => 'id',
+                        'd' => 2,
+                    ],
+                    'rlt' => [
+                        'album_cover' => []
+                    ],
+                ],
+            ],
             'case' => 'camel',
         ]);
 
@@ -591,7 +663,27 @@ class CamelCaseTest extends TestCase
     public function it_validates_camelCase_in_relations()
     {
         $response = $this->json('GET', 'jory/band/2', [
-            'jory' => '{"fld":["yearStart","id","yearEnd"],"rlt":{"albums":{"fld":["release_ate","bandId"],"srt":["-releaseDates"],"flt":{"or":[{"f":"release_ate","d":"1969-01-12"},{"f":"releaseDaate","d":"1970-10-05"}]}}}}',
+            'jory' => [
+                "fld" => ["yearStart", "id", "yearEnd"],
+                "rlt" => [
+                    "albums" => [
+                        "fld" => ["release_ate", "bandId"],
+                        "srt" => ["-releaseDates"],
+                        "flt" => [
+                            "or" => [
+                                [
+                                    "f" => "release_ate",
+                                    "d" => "1969-01-12",
+                                ],
+                                [
+                                    "f" => "releaseDaate",
+                                    "d" => "1970-10-05",
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'case' => 'camel',
         ]);
 
@@ -613,6 +705,23 @@ class CamelCaseTest extends TestCase
     public function it_can_load_a_relation_with_an_alias_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/3', [
+            'jory' => [
+                "fld" => 'name',
+                "rlt" => [
+                    "albums as albumNoEight" => [
+                        "flt" => [
+                            "f" => "id",
+                            "d" => 8,
+                        ],
+                    ],
+                    "albums as albumNoNine" => [
+                        "flt" => [
+                            "f" => "id",
+                            "d" => 9,
+                        ],
+                    ],
+                ],
+            ],
             'jory' => '{"fld":["name"],"rlt":{"albums as albumNoEight":{"flt":{"f":"id","d":8}},"albums as albumNoNine":{"flt":{"f":"id","d":9}}}}',
             'case' => 'camel',
         ]);

@@ -11,7 +11,9 @@ class SortTest extends TestCase
     public function it_can_sort_a_query_ascending()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["name"]}',
+            'jory' => [
+                'srt' => 'name',
+            ]
         ]);
 
         $expected = [
@@ -51,7 +53,9 @@ class SortTest extends TestCase
     public function it_can_sort_a_query_descending()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["-name"]}',
+            'jory' => [
+                'srt' => '-name',
+            ],
         ]);
 
         $expected = [
@@ -91,7 +95,9 @@ class SortTest extends TestCase
     public function it_can_sort_a_query_descending_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["-year_start"]}',
+            'jory' => [
+                'srt' => '-year_start',
+            ],
         ]);
 
         $expected = [
@@ -131,7 +137,9 @@ class SortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_1()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["-year_end","name"]}',
+            'jory' => [
+                'srt' => ["-year_end","name"],
+            ],
         ]);
 
         $expected = [
@@ -169,7 +177,9 @@ class SortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["-year_end","-name"]}',
+            'jory' => [
+                'srt' => ["-year_end","-name"],
+            ],
         ]);
 
         $expected = [
@@ -209,7 +219,9 @@ class SortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_3()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["year_end","name"]}',
+            'jory' => [
+                'srt' => ["year_end","name"],
+            ],
         ]);
 
         $expected = [
@@ -249,7 +261,9 @@ class SortTest extends TestCase
     public function it_can_sort_a_query_on_multiple_fields_4()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["year_end","-name"]}',
+            'jory' => [
+                'srt' => ["year_end","-name"],
+            ],
         ]);
 
         $expected = [
@@ -289,7 +303,22 @@ class SortTest extends TestCase
     public function it_can_sort_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["name"],"rlt":{"people":{"srt":["last_name"]}}}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'people' =>
+                            [
+                                'srt' =>
+                                    [
+                                        0 => 'last_name',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -442,7 +471,38 @@ class SortTest extends TestCase
     public function it_can_combine_relations_filters_and_sorts()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"name","o":"like","d":"%in%"},"srt":["-name"],"rlt":{"people":{"flt":{"f":"last_name","o":"like","d":"%a%"},"srt":["-last_name"],"fld":["last_name"]}}}',
+            'jory' => [
+                'flt' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%in%',
+                    ],
+                'srt' =>
+                    [
+                        0 => '-name',
+                    ],
+                'rlt' =>
+                    [
+                        'people' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'last_name',
+                                        'o' => 'like',
+                                        'd' => '%a%',
+                                    ],
+                                'srt' =>
+                                    [
+                                        0 => '-last_name',
+                                    ],
+                                'fld' =>
+                                    [
+                                        0 => 'last_name',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -492,7 +552,18 @@ class SortTest extends TestCase
     public function it_can_apply_a_custom_sort()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":["number_of_songs","name"],"fld":["id","name"]}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => 'number_of_songs',
+                        1 => 'name',
+                    ],
+                'fld' =>
+                    [
+                        0 => 'id',
+                        1 => 'name',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -556,7 +627,18 @@ class SortTest extends TestCase
     public function it_can_apply_a_custom_sort_2()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"srt":["band_name","number_of_songs"],"fld":["id","name"]}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => 'band_name',
+                        1 => 'number_of_songs',
+                    ],
+                'fld' =>
+                    [
+                        0 => 'id',
+                        1 => 'name',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -620,7 +702,13 @@ class SortTest extends TestCase
     public function it_can_apply_a_sort_by_a_local_scope_on_the_related_model()
     {
         $response = $this->json('GET', 'jory/album-cover', [
-            'jory' => '{"srt":["album_name"],"lmt":4}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => 'album_name',
+                    ],
+                'lmt' => 4,
+            ],
         ]);
 
         $expected = [

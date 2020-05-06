@@ -15,7 +15,9 @@ class ConfigTest extends TestCase
     public function it_can_return_data_in_the_root_when_data_key_is_configured_null()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"]}',
+            'jory' => [
+                'fld' => 'name'
+            ],
         ]);
 
         $expected = [
@@ -30,7 +32,11 @@ class ConfigTest extends TestCase
     public function it_can_return_data_in_the_root_when_data_key_is_configured_null_2()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"band:3 as beatles":{"fld":["name"]}}',
+            'jory' => [
+                'band:3 as beatles' => [
+                    'fld' => 'name',
+                ]
+            ],
         ]);
 
         $expected = [
@@ -47,7 +53,9 @@ class ConfigTest extends TestCase
     public function it_can_return_errors_in_the_root_when_data_key_is_configured_null()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["naame"]}',
+            'jory' => [
+                "fld" => "naame"
+            ]
         ]);
 
         $expected = [
@@ -62,7 +70,11 @@ class ConfigTest extends TestCase
     public function it_can_return_errors_in_the_root_when_data_key_is_configured_null_2()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"band:3 as beatles":{"fld":["naame"]}}',
+            'jory' => [
+                'band:3 as beatles' => [
+                    'fld' => 'naame',
+                ]
+            ],
         ]);
 
         $expected = [

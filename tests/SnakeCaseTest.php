@@ -55,7 +55,14 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band/2', [
             'case_key' => 'snake',
-            'jory' => '{"fld":["year_start","id","year_end"]}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'year_start',
+                        1 => 'id',
+                        2 => 'year_end',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -75,7 +82,14 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band/2', [
             'case_key' => 'snake',
-            'jory' => '{"fld":["yearStart","id","year_end"]}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'yearStart',
+                        1 => 'id',
+                        2 => 'year_end',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -94,7 +108,13 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'case_key' => 'snake',
-            'jory' => '{"flt":{"f":"year_start","d":1968}}',
+            'jory' => [
+                'flt' =>
+                    [
+                        'f' => 'year_start',
+                        'd' => 1968,
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -118,7 +138,18 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
-            'jory' => '{"flt":{"f":"number_of_songs","o":">=","d":15},"srt":["id"]}',
+            'jory' => [
+                'flt' =>
+                    [
+                        'f' => 'number_of_songs',
+                        'o' => '>=',
+                        'd' => 15,
+                    ],
+                'srt' =>
+                    [
+                        0 => 'id',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -154,7 +185,14 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
-            'jory' => '{"flt":{"f":"numberOfSongs","o":">=","d":15}}',
+            'jory' => [
+                'flt' =>
+                    [
+                        'f' => 'numberOfSongs',
+                        'o' => '>=',
+                        'd' => 15,
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -173,7 +211,13 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'case_key' => 'snake',
-            'jory' => '{"srt":["year_end","-year_start"]}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => 'year_end',
+                        1 => '-year_start',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -215,7 +259,15 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
-            'jory' => '{"srt":["number_of_songs","-band_id"],"lmt":5,"offset":7}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => 'number_of_songs',
+                        1 => '-band_id',
+                    ],
+                'lmt' => 5,
+                'offset' => 7,
+            ],
         ]);
 
         $expected = [
@@ -263,7 +315,15 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
-            'jory' => '{"srt":["numberOfSongs","-bandId"],"lmt":5,"offset":7}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => 'numberOfSongs',
+                        1 => '-bandId',
+                    ],
+                'lmt' => 5,
+                'offset' => 7,
+            ],
         ]);
 
         $expected = [
@@ -283,7 +343,18 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album/2', [
             'case_key' => 'snake',
-            'jory' => '{"rlt":{"album_cover":{}},"fld":["name"]}',
+            'jory' => [
+                'rlt' =>
+                    [
+                        'album_cover' =>
+                            [
+                            ],
+                    ],
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -346,7 +417,18 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
-            'jory' => '{"rlt":{"albumCover":{}},"fld":["name"]}',
+            'jory' => [
+                'rlt' =>
+                    [
+                        'albumCover' =>
+                            [
+                            ],
+                    ],
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -365,7 +447,9 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'case_key' => 'snake',
-            'jory' => '{"lmt":2}',
+            'jory' => [
+                'lmt' => 2,
+            ],
         ]);
 
         $expected = [
@@ -394,7 +478,13 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band/count', [
             'case_key' => 'snake',
-            'jory' => '{"flt":{"f":"year_end","d":1970}}',
+            'jory' => [
+                'flt' =>
+                    [
+                        'f' => 'year_end',
+                        'd' => 1970,
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -431,7 +521,29 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
-            'jory' => '{"album as album_with_cover":{"rlt":{"album_cover":{}},"fld":["name"],"flt":{"f":"id","d":2}},"album-cover:2 as sticky_fingers_album_cover":{}}',
+            'jory' => [
+                'album as album_with_cover' =>
+                    [
+                        'rlt' =>
+                            [
+                                'album_cover' =>
+                                    [
+                                    ],
+                            ],
+                        'fld' =>
+                            [
+                                0 => 'name',
+                            ],
+                        'flt' =>
+                            [
+                                'f' => 'id',
+                                'd' => 2,
+                            ],
+                    ],
+                'album-cover:2 as sticky_fingers_album_cover' =>
+                    [
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -541,7 +653,26 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
-            'jory' => '{"album as album_with_cover":{"rlt":{"albumCover":{}},"fld":["name"],"flt":{"f":"id","d":2}}}',
+            'jory' => [
+                'album as album_with_cover' =>
+                    [
+                        'rlt' =>
+                            [
+                                'albumCover' =>
+                                    [
+                                    ],
+                            ],
+                        'fld' =>
+                            [
+                                0 => 'name',
+                            ],
+                        'flt' =>
+                            [
+                                'f' => 'id',
+                                'd' => 2,
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -617,7 +748,45 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band/2', [
             'case_key' => 'snake',
-            'jory' => '{"fld":["year_start","id","year_end"],"rlt":{"albums":{"fld":["release_ate","band_id"],"srt":["-release_dates"],"flt":{"or":[{"f":"release_ate","d":"1969-01-12"},{"f":"releaseDaate","d":"1970-10-05"}]}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'year_start',
+                        1 => 'id',
+                        2 => 'year_end',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'release_ate',
+                                        1 => 'band_id',
+                                    ],
+                                'srt' =>
+                                    [
+                                        0 => '-release_dates',
+                                    ],
+                                'flt' =>
+                                    [
+                                        'or' =>
+                                            [
+                                                0 =>
+                                                    [
+                                                        'f' => 'release_ate',
+                                                        'd' => '1969-01-12',
+                                                    ],
+                                                1 =>
+                                                    [
+                                                        'f' => 'releaseDaate',
+                                                        'd' => '1970-10-05',
+                                                    ],
+                                            ],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -638,7 +807,31 @@ class SnakeCaseTest extends TestCase
     public function it_can_load_a_relation_with_an_alias_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums as album_no_nine":{"flt":{"f":"id","d":9}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'albums as album_no_eight' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 8,
+                                    ],
+                            ],
+                        'albums as album_no_nine' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 9,
+                                    ],
+                            ],
+                    ],
+            ],
             'case_key' => 'snake',
         ]);
 

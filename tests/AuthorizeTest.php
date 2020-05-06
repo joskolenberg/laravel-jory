@@ -10,34 +10,25 @@ class AuthorizeTest extends TestCase
     public function it_can_modify_the_query_by_authorize_method_1()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["name"]}',
+            'jory' => [
+                'fld' => 'name',
+                'srt' => 'name',
+            ],
         ]);
 
         $expected = [
             'data' => [
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
             ],
         ];
@@ -52,22 +43,19 @@ class AuthorizeTest extends TestCase
         $this->actingAs(User::where('name', 'mick')->first());
 
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["name"]}',
+            'jory' => [
+                'fld' => 'name',
+                'srt' => 'name',
+            ],
         ]);
 
         $expected = [
             'data' => [
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
             ],
         ];
@@ -82,34 +70,25 @@ class AuthorizeTest extends TestCase
         $this->actingAs(User::where('name', 'ronnie')->first());
 
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"srt":["name"]}',
+            'jory' => [
+                'fld' => 'name',
+                'srt' => 'name',
+            ],
         ]);
 
         $expected = [
             'data' => [
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
             ],
         ];
@@ -124,7 +103,19 @@ class AuthorizeTest extends TestCase
         $this->actingAs(User::where('name', 'mick')->first());
 
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"flt":{"f":"id","o":"in","d":[2,9]},"fld":["name"],"rlt":{"band":{"fld":["name"]}}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'id',
+                    'o' => 'in',
+                    'd' => [2,9],
+                ],
+                'fld' => 'name',
+                'rlt' => [
+                    'band' => [
+                        'fld' => 'name',
+                    ]
+                ]
+            ],
         ]);
 
         $expected = [

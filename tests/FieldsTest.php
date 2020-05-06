@@ -8,7 +8,12 @@ class FieldsTest extends TestCase
     public function it_can_specify_the_fields_to_return()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fields":["id","name"]}',
+            'jory' => [
+                'fld' => [
+                    'id',
+                    'name',
+                ],
+            ]
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -39,7 +44,19 @@ class FieldsTest extends TestCase
     public function it_can_specify_the_fields_to_return_on_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"name","o":"like","d":"%zep%"},"rlt":{"songs":{"fld":["title"]}},"fields":["id","name"]}',
+            'jory' => [
+                'fld' => ['id', 'name'],
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'songs' => [
+                        'fld' => 'title',
+                    ]
+                ]
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -144,7 +161,7 @@ class FieldsTest extends TestCase
     public function when_the_fields_parameter_is_not_specified_all_fields_will_be_returned()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{}',
+            'jory' => [],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -183,7 +200,9 @@ class FieldsTest extends TestCase
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":[]}',
+            'jory' => [
+                'fld' => [],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -202,7 +221,24 @@ class FieldsTest extends TestCase
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":[],"flt":{"f":"name","o":"like","d":"%zep%"},"rlt":{"songs":{"flt":{"f":"id","o":">","d":54},"fld":["title"]}}}',
+            'jory' => [
+                'fld' => [],
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'songs' => [
+                        'fld' => 'title',
+                        'flt' => [
+                            'f' => 'id',
+                            'o' => '>',
+                            'd' => 54,
+                        ]
+                    ]
+                ]
+            ],
         ]);
 
         $expected = [
@@ -255,7 +291,9 @@ class FieldsTest extends TestCase
     public function it_can_return_custom_model_attributes()
     {
         $response = $this->json('GET', 'jory/person', [
-            'jory' => '{"fld":["full_name"]}',
+            'jory' => [
+                'fld' => 'full_name',
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([

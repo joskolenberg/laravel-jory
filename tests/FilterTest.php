@@ -543,7 +543,14 @@ class FilterTest extends TestCase
     public function it_can_apply_a_filter_by_a_local_scope_on_the_related_model()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fields":["id","name"],"flt":{"f":"has_album_with_name","o":"like","d":"%a%"}}',
+            'jory' => [
+                'fld' => ['id', 'name'],
+                'flt' => [
+                    'f' => 'has_album_with_name',
+                    'o' => 'like',
+                    'd' => '%a%',
+                ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -570,7 +577,23 @@ class FilterTest extends TestCase
     public function it_wraps_a_closure_around_custom_orWheres_to_prevent_returning_unwanted_data()
     {
         $response = $this->json('GET', 'jory/person', [
-            'jory' => '{"fields":["full_name"],"flt":{"and":[{"f":"full_name","d":"%john%"},{"f":"id","o":"in","d":[7,8]}]}}',
+            'jory' => [
+                'fld' => 'full_name',
+                'flt' => [
+                    'and' => [
+                        [
+                            'f' => 'full_name',
+                            'o' => 'like',
+                            'd' => '%john%',
+                        ],
+                        [
+                            'f' => 'id',
+                            'o' => 'in',
+                            'd' => [7,8],
+                        ],
+                    ]
+                ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([

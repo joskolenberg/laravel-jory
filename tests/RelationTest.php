@@ -8,7 +8,19 @@ class RelationTest extends TestCase
     public function it_can_load_a_many_to_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"people":{}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%zep%',
+                    ],
+                'rlt' =>
+                    [
+                        'people' =>
+                            [],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -59,7 +71,19 @@ class RelationTest extends TestCase
     public function it_can_load_a_has_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%zep%',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -100,7 +124,25 @@ class RelationTest extends TestCase
     public function it_can_load_a_has_many_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","d":"Led Zeppelin IV"}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%zep%',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'name',
+                                        'd' => 'Led Zeppelin IV',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -122,7 +164,30 @@ class RelationTest extends TestCase
     public function it_can_load_subrelations_on_a_has_many_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","d":"Led Zeppelin IV"},"rlt":{"songs":{}}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%zep%',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'name',
+                                        'd' => 'Led Zeppelin IV',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'songs' =>
+                                            [],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -144,7 +209,19 @@ class RelationTest extends TestCase
     public function it_can_load_a_belongs_to_relation()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => '=',
+                        'd' => 'Wild Horses',
+                    ],
+                'rlt' =>
+                    [
+                        'album' =>
+                            [],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -170,7 +247,25 @@ class RelationTest extends TestCase
     public function it_can_load_a_belongs_to_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","d":"another"}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => '=',
+                        'd' => 'Wild Horses',
+                    ],
+                'rlt' =>
+                    [
+                        'album' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'name',
+                                        'd' => 'another',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -191,7 +286,30 @@ class RelationTest extends TestCase
     public function it_can_load_subrelations_on_a_belongs_to_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{"flt":{"f":"name","d":"another"},"rlt":{"band":{}}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => '=',
+                        'd' => 'Wild Horses',
+                    ],
+                'rlt' =>
+                    [
+                        'album' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'name',
+                                        'd' => 'another',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'band' =>
+                                            [],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -212,7 +330,25 @@ class RelationTest extends TestCase
     public function it_can_load_a_has_many_through_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"=","d":"Led Zeppelin"},"rlt":{"songs":{"fld":["id","title"]}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => '=',
+                        'd' => 'Led Zeppelin',
+                    ],
+                'rlt' =>
+                    [
+                        'songs' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'id',
+                                        1 => 'title',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -347,7 +483,19 @@ class RelationTest extends TestCase
     public function it_can_load_a_has_one_relation()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"filter":{"f":"name","o":"=","d":"Abbey road"},"rlt":{"cover":{}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => '=',
+                        'd' => 'Abbey road',
+                    ],
+                'rlt' =>
+                    [
+                        'cover' =>
+                            [],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -412,7 +560,25 @@ class RelationTest extends TestCase
     public function it_can_load_nested_relations()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{"rlt":{"band":{}}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => '=',
+                        'd' => 'Wild Horses',
+                    ],
+                'rlt' =>
+                    [
+                        'album' =>
+                            [
+                                'rlt' =>
+                                    [
+                                        'band' =>
+                                            [],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -444,7 +610,36 @@ class RelationTest extends TestCase
     public function it_can_load_and_filter_nested_relations_1()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%in%"},"rlt":{"songs":{"fld":["id","title"],"flt":{"f":"title","o":"like","d":"%love%"},"rlt":{"album":{}}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%in%',
+                    ],
+                'rlt' =>
+                    [
+                        'songs' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'id',
+                                        1 => 'title',
+                                    ],
+                                'flt' =>
+                                    [
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%love%',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'album' =>
+                                            [],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -495,7 +690,73 @@ class RelationTest extends TestCase
     public function it_can_load_and_filter_nested_relations_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"number_of_albums_in_year","o":"=","d":{"year":1970,"value":1}},"rlt":{"albums":{"flt":{"f":"has_song_with_title","o":"like","d":"%love%"},"rlt":{"cover":{}}},"songs":{"flt":{"f":"title","o":"like","d":"%ac%"},"rlt":{"album":{"rlt":{"band":{}}}},"fld":["id","title"]},"people":{"fld":["id","last_name"],"rlt":{"instruments":{}}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'number_of_albums_in_year',
+                        'o' => '=',
+                        'd' =>
+                            [
+                                'year' => 1970,
+                                'value' => 1,
+                            ],
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'has_song_with_title',
+                                        'o' => 'like',
+                                        'd' => '%love%',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'cover' =>
+                                            [],
+                                    ],
+                            ],
+                        'songs' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%ac%',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'album' =>
+                                            [
+                                                'rlt' =>
+                                                    [
+                                                        'band' =>
+                                                            [],
+                                                    ],
+                                            ],
+                                    ],
+                                'fld' =>
+                                    [
+                                        0 => 'id',
+                                        1 => 'title',
+                                    ],
+                            ],
+                        'people' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'id',
+                                        1 => 'last_name',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'instruments' =>
+                                            [],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -794,7 +1055,31 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_apply_a_filter_on_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%zep%',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'name',
+                                        'o' => 'like',
+                                        'd' => '%III%',
+                                    ],
+                            ],
+                    ],
+                'fld' =>
+                    [
+                        0 => 'id',
+                        1 => 'name',
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -821,7 +1106,26 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_have_a_relation_on_empty_collection()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"=","d":"foo"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => '=',
+                        'd' => 'foo',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'name',
+                                        'o' => 'like',
+                                        'd' => '%III%',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson(['data' => []]);
@@ -833,7 +1137,25 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_and_filter_nested_relations_3()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"The End"},"rlt":{"album":{"rlt":{"songs":{}}}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'title',
+                        'o' => '=',
+                        'd' => 'The End',
+                    ],
+                'rlt' =>
+                    [
+                        'album' =>
+                            [
+                                'rlt' =>
+                                    [
+                                        'songs' =>
+                                            [],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -947,7 +1269,19 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_relation_using_snake_case_notation()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"filter":{"f":"name","o":"=","d":"Abbey road"},"rlt":{"album_cover":{}}}',
+            'jory' => [
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => '=',
+                        'd' => 'Abbey road',
+                    ],
+                'rlt' =>
+                    [
+                        'album_cover' =>
+                            [],
+                    ],
+            ],
             'case' => 'snake',
         ]);
 
@@ -1013,7 +1347,55 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_nested_relations_with_as_little_queries_as_possible()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"rlt":{"albums":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"songs":{"rlt":{"album":{"rlt":{"cover":{"rlt":{"album":{"rlt":{"band":{}}}}}}}}}}}}}}}}}',
+            'jory' => [
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'rlt' =>
+                                    [
+                                        'songs' =>
+                                            [
+                                                'rlt' =>
+                                                    [
+                                                        'album' =>
+                                                            [
+                                                                'rlt' =>
+                                                                    [
+                                                                        'songs' =>
+                                                                            [
+                                                                                'rlt' =>
+                                                                                    [
+                                                                                        'album' =>
+                                                                                            [
+                                                                                                'rlt' =>
+                                                                                                    [
+                                                                                                        'cover' =>
+                                                                                                            [
+                                                                                                                'rlt' =>
+                                                                                                                    [
+                                                                                                                        'album' =>
+                                                                                                                            [
+                                                                                                                                'rlt' =>
+                                                                                                                                    [
+                                                                                                                                        'band' =>
+                                                                                                                                            [],
+                                                                                                                                    ],
+                                                                                                                            ],
+                                                                                                                    ],
+                                                                                                            ],
+                                                                                                    ],
+                                                                                            ],
+                                                                                    ],
+                                                                            ],
+                                                                    ],
+                                                            ],
+                                                    ],
+                                            ],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertJson([]);
@@ -1025,7 +1407,23 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function filters_in_relations_do_not_affect_the_value_of_a_custom_attribute_which_relies_on_that_relation()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["all_albums_string"],"rlt":{"albums":{"flt":{"f":"id","d":8}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'all_albums_string',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 8,
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1051,7 +1449,29 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_eager_load_relations_using_load_on_the_field_config_1()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"flt":{"f":"id","o":">=","d":3},"fld":["all_albums_string"],"rlt":{"albums":{"flt":{"f":"id","d":8}}}}',
+            'jory' => [
+                'flt' =>
+                    [
+                        'f' => 'id',
+                        'o' => '>=',
+                        'd' => 3,
+                    ],
+                'fld' =>
+                    [
+                        0 => 'all_albums_string',
+                    ],
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 8,
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1083,7 +1503,32 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_eager_load_relations_using_load_on_the_field_config_2()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"flt":{"f":"id","o":"in","d":[3,8]},"fld":["id"],"rlt":{"band":{"fld":["all_albums_string"]}}}',
+            'jory' => [
+                'flt' =>
+                    [
+                        'f' => 'id',
+                        'o' => 'in',
+                        'd' =>
+                            [
+                                0 => 3,
+                                1 => 8,
+                            ],
+                    ],
+                'fld' =>
+                    [
+                        0 => 'id',
+                    ],
+                'rlt' =>
+                    [
+                        'band' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'all_albums_string',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1112,7 +1557,31 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_relation_with_an_alias()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums as album_no_nine":{"flt":{"f":"id","d":9}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'albums as album_no_eight' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 8,
+                                    ],
+                            ],
+                        'albums as album_no_nine' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 9,
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1146,7 +1615,22 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_hasOneThrough_relation()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["id"],"rlt":{"firstSong":{"fld":["title"]}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'id',
+                    ],
+                'rlt' =>
+                    [
+                        'firstSong' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'title',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1167,7 +1651,22 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_morphOne_relation()
     {
         $response = $this->json('GET', 'jory/person/3', [
-            'jory' => '{"fld":["id"],"rlt":{"firstImage":{"fld":["url"]}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'id',
+                    ],
+                'rlt' =>
+                    [
+                        'firstImage' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'url',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1188,7 +1687,22 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_morphMany_relation()
     {
         $response = $this->json('GET', 'jory/band/4', [
-            'jory' => '{"fld":["id"],"rlt":{"images":{"fld":["url"]}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'id',
+                    ],
+                'rlt' =>
+                    [
+                        'images' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'url',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1217,7 +1731,22 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_morphToMany_relation()
     {
         $response = $this->json('GET', 'jory/album/4', [
-            'jory' => '{"fld":["id"],"rlt":{"tags":{"fld":["name"]}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'id',
+                    ],
+                'rlt' =>
+                    [
+                        'tags' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'name',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1243,7 +1772,46 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_morphedByMany_relation()
     {
         $response = $this->json('GET', 'jory/tag/1', [
-            'jory' => '{"fld":["id","name"],"rlt":{"songs":{"fld":["title"]},"albums":{"fld":["name"],"rlt":{"songs":{"fld":["title"],"flt":{"f":"title","o":"like","d":"%Sun%"}}}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'id',
+                        1 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'songs' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'title',
+                                    ],
+                            ],
+                        'albums' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'name',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'songs' =>
+                                            [
+                                                'fld' =>
+                                                    [
+                                                        0 => 'title',
+                                                    ],
+                                                'flt' =>
+                                                    [
+                                                        'f' => 'title',
+                                                        'o' => 'like',
+                                                        'd' => '%Sun%',
+                                                    ],
+                                            ],
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1295,7 +1863,32 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_relation_count()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums:count":{"flt":{"f":"id","o":">","d":7}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'albums as album_no_eight' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 8,
+                                    ],
+                            ],
+                        'albums:count' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'o' => '>',
+                                        'd' => 7,
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1322,7 +1915,24 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_relation_count_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"rlt":{"albums:count":{"flt":{"f":"name","o":"like","d":"%ed%"}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'albums:count' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'name',
+                                        'o' => 'like',
+                                        'd' => '%ed%',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1355,7 +1965,25 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_relation_count_as_an_alias()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["name"],"rlt":{"albums as album_no_eight":{"flt":{"f":"id","d":8}},"albums:count as album_count":{}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'albums as album_no_eight' =>
+                            [
+                                'flt' =>
+                                    [
+                                        'f' => 'id',
+                                        'd' => 8,
+                                    ],
+                            ],
+                        'albums:count as album_count' =>
+                            [],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -1382,7 +2010,17 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     public function it_can_load_a_relation_count_as_an_alias_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"rlt":{"songs:count as song_count":{}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'rlt' =>
+                    [
+                        'songs:count as song_count' =>
+                            [],
+                    ],
+            ],
         ]);
 
         $expected = [

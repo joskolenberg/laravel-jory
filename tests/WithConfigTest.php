@@ -23,7 +23,13 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_field_is_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":5}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 5,
+            ],
         ]);
 
         $expected = [
@@ -54,7 +60,13 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_field_is_not_available_2()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["titel"],"lmt":5}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'titel',
+                    ],
+                'lmt' => 5,
+            ],
         ]);
 
         $expected = [
@@ -71,7 +83,13 @@ class WithConfigTest extends TestCase
     public function it_can_load_the_default_fields_when_no_fields_are_specified_in_the_request()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"srt":["-id"],"lmt":3}',
+            'jory' => [
+                'srt' =>
+                    [
+                        0 => '-id',
+                    ],
+                'lmt' => 3,
+            ],
         ]);
 
         $expected = [
@@ -99,7 +117,19 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_filter_is_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","d":"%love%"}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 3,
+                'flt' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -124,7 +154,19 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_filter_is_not_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"titel","o":"like","d":"%love%"}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 3,
+                'flt' =>
+                    [
+                        'f' => 'titel',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -141,7 +183,36 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_requested_filters_are_not_available_1()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"and":[{"f":"titel","o":"like","d":"%love%"},{"f":"title","o":"like","d":"%test%"},{"f":"albumm_id","d":11}]}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 3,
+                'flt' =>
+                    [
+                        'and' =>
+                            [
+                                0 =>
+                                    [
+                                        'f' => 'titel',
+                                        'o' => 'like',
+                                        'd' => '%love%',
+                                    ],
+                                1 =>
+                                    [
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%test%',
+                                    ],
+                                2 =>
+                                    [
+                                        'f' => 'albumm_id',
+                                        'd' => 11,
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -159,7 +230,36 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_requested_filters_are_not_available_2()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"or":[{"f":"titel","o":"like","d":"%love%"},{"f":"title","o":"like","d":"%test%"},{"f":"albumm_id","d":11}]}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 3,
+                'flt' =>
+                    [
+                        'or' =>
+                            [
+                                0 =>
+                                    [
+                                        'f' => 'titel',
+                                        'o' => 'like',
+                                        'd' => '%love%',
+                                    ],
+                                1 =>
+                                    [
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%test%',
+                                    ],
+                                2 =>
+                                    [
+                                        'f' => 'albumm_id',
+                                        'd' => 11,
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -177,7 +277,42 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_the_requested_operator_is_available_on_a_filter()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"and":[{"f":"titel","o":"like","d":"%love%"},{"f":"title","o":"like","d":"%test%"},{"f":"albumm_id","d":11},{"f":"album_id","o":"like","d":11}]}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 3,
+                'flt' =>
+                    [
+                        'and' =>
+                            [
+                                0 =>
+                                    [
+                                        'f' => 'titel',
+                                        'o' => 'like',
+                                        'd' => '%love%',
+                                    ],
+                                1 =>
+                                    [
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%test%',
+                                    ],
+                                2 =>
+                                    [
+                                        'f' => 'albumm_id',
+                                        'd' => 11,
+                                    ],
+                                3 =>
+                                    [
+                                        'f' => 'album_id',
+                                        'o' => 'like',
+                                        'd' => 11,
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -196,7 +331,23 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_sort_is_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","d":"%love%"},"srt":["title"]}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 3,
+                'flt' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                'srt' =>
+                    [
+                        0 => 'title',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -221,7 +372,24 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_sort_is_not_available()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":3,"flt":{"f":"title","o":"like","d":"%love%"},"srt":["tite","if"]}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 3,
+                'flt' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                'srt' =>
+                    [
+                        0 => 'tite',
+                        1 => 'if',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -239,7 +407,19 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_the_requested_limit_exceeds_the_maximum()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","d":"%love%"},"lmt":1500}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'flt' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                'lmt' => 1500,
+            ],
         ]);
 
         $expected = [
@@ -256,7 +436,23 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_the_requested_limit_does_not_exceed_the_maximum()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","d":"%love"},"srt":["title"],"lmt":250}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'flt' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love',
+                    ],
+                'srt' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 250,
+            ],
         ]);
 
         $expected = [
@@ -284,7 +480,12 @@ class WithConfigTest extends TestCase
     public function it_can_apply_the_default_limit_when_no_limit_is_given()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"]}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -450,7 +651,23 @@ class WithConfigTest extends TestCase
     public function it_does_not_validate_on_limit_when_the_max_is_set_to_null()
     {
         $response = $this->json('GET', 'song-two', [
-            'jory' => '{"fld":["title"],"flt":{"f":"title","o":"like","d":"%love"},"srt":["title"],"lmt":321311}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'flt' =>
+                    [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love',
+                    ],
+                'srt' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 321311,
+            ],
         ]);
 
         $expected = [
@@ -478,7 +695,9 @@ class WithConfigTest extends TestCase
     public function it_gives_an_error_when_an_offset_is_applied_but_no_limit_is_available_in_request_and_config()
     {
         $response = $this->json('GET', 'song-two', [
-            'jory' => '{"ofs":2}',
+            'jory' => [
+                'ofs' => 2,
+            ],
         ]);
 
         $expected = [
@@ -495,7 +714,9 @@ class WithConfigTest extends TestCase
     public function it_applies_the_max_limit_as_default_when_only_the_max_is_given_and_applies_default_sorts()
     {
         $response = $this->json('GET', 'song-three', [
-            'jory' => '{"fld":["title"]}',
+            'jory' => [
+                'fld' => 'title',
+            ],
         ]);
 
         $expected = [
@@ -541,7 +762,23 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_relation_is_available_in_a_relation()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":5,"rlt":{"album":{"fld":["name"]}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'album' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'name',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -587,7 +824,23 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_relation_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'song', [
-            'jory' => '{"fld":["title"],"lmt":5,"rlt":{"albumm":{"fld":["name"]}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'title',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'albumm' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'name',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -604,7 +857,23 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_field_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"]}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'namee',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -621,7 +890,27 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_filter_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"],"flt":{"f":"ids"}}}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'namee',
+                                    ],
+                                'flt' =>
+                                    [
+                                        'f' => 'ids',
+                                    ],
+                            ],
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -639,7 +928,46 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_subfilter_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","d":"2018-01-01"}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'fld' =>
+                                    [
+                                        0 => 'namee',
+                                    ],
+                                'flt' =>
+                                    [
+                                        'and' =>
+                                            [
+                                                0 =>
+                                                    [
+                                                        'f' => 'ids',
+                                                    ],
+                                                1 =>
+                                                    [
+                                                        'f' => 'name',
+                                                    ],
+                                                2 =>
+                                                    [
+                                                        'f' => 'relese_date',
+                                                    ],
+                                            ],
+                                    ],
+                            ],
+                    ],
+                'flt' =>
+                    [
+                        'f' => 'date_start',
+                        'd' => '2018-01-01',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -659,7 +987,51 @@ class WithConfigTest extends TestCase
     public function it_can_validate_if_a_requested_sort_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"srt":["name","releese_date"],"fld":["namee"],"flt":{"and":[{"f":"ids"},{"f":"name"},{"f":"relese_date"}]}}},"flt":{"f":"date_start","d":"2018-01-01"}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'srt' =>
+                                    [
+                                        0 => 'name',
+                                        1 => 'releese_date',
+                                    ],
+                                'fld' =>
+                                    [
+                                        0 => 'namee',
+                                    ],
+                                'flt' =>
+                                    [
+                                        'and' =>
+                                            [
+                                                0 =>
+                                                    [
+                                                        'f' => 'ids',
+                                                    ],
+                                                1 =>
+                                                    [
+                                                        'f' => 'name',
+                                                    ],
+                                                2 =>
+                                                    [
+                                                        'f' => 'relese_date',
+                                                    ],
+                                            ],
+                                    ],
+                            ],
+                    ],
+                'flt' =>
+                    [
+                        'f' => 'date_start',
+                        'd' => '2018-01-01',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -682,7 +1054,25 @@ class WithConfigTest extends TestCase
         config()->set('jory.limit.max', 1000);
 
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134}},"flt":{"f":"date_start","d":"2018-01-01"}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'lmt' => 123134,
+                            ],
+                    ],
+                'flt' =>
+                    [
+                        'f' => 'date_start',
+                        'd' => '2018-01-01',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -702,7 +1092,34 @@ class WithConfigTest extends TestCase
         config()->set('jory.limit.max', 1000);
 
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"fld":["name"],"lmt":5,"rlt":{"albums":{"lmt":123134,"rlt":{"band":{},"songgs":{}}}},"flt":{"f":"date_start","d":"2018-01-01"}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'name',
+                    ],
+                'lmt' => 5,
+                'rlt' =>
+                    [
+                        'albums' =>
+                            [
+                                'lmt' => 123134,
+                                'rlt' =>
+                                    [
+                                        'band' =>
+                                            [
+                                            ],
+                                        'songgs' =>
+                                            [
+                                            ],
+                                    ],
+                            ],
+                    ],
+                'flt' =>
+                    [
+                        'f' => 'date_start',
+                        'd' => '2018-01-01',
+                    ],
+            ],
         ]);
 
         $expected = [
@@ -721,7 +1138,19 @@ class WithConfigTest extends TestCase
     public function it_suggests_only_relevant_alternatives()
     {
         $response = $this->json('GET', 'jory/album', [
-            'jory' => '{"fld":["releaseDate", "releaseDat", "releaseDatee", "reMeasDat", "rrrelease__dddate"],"rlt":{}}',
+            'jory' => [
+                'fld' =>
+                    [
+                        0 => 'releaseDate',
+                        1 => 'releaseDat',
+                        2 => 'releaseDatee',
+                        3 => 'reMeasDat',
+                        4 => 'rrrelease__dddate',
+                    ],
+                'rlt' =>
+                    [
+                    ],
+            ],
         ]);
 
         $expected = [

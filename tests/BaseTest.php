@@ -14,7 +14,14 @@ class BaseTest extends TestCase
     public function it_can_apply_a_jory_json_string()
     {
         $actual = Facade::onModelClass(Song::class)
-            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->applyJson(json_encode([
+                'fld' => 'title',
+                'flt' => [
+                    'f' => 'title',
+                    'o' => 'like',
+                    'd' => '%love',
+                ]
+            ]))
             ->toArray();
 
         $this->assertEquals([
@@ -31,12 +38,12 @@ class BaseTest extends TestCase
     public function it_can_apply_a_jory_array()
     {
         $actual = Facade::onModelClass(Song::class)->applyArray([
-            'filter' => [
+            'fld' => ['title'],
+            'flt' => [
                 'f' => 'title',
                 'o' => 'like',
                 'd' => 'love%',
             ],
-            'fld' => ['title']
         ])->toArray();
 
         $this->assertEquals([
@@ -52,7 +59,13 @@ class BaseTest extends TestCase
     public function it_can_apply_a_jory_json_string_from_a_request()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -95,7 +108,7 @@ class BaseTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_mulitple_custom_filters()
+    public function it_can_apply_multiple_custom_filters()
     {
         $actual = Facade::onModelClass(Album::class)->applyArray([
             'filter' => [
@@ -219,7 +232,26 @@ class BaseTest extends TestCase
     public function it_can_filter_sort_and_select_on_an_ambiguous_column_when_using_a_belongs_to_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"id","o":">","d":2},"srt":["-id"],"fld":["id","name"],"rlt":{"people":{"filter":{"f":"id","o":"<","d":14},"srt":["-id"],"fld":["id","last_name"]}}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'id',
+                    'o' => '>',
+                    'd' => 2,
+                ],
+                'srt' => '-id',
+                'fld' => ['id', 'name'],
+                'rlt' => [
+                    'people' => [
+                        'fld' => ['id', 'last_name'],
+                        'flt' => [
+                            'f' => 'id',
+                            'o' => '<',
+                            'd' => 14,
+                        ],
+                        'srt' => '-id'
+                    ]
+                ]
+            ],
         ]);
 
         $expected = [

@@ -11,7 +11,16 @@ class MetadataTest extends TestCase
     public function it_can_return_the_query_count_as_meta_data()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{}}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'Wild Horses',
+                ],
+                'rlt' => [
+                    'album' => [],
+                ]
+            ],
             'meta' => ['query_count'],
         ]);
 
@@ -41,7 +50,13 @@ class MetadataTest extends TestCase
     public function it_can_return_the_query_count_as_meta_data_2()
     {
         $response = $this->json('GET', 'jory/band/1', [
-            'jory' => '{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}}',
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'albums:count' => [],
+                    'songs:count' => [],
+                ]
+            ],
             'meta' => ['query_count'],
         ]);
 
@@ -63,7 +78,22 @@ class MetadataTest extends TestCase
     public function it_can_return_the_query_count_as_meta_data_3()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"band:1":{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}},"band:2 as led_zeppelin":{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}}}',
+            'jory' => [
+                'band:1' => [
+                    'fld' => 'name',
+                    'rlt' => [
+                        'albums:count' => [],
+                        'songs:count' => [],
+                    ]
+                ],
+                'band:2 as led_zeppelin' => [
+                    'fld' => 'name',
+                    'rlt' => [
+                        'albums:count' => [],
+                        'songs:count' => [],
+                    ]
+                ]
+            ],
             'meta' => ['query_count'],
         ]);
 
@@ -91,7 +121,13 @@ class MetadataTest extends TestCase
     public function it_can_return_the_meta_data_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/1', [
-            'jory' => '{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}}',
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'albums:count' => [],
+                    'songs:count' => [],
+                ]
+            ],
             'meta' => ['queryCount'],
             'case' => 'camel'
         ]);
@@ -114,7 +150,7 @@ class MetadataTest extends TestCase
     public function it_can_return_the_processing_time()
     {
         $response = $this->json('GET', 'jory/song/1', [
-            'jory' => '{}',
+            'jory' => [],
             'meta' => ['query_count', 'time'],
         ]);
 
@@ -139,7 +175,16 @@ class MetadataTest extends TestCase
         $this->actingAs(User::find(3));
 
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{}}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'Wild Horses',
+                ],
+                'rlt' => [
+                    'album' => [],
+                ]
+            ],
             'meta' => ['query_count', 'user'],
         ]);
 
@@ -170,7 +215,16 @@ class MetadataTest extends TestCase
     public function it_returns_null_if_no_user_is_logged_in()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"Wild Horses"},"rlt":{"album":{}}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'Wild Horses',
+                ],
+                'rlt' => [
+                    'album' => [],
+                ]
+            ],
             'meta' => ['query_count', 'user'],
         ]);
 
@@ -201,7 +255,15 @@ class MetadataTest extends TestCase
     public function it_can_give_the_total_records_for_a_single_resource()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"fld":["title"],"filter":{"f":"title","o":"like","d":"%love%"},"lmt":3}',
+            'jory' => [
+                'fld' => 'title',
+                'flt' => [
+                    'f' => 'title',
+                    'o' => 'like',
+                    'd' => '%love%',
+                ],
+                'lmt' => 3
+            ],
             'meta' => ['total'],
         ]);
 
@@ -229,7 +291,15 @@ class MetadataTest extends TestCase
     public function it_gives_null_as_total_records_for_a_count_request()
     {
         $response = $this->json('GET', 'jory/song/count', [
-            'jory' => '{"fld":["title"],"filter":{"f":"title","o":"like","d":"%love%"},"lmt":3}',
+            'jory' => [
+                'fld' => 'title',
+                'flt' => [
+                    'f' => 'title',
+                    'o' => 'like',
+                    'd' => '%love%',
+                ],
+                'lmt' => 3
+            ],
             'meta' => ['query_count', 'total'],
         ]);
 
@@ -248,7 +318,15 @@ class MetadataTest extends TestCase
     public function it_gives_null_as_total_records_for_an_exists_request()
     {
         $response = $this->json('GET', 'jory/song/exists', [
-            'jory' => '{"fld":["title"],"filter":{"f":"title","o":"like","d":"%love%"},"lmt":3}',
+            'jory' => [
+                'fld' => 'title',
+                'flt' => [
+                    'f' => 'title',
+                    'o' => 'like',
+                    'd' => '%love%',
+                ],
+                'lmt' => 3
+            ],
             'meta' => ['query_count', 'total'],
         ]);
 
@@ -344,7 +422,13 @@ class MetadataTest extends TestCase
     public function it_returns_a_422_error_when_unknown_metadata_is_requested()
     {
         $response = $this->json('GET', 'jory/band/1', [
-            'jory' => '{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}}',
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'albums:count' => [],
+                    'songs:count' => [],
+                ]
+            ],
             'meta' => ['total', 'unknown', 'query_count', 'unknown2'],
         ]);
 
@@ -364,7 +448,13 @@ class MetadataTest extends TestCase
         config()->set('jory.response.data-key', null);
 
         $response = $this->json('GET', 'jory/band/1', [
-            'jory' => '{"fld":["name"],"rlt":{"albums:count":{},"songs:count":{}}}',
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'albums:count' => [],
+                    'songs:count' => [],
+                ]
+            ],
             'meta' => ['query_count'],
         ]);
 

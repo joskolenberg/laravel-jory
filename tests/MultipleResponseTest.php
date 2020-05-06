@@ -12,7 +12,34 @@ class MultipleResponseTest extends TestCase
     public function it_can_return_multiple_resources_applying_json()
     {
         $actual = Jory::multiple()
-            ->applyJson('{"song":{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]},"song:count as songcount":{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}}')
+            ->applyJson(json_encode([
+                'song' =>
+                    [
+                        'filter' =>
+                            [
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%love',
+                            ],
+                        'fld' =>
+                            [
+                                0 => 'title',
+                            ],
+                    ],
+                'song:count as songcount' =>
+                    [
+                        'filter' =>
+                            [
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%love',
+                            ],
+                        'fld' =>
+                            [
+                                0 => 'title',
+                            ],
+                    ],
+            ]))
             ->toArray();
 
         $this->assertEquals([
@@ -32,7 +59,34 @@ class MultipleResponseTest extends TestCase
     public function it_can_return_multiple_resources_applying_json_using_apply()
     {
         $actual = Jory::multiple()
-            ->apply('{"song":{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]},"song:count as songcount":{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}}')
+            ->apply(json_encode([
+                'song' =>
+                    [
+                        'filter' =>
+                            [
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%love',
+                            ],
+                        'fld' =>
+                            [
+                                0 => 'title',
+                            ],
+                    ],
+                'song:count as songcount' =>
+                    [
+                        'filter' =>
+                            [
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%love',
+                            ],
+                        'fld' =>
+                            [
+                                0 => 'title',
+                            ],
+                    ],
+            ]))
             ->toArray();
 
         $this->assertEquals([

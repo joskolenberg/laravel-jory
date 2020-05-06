@@ -9,7 +9,26 @@ class Base64Test extends TestCase
     public function it_can_process_a_base64_encoded_json_string()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => base64_encode('{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]}'),
+            'jory' => base64_encode(json_encode([
+                'fld' => [
+                    'id',
+                    'name',
+                ],
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'flt' => [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'd' => '%III%',
+                        ]
+                    ]
+                ]
+            ])),
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -87,7 +106,38 @@ class Base64Test extends TestCase
     public function it_can_process_a_base64_encoded_json_string_for_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => base64_encode('{"band:first as lz":{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]},"song as songs":{"filter":{"f":"title","o":"like","d":"%let%"},"fld":["title"]}}'),
+            'jory' => base64_encode(json_encode([
+                'band:first as lz' => [
+                    'fld' => [
+                        'id',
+                        'name',
+                    ],
+                    'flt' => [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%zep%',
+                    ],
+                    'rlt' => [
+                        'albums' => [
+                            'flt' => [
+                                'f' => 'name',
+                                'o' => 'like',
+                                'd' => '%III%',
+                            ]
+                        ]
+                    ]
+                ],
+                'song as songs' => [
+                    'fld' => [
+                        'title',
+                    ],
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%let%',
+                    ],
+                ]
+            ])),
         ]);
 
         $response->assertStatus(200)->assertExactJson([

@@ -18,7 +18,14 @@ class FacadeTest extends TestCase
     public function it_can_apply_on_a_model_class_using_on()
     {
         $actual = Jory::on(Song::class)
-            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->applyArray([
+                'fld' => 'title',
+                'flt' => [
+                    'f' => 'title',
+                    'o' => 'like',
+                    'd' => '%love',
+                ]
+            ])
             ->toArray();
 
         $this->assertEquals([
@@ -35,7 +42,14 @@ class FacadeTest extends TestCase
     public function it_can_apply_on_a_query_using_on()
     {
         $actual = Jory::on(Song::query()->where('title', 'like', '%ol%'))
-            ->applyJson('{"filter":{"f":"title","o":"like","d":"%love"},"fld":["title"]}')
+            ->applyArray([
+                'fld' => 'title',
+                'flt' => [
+                    'f' => 'title',
+                    'o' => 'like',
+                    'd' => '%love',
+                ]
+            ])
             ->toArray();
 
         $this->assertEquals([
@@ -50,7 +64,14 @@ class FacadeTest extends TestCase
     public function it_can_apply_on_a_model_instance_using_on()
     {
         $actual = Jory::on(Song::find(47))
-            ->applyJson('{"fld":["title"],"rlt":{"album":{"fld":["name"]}}}')
+            ->applyArray([
+                'fld' => 'title',
+                'rlt' => [
+                    'album' => [
+                        'fld' => 'name',
+                    ]
+                ]
+            ])
             ->toArray();
 
         $this->assertEquals([

@@ -8,7 +8,13 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_multiple_records()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"}}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -29,7 +35,24 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_multiple_records_with_jory_data_applied()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => '{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"},"fld":["id","name","release_date"]}},"fld":["id","name"]}',
+            'jory' => [
+                'fld' => ["id", "name"],
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => ["id", "name", "release_date"],
+                        'flt' => [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'd' => '%III%',
+                        ]
+                    ]
+                ]
+            ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
@@ -56,7 +79,28 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_a_single_record()
     {
         $response = $this->json('GET', 'jory/band/3', [
-            'jory' => '{"fld":["id","name"],"rlt":{"albums":{"rlt":{"songs":{"flt":{"f":"title","o":"like","d":"%love%"}}},"srt":["-release_date"]}}}',
+            'jory' => [
+                'fld' => ["id", "name"],
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%es%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'rlt' => [
+                            'songs' => [
+                                'flt' => [
+                                    'f' => 'title',
+                                    'o' => 'like',
+                                    'd' => '%love%',
+                                ],
+                            ]
+                        ],
+                        'srt' => '-release_date',
+                    ]
+                ]
+            ],
         ]);
 
         $expected = [
@@ -105,7 +149,7 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_the_record_count()
     {
         $response = $this->json('GET', 'jory/song/count', [
-            'jory' => '{}',
+            'jory' => [],
         ]);
 
         $expected = [
@@ -122,7 +166,10 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_the_record_count_and_should_ignore_pagination()
     {
         $response = $this->json('GET', 'jory/song/count', [
-            'jory' => '{"ofs":3,"lmt":10}',
+            'jory' => [
+                'ofs' => 3,
+                'lmt' => 10
+            ],
         ]);
 
         $expected = [
@@ -139,7 +186,15 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_the_record_count_with_a_filter_applied()
     {
         $response = $this->json('GET', 'jory/song/count', [
-            'jory' => '{"flt":{"f":"title","o":"like","d":"%love%"},"ofs":3,"lmt":10}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'title',
+                    'o' => 'like',
+                    'd' => '%love%',
+                ],
+                'ofs' => 3,
+                'lmt' => 10
+            ],
         ]);
 
         $expected = [
@@ -156,7 +211,24 @@ class JoryRoutesTest extends TestCase
     public function it_can_return_the_record_count_with_a_custom_filter_applied()
     {
         $response = $this->json('GET', 'jory/song/count', [
-            'jory' => '{"flt":{"and":[{"f":"title","o":"like","d":"%love%"},{"f":"album_name","o":"like","d":"%experienced%"}]},"ofs":3,"lmt":10}',
+            'jory' => [
+                'flt' => [
+                    'and' => [
+                        [
+                            'f' => 'title',
+                            'o' => 'like',
+                            'd' => '%love%',
+                        ],
+                        [
+                            'f' => 'album_name',
+                            'o' => 'like',
+                            'd' => '%experienced%',
+                        ]
+                    ]
+                ],
+                'ofs' => 3,
+                'lmt' => 10
+            ],
         ]);
 
         $expected = [
@@ -249,7 +321,60 @@ class JoryRoutesTest extends TestCase
     public function it_can_load_multiple_resources_at_once()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"band as btls":{"flt":{"f":"id","d":3}},"band:2 as ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song:count as number_of_songs":{"flt":{"f":"title","o":"like","d":"%Love%"}},"song as lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"song":{"flt":{"f":"title","o":"like","d":"%Lovel%"},"fld":["title"],"srt":["title"]},"band:count":{"flt":{"f":"name","o":"like","d":"%r%"}},"person:3":{"fld":["first_name","last_name"]}}',
+            'jory' => [
+                'band as btls' => [
+                    'flt' => [
+                        'f' => 'id',
+                        'd' => '3',
+                    ],
+                ],
+                'band:2 as ledz' => [
+                    'rlt' => [
+                        'albums' => [
+                            'flt' => [
+                                'f' => 'name',
+                                'o' => 'like',
+                                'd' => '%II%',
+                            ],
+                        ],
+                    ]
+                ],
+                'song:count as number_of_songs' => [
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                ],
+                'song as lovesongs' => [
+                    'fld' => 'title',
+                    'srt' => 'title',
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                ],
+                'song' => [
+                    'fld' => 'title',
+                    'srt' => 'title',
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%Lovel%',
+                    ],
+                ],
+                'band:count' => [
+                    'flt' => [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%r%',
+                    ],
+                ],
+                'person:3' => [
+                    'fld' => ['first_name', 'last_name'],
+                ]
+            ],
         ]);
 
         $expected = [
@@ -332,7 +457,49 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_resource_is_not_found()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"bandd":{"flt":{"f":"id","d":3}},"lbmCovrrr":{"flt":{"f":"id","d":3}},"band:2 as ledz":{"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%II%"}}}},"song as lovesongs":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]},"son as lovesong":{"flt":{"f":"title","o":"like","d":"%Love%"},"fld":["title"],"srt":["title"]}}',
+            'jory' => [
+                'bandd' => [
+                    'flt' => [
+                        'f' => 'id',
+                        'd' => '3',
+                    ],
+                ],
+                'lbmCovrrr' => [
+                    'flt' => [
+                        'f' => 'id',
+                        'd' => '3',
+                    ],
+                ],
+                'band:2 as ledz' => [
+                    'rlt' => [
+                        'albums' => [
+                            'flt' => [
+                                'f' => 'name',
+                                'o' => 'like',
+                                'd' => '%II%',
+                            ],
+                        ],
+                    ]
+                ],
+                'song as lovesongs' => [
+                    'fld' => 'title',
+                    'srt' => 'title',
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                ],
+                'son as lovesongs' => [
+                    'fld' => 'title',
+                    'srt' => 'title',
+                    'flt' => [
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
+                    ],
+                ],
+            ],
         ]);
 
         $expected = [
@@ -372,7 +539,29 @@ class JoryRoutesTest extends TestCase
     public function it_returns_an_error_when_a_LaravelJoryCallException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"band":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]},"band as band_2":{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"],"rlt":{"songgs":{}}}}',
+            'jory' => [
+                'band' => [
+                    'flt' => [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%bea%',
+                    ],
+                    'fld' => 'name',
+                    'srt' => 'naame',
+                ],
+                'band as band_2' => [
+                    'flt' => [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%bea%',
+                    ],
+                    'fld' => 'name',
+                    'srt' => 'naame',
+                    'rlt' => [
+                        'songgs' => [],
+                    ]
+                ],
+            ],
         ]);
 
         $expected = [
@@ -393,7 +582,15 @@ class JoryRoutesTest extends TestCase
     public function it_returns_a_404_when_an_unknown_model_is_configured()
     {
         $this->json('GET', 'jory/bandd', [
-            'jory' => '{"flt":{"f":"name","o":"like","d":"%bea%"},"fld":["name"],"srt":["naame"]}',
+            'jory' => [
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%bea%',
+                ],
+                'fld' => 'name',
+                'srt' => 'naame',
+            ],
         ])->assertStatus(404);
 
         $this->json('GET', 'jory/bandd/3')->assertStatus(404);
@@ -407,7 +604,12 @@ class JoryRoutesTest extends TestCase
     public function it_returns_null_when_a_model_is_not_found_by_id_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => '{"person:3":{"fld":["first_name","last_name"]},"song:1234":{}}',
+            'jory' => [
+                'person:3' => [
+                    'fld' => ["first_name","last_name"],
+                ],
+                'song:1234' => [],
+            ]
         ]);
 
         $expected = [
@@ -478,7 +680,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_404_when_an_get_call_for_an_unknown_resource_is_done()
     {
         $response = $this->json('GET', 'jory/persn', [
-            'jory' => '{}',
+            'jory' => [],
         ]);
 
         $expected = [
@@ -497,7 +699,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_404_when_a_single_call_for_an_unknown_resource_is_done()
     {
         $response = $this->json('GET', 'jory/persn/4', [
-            'jory' => '{}',
+            'jory' => [],
         ]);
 
         $expected = [
@@ -516,7 +718,7 @@ class JoryRoutesTest extends TestCase
     public function it_returns_404_when_a_count_call_for_an_unknown_resource_is_done()
     {
         $response = $this->json('GET', 'jory/persn/count', [
-            'jory' => '{}',
+            'jory' => [],
         ]);
 
         $expected = [
