@@ -343,8 +343,8 @@ class RelationTest extends TestCase
                             [
                                 'fld' =>
                                     [
-                                        0 => 'id',
-                                        1 => 'title',
+                                        'id',
+                                        'title',
                                     ],
                             ],
                     ],
@@ -623,8 +623,8 @@ class RelationTest extends TestCase
                             [
                                 'fld' =>
                                     [
-                                        0 => 'id',
-                                        1 => 'title',
+                                        'id',
+                                        'title',
                                     ],
                                 'flt' =>
                                     [
@@ -738,16 +738,16 @@ class RelationTest extends TestCase
                                     ],
                                 'fld' =>
                                     [
-                                        0 => 'id',
-                                        1 => 'title',
+                                        'id',
+                                        'title',
                                     ],
                             ],
                         'people' =>
                             [
                                 'fld' =>
                                     [
-                                        0 => 'id',
-                                        1 => 'last_name',
+                                        'id',
+                                        'last_name',
                                     ],
                                 'rlt' =>
                                     [
@@ -1076,8 +1076,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                     ],
                 'fld' =>
                     [
-                        0 => 'id',
-                        1 => 'name',
+                        'id',
+                        'name',
                     ],
             ],
         ]);
@@ -1408,10 +1408,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'all_albums_string',
-                    ],
+                'fld' => 'all_albums_string',
                 'rlt' =>
                     [
                         'albums' =>
@@ -1456,10 +1453,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         'o' => '>=',
                         'd' => 3,
                     ],
-                'fld' =>
-                    [
-                        0 => 'all_albums_string',
-                    ],
+                'fld' => 'all_albums_string',
                 'rlt' =>
                     [
                         'albums' =>
@@ -1510,22 +1504,16 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                         'o' => 'in',
                         'd' =>
                             [
-                                0 => 3,
-                                1 => 8,
+                                3,
+                                8,
                             ],
                     ],
-                'fld' =>
-                    [
-                        0 => 'id',
-                    ],
+                'fld' => 'id',
                 'rlt' =>
                     [
                         'band' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'all_albums_string',
-                                    ],
+                                'fld' => 'all_albums_string',
                             ],
                     ],
             ],
@@ -1558,10 +1546,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'rlt' =>
                     [
                         'albums as album_no_eight' =>
@@ -1616,18 +1601,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'id',
-                    ],
+                'fld' => 'id',
                 'rlt' =>
                     [
                         'firstSong' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'title',
-                                    ],
+                                'fld' => 'title',
                             ],
                     ],
             ],
@@ -1652,18 +1631,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/person/3', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'id',
-                    ],
+                'fld' => 'id',
                 'rlt' =>
                     [
                         'firstImage' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'url',
-                                    ],
+                                'fld' => 'url',
                             ],
                     ],
             ],
@@ -1688,18 +1661,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band/4', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'id',
-                    ],
+                'fld' => 'id',
                 'rlt' =>
                     [
                         'images' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'url',
-                                    ],
+                                'fld' => 'url',
                             ],
                     ],
             ],
@@ -1732,18 +1699,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/album/4', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'id',
-                    ],
+                'fld' => 'id',
                 'rlt' =>
                     [
                         'tags' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'name',
-                                    ],
+                                'fld' => 'name',
                             ],
                     ],
             ],
@@ -1775,32 +1736,23 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
             'jory' => [
                 'fld' =>
                     [
-                        0 => 'id',
-                        1 => 'name',
+                        'id',
+                        'name',
                     ],
                 'rlt' =>
                     [
                         'songs' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'title',
-                                    ],
+                                'fld' => 'title',
                             ],
                         'albums' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'name',
-                                    ],
+                                'fld' => 'name',
                                 'rlt' =>
                                     [
                                         'songs' =>
                                             [
-                                                'fld' =>
-                                                    [
-                                                        0 => 'title',
-                                                    ],
+                                                'fld' =>'title',
                                                 'flt' =>
                                                     [
                                                         'f' => 'title',
@@ -1864,10 +1816,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'rlt' =>
                     [
                         'albums as album_no_eight' =>
@@ -1916,10 +1865,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'rlt' =>
                     [
                         'albums:count' =>
@@ -1966,10 +1912,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'rlt' =>
                     [
                         'albums as album_no_eight' =>
@@ -2011,10 +1954,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'rlt' =>
                     [
                         'songs:count as song_count' =>

@@ -24,10 +24,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 5,
             ],
         ]);
@@ -61,10 +58,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'titel',
-                    ],
+                'fld' => 'titel',
                 'lmt' => 5,
             ],
         ]);
@@ -84,10 +78,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'srt' =>
-                    [
-                        0 => '-id',
-                    ],
+                'srt' => '-id',
                 'lmt' => 3,
             ],
         ]);
@@ -118,10 +109,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 3,
                 'flt' =>
                     [
@@ -155,10 +143,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 3,
                 'flt' =>
                     [
@@ -184,28 +169,22 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 3,
                 'flt' =>
                     [
                         'and' =>
                             [
-                                0 =>
                                     [
                                         'f' => 'titel',
                                         'o' => 'like',
                                         'd' => '%love%',
                                     ],
-                                1 =>
                                     [
                                         'f' => 'title',
                                         'o' => 'like',
                                         'd' => '%test%',
                                     ],
-                                2 =>
                                     [
                                         'f' => 'albumm_id',
                                         'd' => 11,
@@ -231,28 +210,22 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 3,
                 'flt' =>
                     [
                         'or' =>
                             [
-                                0 =>
                                     [
                                         'f' => 'titel',
                                         'o' => 'like',
                                         'd' => '%love%',
                                     ],
-                                1 =>
                                     [
                                         'f' => 'title',
                                         'o' => 'like',
                                         'd' => '%test%',
                                     ],
-                                2 =>
                                     [
                                         'f' => 'albumm_id',
                                         'd' => 11,
@@ -278,33 +251,26 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 3,
                 'flt' =>
                     [
                         'and' =>
                             [
-                                0 =>
                                     [
                                         'f' => 'titel',
                                         'o' => 'like',
                                         'd' => '%love%',
                                     ],
-                                1 =>
                                     [
                                         'f' => 'title',
                                         'o' => 'like',
                                         'd' => '%test%',
                                     ],
-                                2 =>
                                     [
                                         'f' => 'albumm_id',
                                         'd' => 11,
                                     ],
-                                3 =>
                                     [
                                         'f' => 'album_id',
                                         'o' => 'like',
@@ -332,10 +298,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 3,
                 'flt' =>
                     [
@@ -343,10 +306,7 @@ class WithConfigTest extends TestCase
                         'o' => 'like',
                         'd' => '%love%',
                     ],
-                'srt' =>
-                    [
-                        0 => 'title',
-                    ],
+                'srt' => 'title',
             ],
         ]);
 
@@ -373,10 +333,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 3,
                 'flt' =>
                     [
@@ -386,8 +343,8 @@ class WithConfigTest extends TestCase
                     ],
                 'srt' =>
                     [
-                        0 => 'tite',
-                        1 => 'if',
+                        'tite',
+                        'if',
                     ],
             ],
         ]);
@@ -408,10 +365,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'flt' =>
                     [
                         'f' => 'title',
@@ -437,20 +391,14 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'flt' =>
                     [
                         'f' => 'title',
                         'o' => 'like',
                         'd' => '%love',
                     ],
-                'srt' =>
-                    [
-                        0 => 'title',
-                    ],
+                'srt' => 'title',
                 'lmt' => 250,
             ],
         ]);
@@ -481,10 +429,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
             ],
         ]);
 
@@ -652,20 +597,14 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song-two', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'flt' =>
                     [
                         'f' => 'title',
                         'o' => 'like',
                         'd' => '%love',
                     ],
-                'srt' =>
-                    [
-                        0 => 'title',
-                    ],
+                'srt' => 'title',
                 'lmt' => 321311,
             ],
         ]);
@@ -763,19 +702,13 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 5,
                 'rlt' =>
                     [
                         'album' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'name',
-                                    ],
+                                'fld' => 'name',
                             ],
                     ],
             ],
@@ -825,19 +758,13 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'song', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'lmt' => 5,
                 'rlt' =>
                     [
                         'albumm' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'name',
-                                    ],
+                                'fld' => 'name',
                             ],
                     ],
             ],
@@ -858,19 +785,13 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'lmt' => 5,
                 'rlt' =>
                     [
                         'albums' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'namee',
-                                    ],
+                                'fld' => 'namee',
                             ],
                     ],
             ],
@@ -891,19 +812,13 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'lmt' => 5,
                 'rlt' =>
                     [
                         'albums' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'namee',
-                                    ],
+                                'fld' => 'namee',
                                 'flt' =>
                                     [
                                         'f' => 'ids',
@@ -929,32 +844,23 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'lmt' => 5,
                 'rlt' =>
                     [
                         'albums' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'namee',
-                                    ],
+                                'fld' => 'namee',
                                 'flt' =>
                                     [
                                         'and' =>
                                             [
-                                                0 =>
                                                     [
                                                         'f' => 'ids',
                                                     ],
-                                                1 =>
                                                     [
                                                         'f' => 'name',
                                                     ],
-                                                2 =>
                                                     [
                                                         'f' => 'relese_date',
                                                     ],
@@ -988,10 +894,7 @@ class WithConfigTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'lmt' => 5,
                 'rlt' =>
                     [
@@ -999,26 +902,20 @@ class WithConfigTest extends TestCase
                             [
                                 'srt' =>
                                     [
-                                        0 => 'name',
-                                        1 => 'releese_date',
+                                        'name',
+                                        'releese_date',
                                     ],
-                                'fld' =>
-                                    [
-                                        0 => 'namee',
-                                    ],
+                                'fld' => 'namee',
                                 'flt' =>
                                     [
                                         'and' =>
                                             [
-                                                0 =>
                                                     [
                                                         'f' => 'ids',
                                                     ],
-                                                1 =>
                                                     [
                                                         'f' => 'name',
                                                     ],
-                                                2 =>
                                                     [
                                                         'f' => 'relese_date',
                                                     ],
@@ -1055,10 +952,7 @@ class WithConfigTest extends TestCase
 
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'lmt' => 5,
                 'rlt' =>
                     [
@@ -1093,10 +987,7 @@ class WithConfigTest extends TestCase
 
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'lmt' => 5,
                 'rlt' =>
                     [
@@ -1141,11 +1032,11 @@ class WithConfigTest extends TestCase
             'jory' => [
                 'fld' =>
                     [
-                        0 => 'releaseDate',
-                        1 => 'releaseDat',
-                        2 => 'releaseDatee',
-                        3 => 'reMeasDat',
-                        4 => 'rrrelease__dddate',
+                        'releaseDate',
+                        'releaseDat',
+                        'releaseDatee',
+                        'reMeasDat',
+                        'rrrelease__dddate',
                     ],
                 'rlt' =>
                     [

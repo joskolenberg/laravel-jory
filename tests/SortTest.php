@@ -304,18 +304,12 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'srt' =>
-                    [
-                        0 => 'name',
-                    ],
+                'srt' => 'name',
                 'rlt' =>
                     [
                         'people' =>
                             [
-                                'srt' =>
-                                    [
-                                        0 => 'last_name',
-                                    ],
+                                'srt' => 'last_name',
                             ],
                     ],
             ],
@@ -478,10 +472,7 @@ class SortTest extends TestCase
                         'o' => 'like',
                         'd' => '%in%',
                     ],
-                'srt' =>
-                    [
-                        0 => '-name',
-                    ],
+                'srt' => '-name',
                 'rlt' =>
                     [
                         'people' =>
@@ -492,14 +483,8 @@ class SortTest extends TestCase
                                         'o' => 'like',
                                         'd' => '%a%',
                                     ],
-                                'srt' =>
-                                    [
-                                        0 => '-last_name',
-                                    ],
-                                'fld' =>
-                                    [
-                                        0 => 'last_name',
-                                    ],
+                                'srt' =>'-last_name',
+                                'fld' => 'last_name',
                             ],
                     ],
             ],
@@ -555,13 +540,13 @@ class SortTest extends TestCase
             'jory' => [
                 'srt' =>
                     [
-                        0 => 'number_of_songs',
-                        1 => 'name',
+                        'number_of_songs',
+                        'name',
                     ],
                 'fld' =>
                     [
-                        0 => 'id',
-                        1 => 'name',
+                        'id',
+                        'name',
                     ],
             ],
         ]);
@@ -630,13 +615,13 @@ class SortTest extends TestCase
             'jory' => [
                 'srt' =>
                     [
-                        0 => 'band_name',
-                        1 => 'number_of_songs',
+                        'band_name',
+                        'number_of_songs',
                     ],
                 'fld' =>
                     [
-                        0 => 'id',
-                        1 => 'name',
+                        'id',
+                        'name',
                     ],
             ],
         ]);
@@ -703,10 +688,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album-cover', [
             'jory' => [
-                'srt' =>
-                    [
-                        0 => 'album_name',
-                    ],
+                'srt' => 'album_name',
                 'lmt' => 4,
             ],
         ]);

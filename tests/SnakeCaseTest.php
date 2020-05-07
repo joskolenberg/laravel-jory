@@ -58,9 +58,9 @@ class SnakeCaseTest extends TestCase
             'jory' => [
                 'fld' =>
                     [
-                        0 => 'year_start',
-                        1 => 'id',
-                        2 => 'year_end',
+                        'year_start',
+                        'id',
+                        'year_end',
                     ],
             ],
         ]);
@@ -85,9 +85,9 @@ class SnakeCaseTest extends TestCase
             'jory' => [
                 'fld' =>
                     [
-                        0 => 'yearStart',
-                        1 => 'id',
-                        2 => 'year_end',
+                        'yearStart',
+                        'id',
+                        'year_end',
                     ],
             ],
         ]);
@@ -145,10 +145,7 @@ class SnakeCaseTest extends TestCase
                         'o' => '>=',
                         'd' => 15,
                     ],
-                'srt' =>
-                    [
-                        0 => 'id',
-                    ],
+                'srt' => 'id',
             ],
         ]);
 
@@ -214,8 +211,8 @@ class SnakeCaseTest extends TestCase
             'jory' => [
                 'srt' =>
                     [
-                        0 => 'year_end',
-                        1 => '-year_start',
+                        'year_end',
+                        '-year_start',
                     ],
             ],
         ]);
@@ -262,8 +259,8 @@ class SnakeCaseTest extends TestCase
             'jory' => [
                 'srt' =>
                     [
-                        0 => 'number_of_songs',
-                        1 => '-band_id',
+                        'number_of_songs',
+                        '-band_id',
                     ],
                 'lmt' => 5,
                 'offset' => 7,
@@ -318,8 +315,8 @@ class SnakeCaseTest extends TestCase
             'jory' => [
                 'srt' =>
                     [
-                        0 => 'numberOfSongs',
-                        1 => '-bandId',
+                        'numberOfSongs',
+                        '-bandId',
                     ],
                 'lmt' => 5,
                 'offset' => 7,
@@ -350,10 +347,7 @@ class SnakeCaseTest extends TestCase
                             [
                             ],
                     ],
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
             ],
         ]);
 
@@ -424,10 +418,7 @@ class SnakeCaseTest extends TestCase
                             [
                             ],
                     ],
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
             ],
         ]);
 
@@ -530,10 +521,7 @@ class SnakeCaseTest extends TestCase
                                     [
                                     ],
                             ],
-                        'fld' =>
-                            [
-                                0 => 'name',
-                            ],
+                        'fld' => 'name',
                         'flt' =>
                             [
                                 'f' => 'id',
@@ -662,10 +650,7 @@ class SnakeCaseTest extends TestCase
                                     [
                                     ],
                             ],
-                        'fld' =>
-                            [
-                                0 => 'name',
-                            ],
+                        'fld' => 'name',
                         'flt' =>
                             [
                                 'f' => 'id',
@@ -751,9 +736,9 @@ class SnakeCaseTest extends TestCase
             'jory' => [
                 'fld' =>
                     [
-                        0 => 'year_start',
-                        1 => 'id',
-                        2 => 'year_end',
+                        'year_start',
+                        'id',
+                        'year_end',
                     ],
                 'rlt' =>
                     [
@@ -761,23 +746,18 @@ class SnakeCaseTest extends TestCase
                             [
                                 'fld' =>
                                     [
-                                        0 => 'release_ate',
-                                        1 => 'band_id',
+                                        'release_ate',
+                                        'band_id',
                                     ],
-                                'srt' =>
-                                    [
-                                        0 => '-release_dates',
-                                    ],
+                                'srt' => '-release_dates',
                                 'flt' =>
                                     [
                                         'or' =>
                                             [
-                                                0 =>
                                                     [
                                                         'f' => 'release_ate',
                                                         'd' => '1969-01-12',
                                                     ],
-                                                1 =>
                                                     [
                                                         'f' => 'releaseDaate',
                                                         'd' => '1970-10-05',
@@ -808,10 +788,7 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
-                'fld' =>
-                    [
-                        0 => 'name',
-                    ],
+                'fld' => 'name',
                 'rlt' =>
                     [
                         'albums as album_no_eight' =>

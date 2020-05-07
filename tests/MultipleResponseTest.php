@@ -21,10 +21,7 @@ class MultipleResponseTest extends TestCase
                                 'o' => 'like',
                                 'd' => '%love',
                             ],
-                        'fld' =>
-                            [
-                                0 => 'title',
-                            ],
+                        'fld' => 'title',
                     ],
                 'song:count as songcount' =>
                     [
@@ -34,10 +31,7 @@ class MultipleResponseTest extends TestCase
                                 'o' => 'like',
                                 'd' => '%love',
                             ],
-                        'fld' =>
-                            [
-                                0 => 'title',
-                            ],
+                        'fld' => 'title',
                     ],
             ]))
             ->toArray();
@@ -68,10 +62,7 @@ class MultipleResponseTest extends TestCase
                                 'o' => 'like',
                                 'd' => '%love',
                             ],
-                        'fld' =>
-                            [
-                                0 => 'title',
-                            ],
+                        'fld' => 'title',
                     ],
                 'song:count as songcount' =>
                     [
@@ -81,10 +72,7 @@ class MultipleResponseTest extends TestCase
                                 'o' => 'like',
                                 'd' => '%love',
                             ],
-                        'fld' =>
-                            [
-                                0 => 'title',
-                            ],
+                        'fld' => 'title',
                     ],
             ]))
             ->toArray();

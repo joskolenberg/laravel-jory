@@ -55,7 +55,35 @@ class Base64Test extends TestCase
     public function it_can_process_a_base64_encoded_json_string_2()
     {
         $response = $this->json('GET', 'jory/band', [
-            'jory' => 'eyJmaWx0ZXIiOnsiZiI6Im5hbWUiLCJvIjoibGlrZSIsImQiOiIlaW4lIn0sInJsdCI6eyJzb25ncyI6eyJmbGQiOlsiaWQiLCJ0aXRsZSJdLCJmbHQiOnsiZiI6InRpdGxlIiwibyI6Imxpa2UiLCJkIjoiJWxvdmUlIn0sInJsdCI6eyJhbGJ1bSI6e319fX19',
+            'jory' => base64_encode(json_encode([
+                'filter' =>
+                    [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%in%',
+                    ],
+                'rlt' =>
+                    [
+                        'songs' =>
+                            [
+                                'fld' =>
+                                    [
+                                        'id',
+                                        'title',
+                                    ],
+                                'flt' =>
+                                    [
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%love%',
+                                    ],
+                                'rlt' =>
+                                    [
+                                        'album' => [],
+                                    ],
+                            ],
+                    ],
+            ])),
         ]);
 
         $response->assertStatus(200)->assertExactJson([

@@ -24,10 +24,7 @@ class ResponseTest extends TestCase
                         'o' => 'like',
                         'd' => '%love',
                     ],
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
             ])
             ->toArray();
 
@@ -52,10 +49,7 @@ class ResponseTest extends TestCase
                         'o' => 'like',
                         'd' => '%love',
                     ],
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
             ])
             ->toArray();
 
@@ -72,18 +66,12 @@ class ResponseTest extends TestCase
     {
         $actual = Jory::onModel(Song::find(47))
             ->apply([
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
                 'rlt' =>
                     [
                         'album' =>
                             [
-                                'fld' =>
-                                    [
-                                        0 => 'name',
-                                    ],
+                                'fld' => 'name',
                             ],
                     ],
             ])
@@ -112,10 +100,7 @@ class ResponseTest extends TestCase
                         'o' => 'like',
                         'd' => '%love',
                     ],
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
             ])
             ->toArray();
 
@@ -140,10 +125,7 @@ class ResponseTest extends TestCase
                         'o' => 'like',
                         'd' => '%love',
                     ],
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
             ]))
             ->toArray();
 
@@ -168,10 +150,7 @@ class ResponseTest extends TestCase
                         'o' => 'like',
                         'd' => '%love',
                     ],
-                'fld' =>
-                    [
-                        0 => 'title',
-                    ],
+                'fld' => 'title',
             ]))
             ->toArray();
 

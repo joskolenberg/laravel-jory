@@ -100,10 +100,7 @@ class OffsetLimitTest extends TestCase
                         'o' => 'like',
                         'd' => '%love%',
                     ],
-                'srt' =>
-                    [
-                        0 => 'title',
-                    ],
+                'srt' => 'title',
                 'offset' => 2,
                 'limit' => 3,
             ],
@@ -152,16 +149,13 @@ class OffsetLimitTest extends TestCase
                                         'o' => 'like',
                                         'd' => '%a%',
                                     ],
-                                'srt' =>
-                                    [
-                                        0 => 'title',
-                                    ],
+                                'srt' => 'title',
                                 'offset' => 10,
                                 'limit' => 5,
                                 'fld' =>
                                     [
-                                        0 => 'id',
-                                        1 => 'title',
+                                        'id',
+                                        'title',
                                     ],
                             ],
                     ],
