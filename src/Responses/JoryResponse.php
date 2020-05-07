@@ -345,7 +345,7 @@ class JoryResponse implements Responsable
      */
     protected function getDataResponseKey(): ?string
     {
-        return config('jory.response.data-key');
+        return config('jory.response.data_key');
     }
 
     /**

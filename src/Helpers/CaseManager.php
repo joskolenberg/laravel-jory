@@ -27,7 +27,7 @@ class CaseManager
     {
         $this->case = config('jory.case');
 
-        $inputCase = $request->input(config('jory.request.case-key'));
+        $inputCase = $request->input(config('jory.request.case_key'));
         if (in_array($inputCase, ['default', 'snake', 'camel'])) {
             $this->case = $inputCase;
         }

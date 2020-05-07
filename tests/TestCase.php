@@ -1028,7 +1028,7 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
                 \JosKolenberg\LaravelJory\Tests\Models\ModelWithoutJoryResource::class,
             ]
         ]);
-        $app['config']->set('jory.generator.jory-resources', [
+        $app['config']->set('jory.generator.jory_resources', [
             'namespace' => 'App\Http\JoryResources',
             'path' => __DIR__ . DIRECTORY_SEPARATOR . 'ConsoleOutput' . DIRECTORY_SEPARATOR . 'Generated',
         ]);

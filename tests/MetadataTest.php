@@ -439,7 +439,7 @@ class MetadataTest extends TestCase
     /** @test */
     public function it_returns_a_422_error_when_metadata_is_requested_while_its_not_supported()
     {
-        config()->set('jory.response.data-key', null);
+        config()->set('jory.response.data_key', null);
 
         $response = $this->json('GET', 'jory/band/1', [
             'jory' => [

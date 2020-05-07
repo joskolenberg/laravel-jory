@@ -52,6 +52,6 @@ class JoryHandler extends ExceptionHandler
      */
     protected function getErrorResponseKey(): ?string
     {
-        return config('jory.response.errors-key');
+        return config('jory.response.errors_key');
     }
 }

@@ -33,7 +33,7 @@ trait ProcessesMetadata
             $this->availableMeta[$caseManager->toCurrent($name)] = $metaClass;
         }
 
-        $requestedMetaData = $request->input(config('jory.request.meta-key'), []);
+        $requestedMetaData = $request->input(config('jory.request.meta_key'), []);
 
         $this->validateRequestedMeta($requestedMetaData);
 
@@ -52,7 +52,7 @@ trait ProcessesMetadata
             return;
         }
 
-        if(config('jory.response.data-key') === null){
+        if(config('jory.response.data_key') === null){
             throw new LaravelJoryCallException(['Meta tags are not supported when data is returned in the root.']);
         }
 
@@ -93,6 +93,6 @@ trait ProcessesMetadata
      */
     protected function getMetaResponseKey(): string
     {
-        return config('jory.response.meta-key');
+        return config('jory.response.meta_key');
     }
 }

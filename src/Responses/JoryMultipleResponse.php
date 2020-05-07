@@ -124,7 +124,7 @@ class JoryMultipleResponse implements Responsable
     {
         $data = $this->toArray();
 
-        $responseKey = config('jory.response.data-key');
+        $responseKey = config('jory.response.data_key');
         $response = $responseKey === null ? $data : [$responseKey => $data];
 
         $meta = $this->getMetadata();

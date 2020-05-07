@@ -7,8 +7,8 @@ class ConfigTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
-        $app['config']->set('jory.response.data-key', null);
-        $app['config']->set('jory.response.errors-key', null);
+        $app['config']->set('jory.response.data_key', null);
+        $app['config']->set('jory.response.errors_key', null);
     }
 
     /** @test */

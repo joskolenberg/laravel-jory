@@ -450,7 +450,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
      */
     protected function getNamespace($name)
     {
-        return config('jory.generator.jory-resources.namespace');
+        return config('jory.generator.jory_resources.namespace');
     }
 
     /**
@@ -463,7 +463,7 @@ class JoryResourceGenerateCommand extends GeneratorCommand
     {
         $name = Str::replaceFirst($this->getNamespace($name), '', $name);
 
-        return config('jory.generator.jory-resources.path') . str_replace('\\', '/', $name) . '.php';
+        return config('jory.generator.jory_resources.path') . str_replace('\\', '/', $name) . '.php';
     }
 
     /**

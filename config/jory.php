@@ -23,9 +23,9 @@ return [
 
         'key' => 'jory',
 
-        'case-key' => 'case',
+        'case_key' => 'case',
 
-        'meta-key' => 'meta',
+        'meta_key' => 'meta',
 
     ],
 
@@ -36,18 +36,18 @@ return [
     |
     | Here you can set the keys on which the data will be returned.
     |
-    | Set 'data-key' to null to return data in the root, but note that it
-    | is not possible use metadata when you set the data-key to null.
+    | Set 'data_key' to null to return data in the root, but note that it
+    | is not possible use metadata when you set the data_key to null.
     |
     */
 
     'response' => [
 
-        'data-key' => 'data',
+        'data_key' => 'data',
 
-        'errors-key' => 'errors',
+        'errors_key' => 'errors',
 
-        'meta-key' => 'meta',
+        'meta_key' => 'meta',
 
     ],
 
@@ -157,7 +157,7 @@ return [
     |
     | Here you can define which metadata is available to be
     | requested. Note that returning metadata is disabled
-    | when the response.data-key value is set to null.
+    | when the response.data_key value is set to null.
     |
     */
 
@@ -221,7 +221,7 @@ return [
         | Jory Resources location
         |--------------------------------------------------------------------------
         |
-        | Tell the generator commands where you want your jory-resources
+        | Tell the generator commands where you want your jory_resources
         | to be stored. You probably want to match this setting with
         | the path and namespace for the auto-registrar, don't
         | forget to manually register them if you store
@@ -229,7 +229,7 @@ return [
         |
         */
 
-        'jory-resources' => [
+        'jory_resources' => [
             'namespace' => 'App\Http\JoryResources',
             'path' => app_path('Http' . DIRECTORY_SEPARATOR . 'JoryResources'),
         ],

@@ -8,7 +8,7 @@ class SnakeCaseTest extends TestCase
     {
         parent::getEnvironmentSetUp($app);
         $app['config']->set('jory.case', 'camel');
-        $app['config']->set('jory.request.case-key', 'case_key');
+        $app['config']->set('jory.request.case_key', 'case_key');
     }
 
     /** @test */
