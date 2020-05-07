@@ -19,7 +19,7 @@ class SongJoryResourceWithExplicitSelect extends JoryResource
         $this->field('album_id')->filterable()->sortable();
 
         // Custom attributes
-        $this->field('album_name')->noSelect()->load('album')->hideByDefault();
+        $this->field('album_name')->noSelect()->load('album');
 
         // Custom filters
         $this->filter('album_name');

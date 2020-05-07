@@ -22,7 +22,7 @@ class TagJoryResourceWithExplicitSelect extends JoryResource
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();
 
-        $this->field('song_titles_string')->noSelect()->load('songs')->hideByDefault();
+        $this->field('song_titles_string')->noSelect()->load('songs');
 
         // Relations
         $this->relation('albums');

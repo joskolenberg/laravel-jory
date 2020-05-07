@@ -16,7 +16,7 @@ class SongJoryResourceWithConfig extends JoryResource
 
         $this->field('title')->filterable()->sortable();
 
-        $this->field('album_id')->hideByDefault()->filterable(function (Filter $filter) {
+        $this->field('album_id')->filterable(function (Filter $filter) {
             $filter->operators(['=']);
         });
 

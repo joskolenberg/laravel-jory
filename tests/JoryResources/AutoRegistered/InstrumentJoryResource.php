@@ -18,6 +18,6 @@ class InstrumentJoryResource extends JoryResource
         $this->field('name')->filterable(function (Filter $filter){
             $filter->scope(new NameFilter);
         })->sortable();
-        $this->field('type_name')->filterable()->sortable()->hideByDefault();
+        $this->field('type_name')->filterable()->sortable();
     }
 }

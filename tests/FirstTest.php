@@ -43,6 +43,7 @@ class FirstTest extends TestCase
                 ],
                 'rlt' => [
                     'albums' => [
+                        'fld' => 'name',
                         'flt' => [
                             'f' => 'name',
                             'o' => 'like',
@@ -59,10 +60,7 @@ class FirstTest extends TestCase
                 'name' => 'Led Zeppelin',
                 'albums' => [
                     [
-                        'id' => 6,
-                        'band_id' => 2,
                         'name' => 'Led Zeppelin III',
-                        'release_date' => '1970-10-05 00:00:00',
                     ],
                 ],
             ],

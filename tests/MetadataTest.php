@@ -12,13 +12,16 @@ class MetadataTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
+                'fld' => 'title',
                 'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'Wild Horses',
                 ],
                 'rlt' => [
-                    'album' => [],
+                    'album' => [
+                        'fld' => 'name',
+                    ],
                 ]
             ],
             'meta' => ['query_count'],
@@ -27,14 +30,9 @@ class MetadataTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 12,
-                    'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => [
-                        'id' => 2,
-                        'band_id' => 1,
                         'name' => 'Sticky Fingers',
-                        'release_date' => '1971-04-23 00:00:00',
                     ],
                 ],
             ],
@@ -150,14 +148,14 @@ class MetadataTest extends TestCase
     public function it_can_return_the_processing_time()
     {
         $response = $this->json('GET', 'jory/song/1', [
-            'jory' => [],
+            'jory' => [
+                'fld' => 'title',
+            ],
             'meta' => ['query_count', 'time'],
         ]);
 
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
-                'id',
-                'album_id',
                 'title',
             ],
             'meta' => [
@@ -176,13 +174,16 @@ class MetadataTest extends TestCase
 
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
+                'fld' => 'title',
                 'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'Wild Horses',
                 ],
                 'rlt' => [
-                    'album' => [],
+                    'album' => [
+                        'fld' => 'name',
+                    ],
                 ]
             ],
             'meta' => ['query_count', 'user'],
@@ -191,14 +192,9 @@ class MetadataTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 12,
-                    'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => [
-                        'id' => 2,
-                        'band_id' => 1,
                         'name' => 'Sticky Fingers',
-                        'release_date' => '1971-04-23 00:00:00',
                     ],
                 ],
             ],
@@ -216,13 +212,16 @@ class MetadataTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
+                'fld' => 'title',
                 'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'Wild Horses',
                 ],
                 'rlt' => [
-                    'album' => [],
+                    'album' => [
+                        'fld' => 'name',
+                    ],
                 ]
             ],
             'meta' => ['query_count', 'user'],
@@ -231,14 +230,9 @@ class MetadataTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 12,
-                    'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => [
-                        'id' => 2,
-                        'band_id' => 1,
                         'name' => 'Sticky Fingers',
-                        'release_date' => '1971-04-23 00:00:00',
                     ],
                 ],
             ],

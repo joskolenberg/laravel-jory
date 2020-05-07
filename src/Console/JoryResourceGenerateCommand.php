@@ -368,10 +368,8 @@ class JoryResourceGenerateCommand extends GeneratorCommand
                 /**
                  * Custom attributes (using accessors) cannot be sorted or filtered
                  * out of the box. So don't make them sortable or filterable.
-                 * Often extra queries or heavy calculations are involved
-                 * at custom attributes, don't return them by default.
                  */
-                $generatedCode .= "$tab$tab\$this->field('" . $attribute->name . "')->hideByDefault();\n";
+                $generatedCode .= "$tab$tab\$this->field('" . $attribute->name . "');\n";
             }
         }
 

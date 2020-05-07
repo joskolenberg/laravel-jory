@@ -18,11 +18,6 @@ class Field
     protected $field;
 
     /**
-     * @var bool
-     */
-    protected $showByDefault = true;
-
-    /**
      * @var null|Filter
      */
     protected $filter = null;
@@ -64,18 +59,6 @@ class Field
         $this->getter = $getter;
 
         $this->case = app(CaseManager::class);
-    }
-
-    /**
-     * Set the field to be hidden by default.
-     *
-     * @return $this
-     */
-    public function hideByDefault(): Field
-    {
-        $this->showByDefault = false;
-
-        return $this;
     }
 
     /**
@@ -168,16 +151,6 @@ class Field
     public function getGetter():? Attribute
     {
         return $this->getter;
-    }
-
-    /**
-     * Tell if this field should be shown by default.
-     *
-     * @return bool
-     */
-    public function isShownByDefault(): bool
-    {
-        return $this->showByDefault;
     }
 
     /**

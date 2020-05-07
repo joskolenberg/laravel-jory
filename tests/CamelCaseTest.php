@@ -4,27 +4,6 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 class CamelCaseTest extends TestCase
 {
-
-    /** @test */
-    public function it_returns_the_configs_default_fields_in_camel_case()
-    {
-        $response = $this->json('GET', 'jory/band/2', [
-            'case' => 'camel',
-        ]);
-
-        $expected = [
-            'data' => [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'yearStart' => 1968,
-                'yearEnd' => 1980,
-            ],
-        ];
-        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
     /** @test */
     public function it_returns_the_defined_fields_in_camel_case()
     {
@@ -69,10 +48,11 @@ class CamelCaseTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_default_filters_in_camelcase()
+    public function it_can_apply_standard_filters_in_camelcase()
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'flt' => [
                     'f' => 'yearStart',
                     'd' => 1968,
@@ -84,10 +64,7 @@ class CamelCaseTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'yearStart' => 1968,
-                    'yearEnd' => 1980,
                 ],
             ],
         ];
@@ -102,6 +79,7 @@ class CamelCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'jory' => [
+                'fld' => 'name',
                 'flt' => [
                     'f' => 'numberOfSongs',
                     'o' => '>=',
@@ -115,22 +93,13 @@ class CamelCaseTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 3,
-                    'bandId' => 1,
                     'name' => 'Exile on main st.',
-                    'releaseDate' => '1972-05-12 00:00:00',
                 ],
                 [
-                    'id' => 8,
-                    'bandId' => 3,
                     'name' => 'Abbey road',
-                    'releaseDate' => '1969-09-26 00:00:00',
                 ],
                 [
-                    'id' => 12,
-                    'bandId' => 4,
                     'name' => 'Electric ladyland',
-                    'releaseDate' => '1968-10-16 00:00:00',
                 ],
             ],
         ];
@@ -166,10 +135,11 @@ class CamelCaseTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_default_sorts_in_camelcase()
+    public function it_can_apply_basic_sorts_in_camelcase()
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => ["id", "name", "yearEnd", "yearStart"],
                 'srt' => ["yearEnd", "-yearStart"],
             ],
             'case' => 'camel',
@@ -214,6 +184,7 @@ class CamelCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => ["numberOfSongs", "-bandId"],
                 'lmt' => 5,
                 'offset' => 7,
@@ -224,34 +195,19 @@ class CamelCaseTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 11,
-                    'bandId' => 4,
                     'name' => 'Axis: Bold as love',
-                    'releaseDate' => '1967-12-01 00:00:00',
                 ],
                 [
-                    'id' => 7,
-                    'bandId' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
-                    'releaseDate' => '1967-06-01 00:00:00',
                 ],
                 [
-                    'id' => 12,
-                    'bandId' => 4,
                     'name' => 'Electric ladyland',
-                    'releaseDate' => '1968-10-16 00:00:00',
                 ],
                 [
-                    'id' => 8,
-                    'bandId' => 3,
                     'name' => 'Abbey road',
-                    'releaseDate' => '1969-09-26 00:00:00',
                 ],
                 [
-                    'id' => 3,
-                    'bandId' => 1,
                     'name' => 'Exile on main st.',
-                    'releaseDate' => '1972-05-12 00:00:00',
                 ],
             ],
         ];
@@ -292,7 +248,9 @@ class CamelCaseTest extends TestCase
             'jory' => [
                 'fld' => 'name',
                 'rlt' => [
-                    'albumCover' => []
+                    'albumCover' => [
+                        'fld' => 'image'
+                    ]
                 ],
             ],
             'case' => 'camel',
@@ -302,8 +260,6 @@ class CamelCaseTest extends TestCase
             'data' => [
                 'name' => 'Sticky Fingers',
                 'albumCover' => [
-                    'id' => 2,
-                    'albumId' => 2,
                     'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -382,6 +338,7 @@ class CamelCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'lmt' => 2,
             ],
             'case' => 'camel',
@@ -390,16 +347,10 @@ class CamelCaseTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'yearStart' => 1962,
-                    'yearEnd' => null,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'yearStart' => 1968,
-                    'yearEnd' => 1980,
                 ],
             ],
         ];
@@ -434,15 +385,15 @@ class CamelCaseTest extends TestCase
     public function it_can_get_a_single_record_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/2', [
+            'jory' => [
+                'fld' => 'name',
+            ],
             'case' => 'camel',
         ]);
 
         $expected = [
             'data' => [
-                'id' => 2,
                 'name' => 'Led Zeppelin',
-                'yearStart' => 1968,
-                'yearEnd' => 1980,
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
@@ -462,10 +413,14 @@ class CamelCaseTest extends TestCase
                         'd' => 2,
                     ],
                     'rlt' => [
-                        'albumCover' => []
+                        'albumCover' => [
+                            'fld' => 'image',
+                        ]
                     ],
                 ],
-                'album-cover:2 as stickyFingersAlbumCover' => [],
+                'album-cover:2 as stickyFingersAlbumCover' => [
+                    'fld' => 'image',
+                ],
             ],
             'case' => 'camel',
         ]);
@@ -476,8 +431,6 @@ class CamelCaseTest extends TestCase
                     [
                         'name' => 'Sticky Fingers',
                         'albumCover' => [
-                            'id' => 2,
-                            'albumId' => 2,
                             'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -522,8 +475,6 @@ class CamelCaseTest extends TestCase
                     ],
                 ],
                 'stickyFingersAlbumCover' => [
-                    'id' => 2,
-                    'albumId' => 2,
                     'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -709,12 +660,14 @@ class CamelCaseTest extends TestCase
                 "fld" => 'name',
                 "rlt" => [
                     "albums as albumNoEight" => [
+                        'fld' => 'name',
                         "flt" => [
                             "f" => "id",
                             "d" => 8,
                         ],
                     ],
                     "albums as albumNoNine" => [
+                        'fld' => 'name',
                         "flt" => [
                             "f" => "id",
                             "d" => 9,
@@ -722,7 +675,6 @@ class CamelCaseTest extends TestCase
                     ],
                 ],
             ],
-            'jory' => '{"fld":["name"],"rlt":{"albums as albumNoEight":{"flt":{"f":"id","d":8}},"albums as albumNoNine":{"flt":{"f":"id","d":9}}}}',
             'case' => 'camel',
         ]);
 
@@ -731,18 +683,12 @@ class CamelCaseTest extends TestCase
                 'name' => 'Beatles',
                 'albumNoEight' => [
                     [
-                        'id' => 8,
-                        'bandId' => 3,
                         'name' => 'Abbey road',
-                        'releaseDate' => '1969-09-26 00:00:00',
                     ],
                 ],
                 'albumNoNine' => [
                     [
-                        'id' => 9,
-                        'bandId' => 3,
                         'name' => 'Let it be',
-                        'releaseDate' => '1970-05-08 00:00:00',
                     ],
                 ],
             ],

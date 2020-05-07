@@ -12,6 +12,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => 'name',
             ]
         ]);
@@ -19,28 +20,16 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
             ],
         ];
@@ -54,6 +43,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => '-name',
             ],
         ]);
@@ -61,28 +51,16 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
             ],
         ];
@@ -96,6 +74,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => '-year_start',
             ],
         ]);
@@ -103,28 +82,16 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
             ],
         ];
@@ -138,6 +105,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => ["-year_end","name"],
             ],
         ]);
@@ -145,28 +113,16 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
             ],
         ];
@@ -178,6 +134,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => ["-year_end","-name"],
             ],
         ]);
@@ -185,28 +142,16 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
             ],
         ];
@@ -220,6 +165,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => ["year_end","name"],
             ],
         ]);
@@ -227,28 +173,16 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -262,6 +196,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => ["year_end","-name"],
             ],
         ]);
@@ -269,28 +204,16 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -304,11 +227,13 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'srt' => 'name',
                 'rlt' =>
                     [
                         'people' =>
                             [
+                                'fld' => 'full_name',
                                 'srt' => 'last_name',
                             ],
                     ],
@@ -318,138 +243,66 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                     'people' => [
                         [
-                            'id' => 11,
-                            'first_name' => 'George',
-                            'last_name' => 'Harrison',
-                            'date_of_birth' => '1943/02/24',
                             'full_name' => 'George Harrison',
                         ],
                         [
-                            'id' => 9,
-                            'first_name' => 'John',
-                            'last_name' => 'Lennon',
-                            'date_of_birth' => '1940/10/09',
                             'full_name' => 'John Lennon',
                         ],
                         [
-                            'id' => 10,
-                            'first_name' => 'Paul',
-                            'last_name' => 'McCartney',
-                            'date_of_birth' => '1942/06/18',
                             'full_name' => 'Paul McCartney',
                         ],
                         [
-                            'id' => 12,
-                            'first_name' => 'Ringo',
-                            'last_name' => 'Starr',
-                            'date_of_birth' => '1940/07/07',
                             'full_name' => 'Ringo Starr',
                         ],
                     ],
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                     'people' => [
                         [
-                            'id' => 13,
-                            'first_name' => 'Jimi',
-                            'last_name' => 'Hendrix',
-                            'date_of_birth' => '1942/11/27',
                             'full_name' => 'Jimi Hendrix',
                         ],
                         [
-                            'id' => 15,
-                            'first_name' => 'Mitch',
-                            'last_name' => 'Mitchell',
-                            'date_of_birth' => '1946/07/09',
                             'full_name' => 'Mitch Mitchell',
                         ],
                         [
-                            'id' => 14,
-                            'first_name' => 'Noel',
-                            'last_name' => 'Redding',
-                            'date_of_birth' => '1945/12/25',
                             'full_name' => 'Noel Redding',
                         ],
                     ],
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'people' => [
                         [
-                            'id' => 8,
-                            'first_name' => 'John',
-                            'last_name' => 'Bonham',
-                            'date_of_birth' => '1948/05/31',
                             'full_name' => 'John Bonham',
                         ],
                         [
-                            'id' => 7,
-                            'first_name' => 'John Paul',
-                            'last_name' => 'Jones',
-                            'date_of_birth' => '1946/01/03',
                             'full_name' => 'John Paul Jones',
                         ],
                         [
-                            'id' => 6,
-                            'first_name' => 'Jimmy',
-                            'last_name' => 'Page',
-                            'date_of_birth' => '1944/01/09',
                             'full_name' => 'Jimmy Page',
                         ],
                         [
-                            'id' => 5,
-                            'first_name' => 'Robert',
-                            'last_name' => 'Plant',
-                            'date_of_birth' => '1948/08/20',
                             'full_name' => 'Robert Plant',
                         ],
                     ],
                 ],
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                     'people' => [
                         [
-                            'id' => 1,
-                            'first_name' => 'Mick',
-                            'last_name' => 'Jagger',
-                            'date_of_birth' => '1943/07/26',
                             'full_name' => 'Mick Jagger',
                         ],
                         [
-                            'id' => 2,
-                            'first_name' => 'Keith',
-                            'last_name' => 'Richards',
-                            'date_of_birth' => '1943/12/18',
                             'full_name' => 'Keith Richards',
                         ],
                         [
-                            'id' => 4,
-                            'first_name' => 'Charlie',
-                            'last_name' => 'Watts',
-                            'date_of_birth' => '1941/06/02',
                             'full_name' => 'Charlie Watts',
                         ],
                         [
-                            'id' => 3,
-                            'first_name' => 'Ronnie',
-                            'last_name' => 'Wood',
-                            'date_of_birth' => '1947/06/01',
                             'full_name' => 'Ronnie Wood',
                         ],
                     ],
@@ -466,6 +319,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'flt' =>
                     [
                         'f' => 'name',
@@ -493,10 +347,7 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                     'people' => [
                         [
                             'last_name' => 'Watts',
@@ -510,10 +361,7 @@ class SortTest extends TestCase
                     ],
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'people' => [
                         [
                             'last_name' => 'Plant',
@@ -688,6 +536,7 @@ class SortTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album-cover', [
             'jory' => [
+                'fld' => 'image',
                 'srt' => 'album_name',
                 'lmt' => 4,
             ],
@@ -696,8 +545,6 @@ class SortTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 8,
-                    'album_id' => 8,
                     'image' => '@@@@@@@@@#@@@@@@@@@@@@@@@#@@@@=#=:----------------------------------------+=###
 @@@@@@@@@@@@#@@@##@@@@@@@@@@@#=**+:---------------------------------------+###@
 @@@@@@@@@@@#@@@@#####@@@@@######+++------------------------------------++*#@@##
@@ -740,8 +587,6 @@ class SortTest extends TestCase
 :::::---+@###########+------::----+##=#===#=###:------------:#######=###=------',
                 ],
                 [
-                    'id' => 10,
-                    'album_id' => 10,
                     'image' => '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ++++++++++++++++++++++++++++++++*==***=*==*==***+++++++++++++++++++++++++++++++
 +++++++***+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -784,8 +629,6 @@ class SortTest extends TestCase
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
                 ],
                 [
-                    'id' => 11,
-                    'album_id' => 11,
                     'image' => '************++++++++++++******+++:::+::----::+::::+******+++++++++*+***********
 ****************+++++++++++*+++:--:****+++*+**+--:+++++++++++++++**************
 ***************++***+::::::::--:***++::-::++*++**+--+:::++++++*+***************
@@ -828,8 +671,6 @@ class SortTest extends TestCase
 +++++:::***----+-:::+++++*=:***+=+--+:=#:--+*+:*#:++***=-*+*:*:*++---:+:::++:**',
                 ],
                 [
-                    'id' => 12,
-                    'album_id' => 12,
                     'image' => '========================###========#===========================================
 =======================####=================********===========================
 =========================##=================**+*++++****===================*===

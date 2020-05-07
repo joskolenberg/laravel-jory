@@ -60,6 +60,7 @@ class BaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'flt' => [
                     'f' => 'name',
                     'o' => 'like',
@@ -71,10 +72,7 @@ class BaseTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ]);
@@ -199,7 +197,9 @@ class BaseTest extends TestCase
     public function it_can_return_a_single_model()
     {
         $actual = Facade::onModelClass(Instrument::class)
-            ->applyArray([])
+            ->applyArray([
+                'fld' => ['id', 'name']
+            ])
             ->first()
             ->toArray();
 

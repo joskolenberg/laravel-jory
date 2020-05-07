@@ -23,9 +23,9 @@ class AlbumJoryResource extends JoryResource
         $this->field('release_date')->filterable()->sortable();
 
         // Custom attributes
-        $this->field('cover_image')->hideByDefault();
-        $this->field('tag_names_string')->hideByDefault();
-        $this->field('titles_string')->hideByDefault();
+        $this->field('cover_image');
+        $this->field('tag_names_string');
+        $this->field('titles_string');
 
         // Relations
         $this->relation('albumCover');

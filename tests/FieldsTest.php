@@ -158,45 +158,6 @@ class FieldsTest extends TestCase
     }
 
     /** @test */
-    public function when_the_fields_parameter_is_not_specified_all_fields_will_be_returned()
-    {
-        $response = $this->json('GET', 'jory/band', [
-            'jory' => [],
-        ]);
-
-        $response->assertStatus(200)->assertExactJson([
-            'data' => [
-                [
-                    'id' => 1,
-                    'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
-                ],
-                [
-                    'id' => 4,
-                    'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
-                ],
-            ],
-        ]);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -344,6 +305,82 @@ class FieldsTest extends TestCase
                     'full_name' => 'Mitch Mitchell',
                 ],
             ],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_can_use_an_asterisk_to_select_all_fields_configured_in_the_jory_resource()
+    {
+        $response = $this->json('GET', 'jory/person/1', [
+            'jory' => [
+                'fld' => '*',
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'id' => 1,
+                'first_name' => 'Mick',
+                'last_name' => 'Jagger',
+                'date_of_birth' => '1943/07/26',
+                'full_name' => 'Mick Jagger',
+                'instruments_string' => 'Vocals',
+                'first_image_url' => 'peron_image_1.jpg',
+            ],
+        ]);
+
+        $this->assertQueryCount(3);
+    }
+
+    /** @test */
+    public function it_can_use_an_asterisk_in_array_notation_to_select_all_fields_configured_in_the_jory_resource()
+    {
+        $response = $this->json('GET', 'jory/person/1', [
+            'jory' => [
+                'fld' => ['*'],
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'id' => 1,
+                'first_name' => 'Mick',
+                'last_name' => 'Jagger',
+                'date_of_birth' => '1943/07/26',
+                'full_name' => 'Mick Jagger',
+                'instruments_string' => 'Vocals',
+                'first_image_url' => 'peron_image_1.jpg',
+            ],
+        ]);
+
+        $this->assertQueryCount(3);
+    }
+
+    /** @test */
+    public function it_returns_no_fields_when_the_fields_parameter_is_omitted()
+    {
+        $response = $this->json('GET', 'jory/person/1', [
+            'jory' => [],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [],
+        ]);
+
+        $this->assertQueryCount(1);
+    }
+
+    /** @test */
+    public function it_returns_no_fields_when_the_fields_parameter_is_an_empty_array()
+    {
+        $response = $this->json('GET', 'jory/person/1', [
+            'jory' => [],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [],
         ]);
 
         $this->assertQueryCount(1);

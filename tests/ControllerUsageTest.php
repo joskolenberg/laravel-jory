@@ -22,6 +22,7 @@ class ControllerUsageTest extends TestCase
     {
         $response = $this->json('GET', 'band', [
             'jory' => [
+                'fld' => 'name',
                 'flt' => [
                     'f' => 'name',
                     'o' => 'like',
@@ -33,10 +34,7 @@ class ControllerUsageTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ]);
@@ -48,15 +46,14 @@ class ControllerUsageTest extends TestCase
     public function it_can_return_a_single_record_based_on_request()
     {
         $response = $this->json('GET', 'band/2', [
-            'jory' => []
+            'jory' => [
+                'fld' => 'name',
+            ]
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
-                'id' => 2,
                 'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
             ],
         ]);
 
@@ -68,6 +65,7 @@ class ControllerUsageTest extends TestCase
     {
         $response = $this->json('GET', 'band/first-by-filter', [
             'jory' => [
+                'fld' => 'name',
                 'flt' => [
                     'f' => 'name',
                     'd' => 'Beatles',
@@ -77,10 +75,7 @@ class ControllerUsageTest extends TestCase
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
-                'id' => 3,
                 'name' => 'Beatles',
-                'year_start' => 1960,
-                'year_end' => 1970,
             ],
         ]);
 

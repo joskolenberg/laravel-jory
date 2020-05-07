@@ -35,28 +35,12 @@ class RequestParserTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 1,
-                    'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
                 [
-                    'id' => 2,
-                    'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
                 [
-                    'id' => 3,
-                    'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 4,
-                    'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
             ],
         ]);

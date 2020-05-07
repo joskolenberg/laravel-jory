@@ -9,54 +9,35 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => 'like',
-                        'd' => '%zep%',
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'people' => [
+                        'fld' => 'full_name',
                     ],
-                'rlt' =>
-                    [
-                        'people' =>
-                            [],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'people' => [
                         [
-                            'id' => 5,
-                            'first_name' => 'Robert',
-                            'last_name' => 'Plant',
-                            'date_of_birth' => '1948/08/20',
                             'full_name' => 'Robert Plant',
                         ],
                         [
-                            'id' => 6,
-                            'first_name' => 'Jimmy',
-                            'last_name' => 'Page',
-                            'date_of_birth' => '1944/01/09',
                             'full_name' => 'Jimmy Page',
                         ],
                         [
-                            'id' => 7,
-                            'first_name' => 'John Paul',
-                            'last_name' => 'Jones',
-                            'date_of_birth' => '1946/01/03',
                             'full_name' => 'John Paul Jones',
                         ],
                         [
-                            'id' => 8,
-                            'first_name' => 'John',
-                            'last_name' => 'Bonham',
-                            'date_of_birth' => '1948/05/31',
                             'full_name' => 'John Bonham',
                         ],
                     ],
@@ -72,45 +53,33 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => 'like',
-                        'd' => '%zep%',
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => 'name',
                     ],
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'albums' => [
                         [
-                            'id' => 4,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin',
-                            'release_date' => '1969-01-12 00:00:00',
                         ],
                         [
-                            'id' => 5,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin II',
-                            'release_date' => '1969-10-22 00:00:00',
                         ],
                         [
-                            'id' => 6,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin III',
-                            'release_date' => '1970-10-05 00:00:00',
                         ],
                     ],
                 ],
@@ -125,33 +94,28 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => 'like',
-                        'd' => '%zep%',
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'name',
+                            'd' => 'Led Zeppelin IV',
+                        ],
                     ],
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'name',
-                                        'd' => 'Led Zeppelin IV',
-                                    ],
-                            ],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'albums' => [],
                 ],
             ],
@@ -165,38 +129,33 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => 'like',
-                        'd' => '%zep%',
-                    ],
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'name',
-                                        'd' => 'Led Zeppelin IV',
-                                    ],
-                                'rlt' =>
-                                    [
-                                        'songs' =>
-                                            [],
-                                    ],
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'name',
+                            'd' => 'Led Zeppelin IV',
+                        ],
+                        'rlt' => [
+                            'songs' => [
+                                'fld' => 'title',
                             ],
+                        ],
                     ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'albums' => [],
                 ],
             ],
@@ -210,31 +169,26 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'title',
-                        'o' => '=',
-                        'd' => 'Wild Horses',
+                'fld' => 'title',
+                'filter' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'Wild Horses',
+                ],
+                'rlt' => [
+                    'album' => [
+                        'fld' => 'name',
                     ],
-                'rlt' =>
-                    [
-                        'album' =>
-                            [],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 12,
-                    'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => [
-                        'id' => 2,
-                        'band_id' => 1,
                         'name' => 'Sticky Fingers',
-                        'release_date' => '1971-04-23 00:00:00',
                     ],
                 ],
             ],
@@ -248,31 +202,27 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'title',
-                        'o' => '=',
-                        'd' => 'Wild Horses',
+                'fld' => 'title',
+                'filter' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'Wild Horses',
+                ],
+                'rlt' => [
+                    'album' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'name',
+                            'd' => 'another',
+                        ],
                     ],
-                'rlt' =>
-                    [
-                        'album' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'name',
-                                        'd' => 'another',
-                                    ],
-                            ],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 12,
-                    'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => null,
                 ],
@@ -287,36 +237,30 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'title',
-                        'o' => '=',
-                        'd' => 'Wild Horses',
+                'fld' => 'title',
+                'filter' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'Wild Horses',
+                ],
+                'rlt' => [
+                    'album' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'name',
+                            'd' => 'another',
+                        ],
+                        'rlt' => [
+                            'band' => [],
+                        ],
                     ],
-                'rlt' =>
-                    [
-                        'album' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'name',
-                                        'd' => 'another',
-                                    ],
-                                'rlt' =>
-                                    [
-                                        'band' =>
-                                            [],
-                                    ],
-                            ],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 12,
-                    'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => null,
                 ],
@@ -331,33 +275,27 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => '=',
-                        'd' => 'Led Zeppelin',
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => '=',
+                    'd' => 'Led Zeppelin',
+                ],
+                'rlt' => [
+                    'songs' => [
+                        'fld' => [
+                            'id',
+                            'title',
+                        ],
                     ],
-                'rlt' =>
-                    [
-                        'songs' =>
-                            [
-                                'fld' =>
-                                    [
-                                        'id',
-                                        'title',
-                                    ],
-                            ],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'songs' => [
                         [
                             'id' => 38,
@@ -484,30 +422,25 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/album', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => '=',
-                        'd' => 'Abbey road',
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => '=',
+                    'd' => 'Abbey road',
+                ],
+                'rlt' => [
+                    'cover' => [
+                        'fld' => 'image',
                     ],
-                'rlt' =>
-                    [
-                        'cover' =>
-                            [],
-                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 8,
-                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26 00:00:00',
                     'cover' => [
-                        'id' => 8,
-                        'album_id' => 8,
                         'image' => '@@@@@@@@@#@@@@@@@@@@@@@@@#@@@@=#=:----------------------------------------+=###
 @@@@@@@@@@@@#@@@##@@@@@@@@@@@#=**+:---------------------------------------+###@
 @@@@@@@@@@@#@@@@#####@@@@@######+++------------------------------------++*#@@##
@@ -561,42 +494,31 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'title',
-                        'o' => '=',
-                        'd' => 'Wild Horses',
-                    ],
-                'rlt' =>
-                    [
-                        'album' =>
-                            [
-                                'rlt' =>
-                                    [
-                                        'band' =>
-                                            [],
-                                    ],
+                'fld' => 'title',
+                'filter' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'Wild Horses',
+                ],
+                'rlt' => [
+                    'album' => [
+                        'rlt' => [
+                            'band' => [
+                                'fld' => 'name',
                             ],
+                        ],
                     ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 12,
-                    'album_id' => 2,
                     'title' => 'Wild Horses',
                     'album' => [
-                        'id' => 2,
-                        'band_id' => 1,
-                        'name' => 'Sticky Fingers',
-                        'release_date' => '1971-04-23 00:00:00',
                         'band' => [
-                            'id' => 1,
                             'name' => 'Rolling Stones',
-                            'year_start' => 1962,
-                            'year_end' => null,
                         ],
                     ],
                 ],
@@ -611,71 +533,55 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => 'like',
-                        'd' => '%in%',
-                    ],
-                'rlt' =>
-                    [
-                        'songs' =>
-                            [
-                                'fld' =>
-                                    [
-                                        'id',
-                                        'title',
-                                    ],
-                                'flt' =>
-                                    [
-                                        'f' => 'title',
-                                        'o' => 'like',
-                                        'd' => '%love%',
-                                    ],
-                                'rlt' =>
-                                    [
-                                        'album' =>
-                                            [],
-                                    ],
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%in%',
+                ],
+                'rlt' => [
+                    'songs' => [
+                        'fld' => [
+                            'id',
+                            'title',
+                        ],
+                        'flt' => [
+                            'f' => 'title',
+                            'o' => 'like',
+                            'd' => '%love%',
+                        ],
+                        'rlt' => [
+                            'album' => [
+                                'fld' => 'name',
                             ],
+                        ],
                     ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                     'songs' => [
                         [
                             'id' => 2,
                             'title' => 'Love In Vain (Robert Johnson)',
                             'album' => [
-                                'id' => 1,
-                                'band_id' => 1,
                                 'name' => 'Let it bleed',
-                                'release_date' => '1969-12-05 00:00:00',
                             ],
                         ],
                     ],
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'songs' => [
                         [
                             'id' => 47,
                             'title' => 'Whole Lotta Love',
                             'album' => [
-                                'id' => 5,
-                                'band_id' => 2,
                                 'name' => 'Led Zeppelin II',
-                                'release_date' => '1969-10-22 00:00:00',
                             ],
                         ],
                     ],
@@ -691,90 +597,72 @@ class RelationTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'number_of_albums_in_year',
-                        'o' => '=',
-                        'd' =>
-                            [
-                                'year' => 1970,
-                                'value' => 1,
-                            ],
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'number_of_albums_in_year',
+                    'o' => '=',
+                    'd' => [
+                        'year' => 1970,
+                        'value' => 1,
                     ],
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'has_song_with_title',
-                                        'o' => 'like',
-                                        'd' => '%love%',
-                                    ],
-                                'rlt' =>
-                                    [
-                                        'cover' =>
-                                            [],
-                                    ],
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'has_song_with_title',
+                            'o' => 'like',
+                            'd' => '%love%',
+                        ],
+                        'rlt' => [
+                            'cover' => [
+                                'fld' => 'image',
                             ],
-                        'songs' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'title',
-                                        'o' => 'like',
-                                        'd' => '%ac%',
-                                    ],
-                                'rlt' =>
-                                    [
-                                        'album' =>
-                                            [
-                                                'rlt' =>
-                                                    [
-                                                        'band' =>
-                                                            [],
-                                                    ],
-                                            ],
-                                    ],
-                                'fld' =>
-                                    [
-                                        'id',
-                                        'title',
-                                    ],
-                            ],
-                        'people' =>
-                            [
-                                'fld' =>
-                                    [
-                                        'id',
-                                        'last_name',
-                                    ],
-                                'rlt' =>
-                                    [
-                                        'instruments' =>
-                                            [],
-                                    ],
-                            ],
+                        ],
                     ],
+                    'songs' => [
+                        'flt' => [
+                            'f' => 'title',
+                            'o' => 'like',
+                            'd' => '%ac%',
+                        ],
+                        'rlt' => [
+                            'album' => [
+                                'rlt' => [
+                                    'band' => [
+                                        'fld' => 'name',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'fld' => [
+                            'id',
+                            'title',
+                        ],
+                    ],
+                    'people' => [
+                        'fld' => [
+                            'id',
+                            'last_name',
+                        ],
+                        'rlt' => [
+                            'instruments' => [
+                                'fld' => '*'
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'albums' => [
                         [
-                            'id' => 5,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin II',
-                            'release_date' => '1969-10-22 00:00:00',
                             'cover' => [
-                                'id' => 5,
-                                'album_id' => 5,
                                 'image' => '++*++*+++++*++++++++*+++++++++++*+++*++*++*++*++++*+++*++*++*+++*++*++++++++*++
 +**+**++++**+*++**+**++*+++***+**++**+*++*++**+++*+++*++**+**++**+**++*+**+**++
 ===============================================================================
@@ -823,15 +711,8 @@ class RelationTest extends TestCase
                             'id' => 43,
                             'title' => 'Black Mountain Side',
                             'album' => [
-                                'id' => 4,
-                                'band_id' => 2,
-                                'name' => 'Led Zeppelin',
-                                'release_date' => '1969-01-12 00:00:00',
                                 'band' => [
-                                    'id' => 2,
                                     'name' => 'Led Zeppelin',
-                                    'year_start' => 1968,
-                                    'year_end' => 1980,
                                 ],
                             ],
                         ],
@@ -844,6 +725,7 @@ class RelationTest extends TestCase
                                 [
                                     'id' => 1,
                                     'name' => 'Vocals',
+                                    'type_name' => 'voice',
                                 ],
                             ],
                         ],
@@ -854,6 +736,7 @@ class RelationTest extends TestCase
                                 [
                                     'id' => 2,
                                     'name' => 'Guitar',
+                                    'type_name' => 'stringed',
                                 ],
                             ],
                         ],
@@ -864,10 +747,12 @@ class RelationTest extends TestCase
                                 [
                                     'id' => 3,
                                     'name' => 'Bassguitar',
+                                    'type_name' => 'stringed',
                                 ],
                                 [
                                     'id' => 5,
                                     'name' => 'Piano/Keys',
+                                    'type_name' => 'stringed',
                                 ],
                             ],
                         ],
@@ -878,25 +763,18 @@ class RelationTest extends TestCase
                                 [
                                     'id' => 4,
                                     'name' => 'Drums',
+                                    'type_name' => 'percussion',
                                 ],
                             ],
                         ],
                     ],
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                     'albums' => [
                         [
-                            'id' => 7,
-                            'band_id' => 3,
                             'name' => 'Sgt. Peppers lonely hearts club band',
-                            'release_date' => '1967-06-01 00:00:00',
                             'cover' => [
-                                'id' => 7,
-                                'album_id' => 7,
                                 'image' => '*+++++++++**+++++++++++***++++++++++++****+*****************+*+:+*+++++++++++++
 **++++**+:+***-=*#=+**#@*+**:+::#=:=*******=W@**:+==****=*#=**+++=#++++++++++++
 ***@=***=*=*+++=@=*+*#*+#**=###*#*+*****+=##@@=+::*@+***===#*==+:=*+=*++++++++=
@@ -945,15 +823,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                             'id' => 98,
                             'title' => 'Across the Universe',
                             'album' => [
-                                'id' => 9,
-                                'band_id' => 3,
-                                'name' => 'Let it be',
-                                'release_date' => '1970-05-08 00:00:00',
                                 'band' => [
-                                    'id' => 3,
                                     'name' => 'Beatles',
-                                    'year_start' => 1960,
-                                    'year_end' => 1970,
                                 ],
                             ],
                         ],
@@ -961,15 +832,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                             'id' => 107,
                             'title' => 'Get Back',
                             'album' => [
-                                'id' => 9,
-                                'band_id' => 3,
-                                'name' => 'Let it be',
-                                'release_date' => '1970-05-08 00:00:00',
                                 'band' => [
-                                    'id' => 3,
                                     'name' => 'Beatles',
-                                    'year_start' => 1960,
-                                    'year_end' => 1970,
                                 ],
                             ],
                         ],
@@ -982,10 +846,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                                 [
                                     'id' => 1,
                                     'name' => 'Vocals',
+                                    'type_name' => 'voice',
                                 ],
                                 [
                                     'id' => 2,
                                     'name' => 'Guitar',
+                                    'type_name' => 'stringed',
                                 ],
                             ],
                         ],
@@ -996,22 +862,27 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                                 [
                                     'id' => 1,
                                     'name' => 'Vocals',
+                                    'type_name' => 'voice',
                                 ],
                                 [
                                     'id' => 2,
                                     'name' => 'Guitar',
+                                    'type_name' => 'stringed',
                                 ],
                                 [
                                     'id' => 3,
                                     'name' => 'Bassguitar',
+                                    'type_name' => 'stringed',
                                 ],
                                 [
                                     'id' => 4,
                                     'name' => 'Drums',
+                                    'type_name' => 'percussion',
                                 ],
                                 [
                                     'id' => 5,
                                     'name' => 'Piano/Keys',
+                                    'type_name' => 'stringed',
                                 ],
                             ],
                         ],
@@ -1022,10 +893,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                                 [
                                     'id' => 1,
                                     'name' => 'Vocals',
+                                    'type_name' => 'voice',
                                 ],
                                 [
                                     'id' => 2,
                                     'name' => 'Guitar',
+                                    'type_name' => 'stringed',
                                 ],
                             ],
                         ],
@@ -1036,10 +909,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                                 [
                                     'id' => 1,
                                     'name' => 'Vocals',
+                                    'type_name' => 'voice',
                                 ],
                                 [
                                     'id' => 4,
                                     'name' => 'Drums',
+                                    'type_name' => 'percussion',
                                 ],
                             ],
                         ],
@@ -1056,29 +931,25 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => 'like',
-                        'd' => '%zep%',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%zep%',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'd' => '%III%',
+                        ],
                     ],
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'name',
-                                        'o' => 'like',
-                                        'd' => '%III%',
-                                    ],
-                            ],
-                    ],
-                'fld' =>
-                    [
-                        'id',
-                        'name',
-                    ],
+                ],
+                'fld' => [
+                    'id',
+                    'name',
+                ],
             ],
         ]);
 
@@ -1089,10 +960,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                     'name' => 'Led Zeppelin',
                     'albums' => [
                         [
-                            'id' => 6,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin III',
-                            'release_date' => '1970-10-05 00:00:00',
                         ],
                     ],
                 ],
@@ -1107,24 +975,20 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => '=',
-                        'd' => 'foo',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => '=',
+                    'd' => 'foo',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'flt' => [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'd' => '%III%',
+                        ],
                     ],
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'name',
-                                        'o' => 'like',
-                                        'd' => '%III%',
-                                    ],
-                            ],
-                    ],
+                ],
             ],
         ]);
 
@@ -1138,121 +1002,79 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'title',
-                        'o' => '=',
-                        'd' => 'The End',
-                    ],
-                'rlt' =>
-                    [
-                        'album' =>
-                            [
-                                'rlt' =>
-                                    [
-                                        'songs' =>
-                                            [],
-                                    ],
+                'fld' => 'title',
+                'filter' => [
+                    'f' => 'title',
+                    'o' => '=',
+                    'd' => 'The End',
+                ],
+                'rlt' => [
+                    'album' => [
+                        'rlt' => [
+                            'songs' => [
+                                'fld' => 'title',
                             ],
+                        ],
                     ],
+                ],
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 94,
-                    'album_id' => 8,
                     'title' => 'The End',
                     'album' => [
-                        'id' => 8,
-                        'band_id' => 3,
-                        'name' => 'Abbey road',
-                        'release_date' => '1969-09-26 00:00:00',
                         'songs' => [
                             [
-                                'id' => 79,
-                                'album_id' => 8,
                                 'title' => 'Come Together',
                             ],
                             [
-                                'id' => 80,
-                                'album_id' => 8,
                                 'title' => 'Something',
                             ],
                             [
-                                'id' => 81,
-                                'album_id' => 8,
                                 'title' => 'Maxwell\'s Silver Hammer',
                             ],
                             [
-                                'id' => 82,
-                                'album_id' => 8,
                                 'title' => 'Oh! Darling',
                             ],
                             [
-                                'id' => 83,
-                                'album_id' => 8,
                                 'title' => 'Octopus\'s Garden',
                             ],
                             [
-                                'id' => 84,
-                                'album_id' => 8,
                                 'title' => 'I Want You (She\'s So Heavy)',
                             ],
                             [
-                                'id' => 85,
-                                'album_id' => 8,
                                 'title' => 'Here Comes the Sun',
                             ],
                             [
-                                'id' => 86,
-                                'album_id' => 8,
                                 'title' => 'Because',
                             ],
                             [
-                                'id' => 87,
-                                'album_id' => 8,
                                 'title' => 'You Never Give Me Your Money',
                             ],
                             [
-                                'id' => 88,
-                                'album_id' => 8,
                                 'title' => 'Sun King',
                             ],
                             [
-                                'id' => 89,
-                                'album_id' => 8,
                                 'title' => 'Mean Mr. Mustard',
                             ],
                             [
-                                'id' => 90,
-                                'album_id' => 8,
                                 'title' => 'Polythene Pam',
                             ],
                             [
-                                'id' => 91,
-                                'album_id' => 8,
                                 'title' => 'She Came in Through the Bathroom Window',
                             ],
                             [
-                                'id' => 92,
-                                'album_id' => 8,
                                 'title' => 'Golden Slumbers',
                             ],
                             [
-                                'id' => 93,
-                                'album_id' => 8,
                                 'title' => 'Carry That Weight',
                             ],
                             [
-                                'id' => 94,
-                                'album_id' => 8,
                                 'title' => 'The End',
                             ],
                             [
-                                'id' => 95,
-                                'album_id' => 8,
                                 'title' => 'Her Majesty',
                             ],
 
@@ -1270,17 +1092,17 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/album', [
             'jory' => [
-                'filter' =>
-                    [
-                        'f' => 'name',
-                        'o' => '=',
-                        'd' => 'Abbey road',
+                'fld' => 'name',
+                'filter' => [
+                    'f' => 'name',
+                    'o' => '=',
+                    'd' => 'Abbey road',
+                ],
+                'rlt' => [
+                    'album_cover' => [
+                        'fld' => 'image',
                     ],
-                'rlt' =>
-                    [
-                        'album_cover' =>
-                            [],
-                    ],
+                ],
             ],
             'case' => 'snake',
         ]);
@@ -1288,13 +1110,8 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response->assertExactJson([
             'data' => [
                 [
-                    'id' => 8,
-                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26 00:00:00',
                     'album_cover' => [
-                        'id' => 8,
-                        'album_id' => 8,
                         'image' => '@@@@@@@@@#@@@@@@@@@@@@@@@#@@@@=#=:----------------------------------------+=###
 @@@@@@@@@@@@#@@@##@@@@@@@@@@@#=**+:---------------------------------------+###@
 @@@@@@@@@@@#@@@@#####@@@@@######+++------------------------------------++*#@@##
@@ -1348,53 +1165,37 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'rlt' =>
-                                    [
-                                        'songs' =>
-                                            [
-                                                'rlt' =>
-                                                    [
-                                                        'album' =>
-                                                            [
-                                                                'rlt' =>
-                                                                    [
-                                                                        'songs' =>
-                                                                            [
-                                                                                'rlt' =>
-                                                                                    [
-                                                                                        'album' =>
-                                                                                            [
-                                                                                                'rlt' =>
-                                                                                                    [
-                                                                                                        'cover' =>
-                                                                                                            [
-                                                                                                                'rlt' =>
-                                                                                                                    [
-                                                                                                                        'album' =>
-                                                                                                                            [
-                                                                                                                                'rlt' =>
-                                                                                                                                    [
-                                                                                                                                        'band' =>
-                                                                                                                                            [],
-                                                                                                                                    ],
-                                                                                                                            ],
-                                                                                                                    ],
-                                                                                                            ],
-                                                                                                    ],
-                                                                                            ],
-                                                                                    ],
-                                                                            ],
+                'rlt' => [
+                    'albums' => [
+                        'rlt' => [
+                            'songs' => [
+                                'rlt' => [
+                                    'album' => [
+                                        'rlt' => [
+                                            'songs' => [
+                                                'rlt' => [
+                                                    'album' => [
+                                                        'rlt' => [
+                                                            'cover' => [
+                                                                'rlt' => [
+                                                                    'album' => [
+                                                                        'rlt' => [
+                                                                            'band' => [],
+                                                                        ],
                                                                     ],
+                                                                ],
                                                             ],
+                                                        ],
                                                     ],
+                                                ],
                                             ],
+                                        ],
                                     ],
+                                ],
                             ],
+                        ],
                     ],
+                ],
             ],
         ]);
 
@@ -1409,17 +1210,15 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
                 'fld' => 'all_albums_string',
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 8,
-                                    ],
-                            ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 8,
+                        ],
                     ],
+                ],
             ],
         ]);
 
@@ -1428,10 +1227,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 'all_albums_string' => 'Sgt. Peppers lonely hearts club band, Abbey road, Let it be',
                 'albums' => [
                     [
-                        'id' => 8,
-                        'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26 00:00:00',
                     ],
                 ],
             ],
@@ -1447,24 +1243,21 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'flt' =>
-                    [
-                        'f' => 'id',
-                        'o' => '>=',
-                        'd' => 3,
-                    ],
+                'flt' => [
+                    'f' => 'id',
+                    'o' => '>=',
+                    'd' => 3,
+                ],
                 'fld' => 'all_albums_string',
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 8,
-                                    ],
-                            ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 8,
+                        ],
                     ],
+                ],
             ],
         ]);
 
@@ -1474,10 +1267,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                     'all_albums_string' => 'Sgt. Peppers lonely hearts club band, Abbey road, Let it be',
                     'albums' => [
                         [
-                            'id' => 8,
-                            'band_id' => 3,
                             'name' => 'Abbey road',
-                            'release_date' => '1969-09-26 00:00:00',
                         ],
                     ],
                 ],
@@ -1498,24 +1288,20 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/album', [
             'jory' => [
-                'flt' =>
-                    [
-                        'f' => 'id',
-                        'o' => 'in',
-                        'd' =>
-                            [
-                                3,
-                                8,
-                            ],
+                'flt' => [
+                    'f' => 'id',
+                    'o' => 'in',
+                    'd' => [
+                        3,
+                        8,
                     ],
+                ],
                 'fld' => 'id',
-                'rlt' =>
-                    [
-                        'band' =>
-                            [
-                                'fld' => 'all_albums_string',
-                            ],
+                'rlt' => [
+                    'band' => [
+                        'fld' => 'all_albums_string',
                     ],
+                ],
             ],
         ]);
 
@@ -1547,25 +1333,22 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
                 'fld' => 'name',
-                'rlt' =>
-                    [
-                        'albums as album_no_eight' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 8,
-                                    ],
-                            ],
-                        'albums as album_no_nine' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 9,
-                                    ],
-                            ],
+                'rlt' => [
+                    'albums as album_no_eight' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 8,
+                        ],
                     ],
+                    'albums as album_no_nine' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 9,
+                        ],
+                    ],
+                ],
             ],
         ]);
 
@@ -1574,18 +1357,12 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 'name' => 'Beatles',
                 'album_no_eight' => [
                     [
-                        'id' => 8,
-                        'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26 00:00:00',
                     ],
                 ],
                 'album_no_nine' => [
                     [
-                        'id' => 9,
-                        'band_id' => 3,
                         'name' => 'Let it be',
-                        'release_date' => '1970-05-08 00:00:00',
                     ],
                 ],
             ],
@@ -1602,13 +1379,11 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
                 'fld' => 'id',
-                'rlt' =>
-                    [
-                        'firstSong' =>
-                            [
-                                'fld' => 'title',
-                            ],
+                'rlt' => [
+                    'firstSong' => [
+                        'fld' => 'title',
                     ],
+                ],
             ],
         ]);
 
@@ -1632,13 +1407,11 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/person/3', [
             'jory' => [
                 'fld' => 'id',
-                'rlt' =>
-                    [
-                        'firstImage' =>
-                            [
-                                'fld' => 'url',
-                            ],
+                'rlt' => [
+                    'firstImage' => [
+                        'fld' => 'url',
                     ],
+                ],
             ],
         ]);
 
@@ -1662,13 +1435,11 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band/4', [
             'jory' => [
                 'fld' => 'id',
-                'rlt' =>
-                    [
-                        'images' =>
-                            [
-                                'fld' => 'url',
-                            ],
+                'rlt' => [
+                    'images' => [
+                        'fld' => 'url',
                     ],
+                ],
             ],
         ]);
 
@@ -1700,13 +1471,11 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/album/4', [
             'jory' => [
                 'fld' => 'id',
-                'rlt' =>
-                    [
-                        'tags' =>
-                            [
-                                'fld' => 'name',
-                            ],
+                'rlt' => [
+                    'tags' => [
+                        'fld' => 'name',
                     ],
+                ],
             ],
         ]);
 
@@ -1734,35 +1503,28 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/tag/1', [
             'jory' => [
-                'fld' =>
-                    [
-                        'id',
-                        'name',
+                'fld' => [
+                    'id',
+                    'name',
+                ],
+                'rlt' => [
+                    'songs' => [
+                        'fld' => 'title',
                     ],
-                'rlt' =>
-                    [
-                        'songs' =>
-                            [
+                    'albums' => [
+                        'fld' => 'name',
+                        'rlt' => [
+                            'songs' => [
                                 'fld' => 'title',
+                                'flt' => [
+                                    'f' => 'title',
+                                    'o' => 'like',
+                                    'd' => '%Sun%',
+                                ],
                             ],
-                        'albums' =>
-                            [
-                                'fld' => 'name',
-                                'rlt' =>
-                                    [
-                                        'songs' =>
-                                            [
-                                                'fld' =>'title',
-                                                'flt' =>
-                                                    [
-                                                        'f' => 'title',
-                                                        'o' => 'like',
-                                                        'd' => '%Sun%',
-                                                    ],
-                                            ],
-                                    ],
-                            ],
+                        ],
                     ],
+                ],
             ],
         ]);
 
@@ -1817,26 +1579,22 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
                 'fld' => 'name',
-                'rlt' =>
-                    [
-                        'albums as album_no_eight' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 8,
-                                    ],
-                            ],
-                        'albums:count' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'o' => '>',
-                                        'd' => 7,
-                                    ],
-                            ],
+                'rlt' => [
+                    'albums as album_no_eight' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 8,
+                        ],
                     ],
+                    'albums:count' => [
+                        'flt' => [
+                            'f' => 'id',
+                            'o' => '>',
+                            'd' => 7,
+                        ],
+                    ],
+                ],
             ],
         ]);
 
@@ -1845,10 +1603,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 'name' => 'Beatles',
                 'album_no_eight' => [
                     [
-                        'id' => 8,
-                        'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26 00:00:00',
                     ],
                 ],
                 'albums:count' => 2,
@@ -1866,18 +1621,15 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'rlt' =>
-                    [
-                        'albums:count' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'name',
-                                        'o' => 'like',
-                                        'd' => '%ed%',
-                                    ],
-                            ],
+                'rlt' => [
+                    'albums:count' => [
+                        'flt' => [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'd' => '%ed%',
+                        ],
                     ],
+                ],
             ],
         ]);
 
@@ -1913,19 +1665,16 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
                 'fld' => 'name',
-                'rlt' =>
-                    [
-                        'albums as album_no_eight' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 8,
-                                    ],
-                            ],
-                        'albums:count as album_count' =>
-                            [],
+                'rlt' => [
+                    'albums as album_no_eight' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 8,
+                        ],
                     ],
+                    'albums:count as album_count' => [],
+                ],
             ],
         ]);
 
@@ -1934,10 +1683,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
                 'name' => 'Beatles',
                 'album_no_eight' => [
                     [
-                        'id' => 8,
-                        'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26 00:00:00',
                     ],
                 ],
                 'album_count' => 3,
@@ -1955,11 +1701,9 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'rlt' =>
-                    [
-                        'songs:count as song_count' =>
-                            [],
-                    ],
+                'rlt' => [
+                    'songs:count as song_count' => [],
+                ],
             ],
         ]);
 

@@ -29,23 +29,23 @@ trait AppliesConfigToJory
     /**
      * Apply the field settings in this Config on the Jory query.
      *
-     * When no fields are specified in the request, the default fields in will be set on the Jory query.
+     * When an asterisk is present in the array, we will add all the configured fields.
      *
      * @param Jory $jory
      * @param array $fields
      */
     protected function applyFieldsToJory(Jory $jory, array $fields): void
     {
-        if ($jory->getFields() === null) {
-            // No fields set in the request, than we will update the fields
-            // with the ones to be shown by default.
-            $defaultFields = [];
+        if($jory->getFields() === null){
+            $jory->setFields([]);
+        }
+
+        if (in_array('*', $jory->getFields())) {
+            $allFields = [];
             foreach ($fields as $field) {
-                if ($field->isShownByDefault()) {
-                    $defaultFields[] = $field->getField();
-                }
+                $allFields[] = $field->getField();
             }
-            $jory->setFields($defaultFields);
+            $jory->setFields($allFields);
         }
     }
 

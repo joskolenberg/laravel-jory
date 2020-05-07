@@ -74,15 +74,12 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'default' => true,
                 ],
                 [
                     'field' => 'title',
-                    'default' => true,
                 ],
                 [
                     'field' => 'album_id',
-                    'default' => false,
                 ],
             ],
             'filters' => [
@@ -153,15 +150,12 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'default' => true,
                 ],
                 [
                     'field' => 'title',
-                    'default' => true,
                 ],
                 [
                     'field' => 'album_id',
-                    'default' => true,
                 ],
             ],
             'filters' => [
@@ -213,15 +207,12 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'default' => true,
                 ],
                 [
                     'field' => 'title',
-                    'default' => true,
                 ],
                 [
                     'field' => 'album_id',
-                    'default' => true,
                 ],
             ],
             'filters' => [],
@@ -262,35 +253,27 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'default' => true,
                 ],
                 [
                     'field' => 'name',
-                    'default' => true,
                 ],
                 [
                     'field' => 'year_start',
-                    'default' => true,
                 ],
                 [
                     'field' => 'year_end',
-                    'default' => true,
                 ],
                 [
                     'field' => 'all_albums_string',
-                    'default' => false,
                 ],
                 [
                     'field' => 'titles_string',
-                    'default' => false,
                 ],
                 [
                     'field' => 'first_title_string',
-                    'default' => false,
                 ],
                 [
                     'field' => 'image_urls_string',
-                    'default' => false,
                 ],
             ],
             'filters' => [
@@ -449,35 +432,27 @@ class RegisterTest extends TestCase
             'fields' => [
                 [
                     'field' => 'id',
-                    'default' => true,
                 ],
                 [
                     'field' => 'name',
-                    'default' => true,
                 ],
                 [
                     'field' => 'band_id',
-                    'default' => true,
                 ],
                 [
                     'field' => 'release_date',
-                    'default' => true,
                 ],
                 [
                     'field' => 'custom_field',
-                    'default' => false,
                 ],
                 [
                     'field' => 'cover_image',
-                    'default' => false,
                 ],
                 [
                     'field' => 'titles_string',
-                    'default' => false,
                 ],
                 [
                     'field' => 'tag_names_string',
-                    'default' => false,
                 ],
             ],
             'filters' => [

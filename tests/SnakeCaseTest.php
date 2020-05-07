@@ -12,56 +12,16 @@ class SnakeCaseTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_configs_default_fields_in_snake_case()
-    {
-        $response = $this->json('GET', 'jory/band/2', [
-            'case_key' => 'snake',
-        ]);
-
-        $expected = [
-            'data' => [
-                'id' => 2,
-                'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
-            ],
-        ];
-        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
-    public function it_returns_the_toarray_default_fields_in_snake_case()
-    {
-        $response = $this->json('GET', 'jory/song/2', [
-            'case_key' => 'snake',
-        ]);
-
-        $expected = [
-            'data' => [
-                'id' => 2,
-                'album_id' => 1,
-                'title' => 'Love In Vain (Robert Johnson)',
-            ],
-        ];
-        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
     public function it_returns_the_defined_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
             'case_key' => 'snake',
             'jory' => [
-                'fld' =>
-                    [
-                        'year_start',
-                        'id',
-                        'year_end',
-                    ],
+                'fld' => [
+                    'year_start',
+                    'id',
+                    'year_end',
+                ],
             ],
         ]);
 
@@ -83,12 +43,11 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/band/2', [
             'case_key' => 'snake',
             'jory' => [
-                'fld' =>
-                    [
-                        'yearStart',
-                        'id',
-                        'year_end',
-                    ],
+                'fld' => [
+                    'yearStart',
+                    'id',
+                    'year_end',
+                ],
             ],
         ]);
 
@@ -109,21 +68,18 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'case_key' => 'snake',
             'jory' => [
-                'flt' =>
-                    [
-                        'f' => 'year_start',
-                        'd' => 1968,
-                    ],
+                'fld' => 'name',
+                'flt' => [
+                    'f' => 'year_start',
+                    'd' => 1968,
+                ],
             ],
         ]);
 
         $expected = [
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -139,12 +95,12 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
             'jory' => [
-                'flt' =>
-                    [
-                        'f' => 'number_of_songs',
-                        'o' => '>=',
-                        'd' => 15,
-                    ],
+                'fld' => 'name',
+                'flt' => [
+                    'f' => 'number_of_songs',
+                    'o' => '>=',
+                    'd' => 15,
+                ],
                 'srt' => 'id',
             ],
         ]);
@@ -152,22 +108,13 @@ class SnakeCaseTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 3,
-                    'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'release_date' => '1972-05-12 00:00:00',
                 ],
                 [
-                    'id' => 8,
-                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26 00:00:00',
                 ],
                 [
-                    'id' => 12,
-                    'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'release_date' => '1968-10-16 00:00:00',
                 ],
             ],
         ];
@@ -183,12 +130,11 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
             'jory' => [
-                'flt' =>
-                    [
-                        'f' => 'numberOfSongs',
-                        'o' => '>=',
-                        'd' => 15,
-                    ],
+                'flt' => [
+                    'f' => 'numberOfSongs',
+                    'o' => '>=',
+                    'd' => 15,
+                ],
             ],
         ]);
 
@@ -204,44 +150,32 @@ class SnakeCaseTest extends TestCase
     }
 
     /** @test */
-    public function it_can_apply_default_sorts_in_snakecase()
+    public function it_can_apply_basic_sorts_in_snakecase()
     {
         $response = $this->json('GET', 'jory/band', [
             'case_key' => 'snake',
             'jory' => [
-                'srt' =>
-                    [
-                        'year_end',
-                        '-year_start',
-                    ],
+                'fld' => 'name',
+                'srt' => [
+                    'year_end',
+                    '-year_start',
+                ],
             ],
         ]);
 
         $expected = [
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
                 [
-                    'id' => 4,
                     'name' => 'Jimi Hendrix Experience',
-                    'year_start' => 1966,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -257,11 +191,11 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
             'jory' => [
-                'srt' =>
-                    [
-                        'number_of_songs',
-                        '-band_id',
-                    ],
+                'fld' => 'name',
+                'srt' => [
+                    'number_of_songs',
+                    '-band_id',
+                ],
                 'lmt' => 5,
                 'offset' => 7,
             ],
@@ -270,34 +204,19 @@ class SnakeCaseTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 11,
-                    'band_id' => 4,
                     'name' => 'Axis: Bold as love',
-                    'release_date' => '1967-12-01 00:00:00',
                 ],
                 [
-                    'id' => 7,
-                    'band_id' => 3,
                     'name' => 'Sgt. Peppers lonely hearts club band',
-                    'release_date' => '1967-06-01 00:00:00',
                 ],
                 [
-                    'id' => 12,
-                    'band_id' => 4,
                     'name' => 'Electric ladyland',
-                    'release_date' => '1968-10-16 00:00:00',
                 ],
                 [
-                    'id' => 8,
-                    'band_id' => 3,
                     'name' => 'Abbey road',
-                    'release_date' => '1969-09-26 00:00:00',
                 ],
                 [
-                    'id' => 3,
-                    'band_id' => 1,
                     'name' => 'Exile on main st.',
-                    'release_date' => '1972-05-12 00:00:00',
                 ],
             ],
         ];
@@ -313,11 +232,10 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
             'jory' => [
-                'srt' =>
-                    [
-                        'numberOfSongs',
-                        '-bandId',
-                    ],
+                'srt' => [
+                    'numberOfSongs',
+                    '-bandId',
+                ],
                 'lmt' => 5,
                 'offset' => 7,
             ],
@@ -341,12 +259,11 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/album/2', [
             'case_key' => 'snake',
             'jory' => [
-                'rlt' =>
-                    [
-                        'album_cover' =>
-                            [
-                            ],
+                'rlt' => [
+                    'album_cover' => [
+                        'fld' => 'image',
                     ],
+                ],
                 'fld' => 'name',
             ],
         ]);
@@ -355,8 +272,6 @@ class SnakeCaseTest extends TestCase
             'data' => [
                 'name' => 'Sticky Fingers',
                 'album_cover' => [
-                    'id' => 2,
-                    'album_id' => 2,
                     'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -412,12 +327,10 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/album', [
             'case_key' => 'snake',
             'jory' => [
-                'rlt' =>
-                    [
-                        'albumCover' =>
-                            [
-                            ],
+                'rlt' => [
+                    'albumCover' => [
                     ],
+                ],
                 'fld' => 'name',
             ],
         ]);
@@ -439,6 +352,7 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'case_key' => 'snake',
             'jory' => [
+                'fld' => 'name',
                 'lmt' => 2,
             ],
         ]);
@@ -446,16 +360,10 @@ class SnakeCaseTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ];
@@ -470,11 +378,10 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/band/count', [
             'case_key' => 'snake',
             'jory' => [
-                'flt' =>
-                    [
-                        'f' => 'year_end',
-                        'd' => 1970,
-                    ],
+                'flt' => [
+                    'f' => 'year_end',
+                    'd' => 1970,
+                ],
             ],
         ]);
 
@@ -492,14 +399,14 @@ class SnakeCaseTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band/2', [
             'case_key' => 'snake',
+            'jory' => [
+                'fld' => 'name',
+            ]
         ]);
 
         $expected = [
             'data' => [
-                'id' => 2,
                 'name' => 'Led Zeppelin',
-                'year_start' => 1968,
-                'year_end' => 1980,
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
@@ -513,24 +420,21 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
             'jory' => [
-                'album as album_with_cover' =>
-                    [
-                        'rlt' =>
-                            [
-                                'album_cover' =>
-                                    [
-                                    ],
-                            ],
-                        'fld' => 'name',
-                        'flt' =>
-                            [
-                                'f' => 'id',
-                                'd' => 2,
-                            ],
+                'album as album_with_cover' => [
+                    'rlt' => [
+                        'album_cover' => [
+                            'fld' => 'image',
+                        ],
                     ],
-                'album-cover:2 as sticky_fingers_album_cover' =>
-                    [
+                    'fld' => 'name',
+                    'flt' => [
+                        'f' => 'id',
+                        'd' => 2,
                     ],
+                ],
+                'album-cover:2 as sticky_fingers_album_cover' => [
+                    'fld' => 'image',
+                ],
             ],
         ]);
 
@@ -540,8 +444,6 @@ class SnakeCaseTest extends TestCase
                     [
                         'name' => 'Sticky Fingers',
                         'album_cover' => [
-                            'id' => 2,
-                            'album_id' => 2,
                             'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -586,8 +488,6 @@ class SnakeCaseTest extends TestCase
                     ],
                 ],
                 'sticky_fingers_album_cover' => [
-                    'id' => 2,
-                    'album_id' => 2,
                     'image' => '.........-#WWW@#####@#=+-:**--:------:@W@@W@#**##@WWWWWW++WWWWWW@+-#WWWWWWWWW@@
 .........+WWWW@@@#=**=#+-*@===@@@@#@@@+@=@WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW@@
 ........-#WWWWWW@##=#@#+-*@#*W@@##*==:*W#-#WWWWWW@@WWWWWWWWWWWWWWWWWWWWWWWWWWW#
@@ -642,21 +542,17 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory', [
             'case_key' => 'snake',
             'jory' => [
-                'album as album_with_cover' =>
-                    [
-                        'rlt' =>
-                            [
-                                'albumCover' =>
-                                    [
-                                    ],
-                            ],
-                        'fld' => 'name',
-                        'flt' =>
-                            [
-                                'f' => 'id',
-                                'd' => 2,
-                            ],
+                'album as album_with_cover' => [
+                    'rlt' => [
+                        'albumCover' => [
+                        ],
                     ],
+                    'fld' => 'name',
+                    'flt' => [
+                        'f' => 'id',
+                        'd' => 2,
+                    ],
+                ],
             ],
         ]);
 
@@ -734,38 +630,32 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/band/2', [
             'case_key' => 'snake',
             'jory' => [
-                'fld' =>
-                    [
-                        'year_start',
-                        'id',
-                        'year_end',
-                    ],
-                'rlt' =>
-                    [
-                        'albums' =>
-                            [
-                                'fld' =>
-                                    [
-                                        'release_ate',
-                                        'band_id',
-                                    ],
-                                'srt' => '-release_dates',
-                                'flt' =>
-                                    [
-                                        'or' =>
-                                            [
-                                                    [
-                                                        'f' => 'release_ate',
-                                                        'd' => '1969-01-12',
-                                                    ],
-                                                    [
-                                                        'f' => 'releaseDaate',
-                                                        'd' => '1970-10-05',
-                                                    ],
-                                            ],
-                                    ],
+                'fld' => [
+                    'year_start',
+                    'id',
+                    'year_end',
+                ],
+                'rlt' => [
+                    'albums' => [
+                        'fld' => [
+                            'release_ate',
+                            'band_id',
+                        ],
+                        'srt' => '-release_dates',
+                        'flt' => [
+                            'or' => [
+                                [
+                                    'f' => 'release_ate',
+                                    'd' => '1969-01-12',
+                                ],
+                                [
+                                    'f' => 'releaseDaate',
+                                    'd' => '1970-10-05',
+                                ],
                             ],
+                        ],
                     ],
+                ],
             ],
         ]);
 
@@ -789,25 +679,22 @@ class SnakeCaseTest extends TestCase
         $response = $this->json('GET', 'jory/band/3', [
             'jory' => [
                 'fld' => 'name',
-                'rlt' =>
-                    [
-                        'albums as album_no_eight' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 8,
-                                    ],
-                            ],
-                        'albums as album_no_nine' =>
-                            [
-                                'flt' =>
-                                    [
-                                        'f' => 'id',
-                                        'd' => 9,
-                                    ],
-                            ],
+                'rlt' => [
+                    'albums as album_no_eight' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 8,
+                        ],
                     ],
+                    'albums as album_no_nine' => [
+                        'fld' => 'name',
+                        'flt' => [
+                            'f' => 'id',
+                            'd' => 9,
+                        ],
+                    ],
+                ],
             ],
             'case_key' => 'snake',
         ]);
@@ -817,18 +704,12 @@ class SnakeCaseTest extends TestCase
                 'name' => 'Beatles',
                 'album_no_eight' => [
                     [
-                        'id' => 8,
-                        'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26 00:00:00',
                     ],
                 ],
                 'album_no_nine' => [
                     [
-                        'id' => 9,
-                        'band_id' => 3,
                         'name' => 'Let it be',
-                        'release_date' => '1970-05-08 00:00:00',
                     ],
                 ],
             ],

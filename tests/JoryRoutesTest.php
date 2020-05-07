@@ -9,6 +9,7 @@ class JoryRoutesTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'flt' => [
                     'f' => 'name',
                     'o' => 'like',
@@ -20,10 +21,7 @@ class JoryRoutesTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                 ],
             ],
         ]);
@@ -88,8 +86,10 @@ class JoryRoutesTest extends TestCase
                 ],
                 'rlt' => [
                     'albums' => [
+                        'fld' => 'name',
                         'rlt' => [
                             'songs' => [
+                                'fld' => 'title',
                                 'flt' => [
                                     'f' => 'title',
                                     'o' => 'like',
@@ -109,28 +109,17 @@ class JoryRoutesTest extends TestCase
                 'name' => 'Beatles',
                 'albums' => [
                     [
-                        'id' => 9,
-                        'band_id' => 3,
                         'name' => 'Let it be',
-                        'release_date' => '1970-05-08 00:00:00',
                         'songs' => [],
                     ],
                     [
-                        'id' => 8,
-                        'band_id' => 3,
                         'name' => 'Abbey road',
-                        'release_date' => '1969-09-26 00:00:00',
                         'songs' => [],
                     ],
                     [
-                        'id' => 7,
-                        'band_id' => 3,
                         'name' => 'Sgt. Peppers lonely hearts club band',
-                        'release_date' => '1967-06-01 00:00:00',
                         'songs' => [
                             [
-                                'id' => 75,
-                                'album_id' => 7,
                                 'title' => 'Lovely Rita',
                             ],
                         ],
@@ -323,14 +312,17 @@ class JoryRoutesTest extends TestCase
         $response = $this->json('GET', 'jory', [
             'jory' => [
                 'band as btls' => [
+                    'fld' => 'name',
                     'flt' => [
                         'f' => 'id',
                         'd' => '3',
                     ],
                 ],
                 'band:2 as ledz' => [
+                    'fld' => 'name',
                     'rlt' => [
                         'albums' => [
+                            'fld' => 'name',
                             'flt' => [
                                 'f' => 'name',
                                 'o' => 'like',
@@ -381,29 +373,17 @@ class JoryRoutesTest extends TestCase
             'data' => [
                 'btls' => [
                     [
-                        'id' => 3,
                         'name' => 'Beatles',
-                        'year_start' => 1960,
-                        'year_end' => 1970,
                     ],
                 ],
                 'ledz' => [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'albums' => [
                         [
-                            'id' => 5,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin II',
-                            'release_date' => '1969-10-22 00:00:00',
                         ],
                         [
-                            'id' => 6,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin III',
-                            'release_date' => '1970-10-05 00:00:00',
                         ],
                     ],
                 ],

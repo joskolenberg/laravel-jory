@@ -22,11 +22,11 @@ class AlbumJoryResource extends JoryResource
         $this->field('name')->filterable()->sortable();
         $this->field('band_id')->filterable()->sortable();
         $this->field('release_date')->filterable()->sortable();
-        $this->field('custom_field')->hideByDefault();
+        $this->field('custom_field');
 
-        $this->field('cover_image')->load('cover')->hideByDefault();
-        $this->field('titles_string')->load('songs')->hideByDefault();
-        $this->field('tag_names_string')->load('tags')->hideByDefault();
+        $this->field('cover_image')->load('cover');
+        $this->field('titles_string')->load('songs');
+        $this->field('tag_names_string')->load('tags');
 
         $this->filter('number_of_songs', new NumberOfSongsFilter);
         $this->filter('has_song_with_title', new HasSongWithTitleFilter);

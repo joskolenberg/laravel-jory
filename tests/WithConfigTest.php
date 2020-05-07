@@ -74,37 +74,6 @@ class WithConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_can_load_the_default_fields_when_no_fields_are_specified_in_the_request()
-    {
-        $response = $this->json('GET', 'song', [
-            'jory' => [
-                'srt' => '-id',
-                'lmt' => 3,
-            ],
-        ]);
-
-        $expected = [
-            'data' => [
-                [
-                    'id' => 147,
-                    'title' => 'Voodoo Child (Slight Return)',
-                ],
-                [
-                    'id' => 146,
-                    'title' => 'All Along the Watchtower',
-                ],
-                [
-                    'id' => 145,
-                    'title' => 'House Burning Down',
-                ],
-            ],
-        ];
-        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
-
-        $this->assertQueryCount(1);
-    }
-
-    /** @test */
     public function it_can_validate_if_a_requested_filter_is_available()
     {
         $response = $this->json('GET', 'song', [

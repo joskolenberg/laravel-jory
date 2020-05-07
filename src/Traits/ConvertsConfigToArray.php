@@ -42,7 +42,6 @@ trait ConvertsConfigToArray
         foreach ($fields as $field) {
             $result[] = [
                 'field' => $field->getOriginalField(),
-                'default' => $field->isShownByDefault(),
             ];
         }
 

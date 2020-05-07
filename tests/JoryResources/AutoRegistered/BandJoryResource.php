@@ -24,10 +24,10 @@ class BandJoryResource extends JoryResource
 
         $this->field('year_end')->filterable()->sortable();
 
-        $this->field('all_albums_string')->load('albums')->hideByDefault();
-        $this->field('titles_string')->load('songs')->hideByDefault();
-        $this->field('first_title_string')->load('firstSong')->hideByDefault();
-        $this->field('image_urls_string')->load('images')->hideByDefault();
+        $this->field('all_albums_string')->load('albums');
+        $this->field('titles_string')->load('songs');
+        $this->field('first_title_string')->load('firstSong');
+        $this->field('image_urls_string')->load('images');
 
         $this->filter('has_album_with_name', new HasAlbumWithNameFilter);
         $this->filter('number_of_albums_in_year', new NumberOfAlbumsInYearFilter)->operators([

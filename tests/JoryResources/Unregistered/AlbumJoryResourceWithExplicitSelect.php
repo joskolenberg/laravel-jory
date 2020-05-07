@@ -23,11 +23,11 @@ class AlbumJoryResourceWithExplicitSelect extends JoryResource
         $this->field('name')->filterable()->sortable();
         $this->field('band_id')->filterable()->sortable();
         $this->field('release_date')->filterable()->sortable();
-        $this->field('custom_field')->noSelect()->hideByDefault();
+        $this->field('custom_field')->noSelect();
 
-        $this->field('cover_image')->noSelect()->load('cover')->hideByDefault();
-        $this->field('titles_string')->noSelect()->load('songs')->hideByDefault();
-        $this->field('tag_names_string')->noSelect()->load('tags')->hideByDefault();
+        $this->field('cover_image')->noSelect()->load('cover');
+        $this->field('titles_string')->noSelect()->load('songs');
+        $this->field('tag_names_string')->noSelect()->load('tags');
 
         $this->filter('number_of_songs', new NumberOfSongsFilter);
         $this->filter('has_song_with_title', new HasSongWithTitleFilter);

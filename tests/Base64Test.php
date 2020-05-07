@@ -6,7 +6,7 @@ class Base64Test extends TestCase
 {
 
     /** @test */
-    public function it_can_process_a_base64_encoded_json_string()
+    public function it_can_process_a_base64_encoded_json_string_1()
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => base64_encode(json_encode([
@@ -21,6 +21,12 @@ class Base64Test extends TestCase
                 ],
                 'rlt' => [
                     'albums' => [
+                        'fld' => [
+                            'id',
+                            'band_id',
+                            'name',
+                            'release_date',
+                        ],
                         'flt' => [
                             'f' => 'name',
                             'o' => 'like',
@@ -56,6 +62,7 @@ class Base64Test extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => base64_encode(json_encode([
+                'fld' => 'name',
                 'filter' =>
                     [
                         'f' => 'name',
@@ -79,7 +86,9 @@ class Base64Test extends TestCase
                                     ],
                                 'rlt' =>
                                     [
-                                        'album' => [],
+                                        'album' => [
+                                            'fld' => 'name',
+                                        ],
                                     ],
                             ],
                     ],
@@ -89,37 +98,25 @@ class Base64Test extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 1,
                     'name' => 'Rolling Stones',
-                    'year_start' => 1962,
-                    'year_end' => null,
                     'songs' => [
                         [
                             'id' => 2,
                             'title' => 'Love In Vain (Robert Johnson)',
                             'album' => [
-                                'id' => 1,
-                                'band_id' => 1,
                                 'name' => 'Let it bleed',
-                                'release_date' => '1969-12-05 00:00:00',
                             ],
                         ],
                     ],
                 ],
                 [
-                    'id' => 2,
                     'name' => 'Led Zeppelin',
-                    'year_start' => 1968,
-                    'year_end' => 1980,
                     'songs' => [
                         [
                             'id' => 47,
                             'title' => 'Whole Lotta Love',
                             'album' => [
-                                'id' => 5,
-                                'band_id' => 2,
                                 'name' => 'Led Zeppelin II',
-                                'release_date' => '1969-10-22 00:00:00',
                             ],
                         ],
                     ],
@@ -147,6 +144,7 @@ class Base64Test extends TestCase
                     ],
                     'rlt' => [
                         'albums' => [
+                            'fld' => 'name',
                             'flt' => [
                                 'f' => 'name',
                                 'o' => 'like',
@@ -156,9 +154,7 @@ class Base64Test extends TestCase
                     ]
                 ],
                 'song as songs' => [
-                    'fld' => [
-                        'title',
-                    ],
+                    'fld' => 'title',
                     'flt' => [
                         'f' => 'title',
                         'o' => 'like',
@@ -175,10 +171,7 @@ class Base64Test extends TestCase
                     'name' => 'Led Zeppelin',
                     'albums' => [
                         [
-                            'id' => 6,
-                            'band_id' => 2,
                             'name' => 'Led Zeppelin III',
-                            'release_date' => '1970-10-05 00:00:00',
                         ],
                     ],
                 ],

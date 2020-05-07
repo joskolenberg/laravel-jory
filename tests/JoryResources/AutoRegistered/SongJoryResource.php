@@ -18,7 +18,7 @@ class SongJoryResource extends JoryResource
         $this->field('album_id')->filterable()->sortable();
 
         // Custom attributes
-        $this->field('album_name')->load('album')->hideByDefault();
+        $this->field('album_name')->load('album');
 
         // Custom filters
         $this->filter('album_name', new AlbumNameFilter);

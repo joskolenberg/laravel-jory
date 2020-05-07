@@ -9,6 +9,7 @@ class OffsetLimitTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
+                'fld' => 'title',
                 'offset' => 140,
                 'limit' => 20,
             ],
@@ -17,38 +18,24 @@ class OffsetLimitTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 141,
-                    'album_id' => 12,
                     'title' => 'Rainy Day, Dream Away',
                 ],
                 [
-                    'id' => 142,
-                    'album_id' => 12,
                     'title' => '1983... (A Merman I Should Turn to Be)',
                 ],
                 [
-                    'id' => 143,
-                    'album_id' => 12,
                     'title' => 'Moon, Turn the Tides...Gently Gently Away',
                 ],
                 [
-                    'id' => 144,
-                    'album_id' => 12,
                     'title' => 'Still Raining, Still Dreaming',
                 ],
                 [
-                    'id' => 145,
-                    'album_id' => 12,
                     'title' => 'House Burning Down',
                 ],
                 [
-                    'id' => 146,
-                    'album_id' => 12,
                     'title' => 'All Along the Watchtower',
                 ],
                 [
-                    'id' => 147,
-                    'album_id' => 12,
                     'title' => 'Voodoo Child (Slight Return)',
                 ],
             ],
@@ -62,6 +49,7 @@ class OffsetLimitTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
+                'fld' => 'title',
                 'lmt' => 3,
             ],
         ]);
@@ -69,18 +57,12 @@ class OffsetLimitTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 1,
-                    'album_id' => 1,
                     'title' => 'Gimme Shelter',
                 ],
                 [
-                    'id' => 2,
-                    'album_id' => 1,
                     'title' => 'Love In Vain (Robert Johnson)',
                 ],
                 [
-                    'id' => 3,
-                    'album_id' => 1,
                     'title' => 'Country Honk',
                 ],
             ],
@@ -94,6 +76,7 @@ class OffsetLimitTest extends TestCase
     {
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
+                'fld' => 'title',
                 'flt' =>
                     [
                         'f' => 'title',
@@ -109,18 +92,12 @@ class OffsetLimitTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 130,
-                    'album_id' => 11,
                     'title' => 'Little Miss Lover',
                 ],
                 [
-                    'id' => 2,
-                    'album_id' => 1,
                     'title' => 'Love In Vain (Robert Johnson)',
                 ],
                 [
-                    'id' => 112,
-                    'album_id' => 10,
                     'title' => 'Love or Confusion',
                 ],
             ],
@@ -134,6 +111,7 @@ class OffsetLimitTest extends TestCase
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
+                'fld' => 'name',
                 'flt' =>
                     [
                         'f' => 'name',
@@ -165,10 +143,7 @@ class OffsetLimitTest extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'id' => 3,
                     'name' => 'Beatles',
-                    'year_start' => 1960,
-                    'year_end' => 1970,
                     'songs' => [
                         [
                             'id' => 103,

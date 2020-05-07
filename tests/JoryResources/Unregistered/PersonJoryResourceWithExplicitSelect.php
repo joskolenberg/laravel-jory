@@ -27,8 +27,8 @@ class PersonJoryResourceWithExplicitSelect extends JoryResource
             });
 
         // Custom attributes
-        $this->field('instruments_string')->noSelect()->load('instruments')->hideByDefault();
-        $this->field('first_image_url')->noSelect()->load('firstImage')->hideByDefault();
+        $this->field('instruments_string')->noSelect()->load('instruments');
+        $this->field('first_image_url')->noSelect()->load('firstImage');
 
         $this->filter('band.albums.songs.title');
         $this->filter('instruments.name');

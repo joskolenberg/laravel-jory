@@ -78,8 +78,9 @@ class Validator
             return;
         }
 
-        // There are fields in the Jory object and Config, validate them.
-        $availableFields = [];
+        // There are fields in the Jory object, validate them.
+        // The asterisk value is always allowed to select all configured fields.
+        $availableFields = ['*'];
         foreach ($this->config->getFields() as $field) {
             $availableFields[] = $field->getField();
         }

@@ -20,6 +20,6 @@ class InstrumentJoryResourceWithExplicitSelect extends JoryResource
         $this->field('name')->filterable(function (Filter $filter){
             $filter->scope(new NumberOfAlbumsInYearFilter);
         })->sortable();
-        $this->field('type_name')->filterable()->sortable()->hideByDefault();
+        $this->field('type_name')->filterable()->sortable();
     }
 }
