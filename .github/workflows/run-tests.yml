@@ -24,6 +24,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install Composer Dependencies
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+        run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
       - name: Execute tests
         run: phpunit
