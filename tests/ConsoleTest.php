@@ -18,26 +18,21 @@ class ConsoleTest extends TestCase
     /** @test */
     public function it_can_run_a_generate_command_for_a_model()
     {
-        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
-
         $this->artisan('jory:generate', ['--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
             ->expectsOutput('BandJoryResource created successfully.');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('BandJoryResource.php');
-        $expectedContentsScrutinizer = $filesystem->read('Scrutinizer/BandJoryResource.php');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('BandJoryResource.php');
 
-        $this->assertTrue($realContents === $expectedContentsLocal || $realContents === $expectedContentsScrutinizer);
+        $this->assertTrue($realContents === $expectedContentsLocal);
     }
 
     /** @test */
     public function it_can_run_a_generate_for_command_for_a_model_with_name_option()
     {
-        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
-
         $this->artisan('jory:generate', [
             '--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band',
             '--name' => 'AlternateBandJoryResource'
@@ -45,12 +40,11 @@ class ConsoleTest extends TestCase
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
-        $expectedContentsScrutinizer = $filesystem->read('Scrutinizer/AlternateBandJoryResource.php');
 
         $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('AlternateBandJoryResource.php');
 
-        $this->assertTrue($realContents === $expectedContentsLocal || $realContents === $expectedContentsScrutinizer);
+        $this->assertTrue($realContents === $expectedContentsLocal);
     }
 
     /** @test */
@@ -81,11 +75,10 @@ class ConsoleTest extends TestCase
 
         $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
 
-        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
-        $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php') || $filesystem->read('Scrutinizer/AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php'));
-        $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php') || $filesystem->read('Scrutinizer/BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php'));
-        $this->assertTrue($filesystem->read('PersonJoryResource.php') === $generatedFilesystem->read('PersonJoryResource.php') || $filesystem->read('Scrutinizer/PersonJoryResource.php') === $generatedFilesystem->read('PersonJoryResource.php'));
-        $this->assertTrue($filesystem->read('ImageJoryResource.php') === $generatedFilesystem->read('ImageJoryResource.php') || $filesystem->read('Scrutinizer/ImageJoryResource.php') === $generatedFilesystem->read('ImageJoryResource.php'));
+        $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php'));
+        $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php'));
+        $this->assertTrue($filesystem->read('PersonJoryResource.php') === $generatedFilesystem->read('PersonJoryResource.php'));
+        $this->assertTrue($filesystem->read('ImageJoryResource.php') === $generatedFilesystem->read('ImageJoryResource.php'));
 
         $this->assertTrue($generatedFilesystem->has('AlbumCoverJoryResource.php'));
         $this->assertTrue($generatedFilesystem->has('AlbumJoryResource.php'));
@@ -153,8 +146,7 @@ class ConsoleTest extends TestCase
 
         $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
 
-        // Output on scrutinizer can be different than local but is both fine since it only changes the order of the lines.
-        $this->assertTrue($filesystem->read('UserJoryResource.php') === $generatedFilesystem->read('UserJoryResource.php') || $filesystem->read('Scrutinizer/UserJoryResource.php') === $generatedFilesystem->read('UserJoryResource.php'));
+        $this->assertTrue($filesystem->read('UserJoryResource.php') === $generatedFilesystem->read('UserJoryResource.php'));
     }
 
     protected function cleanup()
