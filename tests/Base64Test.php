@@ -87,7 +87,7 @@ class Base64Test extends TestCase
     public function it_can_process_a_base64_encoded_json_string_for_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
-            'jory' => base64_encode('{"band:first as lz":{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]},"song as songs":{"filter":{"f":"title","o":"like","d":"%let%"},"fld":["title"]}}'),
+            'jory' => base64_encode('{"band:first as lz":{"filter":{"f":"name","o":"like","d":"%zep%"},"rlt":{"albums":{"flt":{"f":"name","o":"like","d":"%III%"}}},"fld":["id","name"]},"song as songs":{"filter":{"f":"title","o":"like","d":"%let%"},"fld":["title"],"srt":"title"}}'),
         ]);
 
         $response->assertStatus(200)->assertExactJson([

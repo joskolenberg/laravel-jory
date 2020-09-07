@@ -608,6 +608,7 @@ class FilterTest extends TestCase
                 'fld' => [
                     'full_name',
                 ],
+                'srt' => '-first_name'
             ],
         ]);
 

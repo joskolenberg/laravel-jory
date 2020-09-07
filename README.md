@@ -42,4 +42,4 @@ For more information take a look at the [docs](https://laravel-jory.kolenberg.ne
 
 Happy coding!
 
-Jos Kolenberg <jos@kolenberg.net>
+Jos Kolenberg <jos@kolenbergsoftwareontwikkeling.nl>

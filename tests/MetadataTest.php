@@ -201,20 +201,20 @@ class MetadataTest extends TestCase
     public function it_can_give_the_total_records_for_a_single_resource()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"fld":["title"],"filter":{"f":"title","o":"like","d":"%love%"},"lmt":3}',
+            'jory' => '{"fld":["title"],"filter":{"f":"title","o":"like","d":"%love%"},"lmt":3,"srt":"title"}',
             'meta' => ['total'],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'title' => 'Love In Vain (Robert Johnson)',
+                    'title' => 'And the Gods Made Love',
                 ],
                 [
-                    'title' => 'Lovely Rita',
+                    'title' => 'Bold as Love',
                 ],
                 [
-                    'title' => 'Whole Lotta Love',
+                    'title' => 'Little Miss Lover',
                 ],
             ],
             'meta' => [
@@ -307,10 +307,10 @@ class MetadataTest extends TestCase
                         'title' => 'Love In Vain (Robert Johnson)',
                     ],
                     [
-                        'title' => 'Lovely Rita',
+                        'title' => 'Whole Lotta Love',
                     ],
                     [
-                        'title' => 'Whole Lotta Love',
+                        'title' => 'Lovely Rita',
                     ],
                 ],
                 'lovesong_count' => 8,
