@@ -9,11 +9,11 @@
       "email": "jos@kolenbergsoftwareontwikkeling.nl"
     }
   ],
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
-    "laravel/framework": "^7.0|8.x-dev",
+    "laravel/framework": "^7.0|^8.0",
     "joskolenberg/jory": "^2.0",
-    "joskolenberg/eloquent-reflector": "^2.1|laravel-8-dev",
+    "joskolenberg/eloquent-reflector": "^2.1",
     "rap2hpoutre/similar-text-finder": "^1.1"
   },
   "autoload": {
@@ -27,7 +27,7 @@
     }
   },
   "require-dev": {
-    "orchestra/testbench": "6.x-dev"
+    "orchestra/testbench": "^5.0|^6.0"
   },
   "extra": {
     "laravel": {
