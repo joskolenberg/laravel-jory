@@ -6,12 +6,12 @@
   "authors": [
     {
       "name": "Jos Kolenberg",
-      "email": "jos@kolenberg.net"
+      "email": "jos@kolenbergsoftwareontwikkeling.nl"
     }
   ],
   "minimum-stability": "stable",
   "require": {
-    "laravel/framework": "^7.0",
+    "laravel/framework": "^7.0|^8.0",
     "joskolenberg/jory": "v3.x-dev",
     "joskolenberg/eloquent-reflector": "^2.1",
     "rap2hpoutre/similar-text-finder": "^1.1"
@@ -27,7 +27,7 @@
     }
   },
   "require-dev": {
-    "orchestra/testbench": "^5.0"
+    "orchestra/testbench": "^5.0|^6.0"
   },
   "extra": {
     "laravel": {

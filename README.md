@@ -4,6 +4,8 @@
 [![License](https://poser.pugx.org/joskolenberg/laravel-jory/license)](https://packagist.org/packages/joskolenberg/laravel-jory)
 
 # Laravel-Jory: Flexible Eloquent API Resources
+[Complete documentation](https://laravel-jory.kolenberg.net/docs)
+
 
 ## Concept Overview
 Laravel Jory creates a dynamic API for your Laravel application to serve the data from your Eloquent models.
@@ -42,4 +44,4 @@ For more information take a look at the [docs](https://laravel-jory.kolenberg.ne
 
 Happy coding!
 
-Jos Kolenberg <jos@kolenberg.net>
+Jos Kolenberg <jos@kolenbergsoftwareontwikkeling.nl>

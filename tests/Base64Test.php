@@ -160,6 +160,7 @@ class Base64Test extends TestCase
                         'o' => 'like',
                         'd' => '%let%',
                     ],
+                    'srt' => 'title',
                 ]
             ])),
         ]);
