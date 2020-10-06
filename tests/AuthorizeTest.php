@@ -136,4 +136,33 @@ class AuthorizeTest extends TestCase
 
         $this->assertQueryCount(3);
     }
+
+    /** @test */
+    public function the_authorize_method_is_scoped()
+    {
+        $this->actingAs(User::where('name', 'keith')->first());
+
+        $response = $this->json('GET', 'jory/band', [
+            'jory' => [
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%t%'
+                ],
+                'fld' => 'name',
+                'srt' => 'name',
+            ],
+        ]);
+
+        $expected = [
+            'data' => [
+                [
+                    'name' => 'Rolling Stones',
+                ],
+            ],
+        ];
+        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+
+        $this->assertQueryCount(2);
+    }
 }

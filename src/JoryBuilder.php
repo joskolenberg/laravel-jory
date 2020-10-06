@@ -193,6 +193,8 @@ class JoryBuilder
      */
     protected function authorizeQuery($builder): void
     {
-        $this->joryResource->authorize($builder, Auth::user());
+        $builder->where(function($builder) {
+            $this->joryResource->authorize($builder, Auth::user());
+        });
     }
 }

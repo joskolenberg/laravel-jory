@@ -54,5 +54,10 @@ class BandJoryResource extends JoryResource
         if($user && $user->id == 1){
             $builder->where('id', '>=', 3);
         }
+
+        if($user && $user->id == 2){
+            $builder->where('id', '<', 2)
+                ->orWhere('id', '>', 3);
+        }
     }
 }
