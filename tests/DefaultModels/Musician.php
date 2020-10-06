@@ -12,8 +12,6 @@ class Musician extends Model
 {
     use HasFactory;
 
-    protected $table = 'musicians';
-
     public $timestamps = false;
 
     protected static function newFactory()

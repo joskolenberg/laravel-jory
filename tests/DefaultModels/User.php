@@ -12,8 +12,6 @@ class User extends Authenticatable
 {
     use Notifiable, HasFactory;
 
-    protected $guarded = ['id'];
-
     public $timestamps = false;
 
     protected static function newFactory()

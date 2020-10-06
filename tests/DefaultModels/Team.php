@@ -10,8 +10,6 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $table = 'teams';
-
     public $timestamps = false;
 
     protected static function newFactory()
