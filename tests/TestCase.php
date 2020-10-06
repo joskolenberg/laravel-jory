@@ -7,6 +7,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use JosKolenberg\LaravelJory\JoryServiceProvider;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\Band;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\Musician;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -35,29 +39,23 @@ class TestCase extends Orchestra
             $table->bigIncrements('id');
             $table->string('name');
         });
-//
-//        $app['db']->connection()->getSchemaBuilder()->create('people', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('first_name');
-//            $table->string('last_name');
-//            $table->date('date_of_birth');
-//        });
-//
-//        $app['db']->connection()->getSchemaBuilder()->create('bands', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('name');
-//            $table->integer('year_start');
-//            $table->integer('year_end')->nullable();
-//        });
-//
-//        $app['db']->connection()->getSchemaBuilder()->create('band_members', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->unsignedInteger('person_id');
-//            $table->foreign('person_id')->references('id')->on('people')->onDelete('restrict');
-//            $table->unsignedInteger('band_id');
-//            $table->foreign('band_id')->references('id')->on('bands')->onDelete('restrict');
-//        });
-//
+
+        $app['db']->connection()->getSchemaBuilder()->create('musicians', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('bands', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('band_members', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('musician_id');
+            $table->unsignedInteger('band_id');
+        });
+
 //        $app['db']->connection()->getSchemaBuilder()->create('instruments', function (Blueprint $table) {
 //            $table->increments('id');
 //            $table->string('name');
@@ -136,5 +134,101 @@ class TestCase extends Orchestra
     public function assertQueryCount($expected)
     {
         $this->assertEquals($expected, count(\DB::getQueryLog()));
+    }
+
+    protected function seedSesameStreet()
+    {
+        $team = Team::factory()->create(['name' => 'Sesame Street']);
+        foreach ([
+                     'Bert',
+                     'Big Bird',
+                     'Cookie Monster',
+                     'Ernie',
+                     'Oscar',
+                     'The Count',
+                 ] as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $team->id,
+            ]);
+        }
+    }
+
+    protected function seedSimpsons()
+    {
+        $team = Team::factory()->create(['name' => 'Simpsons']);
+        foreach ([
+                     'Bart',
+                     'Homer',
+                     'Lisa',
+                     'Maggie',
+                     'Marge',
+                 ] as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $team->id,
+            ]);
+        }
+    }
+
+    protected function seedSpongeBob()
+    {
+        $team = Team::factory()->create(['name' => 'SpongeBob']);
+        foreach ([
+                     'Eugene',
+                     'Octo',
+                     'Patrick',
+                     'SpongeBob',
+                 ] as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $team->id,
+            ]);
+        }
+    }
+
+    protected function seedBeatles()
+    {
+        $band = Band::factory()->create(['name' => 'Beatles']);
+        foreach ([
+                     'John',
+                     'Paul',
+                     'George',
+                     'Ringo',
+                 ] as $name) {
+            Musician::factory()->create([
+                'name' => $name,
+            ])->bands()->attach($band);
+        }
+    }
+
+    protected function seedStones()
+    {
+        $band = Band::factory()->create(['name' => 'Stones']);
+        foreach ([
+                     'Mick',
+                     'Keith',
+                     'Ronnie',
+                     'Charlie',
+                     'Bill',
+                 ] as $name) {
+            Musician::factory()->create([
+                'name' => $name,
+            ])->bands()->attach($band);
+        }
+    }
+
+    protected function seedHendrix()
+    {
+        $band = Band::factory()->create(['name' => 'Hendrix']);
+        foreach ([
+                     'Jimi',
+                     'Mitch',
+                     'Noel',
+                 ] as $name) {
+            Musician::factory()->create([
+                'name' => $name,
+            ])->bands()->attach($band);
+        }
     }
 }

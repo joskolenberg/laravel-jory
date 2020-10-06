@@ -11,28 +11,13 @@ use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class Base64Test extends TestCase
 {
-    protected $beatles = [
-        'John',
-        'Paul',
-        'George',
-        'Ringo',
-    ];
-
     /** @test */
     public function it_can_process_a_base64_encoded_json_string()
     {
         Jory::register(UserJoryResource::class);
         Jory::register(TeamJoryResource::class);
-
-        $team = Team::factory()->create(['name' => 'Beatles']);
-        Team::factory()->create(['name' => 'Rolling Stones']);
-
-        foreach ($this->beatles as $name) {
-            User::factory()->create([
-                'name' => $name,
-                'team_id' => $team->id,
-            ]);
-        }
+        $this->seedSesameStreet();
+        $this->seedSimpsons();
 
         $response = $this->json('GET', 'jory/team', [
             'jory' => base64_encode(json_encode([
@@ -41,7 +26,7 @@ class Base64Test extends TestCase
                     [
                         'f' => 'name',
                         'o' => 'like',
-                        'd' => '%eat%',
+                        'd' => '%imp%',
                     ],
                 'rlt' =>
                     [
@@ -55,7 +40,7 @@ class Base64Test extends TestCase
                                     [
                                         'f' => 'name',
                                         'o' => 'like',
-                                        'd' => '%e%',
+                                        'd' => '%h%',
                                     ],
                             ],
                     ],
@@ -65,10 +50,10 @@ class Base64Test extends TestCase
         $response->assertStatus(200)->assertExactJson([
             'data' => [
                 [
-                    'name' => 'Beatles',
+                    'name' => 'Simpsons',
                     'users' => [
                         [
-                            'name' => 'George',
+                            'name' => 'Homer',
                         ],
                     ],
                 ],
@@ -81,31 +66,23 @@ class Base64Test extends TestCase
     {
         Jory::register(UserJoryResource::class);
         Jory::register(TeamJoryResource::class);
-
-        $team = Team::factory()->create(['name' => 'Beatles']);
-        Team::factory()->create(['name' => 'Rolling Stones']);
-
-        foreach ($this->beatles as $name) {
-            User::factory()->create([
-                'name' => $name,
-                'team_id' => $team->id,
-            ]);
-        }
+        $this->seedSesameStreet();
+        $this->seedSimpsons();
 
         $response = $this->json('GET', 'jory', [
             'jory' => base64_encode(json_encode([
-                'user:first as john' => [
+                'user:first as bert' => [
                     'fld' => [
                         'name',
                         'team.name',
                     ],
                 ],
-                'team:first as beatles' => [
+                'team:first as simpsons' => [
                     'fld' => 'name',
                     'flt' => [
                         'f' => 'name',
                         'o' => 'like',
-                        'd' => '%eat%',
+                        'd' => '%simp%',
                     ],
                     'rlt' => [
                         'users:count as users_count' => [],
@@ -116,15 +93,15 @@ class Base64Test extends TestCase
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
-                'john' => [
-                    'name' => 'John',
+                'bert' => [
+                    'name' => 'Bert',
                     'team' => [
-                        'name' => 'Beatles',
+                        'name' => 'Sesame Street',
                     ],
                 ],
-                'beatles' => [
-                    'name' => 'Beatles',
-                    'users_count' => 4,
+                'simpsons' => [
+                    'name' => 'Simpsons',
+                    'users_count' => 5,
                 ],
             ],
         ]);

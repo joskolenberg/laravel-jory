@@ -20,9 +20,9 @@ class UserJoryResource extends JoryResource
 
     public function authorize($builder, $user = null): void
     {
-        if($user && $user->name === 'John'){
-            $builder->where('name', '<', 'John')
-                ->orWhere('name', '>', 'Paul');
+        if($user && $user->name === 'Bert'){
+            $builder->where('name', '<', 'Big Bird')
+                ->orWhere('name', '>', 'Oscar');
         }
     }
 }

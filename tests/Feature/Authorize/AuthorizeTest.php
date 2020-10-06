@@ -21,12 +21,8 @@ class AuthorizeTest extends TestCase
     public function it_can_modify_the_query_by_authorize_method()
     {
         Jory::register(UserJoryResource::class);
-
-        foreach ($this->beatles as $name) {
-            User::factory()->create(['name' => $name]);
-        }
-
-        $this->actingAs(User::where('name', 'John')->first());
+        $this->seedSesameStreet();
+        $this->actingAs(User::where('name', 'Bert')->first());
 
         $response = $this->json('GET', 'jory/user', [
             'jory' => [
@@ -37,10 +33,10 @@ class AuthorizeTest extends TestCase
         $expected = [
             'data' => [
                 [
-                    'name' => 'George',
+                    'name' => 'Bert',
                 ],
                 [
-                    'name' => 'Ringo',
+                    'name' => 'The Count',
                 ],
             ],
         ];
@@ -52,19 +48,10 @@ class AuthorizeTest extends TestCase
     {
         Jory::register(UserJoryResource::class);
         Jory::register(TeamJoryResource::class);
+        $this->seedSesameStreet();
+        $this->actingAs(User::where('name', 'Bert')->first());
 
-        $team = Team::factory()->create(['name' => 'beatles']);
-
-        foreach ($this->beatles as $name) {
-            User::factory()->create([
-                'name' => $name,
-                'team_id' => $team->id,
-            ]);
-        }
-
-        $this->actingAs(User::where('name', 'John')->first());
-
-        $response = $this->json('GET', 'jory/team/' . $team->id, [
+        $response = $this->json('GET', 'jory/team/' . Team::first()->id, [
             'jory' => [
                 'fld' => 'users.name',
             ],
@@ -74,10 +61,10 @@ class AuthorizeTest extends TestCase
             'data' => [
                 'users' => [
                     [
-                        'name' => 'George',
+                        'name' => 'Bert',
                     ],
                     [
-                        'name' => 'Ringo',
+                        'name' => 'The Count',
                     ],
                 ]
             ],
@@ -89,27 +76,27 @@ class AuthorizeTest extends TestCase
     public function the_authorize_method_is_scoped()
     {
         Jory::register(UserJoryResource::class);
-
-        foreach ($this->beatles as $name) {
-            User::factory()->create(['name' => $name]);
-        }
-
-        $this->actingAs(User::where('name', 'John')->first());
+        $this->seedSesameStreet();
+        $this->actingAs(User::where('name', 'Bert')->first());
 
         $response = $this->json('GET', 'jory/user', [
             'jory' => [
                 'fld' => 'name',
                 'flt' => [
                     'f' => 'name',
-                    'd' => 'George',
+                    'd' => 'Bert',
                 ]
             ],
         ]);
 
+        /**
+         * If the authorize method wasn't scoped there would be a bug returning
+         * more results because of the orWhere in UserJoryResource::authorize().
+         */
         $expected = [
             'data' => [
                 [
-                    'name' => 'George',
+                    'name' => 'Bert',
                 ],
             ],
         ];

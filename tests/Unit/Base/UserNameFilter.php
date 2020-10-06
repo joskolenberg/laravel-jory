@@ -23,6 +23,8 @@ class UserNameFilter implements FilterScope
     public function apply($builder, string $operator = null, $data = null): void
     {
         FilterHelper::applyWhere($builder, 'name', $operator, $data);
-        $builder->has('people');
+        $builder->whereHas('team', function($builder){
+            $builder->where('name', 'Sesame Street');
+        });
     }
 }
