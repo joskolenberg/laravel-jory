@@ -26,30 +26,6 @@ class AuthorizeTest extends TestCase
             User::factory()->create(['name' => $name]);
         }
 
-        $response = $this->json('GET', 'jory/user', [
-            'jory' => [
-                'fld' => 'name',
-            ],
-        ]);
-
-        $expected = [
-            'data' => [
-                [
-                    'name' => 'John',
-                ],
-                [
-                    'name' => 'Paul',
-                ],
-                [
-                    'name' => 'George',
-                ],
-                [
-                    'name' => 'Ringo',
-                ],
-            ],
-        ];
-        $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
-
         $this->actingAs(User::where('name', 'John')->first());
 
         $response = $this->json('GET', 'jory/user', [
@@ -85,6 +61,9 @@ class AuthorizeTest extends TestCase
                 'team_id' => $team->id,
             ]);
         }
+
+        $this->actingAs(User::where('name', 'John')->first());
+
         $response = $this->json('GET', 'jory/team/' . $team->id, [
             'jory' => [
                 'fld' => 'users.name',
@@ -94,12 +73,6 @@ class AuthorizeTest extends TestCase
         $expected = [
             'data' => [
                 'users' => [
-                    [
-                        'name' => 'John',
-                    ],
-                    [
-                        'name' => 'Paul',
-                    ],
                     [
                         'name' => 'George',
                     ],
@@ -110,24 +83,34 @@ class AuthorizeTest extends TestCase
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
+    }
+
+    /** @test */
+    public function the_authorize_method_is_scoped()
+    {
+        Jory::register(UserJoryResource::class);
+
+        foreach ($this->beatles as $name) {
+            User::factory()->create(['name' => $name]);
+        }
 
         $this->actingAs(User::where('name', 'John')->first());
-        $response = $this->json('GET', 'jory/team/' . $team->id, [
+
+        $response = $this->json('GET', 'jory/user', [
             'jory' => [
-                'fld' => 'users.name',
+                'fld' => 'name',
+                'flt' => [
+                    'f' => 'name',
+                    'd' => 'George',
+                ]
             ],
         ]);
 
         $expected = [
             'data' => [
-                'users' => [
-                    [
-                        'name' => 'George',
-                    ],
-                    [
-                        'name' => 'Ringo',
-                    ],
-                ]
+                [
+                    'name' => 'George',
+                ],
             ],
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
