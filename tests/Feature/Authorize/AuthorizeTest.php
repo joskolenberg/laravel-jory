@@ -4,8 +4,8 @@ namespace JosKolenberg\LaravelJory\Tests\Feature\Authorize;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
-use JosKolenberg\LaravelJory\Tests\NewModels\Team;
-use JosKolenberg\LaravelJory\Tests\NewModels\User;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class AuthorizeTest extends TestCase

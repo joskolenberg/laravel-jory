@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\NewModels;
+namespace JosKolenberg\LaravelJory\Tests\DefaultModels;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,5 +18,10 @@ class User extends Authenticatable
     protected static function newFactory()
     {
         return new UserFactory();
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
     }
 }

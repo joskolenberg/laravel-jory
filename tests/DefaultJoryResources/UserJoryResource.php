@@ -1,10 +1,10 @@
 <?php
 
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\Authorize;
-
+namespace JosKolenberg\LaravelJory\Tests\DefaultJoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 
 class UserJoryResource extends JoryResource
@@ -16,13 +16,11 @@ class UserJoryResource extends JoryResource
         // Fields
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();
-    }
+        $this->field('email')->filterable()->sortable();
+        $this->field('password')->filterable()->sortable();
+        $this->field('team_id')->filterable()->sortable();
 
-    public function authorize($builder, $user = null): void
-    {
-        if($user && $user->name === 'John'){
-            $builder->where('name', '<', 'John')
-                ->orWhere('name', '>', 'Paul');
-        }
+        // Relations
+        $this->relation('team');
     }
 }

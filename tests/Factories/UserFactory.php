@@ -5,7 +5,7 @@ namespace JosKolenberg\LaravelJory\Tests\Factories;
 
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use JosKolenberg\LaravelJory\Tests\NewModels\User;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 
 class UserFactory extends Factory
 {
