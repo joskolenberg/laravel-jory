@@ -87,7 +87,7 @@ class Validator
 
         foreach ($this->jory->getFields() as $joryField) {
             if (!in_array($joryField, $availableFields)) {
-                $this->errors[] = 'Field "' . $joryField . '" is not available, ' . $this->getSuggestion($availableFields, $joryField) . ' (Location: ' . $this->address . 'fields.' . $joryField . ')';
+                $this->errors[] = 'Field "' . $joryField . '" is not available, ' . $this->getSuggestion($availableFields, $joryField) . ' (Location: ' . $this->address . 'fld.' . $joryField . ')';
             }
         }
     }
@@ -102,7 +102,7 @@ class Validator
             return;
         }
 
-        $this->doValidateFilter($this->jory->getFilter(), $this->address . 'filter');
+        $this->doValidateFilter($this->jory->getFilter(), $this->address . 'flt');
     }
 
     /**
@@ -159,7 +159,7 @@ class Validator
 
         foreach ($this->jory->getSorts() as $jorySort) {
             if (!in_array($jorySort->getField(), $availableFields)) {
-                $this->errors[] = 'Field "' . $jorySort->getField() . '" is not available for sorting, ' . $this->getSuggestion($availableFields, $jorySort->getField()) . ' (Location: ' . $this->address . 'sorts.' . $jorySort->getField() . ')';
+                $this->errors[] = 'Field "' . $jorySort->getField() . '" is not available for sorting, ' . $this->getSuggestion($availableFields, $jorySort->getField()) . ' (Location: ' . $this->address . 'srt.' . $jorySort->getField() . ')';
             }
         }
     }
@@ -175,7 +175,7 @@ class Validator
         }
         if ($this->config->getLimitMax() !== null) {
             if ($this->jory->getLimit() > $this->config->getLimitMax()) {
-                $this->errors[] = 'The maximum limit for this resource is ' . $this->config->getLimitMax() . ', please lower your limit or drop the limit parameter. (Location: ' . $this->address . 'limit)';
+                $this->errors[] = 'The maximum limit for this resource is ' . $this->config->getLimitMax() . ', please lower your limit or drop the limit parameter. (Location: ' . $this->address . 'lmt)';
             }
         }
     }
@@ -194,7 +194,7 @@ class Validator
             $relationName = ResourceNameHelper::explode($joryRelation->getName())->baseName;
 
             if (!in_array($relationName, $availableRelations)) {
-                $this->errors[] = 'Relation "' . $relationName . '" is not available, ' . $this->getSuggestion($availableRelations, $relationName) . ' (Location: ' . $this->address . 'relations.' . $relationName . ')';
+                $this->errors[] = 'Relation "' . $relationName . '" is not available, ' . $this->getSuggestion($availableRelations, $relationName) . ' (Location: ' . $this->address . 'rlt.' . $relationName . ')';
             }
         }
     }

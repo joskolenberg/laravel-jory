@@ -152,6 +152,8 @@ class TestCase extends Orchestra
                 'team_id' => $team->id,
             ]);
         }
+
+        return $team;
     }
 
     protected function seedSimpsons()
@@ -169,6 +171,8 @@ class TestCase extends Orchestra
                 'team_id' => $team->id,
             ]);
         }
+
+        return $team;
     }
 
     protected function seedSpongeBob()
@@ -185,6 +189,8 @@ class TestCase extends Orchestra
                 'team_id' => $team->id,
             ]);
         }
+
+        return $team;
     }
 
     protected function seedBeatles()
@@ -200,6 +206,8 @@ class TestCase extends Orchestra
                 'name' => $name,
             ])->bands()->attach($band);
         }
+
+        return $band;
     }
 
     protected function seedStones()
@@ -216,6 +224,8 @@ class TestCase extends Orchestra
                 'name' => $name,
             ])->bands()->attach($band);
         }
+
+        return $band;
     }
 
     protected function seedHendrix()
@@ -230,5 +240,7 @@ class TestCase extends Orchestra
                 'name' => $name,
             ])->bands()->attach($band);
         }
+
+        return $band;
     }
 }
