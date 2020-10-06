@@ -10,7 +10,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%zep%',
@@ -54,7 +54,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%zep%',
@@ -95,7 +95,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%zep%',
@@ -130,7 +130,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%zep%',
@@ -170,7 +170,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
                 'fld' => 'title',
-                'filter' => [
+                'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'Wild Horses',
@@ -203,7 +203,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
                 'fld' => 'title',
-                'filter' => [
+                'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'Wild Horses',
@@ -238,7 +238,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
                 'fld' => 'title',
-                'filter' => [
+                'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'Wild Horses',
@@ -276,7 +276,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => '=',
                     'd' => 'Led Zeppelin',
@@ -423,7 +423,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/album', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => '=',
                     'd' => 'Abbey road',
@@ -495,7 +495,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
                 'fld' => 'title',
-                'filter' => [
+                'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'Wild Horses',
@@ -534,7 +534,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%in%',
@@ -598,7 +598,7 @@ class RelationTest extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'number_of_albums_in_year',
                     'o' => '=',
                     'd' => [
@@ -931,7 +931,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%zep%',
@@ -975,7 +975,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
     {
         $response = $this->json('GET', 'jory/band', [
             'jory' => [
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => '=',
                     'd' => 'foo',
@@ -1003,7 +1003,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
                 'fld' => 'title',
-                'filter' => [
+                'flt' => [
                     'f' => 'title',
                     'o' => '=',
                     'd' => 'The End',
@@ -1093,7 +1093,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $response = $this->json('GET', 'jory/album', [
             'jory' => [
                 'fld' => 'name',
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => '=',
                     'd' => 'Abbey road',

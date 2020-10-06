@@ -18,7 +18,7 @@ class ResponseTest extends TestCase
     {
         $actual = Jory::onModelClass(Song::class)
             ->apply([
-                'filter' =>
+                'flt' =>
                     [
                         'f' => 'title',
                         'o' => 'like',
@@ -43,7 +43,7 @@ class ResponseTest extends TestCase
     {
         $actual = Jory::onQuery(Song::query()->where('title', 'like', '%ol%'))
             ->apply([
-                'filter' =>
+                'flt' =>
                     [
                         'f' => 'title',
                         'o' => 'like',
@@ -94,7 +94,7 @@ class ResponseTest extends TestCase
 
         $actual = Jory::byUri('ssoonngg')
             ->apply([
-                'filter' =>
+                'flt' =>
                     [
                         'f' => 'title',
                         'o' => 'like',
@@ -119,7 +119,7 @@ class ResponseTest extends TestCase
     {
         $actual = Jory::on(Song::class)
             ->applyJson(json_encode([
-                'filter' =>
+                'flt' =>
                     [
                         'f' => 'title',
                         'o' => 'like',
@@ -144,7 +144,7 @@ class ResponseTest extends TestCase
     {
         $actual = Jory::on(Song::class)
             ->apply(json_encode([
-                'filter' =>
+                'flt' =>
                     [
                         'f' => 'title',
                         'o' => 'like',

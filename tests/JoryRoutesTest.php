@@ -291,12 +291,12 @@ class JoryRoutesTest extends TestCase
     public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_collection_2()
     {
         $response = $this->json('GET', 'jory/song', [
-            'jory' => '{"filter":{"f":"title","o":"=","d":"The End"},"rlt":{"album":{"rlt":{"songs":{"flt":{"wrong":"parameter"}}}}}}',
+            'jory' => '{"flt":{"f":"title","o":"=","d":"The End"},"rlt":{"album":{"rlt":{"songs":{"flt":{"wrong":"parameter"}}}}}}',
         ]);
 
         $expected = [
             'errors' => [
-                'Unknown key "wrong" in Jory Query. (Location: album.songs.filter)',
+                'Unknown key "wrong" in Jory Query. (Location: album.songs.flt)',
             ],
         ];
 

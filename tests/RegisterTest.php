@@ -139,7 +139,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_the_options_for_the_resource_2()
+    public function it_can_give_the_options_for_the_resource_2()
     {
         $register = app(JoryResourcesRegister::class);
         $register->add(new SongJoryResourceWithConfigTwo());
@@ -196,7 +196,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_the_options_for_the_resource_3()
+    public function it_can_give_the_options_for_the_resource_3()
     {
         $register = app(JoryResourcesRegister::class);
         $register->add(new SongJoryResourceWithConfigThree());
@@ -243,7 +243,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_the_options_for_the_resource_4()
+    public function it_can_give_the_options_for_the_resource_4()
     {
         $register = app(JoryResourcesRegister::class);
         $registration = $register->getByUri('band');
@@ -422,7 +422,7 @@ class RegisterTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_the_options_for_the_resource_5()
+    public function it_can_give_the_options_for_the_resource_5()
     {
         $register = app(JoryResourcesRegister::class);
         $registration = $register->getByUri('album');

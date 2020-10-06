@@ -10,8 +10,8 @@ class OffsetLimitTest extends TestCase
         $response = $this->json('GET', 'jory/song', [
             'jory' => [
                 'fld' => 'title',
-                'offset' => 140,
-                'limit' => 20,
+                'ofs' => 140,
+                'lmt' => 20,
             ],
         ]);
 
@@ -84,8 +84,8 @@ class OffsetLimitTest extends TestCase
                         'd' => '%love%',
                     ],
                 'srt' => 'title',
-                'offset' => 2,
-                'limit' => 3,
+                'ofs' => 2,
+                'lmt' => 3,
             ],
         ]);
 
@@ -128,8 +128,8 @@ class OffsetLimitTest extends TestCase
                                         'd' => '%a%',
                                     ],
                                 'srt' => 'title',
-                                'offset' => 10,
-                                'limit' => 5,
+                                'ofs' => 10,
+                                'lmt' => 5,
                                 'fld' =>
                                     [
                                         'id',

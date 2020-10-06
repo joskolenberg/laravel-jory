@@ -84,7 +84,7 @@ class BaseTest extends TestCase
     public function it_can_apply_a_custom_filter()
     {
         $actual = Facade::onModelClass(Album::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'number_of_songs',
                 'o' => '>',
                 'd' => 10,
@@ -109,8 +109,8 @@ class BaseTest extends TestCase
     public function it_can_apply_multiple_custom_filters()
     {
         $actual = Facade::onModelClass(Album::class)->applyArray([
-            'filter' => [
-                'group_or' => [
+            'flt' => [
+                'or' => [
                     [
                         'f' => 'number_of_songs',
                         'o' => '>=',
@@ -146,8 +146,8 @@ class BaseTest extends TestCase
     public function it_can_combine_standard_and_custom_filters()
     {
         $actual = Facade::onModelClass(Album::class)->applyArray([
-            'filter' => [
-                'group_and' => [
+            'flt' => [
+                'and' => [
                     [
                         'f' => 'number_of_songs',
                         'o' => '>=',
@@ -176,7 +176,7 @@ class BaseTest extends TestCase
     {
         $actual = Facade::onModelClass(Instrument::class)
             ->applyArray([
-                'filter' => [
+                'flt' => [
                     'f' => 'name',
                     'o' => 'like',
                     'd' => '%t%',

@@ -187,7 +187,7 @@ class CamelCaseTest extends TestCase
                 'fld' => 'name',
                 'srt' => ["numberOfSongs", "-bandId"],
                 'lmt' => 5,
-                'offset' => 7,
+                'ofs' => 7,
             ],
             'case' => 'camel',
         ]);
@@ -224,7 +224,7 @@ class CamelCaseTest extends TestCase
             'jory' => [
                 'srt' => ["number_of_songs", "-band_id"],
                 'lmt' => 5,
-                'offset' => 7,
+                'ofs' => 7,
             ],
             'case' => 'camel',
         ]);

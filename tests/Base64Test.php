@@ -63,7 +63,7 @@ class Base64Test extends TestCase
         $response = $this->json('GET', 'jory/band', [
             'jory' => base64_encode(json_encode([
                 'fld' => 'name',
-                'filter' =>
+                'flt' =>
                     [
                         'f' => 'name',
                         'o' => 'like',

@@ -16,10 +16,10 @@ class FilterTest extends TestCase
     public function it_can_apply_a_single_filter()
     {
         $actual = Jory::onModelClass(Person::class)->applyArray([
-            'filter' => [
-                'field' => 'first_name',
-                'operator' => 'like',
-                'data' => '%john%',
+            'flt' => [
+                'f' => 'first_name',
+                'o' => 'like',
+                'd' => '%john%',
             ],
             'fld' => ['last_name'],
         ])->toArray();
@@ -39,17 +39,17 @@ class FilterTest extends TestCase
     public function it_can_apply_an_OR_filter_group()
     {
         $actual = Jory::onModelClass(Person::class)->applyArray([
-            'filter' => [
-                'group_or' => [
+            'flt' => [
+                'or' => [
                     [
-                        'field' => 'first_name',
-                        'operator' => 'like',
-                        'data' => '%paul%',
+                        'f' => 'first_name',
+                        'o' => 'like',
+                        'd' => '%paul%',
                     ],
                     [
-                        'field' => 'last_name',
-                        'operator' => 'like',
-                        'data' => '%le%',
+                        'f' => 'last_name',
+                        'o' => 'like',
+                        'd' => '%le%',
                     ],
                 ],
             ],
@@ -71,17 +71,17 @@ class FilterTest extends TestCase
     public function it_can_apply_an_AND_filter_group()
     {
         $actual = Jory::onModelClass(Person::class)->applyArray([
-            'filter' => [
-                'group_and' => [
+            'flt' => [
+                'and' => [
                     [
-                        'field' => 'first_name',
-                        'operator' => 'like',
-                        'data' => '%john%',
+                        'f' => 'first_name',
+                        'o' => 'like',
+                        'd' => '%john%',
                     ],
                     [
-                        'field' => 'last_name',
-                        'operator' => 'like',
-                        'data' => '%le%',
+                        'f' => 'last_name',
+                        'o' => 'like',
+                        'd' => '%le%',
                     ],
                 ],
             ],
@@ -101,12 +101,12 @@ class FilterTest extends TestCase
     public function it_can_apply_nested_filters_1()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
-            'filter' => [
-                'group_and' => [
+            'flt' => [
+                'and' => [
                     [
-                        'field' => 'title',
-                        'operator' => 'like',
-                        'data' => '%love%',
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
                     ],
                 ],
             ],
@@ -133,24 +133,24 @@ class FilterTest extends TestCase
     public function it_can_apply_nested_filters_2()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
-            'filter' => [
-                'group_and' => [
+            'flt' => [
+                'and' => [
                     [
-                        'field' => 'title',
-                        'operator' => 'like',
-                        'data' => '%love%',
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
                     ],
                     [
-                        'group_or' => [
+                        'or' => [
                             [
-                                'field' => 'title',
-                                'operator' => 'like',
-                                'data' => '%bold%',
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%bold%',
                             ],
                             [
-                                'field' => 'title',
-                                'operator' => 'like',
-                                'data' => '%er%',
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%er%',
                             ],
                         ],
                     ],
@@ -174,36 +174,36 @@ class FilterTest extends TestCase
     public function it_can_apply_nested_filters_3()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
-            'filter' => [
-                'group_and' => [
+            'flt' => [
+                'and' => [
                     [
-                        'field' => 'title',
-                        'operator' => 'like',
-                        'data' => '%love%',
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
                     ],
                     [
-                        'group_or' => [
+                        'or' => [
                             [
-                                'field' => 'title',
-                                'operator' => 'like',
-                                'data' => '%bold%',
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%bold%',
                             ],
                             [
-                                'field' => 'title',
-                                'operator' => 'like',
-                                'data' => '%er%',
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%er%',
                             ],
                             [
-                                'group_and' => [
+                                'and' => [
                                     [
-                                        'field' => 'title',
-                                        'operator' => 'like',
-                                        'data' => 'may%',
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => 'may%',
                                     ],
                                     [
-                                        'field' => 'title',
-                                        'operator' => 'like',
-                                        'data' => '%love',
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%love',
                                     ],
                                 ],
                             ],
@@ -230,48 +230,48 @@ class FilterTest extends TestCase
     public function it_can_apply_nested_filters_4()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
-            'filter' => [
-                'group_and' => [
+            'flt' => [
+                'and' => [
                     [
-                        'field' => 'title',
-                        'operator' => 'like',
-                        'data' => '%love%',
+                        'f' => 'title',
+                        'o' => 'like',
+                        'd' => '%love%',
                     ],
                     [
-                        'group_or' => [
+                        'or' => [
                             [
-                                'field' => 'title',
-                                'operator' => 'like',
-                                'data' => '%bold%',
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%bold%',
                             ],
                             [
-                                'field' => 'title',
-                                'operator' => 'like',
-                                'data' => '%er%',
+                                'f' => 'title',
+                                'o' => 'like',
+                                'd' => '%er%',
                             ],
                             [
-                                'group_and' => [
+                                'and' => [
                                     [
-                                        'field' => 'title',
-                                        'operator' => 'like',
-                                        'data' => '%e%',
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%e%',
                                     ],
                                     [
-                                        'field' => 'title',
-                                        'operator' => 'like',
-                                        'data' => '%a%',
+                                        'f' => 'title',
+                                        'o' => 'like',
+                                        'd' => '%a%',
                                     ],
                                     [
-                                        'group_or' => [
+                                        'or' => [
                                             [
-                                                'field' => 'title',
-                                                'operator' => 'like',
-                                                'data' => '%whole%',
+                                                'f' => 'title',
+                                                'o' => 'like',
+                                                'd' => '%whole%',
                                             ],
                                             [
-                                                'field' => 'title',
-                                                'operator' => 'like',
-                                                'data' => '%gods%',
+                                                'f' => 'title',
+                                                'o' => 'like',
+                                                'd' => '%gods%',
                                             ],
                                         ],
                                     ],
@@ -317,7 +317,7 @@ class FilterTest extends TestCase
     {
         // =, >, <, <>, !=, like, not_like, <=, >=
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => '=',
                 'd' => 'Beatles',
@@ -329,7 +329,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => '>',
                 'd' => 'KISS',
@@ -342,7 +342,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => '<',
                 'd' => 'Cult',
@@ -354,7 +354,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => '<>',
                 'd' => 'Beatles',
@@ -368,7 +368,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => '!=',
                 'd' => 'Beatles',
@@ -382,7 +382,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => 'like',
                 'd' => 'Beat%',
@@ -394,7 +394,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => 'like',
                 'd' => '%Stones',
@@ -406,7 +406,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => 'like',
                 'd' => '%s%',
@@ -419,7 +419,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'o' => 'not_like',
                 'd' => '%s%',
@@ -432,7 +432,7 @@ class FilterTest extends TestCase
         ], $actual);
 
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'id',
                 'o' => '>=',
                 'd' => '3',
@@ -451,7 +451,7 @@ class FilterTest extends TestCase
     public function it_can_filter_on_null_values()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'year_end',
                 'o' => 'is_null',
             ],
@@ -468,7 +468,7 @@ class FilterTest extends TestCase
     public function it_can_filter_on_non_null_values()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'year_end',
                 'o' => 'not_null',
             ],
@@ -487,7 +487,7 @@ class FilterTest extends TestCase
     public function it_can_apply_an_IN_filter()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'id',
                 'o' => 'in',
                 'd' => [1, 3],
@@ -506,7 +506,7 @@ class FilterTest extends TestCase
     public function it_can_apply_a_NOT_IN_filter()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'id',
                 'o' => 'not_in',
                 'd' => [1, 3],
@@ -525,7 +525,7 @@ class FilterTest extends TestCase
     public function it_defaults_to_an_EQUALS_check_if_no_operator_is_given()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
-            'filter' => [
+            'flt' => [
                 'f' => 'name',
                 'd' => 'Beatles',
             ],

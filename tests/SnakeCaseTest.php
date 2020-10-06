@@ -197,7 +197,7 @@ class SnakeCaseTest extends TestCase
                     '-band_id',
                 ],
                 'lmt' => 5,
-                'offset' => 7,
+                'ofs' => 7,
             ],
         ]);
 
@@ -237,7 +237,7 @@ class SnakeCaseTest extends TestCase
                     '-bandId',
                 ],
                 'lmt' => 5,
-                'offset' => 7,
+                'ofs' => 7,
             ],
         ]);
 

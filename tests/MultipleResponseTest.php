@@ -15,7 +15,7 @@ class MultipleResponseTest extends TestCase
             ->applyJson(json_encode([
                 'song' =>
                     [
-                        'filter' =>
+                        'flt' =>
                             [
                                 'f' => 'title',
                                 'o' => 'like',
@@ -25,7 +25,7 @@ class MultipleResponseTest extends TestCase
                     ],
                 'song:count as songcount' =>
                     [
-                        'filter' =>
+                        'flt' =>
                             [
                                 'f' => 'title',
                                 'o' => 'like',
@@ -56,7 +56,7 @@ class MultipleResponseTest extends TestCase
             ->apply(json_encode([
                 'song' =>
                     [
-                        'filter' =>
+                        'flt' =>
                             [
                                 'f' => 'title',
                                 'o' => 'like',
@@ -66,7 +66,7 @@ class MultipleResponseTest extends TestCase
                     ],
                 'song:count as songcount' =>
                     [
-                        'filter' =>
+                        'flt' =>
                             [
                                 'f' => 'title',
                                 'o' => 'like',

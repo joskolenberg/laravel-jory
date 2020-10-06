@@ -10,7 +10,7 @@ class RequestParserTest extends TestCase
     public function it_can_get_the_jory_parameter_from_a_request()
     {
         $response = $this->json('GET', 'jory/person', [
-            'jory' => '{"filter":{"f": "first_name","d":"John"},"fld":["id","last_name"]}',
+            'jory' => '{"flt":{"f": "first_name","d":"John"},"fld":["id","last_name"]}',
         ]);
 
         $response->assertStatus(200)->assertExactJson([
