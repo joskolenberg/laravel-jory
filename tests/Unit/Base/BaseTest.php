@@ -1,174 +1,256 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests;
+namespace JosKolenberg\LaravelJory\Tests\Unit\Base;
 
+use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Facades\Jory as Facade;
+use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
+use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class BaseTest extends TestCase
 {
+    protected $beatles = [
+        'John',
+        'Paul',
+        'George',
+        'Ringo',
+    ];
+
+    protected $stones = [
+        'Mick',
+        'Keith',
+        'Ronnie',
+        'Charlie',
+        'Bill',
+    ];
+
+    protected $hendrix = [
+        'Jimi',
+        'Mitch',
+        'Noel',
+    ];
 
     /** @test */
     public function it_can_apply_a_jory_json_string()
     {
-        $actual = Facade::onModelClass(Song::class)
+        Jory::register(UserJoryResource::class);
+        foreach ($this->beatles as $name) {
+            User::factory()->create([
+                'name' => $name,
+            ]);
+        }
+
+        $actual = Facade::onModelClass(User::class)
             ->applyJson(json_encode([
-                'fld' => 'title',
+                'fld' => 'name',
                 'flt' => [
-                    'f' => 'title',
+                    'f' => 'name',
                     'o' => 'like',
-                    'd' => '%love',
+                    'd' => '%n%',
                 ]
             ]))
             ->toArray();
 
         $this->assertEquals([
-            ['title' => 'Whole Lotta Love'],
-            ['title' => 'May This Be Love'],
-            ['title' => 'Bold as Love'],
-            ['title' => 'And the Gods Made Love'],
+            ['name' => 'John'],
+            ['name' => 'Ringo'],
         ], $actual);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
     public function it_can_apply_a_jory_array()
     {
-        $actual = Facade::onModelClass(Song::class)->applyArray([
-            'fld' => ['title'],
-            'flt' => [
-                'f' => 'title',
-                'o' => 'like',
-                'd' => 'love%',
-            ],
-        ])->toArray();
+        Jory::register(UserJoryResource::class);
+        foreach ($this->beatles as $name) {
+            User::factory()->create([
+                'name' => $name,
+            ]);
+        }
+
+        $actual = Facade::onModelClass(User::class)
+            ->applyArray([
+                'fld' => 'name',
+                'flt' => [
+                    'f' => 'name',
+                    'o' => 'like',
+                    'd' => '%n%',
+                ]
+            ])
+            ->toArray();
 
         $this->assertEquals([
-            ['title' => 'Love In Vain (Robert Johnson)'],
-            ['title' => 'Lovely Rita'],
-            ['title' => 'Love or Confusion'],
+            ['name' => 'John'],
+            ['name' => 'Ringo'],
         ], $actual);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
     public function it_can_apply_a_jory_json_string_from_a_request()
     {
-        $response = $this->json('GET', 'jory/band', [
+        Jory::register(UserJoryResource::class);
+        foreach ($this->beatles as $name) {
+            User::factory()->create([
+                'name' => $name,
+            ]);
+        }
+
+        $response = $this->json('GET', 'jory/user', [
             'jory' => [
                 'fld' => 'name',
                 'flt' => [
                     'f' => 'name',
                     'o' => 'like',
-                    'd' => '%zep%',
-                ],
+                    'd' => '%n%',
+                ]
             ],
         ]);
 
         $response->assertStatus(200)->assertExactJson([
             'data' => [
-                [
-                    'name' => 'Led Zeppelin',
-                ],
+                ['name' => 'John'],
+                ['name' => 'Ringo'],
             ],
         ]);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
     public function it_can_apply_a_custom_filter()
     {
-        $actual = Facade::onModelClass(Album::class)->applyArray([
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+        $beatles = Team::factory()->create(['name' => 'Beatles']);
+        $stones = Team::factory()->create(['name' => 'Stones']);
+        foreach ($this->beatles as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $beatles->id,
+            ]);
+        }
+        foreach ($this->stones as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $stones->id,
+            ]);
+        }
+
+        $actual = Facade::onModelClass(Team::class)->applyArray([
             'flt' => [
-                'f' => 'number_of_songs',
+                'f' => 'number_of_users',
                 'o' => '>',
-                'd' => 10,
+                'd' => 4,
             ],
             'fld' => ['name'],
         ])->toArray();
 
         $this->assertEquals([
-            ['name' => 'Exile on main st.'],
-            ['name' => 'Sgt. Peppers lonely hearts club band'],
-            ['name' => 'Abbey road'],
-            ['name' => 'Let it be'],
-            ['name' => 'Are you experienced'],
-            ['name' => 'Axis: Bold as love'],
-            ['name' => 'Electric ladyland'],
+            ['name' => 'Stones'],
         ], $actual);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
     public function it_can_apply_multiple_custom_filters()
     {
-        $actual = Facade::onModelClass(Album::class)->applyArray([
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+        $beatles = Team::factory()->create(['name' => 'Beatles']);
+        $stones = Team::factory()->create(['name' => 'Stones']);
+        $hendrix = Team::factory()->create(['name' => 'Hendrix']);
+        foreach ($this->beatles as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $beatles->id,
+            ]);
+        }
+        foreach ($this->stones as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $stones->id,
+            ]);
+        }
+        foreach ($this->hendrix as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $hendrix->id,
+            ]);
+        }
+
+        $actual = Facade::onModelClass(Team::class)->applyArray([
             'flt' => [
                 'or' => [
                     [
-                        'f' => 'number_of_songs',
-                        'o' => '>=',
-                        'd' => 11,
+                        'f' => 'number_of_users',
+                        'o' => '>',
+                        'd' => 4,
                     ],
                     [
-                        'f' => 'number_of_songs',
-                        'o' => '<=',
-                        'd' => 9,
+                        'f' => 'number_of_users',
+                        'o' => '<',
+                        'd' => 4,
                     ],
-                ],
+                ]
             ],
-            'fld' => ['name']
+            'fld' => ['name'],
         ])->toArray();
 
         $this->assertEquals([
-            ['name' => 'Let it bleed'],
-            ['name' => 'Exile on main st.'],
-            ['name' => 'Led Zeppelin'],
-            ['name' => 'Led Zeppelin II'],
-            ['name' => 'Sgt. Peppers lonely hearts club band'],
-            ['name' => 'Abbey road'],
-            ['name' => 'Let it be'],
-            ['name' => 'Are you experienced'],
-            ['name' => 'Axis: Bold as love'],
-            ['name' => 'Electric ladyland'],
+            ['name' => 'Stones'],
+            ['name' => 'Hendrix'],
         ], $actual);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
     public function it_can_combine_standard_and_custom_filters()
     {
-        $actual = Facade::onModelClass(Album::class)->applyArray([
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+        $beatles = Team::factory()->create(['name' => 'Beatles']);
+        $stones = Team::factory()->create(['name' => 'Stones']);
+        $hendrix = Team::factory()->create(['name' => 'Hendrix']);
+        foreach ($this->beatles as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $beatles->id,
+            ]);
+        }
+        foreach ($this->stones as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $stones->id,
+            ]);
+        }
+        foreach ($this->hendrix as $name) {
+            User::factory()->create([
+                'name' => $name,
+                'team_id' => $hendrix->id,
+            ]);
+        }
+
+        $actual = Facade::onModelClass(Team::class)->applyArray([
             'flt' => [
-                'and' => [
+                'or' => [
                     [
-                        'f' => 'number_of_songs',
-                        'o' => '>=',
-                        'd' => 11,
+                        'f' => 'number_of_users',
+                        'o' => '>',
+                        'd' => 4,
                     ],
                     [
                         'f' => 'name',
                         'o' => 'like',
-                        'd' => '%el%',
+                        'd' => '%eat%',
                     ],
-                ],
+                ]
             ],
-            'fld' => ['name']
+            'fld' => ['name'],
         ])->toArray();
 
         $this->assertEquals([
-            ['name' => 'Sgt. Peppers lonely hearts club band'],
-            ['name' => 'Electric ladyland'],
+            ['name' => 'Beatles'],
+            ['name' => 'Stones'],
         ], $actual);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
@@ -193,7 +275,6 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
     public function it_can_return_a_single_model()
     {
         $actual = Facade::onModelClass(Instrument::class)
@@ -211,7 +292,6 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
     public function it_returns_null_when_a_single_model_is_not_found()
     {
         $actual = Facade::onModelClass(Instrument::class)
@@ -228,7 +308,6 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
     public function it_can_filter_sort_and_select_on_an_ambiguous_column_when_using_a_belongs_to_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [
