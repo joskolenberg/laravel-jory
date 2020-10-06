@@ -161,17 +161,12 @@ class Config
     /**
      * Add a relation to the config.
      *
-     * When no joryResource is given, the method will find the related model
-     * and joryResource by calling the relationMethod. If you don't want
-     * this to happen you can supply the joryResource to prevent this.
-     *
      * @param string $name
-     * @param string $joryResource
      * @return Relation
      */
-    public function relation(string $name, string $joryResource = null): Relation
+    public function relation(string $name): Relation
     {
-        $relation = new Relation($name, $this->modelClass, $joryResource ? new $joryResource : null);
+        $relation = new Relation($name, $this->modelClass);
 
         $this->relations[] = $relation;
 

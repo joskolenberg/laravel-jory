@@ -153,17 +153,12 @@ abstract class JoryResource
     /**
      * Add a relation option which can be requested by the API users.
      *
-     * When no joryResource is given, the method will find the related model
-     * and joryResource by calling the relationMethod. If you don't want
-     * this to happen you can supply the joryResource to prevent this.
-     *
      * @param string $name
-     * @param string $joryResource
      * @return Relation
      */
-    public function relation(string $name, string $joryResource = null): Relation
+    public function relation(string $name): Relation
     {
-        return $this->config->relation($name, $joryResource);
+        return $this->config->relation($name);
     }
 
     /**

@@ -39,13 +39,11 @@ class Relation
      *
      * @param string $name
      * @param string $parentClass
-     * @param JoryResource $joryResource
      */
-    public function __construct(string $name, string $parentClass, JoryResource $joryResource = null)
+    public function __construct(string $name, string $parentClass)
     {
         $this->name = $name;
         $this->parentClass = $parentClass;
-        $this->joryResource = $joryResource;
 
         $this->case = app(CaseManager::class);
     }
@@ -78,10 +76,6 @@ class Relation
     public function getJoryResource(): JoryResource
     {
         if (!$this->joryResource) {
-            /**
-             * When no explicit joryResource is given,
-             * we will search for the joryResource for the related model.
-             */
             $relationMethod = Str::camel($this->name);
 
             $relatedClass = get_class((new $this->parentClass)->{$relationMethod}()->getRelated());
