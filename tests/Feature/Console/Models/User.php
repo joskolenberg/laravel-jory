@@ -14,11 +14,6 @@ class User extends Authenticatable
 
     public $timestamps = false;
 
-    protected static function newFactory()
-    {
-        return new UserFactory();
-    }
-
     public function team()
     {
         return $this->belongsTo(Team::class);

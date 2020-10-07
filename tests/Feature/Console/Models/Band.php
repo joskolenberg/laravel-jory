@@ -13,11 +13,6 @@ class Band extends Model
 
     public $timestamps = false;
 
-    protected static function newFactory()
-    {
-        return new BandFactory();
-    }
-
     public function musicians()
     {
         return $this->belongsToMany(Musician::class, 'band_members');

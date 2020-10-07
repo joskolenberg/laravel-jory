@@ -12,11 +12,6 @@ class Team extends Model
 
     public $timestamps = false;
 
-    protected static function newFactory()
-    {
-        return new TeamFactory();
-    }
-
     public function users()
     {
         return $this->hasMany(User::class);
