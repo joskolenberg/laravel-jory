@@ -23,4 +23,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function getEmailDomainAttribute()
+    {
+        return substr($this->email, 0, strrpos($this->email, '@'));
+    }
 }

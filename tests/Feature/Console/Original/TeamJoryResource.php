@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\JoryResourcess;
+namespace App\Http\JoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\Console\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Feature\Console\Models\Team;
 
-class App\Http\JoryResources\BandJoryResource extends JoryResource
+class TeamJoryResource extends JoryResource
 {
-    protected $modelClass = Band::class;
+    protected $modelClass = Team::class;
 
     /**
      * Configure the JoryResource.
@@ -21,6 +21,6 @@ class App\Http\JoryResources\BandJoryResource extends JoryResource
         $this->field('name')->filterable()->sortable();
 
         // Relations
-        $this->relation('musicians');
+        $this->relation('users');
     }
 }
