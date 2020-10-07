@@ -1,15 +1,20 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Facade;
 
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
+use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
+use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
+use JosKolenberg\LaravelJory\Tests\Factories\UserFactory;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class FacadeTest extends TestCase
 {
@@ -17,79 +22,80 @@ class FacadeTest extends TestCase
     /** @test */
     public function it_can_apply_on_a_model_class_using_on()
     {
-        $actual = Jory::on(Song::class)
+        $this->seedSesameStreet();
+        Jory::register(UserJoryResource::class);
+
+        $actual = Jory::on(User::class)
             ->applyArray([
-                'fld' => 'title',
+                'fld' => 'name',
                 'flt' => [
-                    'f' => 'title',
+                    'f' => 'name',
                     'o' => 'like',
-                    'd' => '%love',
+                    'd' => '%b%',
                 ]
             ])
             ->toArray();
 
         $this->assertEquals([
-            ['title' => 'Whole Lotta Love'],
-            ['title' => 'May This Be Love'],
-            ['title' => 'Bold as Love'],
-            ['title' => 'And the Gods Made Love'],
+            ['name' => 'Bert'],
+            ['name' => 'Big Bird'],
         ], $actual);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
     public function it_can_apply_on_a_query_using_on()
     {
-        $actual = Jory::on(Song::query()->where('title', 'like', '%ol%'))
+        $this->seedSesameStreet();
+        Jory::register(UserJoryResource::class);
+
+        $actual = Jory::on(User::query()->where('name', 'like', '%b%'))
             ->applyArray([
-                'fld' => 'title',
+                'fld' => 'name',
                 'flt' => [
-                    'f' => 'title',
+                    'f' => 'name',
                     'o' => 'like',
-                    'd' => '%love',
+                    'd' => '%e%',
                 ]
             ])
             ->toArray();
 
         $this->assertEquals([
-            ['title' => 'Whole Lotta Love'],
-            ['title' => 'Bold as Love'],
+            ['name' => 'Bert'],
         ], $actual);
-
-        $this->assertQueryCount(1);
     }
 
     /** @test */
     public function it_can_apply_on_a_model_instance_using_on()
     {
-        $actual = Jory::on(Song::find(47))
+        $team = $this->seedSesameStreet();
+        Jory::register(TeamJoryResource::class);
+        Jory::register(UserJoryResource::class);
+
+        $actual = Jory::on($team)
             ->applyArray([
-                'fld' => 'title',
-                'rlt' => [
-                    'album' => [
-                        'fld' => 'name',
-                    ]
-                ]
+                'fld' => ['name', 'users.name'],
             ])
             ->toArray();
 
         $this->assertEquals([
-            'title' => 'Whole Lotta Love',
-            'album' => [
-                'name' => 'Led Zeppelin II',
+            'name' => 'Sesame Street',
+            'users' => [
+                ['name' => 'Bert'],
+                ['name' => 'Big Bird'],
+                ['name' => 'Cookie Monster'],
+                ['name' => 'Ernie'],
+                ['name' => 'Oscar'],
+                ['name' => 'The Count'],
             ]
         ], $actual);
-
-        $this->assertQueryCount(3);
     }
 
     /** @test */
     public function it_throws_an_exception_when_no_valid_resource_is_given_1()
     {
         $this->expectException(RegistrationNotFoundException::class);
-        $this->expectExceptionMessage('No joryResource found for model JosKolenberg\LaravelJory\Http\Controllers\JoryController. Does JosKolenberg\LaravelJory\Http\Controllers\JoryController have an associated JoryResource?');
-        Jory::on(JoryController::class);
+        $this->expectExceptionMessage('No joryResource found for model ' . User::class . '. Does ' . User::class . ' have an associated JoryResource?');
+        Jory::on(User::class);
     }
 
     /** @test */
@@ -97,26 +103,22 @@ class FacadeTest extends TestCase
     {
         $this->expectException(LaravelJoryException::class);
         $this->expectExceptionMessage('Unexpected type given. Please provide a model instance, Eloquent builder instance or a model\'s class name.');
-        Jory::on(new JoryController());
+        Jory::on(new UserFactory());
     }
 
     /** @test */
     public function it_can_register_a_jory_resource_by_class_name()
     {
-        $this->assertInstanceOf(TagJoryResource::class, app(JoryResourcesRegister::class)->getByUri('tag'));
+        Jory::register(UserJoryResource::class);
 
-        Jory::register(TagJoryResourceWithExplicitSelect::class);
-
-        $this->assertInstanceOf(TagJoryResourceWithExplicitSelect::class, app(JoryResourcesRegister::class)->getByUri('tag'));
+        $this->assertInstanceOf(UserJoryResource::class, app(JoryResourcesRegister::class)->getByUri('user'));
     }
 
     /** @test */
     public function it_can_register_a_jory_resource_by_instance()
     {
-        $this->assertInstanceOf(TagJoryResource::class, app(JoryResourcesRegister::class)->getByUri('tag'));
+        Jory::register(new UserJoryResource());
 
-        Jory::register(new TagJoryResourceWithExplicitSelect());
-
-        $this->assertInstanceOf(TagJoryResourceWithExplicitSelect::class, app(JoryResourcesRegister::class)->getByUri('tag'));
+        $this->assertInstanceOf(UserJoryResource::class, app(JoryResourcesRegister::class)->getByUri('user'));
     }
 }
