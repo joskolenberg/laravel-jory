@@ -70,20 +70,17 @@ class TestCase extends Orchestra
 //            $table->foreign('instrument_id')->references('id')->on('instruments')->onDelete('restrict');
 //        });
 //
-//        $app['db']->connection()->getSchemaBuilder()->create('albums', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('name');
-//            $table->unsignedInteger('band_id');
-//            $table->foreign('band_id')->references('id')->on('bands')->onDelete('restrict');
-//            $table->date('release_date');
-//        });
-//
-//        $app['db']->connection()->getSchemaBuilder()->create('songs', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('title');
-//            $table->unsignedInteger('album_id');
-//            $table->foreign('album_id')->references('id')->on('albums')->onDelete('restrict');
-//        });
+        $app['db']->connection()->getSchemaBuilder()->create('albums', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->unsignedInteger('band_id');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('songs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->unsignedInteger('album_id');
+        });
 //
 //        $app['db']->connection()->getSchemaBuilder()->create('album_covers', function (Blueprint $table) {
 //            $table->increments('id');
@@ -99,23 +96,23 @@ class TestCase extends Orchestra
 //            $table->foreign('person_id')->references('id')->on('people')->onDelete('restrict');
 //        });
 //
-//        $app['db']->connection()->getSchemaBuilder()->create('images', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('url');
-//            $table->unsignedInteger('imageable_id');
-//            $table->string('imageable_type');
-//        });
-//
-//        $app['db']->connection()->getSchemaBuilder()->create('tags', function (Blueprint $table) {
-//            $table->increments('id');
-//            $table->string('name');
-//        });
-//
-//        $app['db']->connection()->getSchemaBuilder()->create('taggables', function (Blueprint $table) {
-//            $table->unsignedInteger('tag_id');
-//            $table->unsignedInteger('taggable_id');
-//            $table->string('taggable_type');
-//        });
+        $app['db']->connection()->getSchemaBuilder()->create('images', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('url');
+            $table->unsignedInteger('imageable_id');
+            $table->string('imageable_type');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('tags', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
+        $app['db']->connection()->getSchemaBuilder()->create('taggables', function (Blueprint $table) {
+            $table->unsignedInteger('tag_id');
+            $table->unsignedInteger('taggable_id');
+            $table->string('taggable_type');
+        });
 
     }
 

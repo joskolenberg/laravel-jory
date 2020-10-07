@@ -4,9 +4,7 @@
 namespace JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\Band;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
+use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\Models\Band;
 
 class BandJoryResource extends JoryResource
 {
@@ -19,8 +17,19 @@ class BandJoryResource extends JoryResource
         // Fields
         $this->field('id')->filterable()->sortable();
         $this->field('name')->filterable()->sortable();
+        $this->field('musicians_string')->noSelect()->load('musicians');
+        $this->field('songs_string')->noSelect()->load('songs');
+        $this->field('first_title_string')->noSelect()->load('firstSong');
+        $this->field('first_image_url')->noSelect()->load('firstImage');
+        $this->field('image_urls_string')->noSelect()->load('images');
+        $this->field('tags_string')->noSelect()->load('tags');
 
         // Relations
         $this->relation('musicians');
+        $this->relation('songs');
+        $this->relation('firstSong');
+        $this->relation('firstImage');
+        $this->relation('images');
+        $this->relation('tags');
     }
 }

@@ -4,10 +4,13 @@ namespace JosKolenberg\LaravelJory\Tests\DefaultModels;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use JosKolenberg\LaravelJory\Tests\Factories\AlbumFactory;
 use JosKolenberg\LaravelJory\Tests\Factories\BandFactory;
+use JosKolenberg\LaravelJory\Tests\Factories\SongFactory;
+use JosKolenberg\LaravelJory\Tests\Factories\TagFactory;
 use JosKolenberg\LaravelJory\Tests\Factories\TeamFactory;
 
-class Band extends Model
+class Tag extends Model
 {
     use HasFactory;
 
@@ -15,21 +18,11 @@ class Band extends Model
 
     protected static function newFactory()
     {
-        return new BandFactory();
+        return new TagFactory();
     }
 
-    public function musicians()
+    public function bands()
     {
-        return $this->belongsToMany(Musician::class, 'band_members');
-    }
-
-    public function albums()
-    {
-        return $this->hasMany(Album::class);
-    }
-
-    public function songs()
-    {
-        return $this->hasManyThrough(Song::class, Album::class);
+        return $this->morphedByMany(Band::class, 'taggable');
     }
 }
