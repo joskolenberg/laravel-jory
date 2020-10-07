@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\Models;
+namespace JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

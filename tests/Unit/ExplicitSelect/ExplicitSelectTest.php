@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect;
+namespace JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect;
 
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\Facades\Jory;
@@ -8,16 +8,16 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Musician;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Tag;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\ImageJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\SongJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\Models\Team;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\ImageJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\SongJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models\Team;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\BandJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\MusicianJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\TeamJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\UserJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\TagJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\BandJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\MusicianJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\TeamJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\UserJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\TagJoryResource;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class ExplicitSelectTest extends TestCase

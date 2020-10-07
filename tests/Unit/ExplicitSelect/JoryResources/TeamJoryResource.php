@@ -1,10 +1,10 @@
 <?php
 
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\Models\Team;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models\Team;
 
 class TeamJoryResource extends JoryResource
 {
