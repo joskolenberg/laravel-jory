@@ -1,124 +1,63 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests;
+namespace JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect;
 
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\JoryBuilder;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumCoverJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\AlbumJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\BandJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\ImageJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\InstrumentJoryResourceWithExplicitSelect;
+use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\Models\Team;
+use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
+use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\BandJoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\MusicianJoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\TeamJoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\ExplicitSelect\JoryResources\UserJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Tag;
+use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class ExplicitSelectTest extends TestCase
 {
     /** @test */
     public function it_only_selects_requested_fields_when_using_explicit_select()
     {
-        $builder = Person::query();
-
-        $joryResource = new PersonJoryResourceWithExplicitSelect();
+        $joryResource = new UserJoryResource();
 
         $joryResource->setJory((new ArrayParser([
-            'fld' => ['full_name'],
+            'fld' => ['description'],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `first_name`, `last_name` from `people`', $builder->toSql());
+        $this->assertJoryResourceGeneratesQuery($joryResource, User::query(), 'select `name`, `email` from `users`');
     }
 
     /** @test */
-    public function it_returns_the_same_result_when_requesting_fields_using_explicit_select()
+    public function it_selects_the_primary_key_field_when_no_fields_are_requested_to_prevent_query_errors()
     {
-        $jory = [
-            'fld' => ['full_name', 'date_of_birth'],
-        ];
-
-        $expected = $this->json('GET', 'jory/person/3', ['jory' => $jory])->getContent();
-        Jory::register(PersonJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/person/3', ['jory' => $jory])->getContent();
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /** @test */
-    public function it_selects_the_primary_key_field_when_no_fields_are_requested_to_prevent_query_errors_1()
-    {
-        $builder = Person::query();
-
-        $joryResource = new PersonJoryResourceWithExplicitSelect();
+        $joryResource = new TeamJoryResource();
 
         $joryResource->setJory((new ArrayParser([
             'fld' => [],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `people`.`id` from `people`', $builder->toSql());
+        $this->assertJoryResourceGeneratesQuery($joryResource, Team::query(), 'select `teams`.`id` from `teams`');
     }
 
     /** @test */
-    public function it_selects_the_primary_key_field_when_no_fields_are_requested_to_prevent_query_errors_2()
+    public function it_selects_the_primary_key_field_when_no_fields_are_requested_in_a_relation_to_prevent_query_errors()
     {
-        $jory = [
-            'fld' => [],
-        ];
+        $band = $this->seedBeatles();
 
-        Jory::register(PersonJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/person/3', ['jory' => $jory])->getContent();
-
-        $this->assertEquals('{"data":[]}', $actual);
-    }
-
-    /** @test */
-    public function it_selects_the_primary_key_field_when_no_fields_are_requested_in_a_relation_to_prevent_query_errors_1()
-    {
-        $builder = Person::find(3)->instruments();
-
-        $joryResource = new InstrumentJoryResourceWithExplicitSelect();
+        $joryResource = new MusicianJoryResource();
 
         $joryResource->setJory((new ArrayParser([
             'fld' => [],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `instruments`.`id` from `instruments` inner join `instrument_person` on `instruments`.`id` = `instrument_person`.`instrument_id` where `instrument_person`.`person_id` = ?', $builder->toSql());
-    }
-
-    /** @test */
-    public function it_selects_the_primary_key_field_when_no_fields_are_requested_in_a_relation_to_prevent_query_errors_2()
-    {
-        $jory = [
-            'fld' => ['first_name'],
-            'rlt' => [
-                'instruments' => [
-                    'fld' => [],
-                ],
-            ],
-        ];
-
-        Jory::register(PersonJoryResourceWithExplicitSelect::class);
-        Jory::register(InstrumentJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/person/10', ['jory' => $jory])->getContent();
-
-        $this->assertEquals('{"data":{"first_name":"Paul","instruments":[[],[],[],[],[]]}}', $actual);
+        $this->assertJoryResourceGeneratesQuery($joryResource, $band->musicians(), 'select `musicians`.`id` from `musicians` inner join `band_members` on `musicians`.`id` = `band_members`.`musician_id` where `band_members`.`band_id` = ?');
     }
 
     /**
@@ -128,99 +67,43 @@ class ExplicitSelectTest extends TestCase
     /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_hasOne_relation_using_explicit_select()
     {
-        $builder = Album::query();
-
-        $joryResource = new AlbumJoryResourceWithExplicitSelect();
+        Jory::register(UserJoryResource::class);
+        $joryResource = new TeamJoryResource();
 
         $joryResource->setJory((new ArrayParser([
             'fld' => ['name'],
             'rlt' => [
-                'cover' => [],
+                'firstUser' => [],
             ],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
+        $this->assertJoryResourceGeneratesQuery($joryResource, Team::query(), 'select `teams`.`name`, `teams`.`id` from `teams`');
     }
 
     /** @test */
     public function it_adds_the_foreign_key_field_when_requesting_a_hasOne_relation_using_explicit_select()
     {
-        $builder = Album::find(1)->cover();
+        $team = $this->seedSesameStreet();
+        $team = Team::find($team->id); // Convert the default Team to the specific Team class for this test.
 
-        $joryResource = new AlbumCoverJoryResourceWithExplicitSelect();
-
+        $joryResource = new UserJoryResource();
         $joryResource->setJory((new ArrayParser([
-            'fld' => ['image'],
+            'fld' => ['name'],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `album_covers`.`image`, `album_covers`.`album_id` from `album_covers` where `album_covers`.`album_id` = ? and `album_covers`.`album_id` is not null',
-            $builder->toSql());
-    }
-
-    /** @test */
-    public function it_returns_the_same_result_when_requesting_a_hasOne_relation_using_explicit_select()
-    {
-        $jory = [
-            'fld' => ['name'],
-            'rlt' => [
-                'cover' => [
-                    'fld' => ['image'],
-                ],
-            ],
-        ];
-
-        $expected = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
-        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
-        Jory::register(AlbumCoverJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
-
-        $this->assertEquals($expected, $actual);
-
-        $this->assertQueryCount(4);
+        $this->assertJoryResourceGeneratesQuery($joryResource, $team->firstUser(), 'select `users`.`name`, `users`.`team_id` from `users` where `users`.`team_id` = ? and `users`.`team_id` is not null');
     }
 
     /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select(
     )
     {
-        $builder = Album::query();
-
-        $joryResource = new AlbumJoryResourceWithExplicitSelect();
-
+        $joryResource = new TeamJoryResource();
         $joryResource->setJory((new ArrayParser([
-            'fld' => ['cover_image'],
+            'fld' => ['first_user_field'],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `albums`.`id` from `albums`', $builder->toSql());
-    }
-
-    /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select(
-    )
-    {
-        $jory = [
-            'fld' => ['name', 'cover_image'],
-        ];
-
-        $expected = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
-        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
-
-        $this->assertEquals($expected, $actual);
-
-        $this->assertQueryCount(4);
+        $this->assertJoryResourceGeneratesQuery($joryResource, Team::query(), 'select `teams`.`id` from `teams`');
     }
 
     /**
@@ -230,99 +113,41 @@ class ExplicitSelectTest extends TestCase
     /** @test */
     public function it_adds_the_foreign_key_field_when_requesting_a_belongsTo_relation_using_explicit_select()
     {
-        $builder = Song::query();
-
-        $joryResource = new SongJoryResourceWithExplicitSelect();
-
+        $joryResource = new UserJoryResource();
         $joryResource->setJory((new ArrayParser([
-            'fld' => ['title'],
+            'fld' => ['name'],
             'rlt' => [
-                'album' => [],
+                'team' => [],
             ],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs`', $builder->toSql());
+        $this->assertJoryResourceGeneratesQuery($joryResource, User::query(), 'select `users`.`name`, `users`.`team_id` from `users`');
     }
 
     /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_belongsTo_relation_using_explicit_select()
     {
-        $builder = Song::find(1)->album();
+        $this->seedSesameStreet();
+        $user = User::first();
 
-        $joryResource = new AlbumJoryResourceWithExplicitSelect();
-
+        $joryResource = new TeamJoryResource();
         $joryResource->setJory((new ArrayParser([
             'fld' => ['name'],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums` where `albums`.`id` = ?',
-            $builder->toSql());
-    }
-
-    /** @test */
-    public function it_returns_the_same_result_when_requesting_a_belongsTo_relation_using_explicit_select()
-    {
-        $jory = [
-            'fld' => ['title'],
-            'rlt' => [
-                'album' => [
-                    'fld' => ['name'],
-                ],
-            ],
-        ];
-
-        $expected = $this->json('GET', 'jory/song', ['jory' => $jory])->getContent();
-        Jory::register(SongJoryResourceWithExplicitSelect::class);
-        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/song', ['jory' => $jory])->getContent();
-
-        $this->assertEquals($expected, $actual);
-
-        $this->assertQueryCount(4);
+        $this->assertJoryResourceGeneratesQuery($joryResource, $user->team(), 'select `teams`.`name`, `teams`.`id` from `teams` where `teams`.`id` = ?');
     }
 
     /** @test */
     public function it_adds_the_foreign_key_field_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select(
     )
     {
-        $builder = Song::query();
-
-        $joryResource = new SongJoryResourceWithExplicitSelect();
-
+        $joryResource = new UserJoryResource();
         $joryResource->setJory((new ArrayParser([
-            'fld' => ['title', 'album_name'],
+            'fld' => ['name', 'team_name'],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs`', $builder->toSql());
-    }
-
-    /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select(
-    )
-    {
-        $jory = [
-            'fld' => ['title', 'album_name'],
-        ];
-
-        $expected = $this->json('GET', 'jory/song/3', ['jory' => $jory])->getContent();
-        Jory::register(SongJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/song/3', ['jory' => $jory])->getContent();
-
-        $this->assertEquals($expected, $actual);
-
-        $this->assertQueryCount(4);
+        $this->assertJoryResourceGeneratesQuery($joryResource, User::query(), 'select `users`.`name`, `users`.`team_id` from `users`');
     }
 
     /**
@@ -332,108 +157,49 @@ class ExplicitSelectTest extends TestCase
     /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_hasMany_relation_using_explicit_select()
     {
-        $builder = Album::query();
-
-        $joryResource = new AlbumJoryResourceWithExplicitSelect();
-
+        $joryResource = new TeamJoryResource();
         $joryResource->setJory((new ArrayParser([
             'fld' => ['name'],
             'rlt' => [
-                'songs' => [
-                    'fld' => ['title'],
+                'users' => [
+                    'fld' => ['name'],
                 ],
             ],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
+        $this->assertJoryResourceGeneratesQuery($joryResource, Team::query(), 'select `teams`.`name`, `teams`.`id` from `teams`');
     }
 
     /** @test */
     public function it_adds_the_foreign_key_field_when_requesting_a_hasMany_relation_using_explicit_select()
     {
-        $builder = Album::find(1)->songs();
+        $team = $this->seedSesameStreet();
+        $team = Team::find($team->id); // Convert the default Team to the specific Team class for this test.
 
-        $joryResource = new SongJoryResourceWithExplicitSelect();
-
+        $joryResource = new UserJoryResource();
         $joryResource->setJory((new ArrayParser([
-            'fld' => ['title'],
+            'fld' => ['name'],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs` where `songs`.`album_id` = ? and `songs`.`album_id` is not null',
-            $builder->toSql());
-    }
-
-    /** @test */
-    public function it_returns_the_same_result_when_requesting_a_hasMany_relation_using_explicit_select()
-    {
-        $jory = [
-            'fld' => ['name'],
-            'rlt' => [
-                'songs' => [
-                    'fld' => ['title'],
-                ],
-            ],
-        ];
-
-        $expected = $this->json('GET', 'jory/album/4', ['jory' => $jory])->getContent();
-        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
-        Jory::register(SongJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/album/4', ['jory' => $jory])->getContent();
-
-        $this->assertEquals($expected, $actual);
-
-        $this->assertQueryCount(4);
+        $this->assertJoryResourceGeneratesQuery($joryResource, $team->users(), 'select `users`.`name`, `users`.`team_id` from `users` where `users`.`team_id` = ? and `users`.`team_id` is not null');
     }
 
     /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select(
     )
     {
-        $builder = Album::query();
-
-        $joryResource = new AlbumJoryResourceWithExplicitSelect();
-
+        $joryResource = new TeamJoryResource();
         $joryResource->setJory((new ArrayParser([
-            'fld' => ['name', 'titles_string'],
+            'fld' => ['name', 'users_string'],
         ]))->getJory());
 
-        $joryBuilder = new JoryBuilder($joryResource);
-
-        $joryBuilder->applyOnQuery($builder);
-
-        $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
-    }
-
-    /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select(
-    )
-    {
-        $jory = [
-            'fld' => ['name', 'titles_string'],
-        ];
-
-        $expected = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
-        Jory::register(AlbumJoryResourceWithExplicitSelect::class);
-        $actual = $this->json('GET', 'jory/album', ['jory' => $jory])->getContent();
-
-        $this->assertEquals($expected, $actual);
-
-        $this->assertQueryCount(4);
+        $this->assertJoryResourceGeneratesQuery($joryResource, Team::query(), 'select `teams`.`name`, `teams`.`id` from `teams`');
     }
 
     /**
      * BELONGS TO MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_belongsToMany_relation_using_explicit_select()
     {
         $builder = Person::query();
@@ -456,7 +222,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_belongsToMany_relation_using_explicit_select(
     )
     {
@@ -476,7 +241,6 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_belongsToMany_relation_using_explicit_select()
     {
         $jory = [
@@ -498,7 +262,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select(
     )
     {
@@ -517,7 +280,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select(
     )
     {
@@ -538,7 +300,6 @@ class ExplicitSelectTest extends TestCase
      * HAS MANY THROUGH RELATIONS ===============================================================================================
      */
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_hasManyThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -561,7 +322,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasManyThrough_relation_using_explicit_select(
     )
     {
@@ -581,7 +341,6 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_hasManyThrough_relation_using_explicit_select()
     {
         $jory = [
@@ -603,7 +362,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select(
     )
     {
@@ -622,7 +380,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select(
     )
     {
@@ -643,7 +400,6 @@ class ExplicitSelectTest extends TestCase
      * HAS ONE THROUGH RELATIONS ===============================================================================================
      */
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_hasOneThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -666,7 +422,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasOneThrough_relation_using_explicit_select(
     )
     {
@@ -686,7 +441,6 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_hasOneThrough_relation_using_explicit_select()
     {
         $jory = [
@@ -708,7 +462,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasOneThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -726,7 +479,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasOneThrough_relation_using_explicit_select()
     {
         $jory = [
@@ -746,7 +498,6 @@ class ExplicitSelectTest extends TestCase
      * MORPH ONE RELATIONS ===============================================================================================
      */
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_morphOne_relation_using_explicit_select()
     {
         $builder = Person::query();
@@ -769,7 +520,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
     
-    /** @test */
     public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphOne_relation_using_explicit_select(
     )
     {
@@ -789,7 +539,6 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_morphOne_relation_using_explicit_select()
     {
         $jory = [
@@ -811,7 +560,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphOne_relation_using_explicit_select()
     {
         $builder = Person::query();
@@ -829,7 +577,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphOne_relation_using_explicit_select()
     {
         $jory = [
@@ -849,7 +596,6 @@ class ExplicitSelectTest extends TestCase
      * MORPH MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_morphMany_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -872,7 +618,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
     public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphMany_relation_using_explicit_select(
     )
     {
@@ -892,7 +637,6 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_morphMany_relation_using_explicit_select()
     {
         $jory = [
@@ -914,7 +658,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphMany_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -932,7 +675,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphMany_relation_using_explicit_select()
     {
         $jory = [
@@ -952,7 +694,6 @@ class ExplicitSelectTest extends TestCase
      * MORPH TO MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_morphToMany_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -975,7 +716,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphToMany_relation_using_explicit_select(
     )
     {
@@ -995,7 +735,6 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_morphToMany_relation_using_explicit_select()
     {
         $jory = [
@@ -1017,7 +756,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphToMany_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -1035,7 +773,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphToMany_relation_using_explicit_select()
     {
         $jory = [
@@ -1055,7 +792,6 @@ class ExplicitSelectTest extends TestCase
      * MORPHED BY MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
     public function it_adds_the_foreign_key_field_when_requesting_a_morphedByMany_relation_using_explicit_select()
     {
         $builder = Tag::query();
@@ -1078,7 +814,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `tags`.`name`, `tags`.`id` from `tags`', $builder->toSql());
     }
 
-    /** @test */
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphedByMany_relation_using_explicit_select(
     )
     {
@@ -1098,7 +833,6 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_morphedByMany_relation_using_explicit_select()
     {
         $jory = [
@@ -1120,7 +854,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphedByMany_relation_using_explicit_select()
     {
         $builder = Tag::query();
@@ -1138,7 +871,6 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `tags`.`name`, `tags`.`id` from `tags`', $builder->toSql());
     }
 
-    /** @test */
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphedByMany_relation_using_explicit_select()
     {
         $jory = [
@@ -1152,6 +884,15 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals($expected, $actual);
 
         $this->assertQueryCount(4);
+    }
+
+    protected function assertJoryResourceGeneratesQuery(JoryResource $joryResource, $baseQuery, string $string)
+    {
+        $joryBuilder = new JoryBuilder($joryResource);
+
+        $joryBuilder->applyOnQuery($baseQuery);
+
+        $this->assertEquals($string, $baseQuery->toSql());
     }
 
 }
