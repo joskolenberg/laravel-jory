@@ -110,6 +110,52 @@ class FirstTest extends TestCase
     }
 
     /** @test */
+    public function it_can_the_first_items_on_nested_relations_but_comes_with_n_plus_1_problem()
+    {
+        Jory::register(TeamJoryResource::class);
+        Jory::register(UserJoryResource::class);
+        $this->seedSesameStreet();
+        $this->seedSimpsons();
+        $this->seedSpongeBob();
+
+        $this->startQueryCount();
+
+        $this->json('GET', 'jory/team', [
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'users:first' => [
+                        'fld' => 'name'
+                    ]
+                ]
+            ]
+        ])->assertExactJson([
+            'data' => [
+                [
+                    'name' => 'Sesame Street',
+                    'users:first' => [
+                        'name' => 'Bert'
+                    ]
+                ],
+                [
+                    'name' => 'Simpsons',
+                    'users:first' => [
+                        'name' => 'Bart'
+                    ]
+                ],
+                [
+                    'name' => 'SpongeBob',
+                    'users:first' => [
+                        'name' => 'Eugene'
+                    ]
+                ],
+            ],
+        ]);
+
+        $this->assertQueryCount(4);
+    }
+
+    /** @test */
     public function it_returns_a_404_when_a_model_is_not_found_by_first()
     {
         Jory::register(UserJoryResource::class);
