@@ -1,14 +1,10 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\Filter;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Filter;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\Feature\Filter\JoryResources\UserJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\Filter\JoryResources\TeamJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithScopes;
-use JosKolenberg\LaravelJory\Tests\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
+use JosKolenberg\LaravelJory\Tests\Feature\Query\Filter\JoryResources\TeamJoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\Query\Filter\JoryResources\UserJoryResource;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class FilterTest extends TestCase

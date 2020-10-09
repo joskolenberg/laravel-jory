@@ -4,7 +4,6 @@ namespace JosKolenberg\LaravelJory\Tests\Feature\ControllerUsage;
 
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
 use JosKolenberg\LaravelJory\Tests\Feature\ControllerUsage\Controllers\TeamController;

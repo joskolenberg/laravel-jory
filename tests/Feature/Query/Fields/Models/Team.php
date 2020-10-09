@@ -1,13 +1,11 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\CustomAttribute;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Fields\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
-use JosKolenberg\LaravelJory\Tests\Factories\UserFactory;
-use JosKolenberg\LaravelJory\Tests\Models\Person;
 
 class Team extends Authenticatable
 {

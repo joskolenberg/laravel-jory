@@ -5,7 +5,6 @@ namespace JosKolenberg\LaravelJory\Tests\DefaultModels;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use JosKolenberg\LaravelJory\Tests\Factories\BandFactory;
-use JosKolenberg\LaravelJory\Tests\Factories\TeamFactory;
 
 class Band extends Model
 {

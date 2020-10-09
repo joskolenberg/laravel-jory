@@ -1,8 +1,9 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\CustomAttribute;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Fields\JoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\Query\Fields\Models\Team;
 
 class TeamJoryResource extends JoryResource
 {

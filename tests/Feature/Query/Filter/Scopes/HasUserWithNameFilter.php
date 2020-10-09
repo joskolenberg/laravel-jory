@@ -1,7 +1,7 @@
 <?php
 
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\Filter\Scopes;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Filter\Scopes;
 
 
 use JosKolenberg\LaravelJory\Helpers\FilterHelper;

@@ -1,8 +1,8 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\Fields\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Fields\JoryResources;
 
-use JosKolenberg\LaravelJory\Tests\Feature\Fields\Models\User;
+use JosKolenberg\LaravelJory\Tests\Feature\Query\Fields\Models\User;
 
 class UserJoryResource extends \JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource
 {

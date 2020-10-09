@@ -4,7 +4,6 @@
 namespace JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\Album;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Tag;
 
 class TagJoryResource extends JoryResource

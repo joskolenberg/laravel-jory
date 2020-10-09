@@ -1,9 +1,9 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\CustomAttribute;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Fields;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\Query\Fields\JoryResources\TeamJoryResource;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class CustomAttributeTest extends TestCase

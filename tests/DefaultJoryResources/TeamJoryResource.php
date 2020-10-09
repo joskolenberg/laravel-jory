@@ -5,7 +5,6 @@ namespace JosKolenberg\LaravelJory\Tests\DefaultJoryResources;
 
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 
 class TeamJoryResource extends JoryResource
 {

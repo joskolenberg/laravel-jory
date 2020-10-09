@@ -8,17 +8,17 @@ use JosKolenberg\LaravelJory\JoryBuilder;
 use JosKolenberg\LaravelJory\JoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Musician;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Tag;
-use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\ImageJoryResource;
-use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\SongJoryResource;
-use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models\Band;
-use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models\Team;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
+use JosKolenberg\LaravelJory\Tests\TestCase;
 use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\BandJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\ImageJoryResource;
 use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\MusicianJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\SongJoryResource;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\TagJoryResource;
 use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\TeamJoryResource;
 use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\UserJoryResource;
-use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources\TagJoryResource;
-use JosKolenberg\LaravelJory\Tests\TestCase;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models\Band;
+use JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\Models\Team;
 
 class ExplicitSelectTest extends TestCase
 {

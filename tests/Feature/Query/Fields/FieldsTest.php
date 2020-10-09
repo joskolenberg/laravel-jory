@@ -1,10 +1,10 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\Fields;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Fields;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
-use JosKolenberg\LaravelJory\Tests\Feature\Fields\JoryResources\UserJoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\Query\Fields\JoryResources\UserJoryResource;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class FieldsTest extends TestCase

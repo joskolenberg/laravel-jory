@@ -5,8 +5,6 @@ namespace JosKolenberg\LaravelJory\Tests\Feature\Base64;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class Base64Test extends TestCase

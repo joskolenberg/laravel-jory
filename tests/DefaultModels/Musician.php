@@ -4,9 +4,7 @@ namespace JosKolenberg\LaravelJory\Tests\DefaultModels;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use JosKolenberg\LaravelJory\Tests\Factories\BandFactory;
 use JosKolenberg\LaravelJory\Tests\Factories\MusicianFactory;
-use JosKolenberg\LaravelJory\Tests\Factories\TeamFactory;
 
 class Musician extends Model
 {

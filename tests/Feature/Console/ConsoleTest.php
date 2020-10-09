@@ -4,7 +4,6 @@ namespace JosKolenberg\LaravelJory\Tests\Feature\Console;
 
 use JosKolenberg\LaravelJory\Tests\Feature\Console\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Feature\Console\Models\Musician;
-use JosKolenberg\LaravelJory\Tests\Models\User;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;

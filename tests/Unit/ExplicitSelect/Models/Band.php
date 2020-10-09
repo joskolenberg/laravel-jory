@@ -10,7 +10,6 @@ use JosKolenberg\LaravelJory\Tests\DefaultModels\Musician;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Song;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Tag;
 use JosKolenberg\LaravelJory\Tests\Factories\BandFactory;
-use JosKolenberg\LaravelJory\Tests\Factories\TeamFactory;
 
 class Band extends Model
 {

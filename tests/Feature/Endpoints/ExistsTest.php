@@ -1,10 +1,10 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\Exists;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Endpoints;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
+use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 use JosKolenberg\LaravelJory\Tests\TestCase;

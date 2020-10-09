@@ -3,11 +3,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests\Unit\ExplicitSelect\JoryResources;
 
-use JosKolenberg\LaravelJory\Config\Filter;
 use JosKolenberg\LaravelJory\JoryResource;
-use JosKolenberg\LaravelJory\Tests\DefaultModels\Team;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
-use JosKolenberg\LaravelJory\Tests\Scopes\FullNameFilter;
 
 class UserJoryResource extends JoryResource
 {

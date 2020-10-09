@@ -1,6 +1,6 @@
 <?php
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\First;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Endpoints;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;

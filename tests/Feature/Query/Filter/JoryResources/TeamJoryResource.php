@@ -1,9 +1,9 @@
 <?php
 
 
-namespace JosKolenberg\LaravelJory\Tests\Feature\Filter\JoryResources;
+namespace JosKolenberg\LaravelJory\Tests\Feature\Query\Filter\JoryResources;
 
-use JosKolenberg\LaravelJory\Tests\Feature\Filter\Scopes\HasUserWithNameFilter;
+use JosKolenberg\LaravelJory\Tests\Feature\Query\Filter\Scopes\HasUserWithNameFilter;
 
 class TeamJoryResource extends \JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource
 {

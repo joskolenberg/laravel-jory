@@ -5,15 +5,11 @@ namespace JosKolenberg\LaravelJory\Tests\Feature\Facade;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
-use JosKolenberg\LaravelJory\Http\Controllers\JoryController;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\User;
 use JosKolenberg\LaravelJory\Tests\Factories\UserFactory;
-use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
-use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
-use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\TestCase;
 
 class FacadeTest extends TestCase

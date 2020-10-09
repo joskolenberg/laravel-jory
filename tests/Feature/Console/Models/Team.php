@@ -4,7 +4,6 @@ namespace JosKolenberg\LaravelJory\Tests\Feature\Console\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use JosKolenberg\LaravelJory\Tests\Factories\TeamFactory;
 
 class Team extends Model
 {
