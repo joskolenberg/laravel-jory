@@ -165,4 +165,64 @@ class ExistsTest extends TestCase
         ];
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
+
+    /** @test */
+    public function it_returns_a_404_when_an_unknown_resource_exists_is_requested()
+    {
+        $this->json('GET', 'jory/team/exists')->assertStatus(404);
+    }
+
+    /** @test */
+    public function an_exists_call_can_be_done_when_fetching_multiple_resources()
+    {
+        $this->seedSesameStreet();
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+
+        $this->json('GET', 'jory', [
+            'jory' => [
+                'team:exists' => [],
+                'user:exists' => [
+                    'flt' => [
+                        'f' => 'name',
+                        'o' => 'like',
+                        'd' => '%homer%',
+                    ]
+                ],
+            ],
+        ])->assertStatus(200)->assertExactJson([
+            'data' => [
+                'team:exists' => true,
+                'user:exists' => false,
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function an_exists_call_can_be_done_on_relations()
+    {
+        $team = $this->seedSesameStreet();
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+
+        $this->json('GET', 'jory/team/' . $team->id, [
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'users:exists' => [
+                        'flt' => [
+                            'f' => 'name',
+                            'o' => 'like',
+                            'd' => '%e%',
+                        ]
+                    ],
+                ],
+            ],
+        ])->assertStatus(200)->assertExactJson([
+            'data' => [
+                'name' => 'Sesame Street',
+                'users:exists' => true,
+            ],
+        ]);
+    }
 }

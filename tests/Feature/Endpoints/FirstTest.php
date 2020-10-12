@@ -173,4 +173,62 @@ class FirstTest extends TestCase
             'message' => 'No query results for model [' . User::class . '].',
         ]);
     }
+
+    /** @test */
+    public function it_returns_a_404_when_an_unknown_resource_first_is_requested()
+    {
+        $this->json('GET', 'jory/team/first')->assertStatus(404);
+    }
+
+    /** @test */
+    public function a_first_call_can_be_done_when_fetching_multiple_resources()
+    {
+        $this->seedSesameStreet();
+        $this->seedSimpsons();
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+
+        $this->json('GET', 'jory', [
+            'jory' => [
+                'team:first' => [
+                    'fld' => 'name',
+                    'srt' => '-name'
+                ],
+                'user:first' => [
+                    'fld' => 'name',
+                    'srt' => 'name'
+                ],
+            ],
+        ])->assertStatus(200)->assertExactJson([
+            'data' => [
+                'team:first' => ['name' => 'Simpsons'],
+                'user:first' => ['name' => 'Bart'],
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function a_first_call_can_be_done_on_relations()
+    {
+        $team = $this->seedSesameStreet();
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+
+        $this->json('GET', 'jory/team/' . $team->id, [
+            'jory' => [
+                'fld' => 'name',
+                'rlt' => [
+                    'users:first' => [
+                        'fld' => 'name',
+                        'srt' => '-name',
+                    ],
+                ],
+            ],
+        ])->assertStatus(200)->assertExactJson([
+            'data' => [
+                'name' => 'Sesame Street',
+                'users:first' => ['name' => 'The Count'],
+            ],
+        ]);
+    }
 }
