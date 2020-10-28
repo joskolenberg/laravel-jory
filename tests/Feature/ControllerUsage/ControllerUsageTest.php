@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\TeamJoryResource;
 use JosKolenberg\LaravelJory\Tests\DefaultJoryResources\UserJoryResource;
+use JosKolenberg\LaravelJory\Tests\Feature\ControllerUsage\Controllers\GeneralController;
 use JosKolenberg\LaravelJory\Tests\Feature\ControllerUsage\Controllers\TeamController;
 use JosKolenberg\LaravelJory\Tests\Feature\ControllerUsage\Controllers\UserController;
 use JosKolenberg\LaravelJory\Tests\TestCase;
@@ -103,6 +104,37 @@ class ControllerUsageTest extends TestCase
 
         $response->assertStatus(200)->assertExactJson([
             'data' => 5,
+        ]);
+    }
+
+    /** @test */
+    public function it_can_return_multiple_resources()
+    {
+        $this->seedSesameStreet();
+        Jory::register(UserJoryResource::class);
+        Jory::register(TeamJoryResource::class);
+        Route::get('custom/multiple', [GeneralController::class, 'multiple'])->middleware('jory');
+
+        $response = $this->json('GET', 'custom/multiple', [
+            'jory' => [
+                'team' => [
+                    'fld' => 'name'
+                ],
+                'user:first' => [
+                    'fld' => 'name'
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                'team' => [
+                    ['name' => 'Sesame Street'],
+                ],
+                'user:first' => [
+                    'name' => 'Bert',
+                ],
+            ]
         ]);
     }
 
