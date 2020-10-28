@@ -91,7 +91,7 @@ class AutoRegistrar implements RegistersJoryResources
     {
         // Example; $path = /home/vagrant/code/project/app/Http/JoryResources/UserJoryResource.php
 
-        $rootPath = config('jory.auto-registrar.path');
+        $rootPath = realpath(config('jory.auto-registrar.path'));
         $rootNameSpace = config('jory.auto-registrar.namespace');
 
         // Get filename relative to rootPath without extension, e.g. /Http/JoryResources/UserJoryResource
