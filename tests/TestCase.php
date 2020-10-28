@@ -6,6 +6,7 @@ use Illuminate\Database\Query\Grammars\MySqlGrammar;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\JoryServiceProvider;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Band;
 use JosKolenberg\LaravelJory\Tests\DefaultModels\Musician;
@@ -146,6 +147,7 @@ class TestCase extends Orchestra
                  ] as $name) {
             User::factory()->create([
                 'name' => $name,
+                'email' => Str::slug($name) . '@sesamestreet.com',
                 'team_id' => $team->id,
             ]);
         }
