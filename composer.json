@@ -39,7 +39,8 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/joskolenberg/similar-text-finder.git"
+      "url": "https://github.com/joskolenberg/similar-text-finder.git",
+      "canonical": false
     }
   ]
 }
