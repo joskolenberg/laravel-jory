@@ -35,5 +35,11 @@
         "JosKolenberg\\LaravelJory\\JoryServiceProvider"
       ]
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/joskolenberg/similar-text-finder.git"
+    }
+  ],
 }
