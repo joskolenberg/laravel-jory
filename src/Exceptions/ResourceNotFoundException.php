@@ -3,8 +3,8 @@
 
 namespace JosKolenberg\LaravelJory\Exceptions;
 
+use JosKolenberg\LaravelJory\Helpers\SimilarTextFinder;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
-use SimilarText\Finder;
 
 /**
  * Class ResourceNotFoundException
@@ -33,7 +33,7 @@ class ResourceNotFoundException extends \Exception
      */
     protected function getSuggestion(array $array, string $value): string
     {
-        $bestMatch = (new Finder($value, $array))->threshold(4)->first();
+        $bestMatch = (new SimilarTextFinder($value, $array))->threshold(4)->first();
 
         return $bestMatch ? 'did you mean "' . $bestMatch . '"?' : 'no suggestions found.';
     }

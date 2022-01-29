@@ -8,7 +8,7 @@ use JosKolenberg\Jory\Support\GroupAndFilter;
 use JosKolenberg\Jory\Support\GroupOrFilter;
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryCallException;
 use JosKolenberg\LaravelJory\Helpers\ResourceNameHelper;
-use SimilarText\Finder;
+use JosKolenberg\LaravelJory\Helpers\SimilarTextFinder;
 
 /**
  * Class Validator.
@@ -234,7 +234,7 @@ class Validator
      */
     protected function getSuggestion(array $array, string $value): string
     {
-        $bestMatch = (new Finder($value, $array))->threshold(4)->first();
+        $bestMatch = (new SimilarTextFinder($value, $array))->threshold(4)->first();
 
         return $bestMatch ? 'did you mean "' . $bestMatch . '"?' : 'no suggestions found.';
     }

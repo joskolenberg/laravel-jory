@@ -188,8 +188,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select(
-    )
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select()
     {
         $builder = Album::query();
 
@@ -207,8 +206,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select(
-    )
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select()
     {
         $jory = [
             'fld' => ['name', 'cover_image'],
@@ -290,8 +288,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_foreign_key_field_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select(
-    )
+    public function it_adds_the_foreign_key_field_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select()
     {
         $builder = Song::query();
 
@@ -309,8 +306,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select(
-    )
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select()
     {
         $jory = [
             'fld' => ['title', 'album_name'],
@@ -394,8 +390,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select(
-    )
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select()
     {
         $builder = Album::query();
 
@@ -413,8 +408,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select(
-    )
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select()
     {
         $jory = [
             'fld' => ['name', 'titles_string'],
@@ -457,8 +451,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_belongsToMany_relation_using_explicit_select(
-    )
+    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_belongsToMany_relation_using_explicit_select()
     {
         $builder = Person::find(1)->instruments();
 
@@ -499,8 +492,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select(
-    )
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select()
     {
         $builder = Person::query();
 
@@ -518,8 +510,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select(
-    )
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select()
     {
         $jory = [
             'fld' => ['first_name', 'instruments_string'],
@@ -562,8 +553,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasManyThrough_relation_using_explicit_select(
-    )
+    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasManyThrough_relation_using_explicit_select()
     {
         $builder = Band::find(1)->songs();
 
@@ -604,8 +594,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select(
-    )
+    public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
 
@@ -623,8 +612,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select(
-    )
+    public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select()
     {
         $jory = [
             'fld' => ['name', 'titles_string'],
@@ -667,8 +655,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasOneThrough_relation_using_explicit_select(
-    )
+    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasOneThrough_relation_using_explicit_select()
     {
         $builder = Band::find(1)->firstSong();
 
@@ -768,10 +755,9 @@ class ExplicitSelectTest extends TestCase
 
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
-    
+
     /** @test */
-    public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphOne_relation_using_explicit_select(
-    )
+    public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphOne_relation_using_explicit_select()
     {
         $builder = Person::find(1)->firstImage();
 
@@ -785,8 +771,13 @@ class ExplicitSelectTest extends TestCase
 
         $joryBuilder->applyOnQuery($builder);
 
-        $this->assertEquals('select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_id` = ? and `images`.`imageable_id` is not null and `images`.`imageable_type` = ?',
-            $builder->toSql());
+        /**
+         * Different Laravel versions produce different SQL.
+         */
+        $this->assertContains($builder->toSql(), [
+            'select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_id` = ? and `images`.`imageable_id` is not null and `images`.`imageable_type` = ?',
+            'select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_type` = ? and `images`.`imageable_id` = ? and `images`.`imageable_id` is not null'
+        ]);
     }
 
     /** @test */
@@ -873,8 +864,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphMany_relation_using_explicit_select(
-    )
+    public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphMany_relation_using_explicit_select()
     {
         $builder = Band::find(1)->images();
 
@@ -888,8 +878,13 @@ class ExplicitSelectTest extends TestCase
 
         $joryBuilder->applyOnQuery($builder);
 
-        $this->assertEquals('select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_id` = ? and `images`.`imageable_id` is not null and `images`.`imageable_type` = ?',
-            $builder->toSql());
+        /**
+         * Different Laravel versions produce different SQL.
+         */
+        $this->assertContains($builder->toSql(), [
+            'select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_id` = ? and `images`.`imageable_id` is not null and `images`.`imageable_type` = ?',
+            'select `images`.`url`, `images`.`imageable_id` from `images` where `images`.`imageable_type` = ? and `images`.`imageable_id` = ? and `images`.`imageable_id` is not null'
+        ]);
     }
 
     /** @test */
@@ -976,8 +971,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphToMany_relation_using_explicit_select(
-    )
+    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphToMany_relation_using_explicit_select()
     {
         $builder = Album::find(1)->tags();
 
@@ -1079,8 +1073,7 @@ class ExplicitSelectTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphedByMany_relation_using_explicit_select(
-    )
+    public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphedByMany_relation_using_explicit_select()
     {
         $builder = Tag::find(1)->albums();
 
