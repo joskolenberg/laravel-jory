@@ -15,10 +15,7 @@ class Album extends Model
     protected $casts = [
         'id' => 'integer',
         'band_id' => 'integer',
-    ];
-
-    protected $dates = [
-        'release_date'
+        'release_date' => 'datetime',
     ];
 
     protected function serializeDate(\DateTimeInterface $date)

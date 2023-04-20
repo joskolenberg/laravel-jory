@@ -2,9 +2,10 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Tests\Models\User;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
 class ConsoleTest extends TestCase
 {
@@ -21,10 +22,10 @@ class ConsoleTest extends TestCase
         $this->artisan('jory:generate', ['--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
             ->expectsOutput('BandJoryResource created successfully.');
 
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('BandJoryResource.php');
 
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('BandJoryResource.php');
 
         $this->assertTrue($realContents === $expectedContentsLocal);
@@ -38,10 +39,10 @@ class ConsoleTest extends TestCase
             '--name' => 'AlternateBandJoryResource'
         ])->expectsOutput('AlternateBandJoryResource created successfully.');
 
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Original'));
         $expectedContentsLocal = $filesystem->read('AlternateBandJoryResource.php');
 
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Generated'));
         $realContents = $filesystem->read('AlternateBandJoryResource.php');
 
         $this->assertTrue($realContents === $expectedContentsLocal);
@@ -71,9 +72,9 @@ class ConsoleTest extends TestCase
             ->expectsOutput('TagJoryResource created successfully.')
             ->expectsOutput('UserJoryResource created successfully.');
 
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Original'));
 
-        $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
+        $generatedFilesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Generated'));
 
         $this->assertTrue($filesystem->read('AlbumJoryResource.php') === $generatedFilesystem->read('AlbumJoryResource.php'));
         $this->assertTrue($filesystem->read('BandJoryResource.php') === $generatedFilesystem->read('BandJoryResource.php'));
@@ -117,7 +118,7 @@ class ConsoleTest extends TestCase
             ->expectsOutput('GroupieJoryResource created successfully.')
             ->expectsOutput('SongJoryResource created successfully.');
 
-        $adapter = new Local(__DIR__ . '/ConsoleOutput/Generated');
+        $adapter = new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Generated');
         $filesystem = new Filesystem($adapter);
         $filesystem->delete('SongJoryResource.php');
 
@@ -142,9 +143,9 @@ class ConsoleTest extends TestCase
             '--model' => User::class,
         ])->expectsOutput('UserJoryResource created successfully.');
 
-        $filesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Original'));
+        $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Original'));
 
-        $generatedFilesystem = new Filesystem(new Local(__DIR__ . '/ConsoleOutput/Generated'));
+        $generatedFilesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput/Generated'));
 
         $this->assertTrue($filesystem->read('UserJoryResource.php') === $generatedFilesystem->read('UserJoryResource.php'));
     }
@@ -152,12 +153,12 @@ class ConsoleTest extends TestCase
     protected function cleanup()
     {
         // Remove all previously built JoryResources
-        $adapter = new Local(__DIR__ . '/ConsoleOutput');
+        $adapter = new LocalFilesystemAdapter(__DIR__ . '/ConsoleOutput');
         $filesystem = new Filesystem($adapter);
 
         foreach ($filesystem->listContents('Generated') as $file){
-            if($file['basename'] !== '.gitignore'){
-                $filesystem->delete($file['path']);
+            if(!Str::endsWith($file->path(), '.gitignore')){
+                $filesystem->delete($file->path());
             }
         }
     }
