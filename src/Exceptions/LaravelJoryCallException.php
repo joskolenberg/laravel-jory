@@ -2,12 +2,15 @@
 
 namespace JosKolenberg\LaravelJory\Exceptions;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
 /**
  * Exception class to be thrown when an error occurs
  * because of invalid data passed in the jory query.
  *
- * These exceptions will be used to show the errors in the return data
- * and will result into a 422 to the user by the JoryHandler.
+ * These exceptions will be used to show the errors in the
+ * return data and will result into a 422 to the user.
  *
  * Class LaravelJoryCallException
  */
@@ -19,7 +22,7 @@ class LaravelJoryCallException extends \Exception
     {
         $this->errors = $errors;
 
-        parent::__construct(implode(', ', $errors), 0, null);
+        parent::__construct(implode(', ', $errors));
     }
 
     /**
@@ -28,5 +31,13 @@ class LaravelJoryCallException extends \Exception
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function render(Request $request): Response
+    {
+        $responseKey = config('jory.response.errors-key');
+        $response = $responseKey === null ? $this->getErrors() : [$responseKey => $this->getErrors()];
+
+        return response($response, 422);
     }
 }

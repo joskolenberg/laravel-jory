@@ -3,6 +3,8 @@
 
 namespace JosKolenberg\LaravelJory\Exceptions;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use JosKolenberg\LaravelJory\Helpers\SimilarTextFinder;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 
@@ -11,7 +13,7 @@ use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
  *
  * Exception to be thrown when a resource is not found by a resource's uri.
  *
- * This exception will result into a 404 to the user by the JoryHandler.
+ * This exception will result into a 404 to the user.
  */
 class ResourceNotFoundException extends \Exception
 {
@@ -36,5 +38,14 @@ class ResourceNotFoundException extends \Exception
         $bestMatch = (new SimilarTextFinder($value, $array))->threshold(4)->first();
 
         return $bestMatch ? 'did you mean "' . $bestMatch . '"?' : 'no suggestions found.';
+    }
+
+    public function render(Request $request): Response
+    {
+        return response([
+            config('jory.response.errors-key') => [
+                $this->getMessage(),
+            ],
+        ], 404);
     }
 }

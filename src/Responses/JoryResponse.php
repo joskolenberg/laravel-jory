@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use JosKolenberg\Jory\Contracts\JoryParserInterface;
+use JosKolenberg\Jory\Exceptions\JoryException;
 use JosKolenberg\Jory\Jory;
 use JosKolenberg\Jory\Parsers\ArrayParser;
 use JosKolenberg\Jory\Parsers\JsonParser;
@@ -360,7 +361,11 @@ class JoryResponse implements Responsable
             throw new LaravelJoryException('No resource has been set on the JoryResponse. Use the on() method to set a resource.');
         }
 
-        $this->joryResource->setJory($this->getJory());
+        try {
+            $this->joryResource->setJory($this->getJory());
+        }catch (JoryException $e){
+            throw new \JosKolenberg\LaravelJory\Exceptions\JoryException($e);
+        }
 
         $this->joryResource->validate();
 

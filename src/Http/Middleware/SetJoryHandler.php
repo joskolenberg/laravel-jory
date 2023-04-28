@@ -3,9 +3,15 @@
 namespace JosKolenberg\LaravelJory\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Debug\ExceptionHandler;
-use JosKolenberg\LaravelJory\Exceptions\JoryHandler;
 
+/**
+ * @deprecated
+ *
+ * Class is kept to prevent breaking changes.
+ * But it is no longer needed since the error response handling is now done in the exceptions itself.
+ *
+ * Any references to this class in your code can be removed.
+ */
 class SetJoryHandler
 {
     /**
@@ -18,11 +24,6 @@ class SetJoryHandler
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        app()->singleton(
-            ExceptionHandler::class,
-            JoryHandler::class
-        );
-
         return $next($request);
     }
 }

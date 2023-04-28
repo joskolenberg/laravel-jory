@@ -145,7 +145,6 @@ return [
         'middleware' => [
             'api',
             // 'auth',
-            \JosKolenberg\LaravelJory\Http\Middleware\SetJoryHandler::class
         ],
 
     ],
