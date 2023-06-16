@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithCallables;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithScopes;
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
@@ -841,5 +842,62 @@ class FilterTest extends TestCase
         ]);
 
         $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_apply_a_filter_using_a_callback()
+    {
+        Jory::register(PersonJoryResourceWithCallables::class);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'fld' => [
+                    'first_name',
+                ],
+                'flt' => [
+                    'f' => 'full_name',
+                    'o' => 'like',
+                    'd' => '%on%',
+                ]
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                ['first_name' => 'Ronnie'],
+                ['first_name' => 'John Paul'],
+                ['first_name' => 'John'],
+                ['first_name' => 'John'],
+                ['first_name' => 'George'],
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function it_can_apply_a_filter_using_a_callback_via_field_definition()
+    {
+        Jory::register(PersonJoryResourceWithCallables::class);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'fld' => [
+                    'first_name',
+                    'last_name',
+                ],
+                'flt' => [
+                    'f' => 'first_name',
+                    'd' => [
+                        'is_reversed' => true,
+                        'value' => 'egroeG',
+                    ],
+                ]
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                ['first_name' => 'George', 'last_name' => 'Harrison'],
+            ],
+        ]);
     }
 }

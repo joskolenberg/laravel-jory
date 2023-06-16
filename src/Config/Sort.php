@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Config;
 
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Scopes\CallbackSortScope;
 use JosKolenberg\LaravelJory\Scopes\SortScope;
 
 /**
@@ -54,11 +55,15 @@ class Sort
     /**
      * Set the sort's scope class.
      *
-     * @param SortScope $scope
+     * @param SortScope|callable $scope
      * @return $this
      */
-    public function scope(SortScope $scope = null): Sort
+    public function scope(SortScope|callable $scope = null): Sort
     {
+        if(is_callable($scope)){
+            $scope = new CallbackSortScope($scope);
+        }
+
         $this->scope = $scope;
 
         return $this;

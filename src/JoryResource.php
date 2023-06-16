@@ -13,6 +13,8 @@ use JosKolenberg\LaravelJory\Config\Relation;
 use JosKolenberg\LaravelJory\Config\Sort;
 use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Scopes\CallbackFilterScope;
+use JosKolenberg\LaravelJory\Scopes\CallbackSortScope;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
 use JosKolenberg\LaravelJory\Scopes\SortScope;
 use JosKolenberg\LaravelJory\Traits\ConvertsModelToArray;
@@ -102,11 +104,15 @@ abstract class JoryResource
      * Add a filter option which can be applied by the API users.
      *
      * @param $field
-     * @param FilterScope|null $scope
+     * @param FilterScope|callable|null $scope
      * @return Filter
      */
-    public function filter($field, FilterScope $scope = null): Filter
+    public function filter($field, FilterScope|callable $scope = null): Filter
     {
+        if(is_callable($scope)){
+            $scope = new CallbackFilterScope($scope);
+        }
+
         return $this->config->filter($field, $scope);
     }
 
@@ -114,11 +120,15 @@ abstract class JoryResource
      * Add a sort option which can be applied by the API users.
      *
      * @param $field
-     * @param SortScope|null $scope
+     * @param SortScope|callable|null $scope
      * @return Sort
      */
-    public function sort($field, SortScope $scope = null): Sort
+    public function sort($field, SortScope|callable $scope = null): Sort
     {
+        if(is_callable($scope)){
+            $scope = new CallbackSortScope($scope);
+        }
+
         return $this->config->sort($field, $scope);
     }
 

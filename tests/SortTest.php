@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
+use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithCallables;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithScopes;
 
 class SortTest extends TestCase
@@ -916,5 +917,105 @@ class SortTest extends TestCase
         ]);
 
         $this->assertQueryCount(2);
+    }
+
+    /** @test */
+    public function it_can_apply_a_sort_using_a_callback()
+    {
+        Jory::register(PersonJoryResourceWithCallables::class);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'fld' => [
+                    'last_name',
+                ],
+                'flt' => [
+                    'f' => 'last_name',
+                    'o' => 'like',
+                    'd' => '%s',
+                ],
+                'srt' => 'last_name_alias',
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                ['last_name' => 'Jones'],
+                ['last_name' => 'Richards'],
+                ['last_name' => 'Watts'],
+            ],
+        ]);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'fld' => [
+                    'last_name',
+                ],
+                'flt' => [
+                    'f' => 'last_name',
+                    'o' => 'like',
+                    'd' => '%s',
+                ],
+                'srt' => '-last_name_alias',
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                ['last_name' => 'Watts'],
+                ['last_name' => 'Richards'],
+                ['last_name' => 'Jones'],
+            ],
+        ]);
+    }
+
+    /** @test */
+    public function it_can_apply_a_sort_using_a_callback_via_field_definition()
+    {
+        Jory::register(PersonJoryResourceWithCallables::class);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'fld' => [
+                    'last_name',
+                ],
+                'flt' => [
+                    'f' => 'last_name',
+                    'o' => 'like',
+                    'd' => '%s',
+                ],
+                'srt' => 'last_name',
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                ['last_name' => 'Watts'],
+                ['last_name' => 'Richards'],
+                ['last_name' => 'Jones'],
+            ],
+        ]);
+
+        $response = $this->json('GET', 'jory/person', [
+            'jory' => [
+                'fld' => [
+                    'last_name',
+                ],
+                'flt' => [
+                    'f' => 'last_name',
+                    'o' => 'like',
+                    'd' => '%s',
+                ],
+                'srt' => '-last_name',
+            ],
+        ]);
+
+        $response->assertStatus(200)->assertExactJson([
+            'data' => [
+                ['last_name' => 'Jones'],
+                ['last_name' => 'Richards'],
+                ['last_name' => 'Watts'],
+            ],
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace JosKolenberg\LaravelJory\Config;
 
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
+use JosKolenberg\LaravelJory\Scopes\CallbackFilterScope;
 use JosKolenberg\LaravelJory\Scopes\FilterScope;
 
 /**
@@ -63,11 +64,15 @@ class Filter
     /**
      * Set the filter's scope class.
      *
-     * @param FilterScope $scope
+     * @param FilterScope|callable $scope
      * @return $this
      */
-    public function scope(FilterScope $scope = null): Filter
+    public function scope(FilterScope|callable $scope = null): Filter
     {
+        if(is_callable($scope)){
+            $scope = new CallbackFilterScope($scope);
+        }
+
         $this->scope = $scope;
 
         return $this;
