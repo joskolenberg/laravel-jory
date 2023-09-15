@@ -13,7 +13,7 @@ trait HandlesJorySorts
      * @param $builder
      * @param JoryResource $joryResource
      */
-    protected function applySorts($builder, JoryResource $joryResource): void
+    public function applySorts($builder, JoryResource $joryResource): void
     {
         foreach ($joryResource->getJory()->getSorts() as $sort) {
             $this->applySort($builder, $sort, $joryResource);
@@ -27,7 +27,7 @@ trait HandlesJorySorts
      * @param Sort $sort
      * @param JoryResource $joryResource
      */
-    protected function applySort($builder, Sort $sort, JoryResource $joryResource): void
+    public function applySort($builder, Sort $sort, JoryResource $joryResource): void
     {
         $configuredSort = $joryResource->getConfig()->getSort($sort);
 
@@ -55,7 +55,7 @@ trait HandlesJorySorts
      * @param string $field
      * @param string $order
      */
-    protected function applyDefaultSort($builder, string $field, string $order): void
+    public function applyDefaultSort($builder, string $field, string $order): void
     {
         $builder->orderBy($field, $order);
     }

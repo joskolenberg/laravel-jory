@@ -21,7 +21,7 @@ trait HandlesJoryFilters
      * @param mixed $builder
      * @param JoryResource $joryResource
      */
-    protected function applyFilter($builder, JoryResource $joryResource): void
+    public function applyFilter($builder, JoryResource $joryResource): void
     {
         $this->doApplyFilter($builder, $joryResource->getJory()->getFilter(), $joryResource);
     }
@@ -38,7 +38,7 @@ trait HandlesJoryFilters
      * @param FilterInterface $filter
      * @param JoryResource $joryResource
      */
-    protected function doApplyFilter($builder, FilterInterface $filter, JoryResource $joryResource): void
+    public function doApplyFilter($builder, FilterInterface $filter, JoryResource $joryResource): void
     {
         if ($filter instanceof Filter) {
             $this->applyFieldFilter($builder, $filter, $joryResource);
@@ -70,7 +70,7 @@ trait HandlesJoryFilters
      * @param Filter $filter
      * @param JoryResource $joryResource
      */
-    protected function applyFieldFilter($builder, Filter $filter, JoryResource $joryResource): void
+    public function applyFieldFilter($builder, Filter $filter, JoryResource $joryResource): void
     {
         $configuredFilter = $joryResource->getConfig()->getFilter($filter);
 
@@ -115,7 +115,7 @@ trait HandlesJoryFilters
      * @param Filter $filter
      * @return void
      */
-    protected function applyRelationFilter($builder, Filter $filter, \JosKolenberg\LaravelJory\Config\Filter $configuredFilter): void
+    public function applyRelationFilter($builder, Filter $filter, \JosKolenberg\LaravelJory\Config\Filter $configuredFilter): void
     {
         $relations = explode('.', $configuredFilter->getField());
 

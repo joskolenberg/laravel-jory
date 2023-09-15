@@ -20,7 +20,7 @@ trait HandlesJorySelects
      * @param $builder
      * @param JoryResource $joryResource
      */
-    protected function applySelects($builder, JoryResource $joryResource): void
+    public function applySelects($builder, JoryResource $joryResource): void
     {
         if (! $joryResource->getConfig()->hasExplicitSelect()) {
             $this->applyDefaultSelect($builder);
@@ -37,7 +37,7 @@ trait HandlesJorySelects
      * @param $builder
      * @return void
      */
-    protected function applyDefaultSelect($builder): void
+    public function applyDefaultSelect($builder): void
     {
         $table = $builder->getModel()->getTable();
         $builder->select($table.'.*');
@@ -49,7 +49,7 @@ trait HandlesJorySelects
      * @param $builder
      * @param JoryResource $joryResource
      */
-    protected function applySelectsByJory($builder, JoryResource $joryResource): void
+    public function applySelectsByJory($builder, JoryResource $joryResource): void
     {
         $fields = $this->getSelectsForRequestedFields($builder, $joryResource);
         $fields = array_merge($fields, $this->getFieldsForEagerLoading($builder, $joryResource));
@@ -72,7 +72,7 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getSelectsForRequestedFields($builder, JoryResource $joryResource): array
+    public function getSelectsForRequestedFields($builder, JoryResource $joryResource): array
     {
         $fields = [];
 
@@ -100,7 +100,7 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getSelectsForChildRelations($builder, JoryResource $joryResource): array
+    public function getSelectsForChildRelations($builder, JoryResource $joryResource): array
     {
         $fields = [];
 
@@ -126,7 +126,7 @@ trait HandlesJorySelects
      * @param JoryResource $joryResource
      * @return array
      */
-    protected function getFieldsForEagerLoading($builder, JoryResource $joryResource): array
+    public function getFieldsForEagerLoading($builder, JoryResource $joryResource): array
     {
         $fields = [];
 
@@ -159,7 +159,7 @@ trait HandlesJorySelects
      * @param $builder
      * @return array
      */
-    protected function getSelectsForParentRelation($builder): array
+    public function getSelectsForParentRelation($builder): array
     {
         if($builder instanceof HasOne){
             return [$builder->getQualifiedForeignKeyName()];
