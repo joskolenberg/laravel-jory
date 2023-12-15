@@ -202,7 +202,8 @@ abstract class JoryResource
     public function getConfig(): Config
     {
         if (! $this->config) {
-            $this->config = new Config($this->modelClass);
+            $this->config = app()->makeWith(Config::class, ['modelClass' => $this->modelClass]);
+
             $this->configure();
         }
 
@@ -234,7 +235,10 @@ abstract class JoryResource
      */
     public function validate(): void
     {
-        (new Validator($this->getConfig(), $this->jory))->validate();
+        app()->makeWith(Validator::class, [
+            'config' => $this->getConfig(),
+            'jory' => $this->jory,
+        ])->validate();
     }
 
     /**

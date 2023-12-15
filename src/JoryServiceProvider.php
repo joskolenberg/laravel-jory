@@ -4,6 +4,8 @@ namespace JosKolenberg\LaravelJory;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use JosKolenberg\LaravelJory\Config\Config;
+use JosKolenberg\LaravelJory\Config\Validator;
 use JosKolenberg\LaravelJory\Console\JoryResourceGenerateCommand;
 use JosKolenberg\LaravelJory\Helpers\CaseManager;
 use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
@@ -51,6 +53,14 @@ class JoryServiceProvider extends ServiceProvider
 
         $this->app->bind(JoryBuilder::class, function ($app, $params){
             return new JoryBuilder($params['joryResource']);
+        });
+
+        $this->app->bind(Validator::class, function ($app, $params){
+            return new Validator($params['config'], $params['jory']);
+        });
+
+        $this->app->bind(Config::class, function ($app, $params){
+            return new Config($params['modelClass']);
         });
     }
 
