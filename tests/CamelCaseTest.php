@@ -2,10 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class CamelCaseTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_returns_the_configs_default_fields_in_camel_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -25,7 +27,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_defined_fields_in_camel_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -45,7 +47,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_fields_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -64,7 +66,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_default_filters_in_camelcase()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -88,7 +90,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_custom_filters_in_camelcase()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -124,7 +126,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_filters_in_camelCase()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -143,7 +145,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_default_sorts_in_camelcase()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -185,7 +187,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_custom_sorts_in_camelcase()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -233,7 +235,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_sorts_in_camelCase()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -253,7 +255,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_relations_in_camelcase()
     {
         $response = $this->json('GET', 'jory/album/2', [
@@ -316,7 +318,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_relations_in_camelCase()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -335,7 +337,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_records_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -364,7 +366,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_do_a_count_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/count', [
@@ -381,7 +383,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_a_single_record_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -401,7 +403,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_apply_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
@@ -511,7 +513,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_camelCase_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
@@ -530,7 +532,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_camel_case_in_relations()
     {
         $response = $this->json('GET', 'jory/person/10', [
@@ -587,7 +589,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_camelCase_in_relations()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -609,7 +611,7 @@ class CamelCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_with_an_alias_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/3', [

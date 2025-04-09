@@ -2,10 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class FirstTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_first_item_using_the_uri_1()
     {
         $response = $this->json('GET', 'jory/song/first', [
@@ -30,7 +32,7 @@ class FirstTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_first_item_using_the_uri_2()
     {
         $response = $this->json('GET', 'jory/band/first', [
@@ -55,7 +57,7 @@ class FirstTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_first_item_on_a_relation_1()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -82,7 +84,7 @@ class FirstTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_first_item_on_a_relation_2()
     {
         $response = $this->json('GET', 'jory/album/3', [
@@ -101,7 +103,7 @@ class FirstTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_fail_when_requesting_the_first_item_on_a_non_collection_relation()
     {
         $response = $this->json('GET', 'jory/song/first', [
@@ -120,7 +122,7 @@ class FirstTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_first_item_when_fetching_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
@@ -156,7 +158,7 @@ class FirstTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_404_when_a_model_is_not_found_by_id()
     {
         $response = $this->json('GET', 'jory/band/1234', [
@@ -174,7 +176,7 @@ class FirstTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_404_when_a_model_is_not_found_by_first()
     {
         $response = $this->json('GET', 'jory/band/first', [

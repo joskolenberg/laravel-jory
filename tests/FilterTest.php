@@ -8,12 +8,11 @@ use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResource
 use JosKolenberg\LaravelJory\Tests\Models\Band;
 use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use PHPUnit\Framework\Attributes\Test;
 
 class FilterTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_apply_a_single_filter()
     {
         $actual = Jory::onModelClass(Person::class)->applyArray([
@@ -34,9 +33,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_apply_an_OR_filter_group()
     {
         $actual = Jory::onModelClass(Person::class)->applyArray([
@@ -66,9 +63,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_apply_an_AND_filter_group()
     {
         $actual = Jory::onModelClass(Person::class)->applyArray([
@@ -96,9 +91,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_apply_nested_filters_1()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
@@ -128,9 +121,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_apply_nested_filters_2()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
@@ -169,9 +160,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_apply_nested_filters_3()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
@@ -225,9 +214,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_apply_nested_filters_4()
     {
         $actual = Jory::onModelClass(Song::class)->applyArray([
@@ -296,9 +283,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_doesnt_apply_any_filter_when_parameter_is_omitted()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray(['fld' => ['name']])->toArray();
@@ -313,7 +298,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_by_the_default_laravel_operators()
     {
         // =, >, <, <>, !=, like, not_like, <=, >=
@@ -448,7 +433,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(10);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_on_null_values()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
@@ -465,7 +450,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_on_non_null_values()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
@@ -484,7 +469,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_an_IN_filter()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
@@ -503,7 +488,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_NOT_IN_filter()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
@@ -522,7 +507,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_defaults_to_an_EQUALS_check_if_no_operator_is_given()
     {
         $actual = Jory::onModelClass(Band::class)->applyArray([
@@ -540,7 +525,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_filter_by_a_local_scope_on_the_related_model()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -567,7 +552,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_wraps_a_closure_around_custom_orWheres_to_prevent_returning_unwanted_data()
     {
         $response = $this->json('GET', 'jory/person', [
@@ -588,7 +573,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_on_a_related_models_field()
     {
         $response = $this->json('GET', 'jory/person', [
@@ -627,7 +612,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_on_a_related_models_field_in_default_case()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -666,7 +651,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_on_a_related_models_field_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -706,7 +691,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_on_a_related_models_field_in_camel_case()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -746,7 +731,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_using_a_filter_scope_class()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -777,7 +762,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_via_the_field_using_a_filter_scope_class()
     {
         Jory::register(PersonJoryResourceWithScopes::class);
@@ -808,7 +793,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_via_the_field_using_a_filter_scope_class_when_requesting_a_relation()
     {
         Jory::register(PersonJoryResourceWithScopes::class);
@@ -844,7 +829,7 @@ class FilterTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_filter_using_a_callback()
     {
         Jory::register(PersonJoryResourceWithCallables::class);
@@ -873,7 +858,7 @@ class FilterTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_filter_using_a_callback_via_field_definition()
     {
         Jory::register(PersonJoryResourceWithCallables::class);

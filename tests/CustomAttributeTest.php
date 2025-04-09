@@ -4,10 +4,11 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\CustomSongJoryResource;
+use PHPUnit\Framework\Attributes\Test;
 
 class CustomAttributeTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_get_a_custom_attribute_for_a_model()
     {
         Jory::register(CustomSongJoryResource::class);

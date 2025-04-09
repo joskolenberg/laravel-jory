@@ -3,11 +3,12 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Tests\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 
 class MetadataTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_query_count_as_meta_data()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -37,7 +38,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_query_count_as_meta_data_2()
     {
         $response = $this->json('GET', 'jory/band/1', [
@@ -59,7 +60,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_query_count_as_meta_data_3()
     {
         $response = $this->json('GET', 'jory', [
@@ -87,7 +88,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(6);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_meta_data_in_camelCase()
     {
         $response = $this->json('GET', 'jory/band/1', [
@@ -110,7 +111,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_processing_time()
     {
         $response = $this->json('GET', 'jory/song/1', [
@@ -133,7 +134,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_current_users_email()
     {
         $this->actingAs(User::find(3));
@@ -166,7 +167,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_if_no_user_is_logged_in()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -197,7 +198,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_give_the_total_records_for_a_single_resource()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -225,7 +226,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_gives_null_as_total_records_for_a_count_request()
     {
         $response = $this->json('GET', 'jory/song/count', [
@@ -244,7 +245,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_gives_null_as_total_records_for_an_exists_request()
     {
         $response = $this->json('GET', 'jory/song/exists', [
@@ -263,7 +264,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_give_the_total_records_for_multiple_resources_and_returns_no_total_for_count_or_show_requests()
     {
         $response = $this->json('GET', 'jory', [
@@ -340,7 +341,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(6);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_422_error_when_unknown_metadata_is_requested()
     {
         $response = $this->json('GET', 'jory/band/1', [
@@ -358,7 +359,7 @@ class MetadataTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_422_error_when_metadata_is_requested_while_its_not_supported()
     {
         config()->set('jory.response.data-key', null);

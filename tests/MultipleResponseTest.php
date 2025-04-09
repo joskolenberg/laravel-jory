@@ -4,11 +4,12 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Exceptions\LaravelJoryException;
 use JosKolenberg\LaravelJory\Facades\Jory;
+use PHPUnit\Framework\Attributes\Test;
 
 class MultipleResponseTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_resources_applying_json()
     {
         $actual = Jory::multiple()
@@ -28,7 +29,7 @@ class MultipleResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_resources_applying_json_using_apply()
     {
         $actual = Jory::multiple()
@@ -48,7 +49,7 @@ class MultipleResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_resources_applying_an_array()
     {
         $actual = Jory::multiple()
@@ -85,7 +86,7 @@ class MultipleResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_resources_applying_an_array_using_apply()
     {
         $actual = Jory::multiple()
@@ -122,7 +123,7 @@ class MultipleResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_defaults_to_applying_the_data_in_the_request_when_nothing_is_applied()
     {
         $response = $this->json('GET', 'jory', [
@@ -161,7 +162,7 @@ class MultipleResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_invalid_data_is_applied()
     {
         $this->expectException(LaravelJoryException::class);

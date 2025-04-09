@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Tests\Controllers\BandController;
+use PHPUnit\Framework\Attributes\Test;
 
 class ControllerUsageTest extends TestCase
 {
@@ -17,7 +18,7 @@ class ControllerUsageTest extends TestCase
         Route::get('band/{bandId}', BandController::class.'@show')->middleware('jory');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_collection_based_on_request()
     {
         $response = $this->json('GET', 'band', [
@@ -38,7 +39,7 @@ class ControllerUsageTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_single_record_based_on_request()
     {
         $response = $this->json('GET', 'band/2', [
@@ -57,7 +58,7 @@ class ControllerUsageTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_single_record_filtered_by_jory()
     {
         $response = $this->json('GET', 'band/first-by-filter', ['jory' => '{"flt":{"f":"name","d":"Beatles"}}']);
@@ -74,7 +75,7 @@ class ControllerUsageTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_record_count_based_on_jory_filters()
     {
         $response = $this->json('GET', 'band/count', ['jory' => '{"flt":{"f":"name","o":"like","d":"%r%"}}']);
@@ -86,7 +87,7 @@ class ControllerUsageTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_execute_when_no_jory_parameter_is_given()
     {
         $response = $this->json('GET', 'band/2');

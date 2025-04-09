@@ -5,10 +5,11 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithCallables;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\PersonJoryResourceWithScopes;
+use PHPUnit\Framework\Attributes\Test;
 
 class SortTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_sort_a_query_ascending()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -48,7 +49,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sort_a_query_descending()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -88,7 +89,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sort_a_query_descending_2()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -128,7 +129,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sort_a_query_on_multiple_fields_1()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -166,7 +167,7 @@ class SortTest extends TestCase
         $response->assertStatus(200)->assertExactJson($expected)->assertJson($expected);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sort_a_query_on_multiple_fields_2()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -206,7 +207,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sort_a_query_on_multiple_fields_3()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -246,7 +247,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sort_a_query_on_multiple_fields_4()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -286,7 +287,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sort_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -439,7 +440,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_combine_relations_filters_and_sorts()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -489,7 +490,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_custom_sort()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -553,7 +554,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_custom_sort_2()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -617,7 +618,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_sort_by_a_local_scope_on_the_related_model()
     {
         $response = $this->json('GET', 'jory/album-cover', [
@@ -809,7 +810,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_sorting_by_using_a_sort_scope_class()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -843,7 +844,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_sort_via_the_field_using_a_sort_scope_class()
     {
         Jory::register(PersonJoryResourceWithScopes::class);
@@ -876,7 +877,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_via_the_field_using_a_filter_scope_class_when_requesting_a_relation()
     {
         Jory::register(PersonJoryResourceWithScopes::class);
@@ -919,7 +920,7 @@ class SortTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_sort_using_a_callback()
     {
         Jory::register(PersonJoryResourceWithCallables::class);
@@ -969,7 +970,7 @@ class SortTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_sort_using_a_callback_via_field_definition()
     {
         Jory::register(PersonJoryResourceWithCallables::class);

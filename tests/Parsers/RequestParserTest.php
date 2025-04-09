@@ -3,10 +3,11 @@
 namespace JosKolenberg\LaravelJory\Tests\Parsers;
 
 use JosKolenberg\LaravelJory\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RequestParserTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_get_the_jory_parameter_from_a_request()
     {
         $response = $this->json('GET', 'jory/person', [
@@ -27,7 +28,7 @@ class RequestParserTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_defaults_to_empty_when_no_data_is_passed()
     {
         $response = $this->json('GET', 'jory/band');

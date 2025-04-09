@@ -13,10 +13,11 @@ use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWi
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfigThree;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithConfigTwo;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
+use PHPUnit\Framework\Attributes\Test;
 
 class RegisterTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_gives_manually_added_jory_resources_precedence_over_autoregistered_jory_resources_with_the_same_uri()
     {
         $register = app(JoryResourcesRegister::class);
@@ -27,7 +28,7 @@ class RegisterTest extends TestCase
         $this->assertInstanceOf(TagJoryResourceWithExplicitSelect::class, $register->getByUri('tag'));
     }
 
-    /** @test */
+    #[Test]
     public function it_gives_any_newly_added_jory_resources_precedence_over_earlier_registered_jory_resources_with_the_same_uri()
     {
         $register = app(JoryResourcesRegister::class);
@@ -41,7 +42,7 @@ class RegisterTest extends TestCase
         $this->assertInstanceOf(CustomSongJoryResource2::class, $register->getByUri('song'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_give_all_the_available_resources()
     {
         $register = app(JoryResourcesRegister::class);
@@ -62,7 +63,7 @@ class RegisterTest extends TestCase
         $this->assertEquals(json_encode($expected), json_encode($actual));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_give_the_options_for_the_resource()
     {
         $register = app(JoryResourcesRegister::class);
@@ -141,7 +142,7 @@ class RegisterTest extends TestCase
         $this->assertEquals(json_encode($expected), json_encode($actual));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_the_options_for_the_resource_2()
     {
         $register = app(JoryResourcesRegister::class);
@@ -201,7 +202,7 @@ class RegisterTest extends TestCase
         $this->assertEquals(json_encode($expected), json_encode($actual));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_the_options_for_the_resource_3()
     {
         $register = app(JoryResourcesRegister::class);
@@ -251,7 +252,7 @@ class RegisterTest extends TestCase
         $this->assertEquals(json_encode($expected), json_encode($actual));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_the_options_for_the_resource_4()
     {
         $register = app(JoryResourcesRegister::class);
@@ -438,7 +439,7 @@ class RegisterTest extends TestCase
         $this->assertEquals(json_encode($expected), json_encode($actual));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_show_the_options_for_the_resource_5()
     {
         $register = app(JoryResourcesRegister::class);
@@ -703,7 +704,7 @@ class RegisterTest extends TestCase
         $this->assertEquals(json_encode($expected), json_encode($actual));
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_return_a_jory_resource_without_routes_enabled()
     {
         Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
@@ -725,7 +726,7 @@ class RegisterTest extends TestCase
         $this->assertEquals(json_encode($expected), json_encode($actual));
     }
 
-    /** @test */
+    #[Test]
     public function a_jory_resource_without_routes_enabled_cannot_be_called_from_the_uri_1()
     {
         Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
@@ -735,7 +736,7 @@ class RegisterTest extends TestCase
         ])->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function a_jory_resource_without_routes_enabled_cannot_be_called_from_the_uri_2()
     {
         Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
@@ -745,7 +746,7 @@ class RegisterTest extends TestCase
         ])->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function a_jory_resource_without_routes_enabled_cannot_be_called_from_the_uri_3()
     {
         Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);
@@ -755,7 +756,7 @@ class RegisterTest extends TestCase
         ])->assertStatus(404);
     }
 
-    /** @test */
+    #[Test]
     public function a_jory_resource_without_routes_enabled_can_still_be_used_to_query_relations()
     {
         Jory::register(AlbumCoverJoryResourceWithoutRoutes::class);

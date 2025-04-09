@@ -2,9 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class RelationTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_load_a_many_to_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -55,7 +57,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_has_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -96,7 +98,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_has_many_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -118,7 +120,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_subrelations_on_a_has_many_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -140,7 +142,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_belongs_to_relation()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -166,7 +168,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_belongs_to_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -187,7 +189,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_subrelations_on_a_belongs_to_relation_with_no_result()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -208,7 +210,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_has_many_through_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -343,7 +345,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_has_one_relation()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -408,7 +410,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_nested_relations()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -440,7 +442,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_and_filter_nested_relations_1()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -491,7 +493,7 @@ class RelationTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_and_filter_nested_relations_2()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -790,7 +792,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(8);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_filter_on_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -817,7 +819,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_have_a_relation_on_empty_collection()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -829,7 +831,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_and_filter_nested_relations_3()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -943,7 +945,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_using_snake_case_notation()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -1009,7 +1011,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_nested_relations_with_as_little_queries_as_possible()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -1021,7 +1023,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(9);
     }
 
-    /** @test */
+    #[Test]
     public function filters_in_relations_do_not_affect_the_value_of_a_custom_attribute_which_relies_on_that_relation()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -1047,7 +1049,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_eager_load_relations_using_load_on_the_field_config_1()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -1079,7 +1081,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_eager_load_relations_using_load_on_the_field_config_2()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -1108,7 +1110,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_with_an_alias()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -1142,7 +1144,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_hasOneThrough_relation()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -1163,7 +1165,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_morphOne_relation()
     {
         $response = $this->json('GET', 'jory/person/3', [
@@ -1184,7 +1186,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_morphMany_relation()
     {
         $response = $this->json('GET', 'jory/band/4', [
@@ -1213,7 +1215,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_morphToMany_relation()
     {
         $response = $this->json('GET', 'jory/album/4', [
@@ -1239,7 +1241,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_morphedByMany_relation()
     {
         $response = $this->json('GET', 'jory/tag/1', [
@@ -1291,7 +1293,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_count()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -1318,7 +1320,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_count_2()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -1351,7 +1353,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(5);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_count_as_an_alias()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -1378,7 +1380,7 @@ WWW@@WWWWWW*###=#*:*#@#@=*@W@WWWWWW@@@W@WWWWWWWWWW@**+**+++*++*:@WWW@@W@WWWWWWW'
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_count_as_an_alias_2()
     {
         $response = $this->json('GET', 'jory/band', [

@@ -6,11 +6,12 @@ use JosKolenberg\LaravelJory\Facades\Jory as Facade;
 use JosKolenberg\LaravelJory\Tests\Models\Instrument;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
+use PHPUnit\Framework\Attributes\Test;
 
 class BaseTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_jory_json_string()
     {
         $actual = Facade::onModelClass(Song::class)
@@ -27,7 +28,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_jory_array()
     {
         $actual = Facade::onModelClass(Song::class)->applyArray([
@@ -48,7 +49,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_jory_json_string_from_a_request()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -69,7 +70,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_custom_filter()
     {
         $actual = Facade::onModelClass(Album::class)->applyArray([
@@ -94,7 +95,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_mulitple_custom_filters()
     {
         $actual = Facade::onModelClass(Album::class)->applyArray([
@@ -131,7 +132,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_combine_standard_and_custom_filters()
     {
         $actual = Facade::onModelClass(Album::class)->applyArray([
@@ -160,7 +161,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_override_the_basic_filter_function()
     {
         $actual = Facade::onModelClass(Instrument::class)
@@ -182,7 +183,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_single_model()
     {
         $actual = Facade::onModelClass(Instrument::class)
@@ -198,7 +199,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_when_a_single_model_is_not_found()
     {
         $actual = Facade::onModelClass(Instrument::class)
@@ -215,7 +216,7 @@ class BaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_sort_and_select_on_an_ambiguous_column_when_using_a_belongs_to_many_relation()
     {
         $response = $this->json('GET', 'jory/band', [

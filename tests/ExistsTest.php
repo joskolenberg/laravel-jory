@@ -2,10 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class ExistsTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_tell_if_an_item_exists_using_the_uri_1()
     {
         $response = $this->json('GET', 'jory/song/exists', [
@@ -26,7 +28,7 @@ class ExistsTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_tell_if_an_item_exists_using_the_uri_2()
     {
         $response = $this->json('GET', 'jory/band/exists', [
@@ -40,7 +42,7 @@ class ExistsTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_tell_if_an_item_exists_using_the_uri_3()
     {
         $response = $this->json('GET', 'jory/song/exists', [
@@ -61,7 +63,7 @@ class ExistsTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_tell_if_a_relation_exists_1()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -84,7 +86,7 @@ class ExistsTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_tell_if_a_relation_exists_2()
     {
         $response = $this->json('GET', 'jory/album/3', [
@@ -101,7 +103,7 @@ class ExistsTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_fail_when_requesting_exists_on_a_non_collection_relation()
     {
         $response = $this->json('GET', 'jory/song/first', [
@@ -118,7 +120,7 @@ class ExistsTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_exists_when_fetching_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [

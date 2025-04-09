@@ -2,9 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class JoryRoutesTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_records()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -25,7 +27,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_records_with_jory_data_applied()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -52,7 +54,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_single_record()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -101,7 +103,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_record_count()
     {
         $response = $this->json('GET', 'jory/song/count', [
@@ -118,7 +120,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_record_count_and_should_ignore_pagination()
     {
         $response = $this->json('GET', 'jory/song/count', [
@@ -135,7 +137,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_record_count_with_a_filter_applied()
     {
         $response = $this->json('GET', 'jory/song/count', [
@@ -152,7 +154,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_record_count_with_a_custom_filter_applied()
     {
         $response = $this->json('GET', 'jory/song/count', [
@@ -169,7 +171,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_collection()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -188,7 +190,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_single_record()
     {
         $response = $this->json('GET', 'jory/song/2', [
@@ -207,7 +209,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_count()
     {
         $response = $this->json('GET', 'jory/song/count', [
@@ -226,7 +228,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_single_error_when_a_jory_exception_is_thrown_loading_a_collection_2()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -245,7 +247,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_multiple_resources_at_once()
     {
         $response = $this->json('GET', 'jory', [
@@ -328,7 +330,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(8);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_error_when_a_resource_is_not_found()
     {
         $response = $this->json('GET', 'jory', [
@@ -349,7 +351,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_error_when_a_JoryException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
@@ -368,7 +370,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_an_error_when_a_LaravelJoryCallException_has_occured()
     {
         $response = $this->json('GET', 'jory', [
@@ -389,7 +391,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_a_404_when_an_unknown_model_is_configured()
     {
         $this->json('GET', 'jory/bandd', [
@@ -403,7 +405,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_when_a_model_is_not_found_by_id_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
@@ -426,7 +428,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_handle_an_incoming_array_instead_of_json()
     {
         $response = $this->json('GET', 'jory/song/75', [
@@ -446,7 +448,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_handle_an_incoming_array_instead_of_json_with_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
@@ -474,7 +476,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_404_when_an_get_call_for_an_unknown_resource_is_done()
     {
         $response = $this->json('GET', 'jory/persn', [
@@ -493,7 +495,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_404_when_a_single_call_for_an_unknown_resource_is_done()
     {
         $response = $this->json('GET', 'jory/persn/4', [
@@ -512,7 +514,7 @@ class JoryRoutesTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_404_when_a_count_call_for_an_unknown_resource_is_done()
     {
         $response = $this->json('GET', 'jory/persn/count', [

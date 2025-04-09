@@ -2,9 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class FieldsTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_specify_the_fields_to_return()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -35,7 +37,7 @@ class FieldsTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_specify_the_fields_to_return_on_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -140,7 +142,7 @@ class FieldsTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function when_the_fields_parameter_is_not_specified_all_fields_will_be_returned()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -179,7 +181,7 @@ class FieldsTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -198,7 +200,7 @@ class FieldsTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function when_the_fields_parameter_is_an_empty_array_no_fields_will_be_returned_2()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -251,7 +253,7 @@ class FieldsTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_custom_model_attributes()
     {
         $response = $this->json('GET', 'jory/person', [

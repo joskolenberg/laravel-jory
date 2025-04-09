@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class ConfigTest extends TestCase
 {
     protected function getEnvironmentSetUp($app)
@@ -11,7 +13,7 @@ class ConfigTest extends TestCase
         $app['config']->set('jory.response.errors-key', null);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_data_in_the_root_when_data_key_is_configured_null()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -26,7 +28,7 @@ class ConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_data_in_the_root_when_data_key_is_configured_null_2()
     {
         $response = $this->json('GET', 'jory', [
@@ -43,7 +45,7 @@ class ConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_errors_in_the_root_when_data_key_is_configured_null()
     {
         $response = $this->json('GET', 'jory/band/3', [
@@ -58,7 +60,7 @@ class ConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_errors_in_the_root_when_data_key_is_configured_null_2()
     {
         $response = $this->json('GET', 'jory', [
@@ -73,7 +75,7 @@ class ConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function a_relation_can_be_defined_with_a_custom_jory_resource_1()
     {
         $response = $this->json('GET', 'jory/album/5', [
@@ -107,7 +109,7 @@ class ConfigTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function a_relation_can_be_defined_with_a_custom_jory_resource_2()
     {
         $response = $this->json('GET', 'jory/album/5', [
@@ -137,7 +139,7 @@ class ConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function a_relation_can_be_defined_with_a_custom_jory_resource_3()
     {
         $response = $this->json('GET', 'jory/album/5', [

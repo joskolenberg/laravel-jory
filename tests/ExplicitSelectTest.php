@@ -18,10 +18,11 @@ use JosKolenberg\LaravelJory\Tests\Models\Person;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
 use JosKolenberg\LaravelJory\Tests\Models\SubFolder\Album;
 use JosKolenberg\LaravelJory\Tests\Models\Tag;
+use PHPUnit\Framework\Attributes\Test;
 
 class ExplicitSelectTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_only_selects_requested_fields_when_using_explicit_select()
     {
         $builder = Person::query();
@@ -39,7 +40,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `first_name`, `last_name` from `people`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_fields_using_explicit_select()
     {
         $jory = [
@@ -53,7 +54,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_selects_the_primary_key_field_when_no_fields_are_requested_to_prevent_query_errors_1()
     {
         $builder = Person::query();
@@ -71,7 +72,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_selects_the_primary_key_field_when_no_fields_are_requested_to_prevent_query_errors_2()
     {
         $jory = [
@@ -84,7 +85,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('{"data":[]}', $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_selects_the_primary_key_field_when_no_fields_are_requested_in_a_relation_to_prevent_query_errors_1()
     {
         $builder = Person::find(3)->instruments();
@@ -102,7 +103,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `instruments`.`id` from `instruments` inner join `instrument_person` on `instruments`.`id` = `instrument_person`.`instrument_id` where `instrument_person`.`person_id` = ?', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_selects_the_primary_key_field_when_no_fields_are_requested_in_a_relation_to_prevent_query_errors_2()
     {
         $jory = [
@@ -125,7 +126,7 @@ class ExplicitSelectTest extends TestCase
      * HAS ONE RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_hasOne_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -146,7 +147,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_foreign_key_field_when_requesting_a_hasOne_relation_using_explicit_select()
     {
         $builder = Album::find(1)->cover();
@@ -165,7 +166,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_hasOne_relation_using_explicit_select()
     {
         $jory = [
@@ -187,7 +188,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -205,7 +206,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasOne_relation_using_explicit_select()
     {
         $jory = [
@@ -225,7 +226,7 @@ class ExplicitSelectTest extends TestCase
      * BELONGS TO RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_foreign_key_field_when_requesting_a_belongsTo_relation_using_explicit_select()
     {
         $builder = Song::query();
@@ -246,7 +247,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_belongsTo_relation_using_explicit_select()
     {
         $builder = Song::find(1)->album();
@@ -265,7 +266,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_belongsTo_relation_using_explicit_select()
     {
         $jory = [
@@ -287,7 +288,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_foreign_key_field_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select()
     {
         $builder = Song::query();
@@ -305,7 +306,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `songs`.`title`, `songs`.`album_id` from `songs`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsTo_relation_using_explicit_select()
     {
         $jory = [
@@ -325,7 +326,7 @@ class ExplicitSelectTest extends TestCase
      * HAS MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_hasMany_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -348,7 +349,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_foreign_key_field_when_requesting_a_hasMany_relation_using_explicit_select()
     {
         $builder = Album::find(1)->songs();
@@ -367,7 +368,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_hasMany_relation_using_explicit_select()
     {
         $jory = [
@@ -389,7 +390,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -407,7 +408,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasMany_relation_using_explicit_select()
     {
         $jory = [
@@ -427,7 +428,7 @@ class ExplicitSelectTest extends TestCase
      * BELONGS TO MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_belongsToMany_relation_using_explicit_select()
     {
         $builder = Person::query();
@@ -450,7 +451,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_belongsToMany_relation_using_explicit_select()
     {
         $builder = Person::find(1)->instruments();
@@ -469,7 +470,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_belongsToMany_relation_using_explicit_select()
     {
         $jory = [
@@ -491,7 +492,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select()
     {
         $builder = Person::query();
@@ -509,7 +510,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_belongsToMany_relation_using_explicit_select()
     {
         $jory = [
@@ -529,7 +530,7 @@ class ExplicitSelectTest extends TestCase
      * HAS MANY THROUGH RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_hasManyThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -552,7 +553,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasManyThrough_relation_using_explicit_select()
     {
         $builder = Band::find(1)->songs();
@@ -571,7 +572,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_hasManyThrough_relation_using_explicit_select()
     {
         $jory = [
@@ -593,7 +594,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -611,7 +612,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasManyThrough_relation_using_explicit_select()
     {
         $jory = [
@@ -631,7 +632,7 @@ class ExplicitSelectTest extends TestCase
      * HAS ONE THROUGH RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_hasOneThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -654,7 +655,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_hasOneThrough_relation_using_explicit_select()
     {
         $builder = Band::find(1)->firstSong();
@@ -673,7 +674,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_hasOneThrough_relation_using_explicit_select()
     {
         $jory = [
@@ -695,7 +696,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_hasOneThrough_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -713,7 +714,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_hasOneThrough_relation_using_explicit_select()
     {
         $jory = [
@@ -733,7 +734,7 @@ class ExplicitSelectTest extends TestCase
      * MORPH ONE RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_morphOne_relation_using_explicit_select()
     {
         $builder = Person::query();
@@ -756,7 +757,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphOne_relation_using_explicit_select()
     {
         $builder = Person::find(1)->firstImage();
@@ -780,7 +781,7 @@ class ExplicitSelectTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_morphOne_relation_using_explicit_select()
     {
         $jory = [
@@ -802,7 +803,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphOne_relation_using_explicit_select()
     {
         $builder = Person::query();
@@ -820,7 +821,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `people`.`first_name`, `people`.`id` from `people`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphOne_relation_using_explicit_select()
     {
         $jory = [
@@ -840,7 +841,7 @@ class ExplicitSelectTest extends TestCase
      * MORPH MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_morphMany_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -863,7 +864,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_foreign_key_field_on_the_relation_query_when_requesting_a_morphMany_relation_using_explicit_select()
     {
         $builder = Band::find(1)->images();
@@ -887,7 +888,7 @@ class ExplicitSelectTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_morphMany_relation_using_explicit_select()
     {
         $jory = [
@@ -909,7 +910,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphMany_relation_using_explicit_select()
     {
         $builder = Band::query();
@@ -927,7 +928,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `bands`.`name`, `bands`.`id` from `bands` limit 30', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphMany_relation_using_explicit_select()
     {
         $jory = [
@@ -947,7 +948,7 @@ class ExplicitSelectTest extends TestCase
      * MORPH TO MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_morphToMany_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -970,7 +971,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphToMany_relation_using_explicit_select()
     {
         $builder = Album::find(1)->tags();
@@ -989,7 +990,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_morphToMany_relation_using_explicit_select()
     {
         $jory = [
@@ -1011,7 +1012,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphToMany_relation_using_explicit_select()
     {
         $builder = Album::query();
@@ -1029,7 +1030,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `albums`.`name`, `albums`.`id` from `albums`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphToMany_relation_using_explicit_select()
     {
         $jory = [
@@ -1049,7 +1050,7 @@ class ExplicitSelectTest extends TestCase
      * MORPHED BY MANY RELATIONS ===============================================================================================
      */
 
-    /** @test */
+    #[Test]
     public function it_adds_the_foreign_key_field_when_requesting_a_morphedByMany_relation_using_explicit_select()
     {
         $builder = Tag::query();
@@ -1072,7 +1073,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `tags`.`name`, `tags`.`id` from `tags`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_no_fields_on_the_relation_query_when_requesting_a_morphedByMany_relation_using_explicit_select()
     {
         $builder = Tag::find(1)->albums();
@@ -1091,7 +1092,7 @@ class ExplicitSelectTest extends TestCase
             $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_morphedByMany_relation_using_explicit_select()
     {
         $jory = [
@@ -1113,7 +1114,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertQueryCount(4);
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_primary_key_field_when_requesting_a_field_which_eager_loads_a_morphedByMany_relation_using_explicit_select()
     {
         $builder = Tag::query();
@@ -1131,7 +1132,7 @@ class ExplicitSelectTest extends TestCase
         $this->assertEquals('select `tags`.`name`, `tags`.`id` from `tags`', $builder->toSql());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_same_result_when_requesting_a_field_which_eager_loads_a_morphedByMany_relation_using_explicit_select()
     {
         $jory = [

@@ -9,11 +9,12 @@ use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Responses\JoryResponse;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\SongJoryResourceWithAlternateUri;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use PHPUnit\Framework\Attributes\Test;
 
 class ResponseTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_apply_on_a_model_class()
     {
         $actual = Jory::onModelClass(Song::class)
@@ -30,7 +31,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_on_a_query()
     {
         $actual = Jory::onQuery(Song::query()->where('title', 'like', '%ol%'))
@@ -45,7 +46,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_single_record_when_applying_a_model_instance()
     {
         $actual = Jory::onModel(Song::find(47))
@@ -62,7 +63,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_on_a_resource_by_uri()
     {
         Jory::register(SongJoryResourceWithAlternateUri::class);
@@ -81,7 +82,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_json_string()
     {
         $actual = Jory::on(Song::class)
@@ -98,7 +99,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_json_string_using_apply()
     {
         $actual = Jory::on(Song::class)
@@ -115,7 +116,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_an_array()
     {
         $actual = Jory::on(Song::class)
@@ -139,7 +140,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_an_array_using_apply()
     {
         $actual = Jory::on(Song::class)
@@ -163,7 +164,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_an_invalid_type_is_applied()
     {
         $this->expectException(LaravelJoryException::class);
@@ -173,7 +174,7 @@ class ResponseTest extends TestCase
             ->apply(new JoryController());
     }
 
-    /** @test */
+    #[Test]
     public function it_defaults_to_applying_the_data_in_the_request_when_nothing_is_applied()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -199,7 +200,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_the_record_count()
     {
         $actual = Jory::on(Song::class)
@@ -221,7 +222,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_single_record()
     {
         $actual = Jory::on(Song::class)
@@ -253,7 +254,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_a_single_record_based_on_the_id()
     {
         $actual = Jory::on(Song::class)
@@ -280,7 +281,7 @@ class ResponseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_no_resource_has_been_set_on_the_response()
     {
         $this->expectException(LaravelJoryException::class);

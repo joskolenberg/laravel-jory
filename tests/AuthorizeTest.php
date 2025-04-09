@@ -3,10 +3,11 @@
 namespace JosKolenberg\LaravelJory\Tests;
 
 use JosKolenberg\LaravelJory\Tests\Models\User;
+use PHPUnit\Framework\Attributes\Test;
 
 class AuthorizeTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_modify_the_query_by_authorize_method_1()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -46,7 +47,7 @@ class AuthorizeTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_modify_the_query_by_authorize_method_2()
     {
         $this->actingAs(User::where('name', 'mick')->first());
@@ -76,7 +77,7 @@ class AuthorizeTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_modify_the_query_by_authorize_method_3()
     {
         $this->actingAs(User::where('name', 'ronnie')->first());
@@ -118,7 +119,7 @@ class AuthorizeTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_modify_the_query_by_authorize_method_in_relations()
     {
         $this->actingAs(User::where('name', 'mick')->first());
@@ -146,7 +147,7 @@ class AuthorizeTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function the_authorize_method_is_scoped()
     {
         $this->actingAs(User::where('name', 'keith')->first());

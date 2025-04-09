@@ -5,11 +5,12 @@ namespace JosKolenberg\LaravelJory\Tests;
 use JosKolenberg\LaravelJory\Exceptions\RegistrationNotFoundException;
 use JosKolenberg\LaravelJory\Facades\Jory;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use PHPUnit\Framework\Attributes\Test;
 
 class JoryRegisterTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_does_throw_an_exception_when_no_associated_jory_resource_is_found_when_the_relation_is_requested()
     {
         $this->expectException(RegistrationNotFoundException::class);
@@ -21,7 +22,7 @@ class JoryRegisterTest extends TestCase
             ]
         ])->toArray();
     }
-    /** @test */
+    #[Test]
     public function it_doesnt_throw_an_exception_when_no_associated_jory_resource_is_found_as_long_as_the_relation_isnt_requested()
     {
         $response = $this->json('GET', 'jory/song/1', [
@@ -33,7 +34,7 @@ class JoryRegisterTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_throw_an_exception_when_no_associated_jory_resource_is_found_when_the_relation_is_requested_1()
     {
         $response = $this->json('GET', 'jory/song/1', [

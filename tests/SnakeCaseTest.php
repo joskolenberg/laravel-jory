@@ -2,6 +2,8 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class SnakeCaseTest extends TestCase
 {
     protected function getEnvironmentSetUp($app)
@@ -11,7 +13,7 @@ class SnakeCaseTest extends TestCase
         $app['config']->set('jory.request.case-key', 'case_key');
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_configs_default_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -31,7 +33,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_toarray_default_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/song/2', [
@@ -50,7 +52,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_defined_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -70,7 +72,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_fields_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -89,7 +91,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_default_filters_in_snakecase()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -113,7 +115,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_custom_filters_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -149,7 +151,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_filters_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -168,7 +170,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_default_sorts_in_snakecase()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -210,7 +212,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_custom_sorts_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -258,7 +260,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_sorts_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -278,7 +280,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_relations_in_snakecase()
     {
         $response = $this->json('GET', 'jory/album/2', [
@@ -341,7 +343,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_the_relations_in_snake_case()
     {
         $response = $this->json('GET', 'jory/album', [
@@ -360,7 +362,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_multiple_records_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -389,7 +391,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_do_a_count_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/count', [
@@ -406,7 +408,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_a_single_record_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -426,7 +428,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_apply_snake_case_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
@@ -536,7 +538,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_snake_case_when_loading_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [
@@ -555,7 +557,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_snake_case_in_relations()
     {
         $response = $this->json('GET', 'jory/person/10', [
@@ -612,7 +614,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_snake_case_in_relations()
     {
         $response = $this->json('GET', 'jory/band/2', [
@@ -634,7 +636,7 @@ class SnakeCaseTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_a_relation_with_an_alias_in_snake_case()
     {
         $response = $this->json('GET', 'jory/band/3', [

@@ -11,7 +11,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "laravel/framework": "^10.0 || ^11.0",
+    "laravel/framework": "^10.0|^11.0|^12.0",
     "joskolenberg/jory": "^2.0",
     "joskolenberg/eloquent-reflector": "^2.1"
   },

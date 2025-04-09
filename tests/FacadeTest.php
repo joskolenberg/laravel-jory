@@ -10,11 +10,12 @@ use JosKolenberg\LaravelJory\Register\JoryResourcesRegister;
 use JosKolenberg\LaravelJory\Tests\JoryResources\AutoRegistered\TagJoryResource;
 use JosKolenberg\LaravelJory\Tests\JoryResources\Unregistered\TagJoryResourceWithExplicitSelect;
 use JosKolenberg\LaravelJory\Tests\Models\Song;
+use PHPUnit\Framework\Attributes\Test;
 
 class FacadeTest extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_apply_on_a_model_class_using_on()
     {
         $actual = Jory::on(Song::class)
@@ -31,7 +32,7 @@ class FacadeTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_on_a_query_using_on()
     {
         $actual = Jory::on(Song::query()->where('title', 'like', '%ol%'))
@@ -46,7 +47,7 @@ class FacadeTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_on_a_model_instance_using_on()
     {
         $actual = Jory::on(Song::find(47))
@@ -63,7 +64,7 @@ class FacadeTest extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_no_valid_resource_is_given_1()
     {
         $this->expectException(RegistrationNotFoundException::class);
@@ -71,7 +72,7 @@ class FacadeTest extends TestCase
         Jory::on(JoryController::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_no_valid_resource_is_given_2()
     {
         $this->expectException(LaravelJoryException::class);
@@ -79,7 +80,7 @@ class FacadeTest extends TestCase
         Jory::on(new JoryController());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_register_a_jory_resource_by_class_name()
     {
         $this->assertInstanceOf(TagJoryResource::class, app(JoryResourcesRegister::class)->getByUri('tag'));
@@ -89,7 +90,7 @@ class FacadeTest extends TestCase
         $this->assertInstanceOf(TagJoryResourceWithExplicitSelect::class, app(JoryResourcesRegister::class)->getByUri('tag'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_register_a_jory_resource_by_instance()
     {
         $this->assertInstanceOf(TagJoryResource::class, app(JoryResourcesRegister::class)->getByUri('tag'));

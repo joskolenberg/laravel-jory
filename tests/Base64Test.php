@@ -2,10 +2,12 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class Base64Test extends TestCase
 {
 
-    /** @test */
+    #[Test]
     public function it_can_process_a_base64_encoded_json_string()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -32,7 +34,7 @@ class Base64Test extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_process_a_base64_encoded_json_string_2()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -83,7 +85,7 @@ class Base64Test extends TestCase
         $this->assertQueryCount(3);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_process_a_base64_encoded_json_string_for_multiple_resources()
     {
         $response = $this->json('GET', 'jory', [

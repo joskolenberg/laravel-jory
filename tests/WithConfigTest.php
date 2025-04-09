@@ -4,6 +4,7 @@ namespace JosKolenberg\LaravelJory\Tests;
 
 use Illuminate\Support\Facades\Route;
 use JosKolenberg\LaravelJory\Tests\Controllers\SongWithConfigController;
+use PHPUnit\Framework\Attributes\Test;
 
 class WithConfigTest extends TestCase
 {
@@ -19,7 +20,7 @@ class WithConfigTest extends TestCase
         Route::options('song-three', SongWithConfigController::class.'@optionsThree')->middleware('jory');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_field_is_available()
     {
         $response = $this->json('GET', 'song', [
@@ -50,7 +51,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_field_is_not_available_2()
     {
         $response = $this->json('GET', 'song', [
@@ -67,7 +68,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_the_default_fields_when_no_fields_are_specified_in_the_request()
     {
         $response = $this->json('GET', 'song', [
@@ -95,7 +96,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_filter_is_available()
     {
         $response = $this->json('GET', 'song', [
@@ -120,7 +121,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_filter_is_not_available()
     {
         $response = $this->json('GET', 'song', [
@@ -137,7 +138,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_requested_filters_are_not_available_1()
     {
         $response = $this->json('GET', 'song', [
@@ -155,7 +156,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_requested_filters_are_not_available_2()
     {
         $response = $this->json('GET', 'song', [
@@ -173,7 +174,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_the_requested_operator_is_available_on_a_filter()
     {
         $response = $this->json('GET', 'song', [
@@ -192,7 +193,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_sort_is_available()
     {
         $response = $this->json('GET', 'song', [
@@ -217,7 +218,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_sort_is_not_available()
     {
         $response = $this->json('GET', 'song', [
@@ -235,7 +236,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_the_requested_limit_exceeds_the_maximum()
     {
         $response = $this->json('GET', 'song', [
@@ -252,7 +253,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_the_requested_limit_does_not_exceed_the_maximum()
     {
         $response = $this->json('GET', 'song', [
@@ -280,7 +281,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_the_default_limit_when_no_limit_is_given()
     {
         $response = $this->json('GET', 'song', [
@@ -446,7 +447,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_does_not_validate_on_limit_when_the_max_is_set_to_null()
     {
         $response = $this->json('GET', 'song-two', [
@@ -474,7 +475,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_gives_an_error_when_an_offset_is_applied_but_no_limit_is_available_in_request_and_config()
     {
         $response = $this->json('GET', 'song-two', [
@@ -491,7 +492,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_the_max_limit_as_default_when_only_the_max_is_given_and_applies_default_sorts()
     {
         $response = $this->json('GET', 'song-three', [
@@ -537,7 +538,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_relation_is_available_in_a_relation()
     {
         $response = $this->json('GET', 'song', [
@@ -583,7 +584,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(2);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_relation_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'song', [
@@ -600,7 +601,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_field_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -617,7 +618,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_filter_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -635,7 +636,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_subfilter_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -655,7 +656,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_requested_sort_is_not_available_in_a_relation()
     {
         $response = $this->json('GET', 'jory/band', [
@@ -676,7 +677,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_limit_is_exceeded_in_a_relation()
     {
         config()->set('jory.limit.max', 1000);
@@ -696,7 +697,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_validate_if_a_relation_is_available_in_a_relation()
     {
         config()->set('jory.limit.max', 1000);
@@ -717,7 +718,7 @@ class WithConfigTest extends TestCase
         $this->assertQueryCount(0);
     }
 
-    /** @test */
+    #[Test]
     public function it_suggests_only_relevant_alternatives()
     {
         $response = $this->json('GET', 'jory/album', [

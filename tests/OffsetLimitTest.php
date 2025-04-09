@@ -2,9 +2,11 @@
 
 namespace JosKolenberg\LaravelJory\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class OffsetLimitTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_apply_an_offset_and_limit()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -54,7 +56,7 @@ class OffsetLimitTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_a_limit_without_an_offset()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -84,7 +86,7 @@ class OffsetLimitTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_an_offset_and_limit_combined_with_with_sorts_and_filters()
     {
         $response = $this->json('GET', 'jory/song', [
@@ -114,7 +116,7 @@ class OffsetLimitTest extends TestCase
         $this->assertQueryCount(1);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_apply_an_offset_and_limit_combined_with_with_sorts_and_filters_on_relations()
     {
         $response = $this->json('GET', 'jory/band', [

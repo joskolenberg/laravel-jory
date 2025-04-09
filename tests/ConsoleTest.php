@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use JosKolenberg\LaravelJory\Tests\Models\User;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConsoleTest extends TestCase
 {
@@ -16,7 +17,7 @@ class ConsoleTest extends TestCase
         $this->cleanup();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_run_a_generate_command_for_a_model()
     {
         $this->artisan('jory:generate', ['--model' => 'JosKolenberg\LaravelJory\Tests\Models\Band'])
@@ -31,7 +32,7 @@ class ConsoleTest extends TestCase
         $this->assertTrue($realContents === $expectedContentsLocal);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_run_a_generate_for_command_for_a_model_with_name_option()
     {
         $this->artisan('jory:generate', [
@@ -48,7 +49,7 @@ class ConsoleTest extends TestCase
         $this->assertTrue($realContents === $expectedContentsLocal);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_run_a_generate_for_command_without_a_model_to_be_prompted_for_the_model()
     {
         $this->artisan('jory:generate')
@@ -56,7 +57,7 @@ class ConsoleTest extends TestCase
             ->expectsOutput('SongJoryResource created successfully.');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_run_a_generate_command_for_all_models()
     {
         $this->artisan('jory:generate', [
@@ -92,7 +93,7 @@ class ConsoleTest extends TestCase
         $this->assertFalse($generatedFilesystem->has('NonExistingJoryResource.php'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_run_a_generate_command_for_all_models_using_the_selector()
     {
         $this->artisan('jory:generate')
@@ -109,7 +110,7 @@ class ConsoleTest extends TestCase
             ->expectsOutput('UserJoryResource created successfully.');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_use_the_force_option_to_override_existing_files()
     {
         $this->artisan('jory:generate', [
@@ -136,7 +137,7 @@ class ConsoleTest extends TestCase
             ->expectsOutput('SongJoryResource created successfully.');
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_configure_fields_which_are_marked_to_be_excluded()
     {
         $this->artisan('jory:generate', [
