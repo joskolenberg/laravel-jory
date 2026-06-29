@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
@@ -221,7 +222,12 @@ trait HandlesJorySelects
             return [$baseModel->getQualifiedKeyName()];
         }
 
-        // HasOneThrough extends HasManyThrough, so that action is already taken care of
+        // Up to Laravel 12 HasOneThrough extended HasManyThrough, so it was covered by the
+        // check above. As of Laravel 13 both extend a common HasOneOrManyThrough base, so
+        // HasOneThrough needs to be handled explicitly.
+        if($relationQuery instanceof HasOneThrough){
+            return [$baseModel->getQualifiedKeyName()];
+        }
 
         if($relationQuery instanceof MorphOne){
             return [$baseModel->getQualifiedKeyName()];

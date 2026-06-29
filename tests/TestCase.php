@@ -40,7 +40,16 @@ class TestCase extends Orchestra
 
     protected function setUpDatabase(Application $app)
     {
-        DB::connection()->setQueryGrammar(new MySqlGrammar());
+        // Force the MySql grammar so the generated SQL is consistent across environments.
+        // The grammar is extended to always use the modern (window function) group limit,
+        // which keeps it from calling MySql-connection specific methods (like isMaria())
+        // when running against the SQLite test database on Laravel 12+.
+        DB::connection()->setQueryGrammar(new class(DB::connection()) extends MySqlGrammar {
+            public function useLegacyGroupLimit(\Illuminate\Database\Query\Builder $query)
+            {
+                return false;
+            }
+        });
 
         $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
