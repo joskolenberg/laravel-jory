@@ -11,7 +11,7 @@ class CallbackFilterScope implements FilterScope
         $this->callback = $callback;
     }
 
-    public function apply($builder, string $operator = null, $data = null): void
+    public function apply($builder, ?string $operator = null, $data = null): void
     {
         call_user_func($this->callback, $builder, $operator, $data);
     }

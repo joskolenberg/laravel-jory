@@ -17,7 +17,7 @@ class PersonJoryResourceWithCallables extends JoryResource
         // Fields
         $this->field('id');
         $this->field('first_name')->filterable(function (Filter $filter){
-            $filter->scope(function ($builder, string $operator = null, $data = null){
+            $filter->scope(function ($builder, ?string $operator = null, $data = null){
                 if($data['is_reversed']){
                     $data = strrev($data['value']);
                 }
@@ -31,7 +31,7 @@ class PersonJoryResourceWithCallables extends JoryResource
             });
         });
 
-        $this->filter('full_name', function ($builder, string $operator = null, $data = null){
+        $this->filter('full_name', function ($builder, ?string $operator = null, $data = null){
             $builder->where('first_name', $operator, $data)
                 ->orWhere('last_name', $operator, $data);
         });

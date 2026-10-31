@@ -44,7 +44,7 @@ class Sort
      * @param string $name
      * @param SortScope $scope
      */
-    public function __construct(string $name, SortScope $scope = null)
+    public function __construct(string $name, ?SortScope $scope = null)
     {
         $this->name = $name;
         $this->scope = $scope;
@@ -58,7 +58,7 @@ class Sort
      * @param SortScope|callable $scope
      * @return $this
      */
-    public function scope(SortScope|callable $scope = null): Sort
+    public function scope(SortScope|callable|null $scope = null): Sort
     {
         if(is_callable($scope)){
             $scope = new CallbackSortScope($scope);

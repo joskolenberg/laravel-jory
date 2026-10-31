@@ -84,7 +84,7 @@ trait AppliesConfigToJory
      * @param int|null $limit
      * @param int|null $limitDefault
      */
-    protected function applyOffsetAndLimitToJory(Jory $jory, int $limit = null, int $limitDefault = null): void
+    protected function applyOffsetAndLimitToJory(Jory $jory, ?int $limit = null, ?int $limitDefault = null): void
     {
         if (is_null($limit) && $limitDefault !== null) {
             $jory->setLimit($limitDefault);

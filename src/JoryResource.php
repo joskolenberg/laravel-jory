@@ -95,7 +95,7 @@ abstract class JoryResource
      * @param Attribute|null $getter
      * @return Field
      */
-    public function field($name, Attribute $getter = null): Field
+    public function field($name, ?Attribute $getter = null): Field
     {
         return $this->config->field($name, $getter);
     }
@@ -107,7 +107,7 @@ abstract class JoryResource
      * @param FilterScope|callable|null $scope
      * @return Filter
      */
-    public function filter($field, FilterScope|callable $scope = null): Filter
+    public function filter($field, FilterScope|callable|null $scope = null): Filter
     {
         if(is_callable($scope)){
             $scope = new CallbackFilterScope($scope);
@@ -123,7 +123,7 @@ abstract class JoryResource
      * @param SortScope|callable|null $scope
      * @return Sort
      */
-    public function sort($field, SortScope|callable $scope = null): Sort
+    public function sort($field, SortScope|callable|null $scope = null): Sort
     {
         if(is_callable($scope)){
             $scope = new CallbackSortScope($scope);
@@ -171,7 +171,7 @@ abstract class JoryResource
      * @param string $joryResource
      * @return Relation
      */
-    public function relation(string $name, string $joryResource = null): Relation
+    public function relation(string $name, ?string $joryResource = null): Relation
     {
         return $this->config->relation($name, $joryResource);
     }

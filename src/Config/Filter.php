@@ -39,7 +39,7 @@ class Filter
      * @param string $name
      * @param FilterScope|null $scope
      */
-    public function __construct(string $name, FilterScope $scope = null)
+    public function __construct(string $name, ?FilterScope $scope = null)
     {
         $this->name = $name;
         $this->scope = $scope;
@@ -67,7 +67,7 @@ class Filter
      * @param FilterScope|callable $scope
      * @return $this
      */
-    public function scope(FilterScope|callable $scope = null): Filter
+    public function scope(FilterScope|callable|null $scope = null): Filter
     {
         if(is_callable($scope)){
             $scope = new CallbackFilterScope($scope);

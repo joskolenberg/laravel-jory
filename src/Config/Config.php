@@ -92,7 +92,7 @@ class Config
      * @param Attribute $getter
      * @return Field
      */
-    public function field($field, Attribute $getter = null): Field
+    public function field($field, ?Attribute $getter = null): Field
     {
         $field = new Field($field, $getter);
 
@@ -108,7 +108,7 @@ class Config
      * @param FilterScope|null $scope
      * @return Filter
      */
-    public function filter($name, FilterScope $scope = null): Filter
+    public function filter($name, ?FilterScope $scope = null): Filter
     {
         $filter = new Filter($name, $scope);
 
@@ -123,7 +123,7 @@ class Config
      * @param $field
      * @return Sort
      */
-    public function sort($field, SortScope $scope = null): Sort
+    public function sort($field, ?SortScope $scope = null): Sort
     {
         $sort = new Sort($field, $scope);
 
@@ -169,7 +169,7 @@ class Config
      * @param string $joryResource
      * @return Relation
      */
-    public function relation(string $name, string $joryResource = null): Relation
+    public function relation(string $name, ?string $joryResource = null): Relation
     {
         $relation = new Relation($name, $this->modelClass, $joryResource ? new $joryResource : null);
 

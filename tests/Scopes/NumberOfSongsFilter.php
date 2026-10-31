@@ -19,7 +19,7 @@ class NumberOfSongsFilter implements FilterScope
      * @param mixed $data
      * @return void
      */
-    public function apply($builder, string $operator = null, $data = null): void
+    public function apply($builder, ?string $operator = null, $data = null): void
     {
         $builder->has('songs', $operator, $data);
     }

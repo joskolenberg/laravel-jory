@@ -58,7 +58,7 @@ class Field
      * @param string $field
      * @param Attribute|null $getter
      */
-    public function __construct(string $field, Attribute $getter = null)
+    public function __construct(string $field, ?Attribute $getter = null)
     {
         $this->field = $field;
         $this->getter = $getter;

@@ -41,7 +41,7 @@ class Relation
      * @param string $parentClass
      * @param JoryResource $joryResource
      */
-    public function __construct(string $name, string $parentClass, JoryResource $joryResource = null)
+    public function __construct(string $name, string $parentClass, ?JoryResource $joryResource = null)
     {
         $this->name = $name;
         $this->parentClass = $parentClass;

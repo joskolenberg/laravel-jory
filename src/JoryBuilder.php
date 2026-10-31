@@ -175,7 +175,7 @@ class JoryBuilder
      * @param int|null $offset
      * @param int|null $limit
      */
-    protected function applyOffsetAndLimit($builder, int $offset = null, int $limit = null): void
+    protected function applyOffsetAndLimit($builder, ?int $offset = null, ?int $limit = null): void
     {
         if ($offset !== null) {
             // Check on null, so even 0 will be applied.
